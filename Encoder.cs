@@ -555,6 +555,185 @@ namespace AudioDataInterface
             list_outputFileSamples.Clear();
         }
 
+        /// <summary>
+        /// Конвертирует файл в аудиопоток с оболочкой ADI-FShell
+        /// </summary>
+        /// <param name="dest"></param>
+        /// <param name="filePath"></param>
+        public static void EncodeFileADIFShell()
+        {
+            encoder_forceStop = false;
+            try
+            {
+                if (File.Exists("output.wav"))
+                    File.Delete("output.wav");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DebugHandler.Write("Encoder.cs->EncodeFileStream", ex.Message);
+                encoder_forceStop = true;
+            }
+            if (encoder_forceStop == true)
+                Thread.CurrentThread.Abort();
+            encoder_forceStop = false;
+            CreateInputStream();
+            CreateOutputStream();
+            fs_output.Seek(44, SeekOrigin.Begin);
+            GenerateVoid(fs_output, 2) //Генерация тишины 2 сек.           
+            GenerateTextMarker(fs_output, "254", 1024); //Генерация маркера начала потока текстовых данных
+            GenerateSync(fs_output); //Генерация синхроимпульса
+            GenerateTextMarker(fs_output, "253", 3); //Генерация маркера начала оглавления файла
+            List<byte> encBytes = new List<byte>(); //Список байт кодируемого файла
+            //Формирование списка байт кодируемого файла
+            for (int i = 0; i < fs_input.Length; i++)
+                encBytes.Add((byte)fs_input.ReadByte());
+            string header = ""; //Заголовок файла
+            string fileName = Path.GetFileName(encoder_inputFilePath); //Имя кодируемого файла
+            int fileSize = (int)fs_input.Length; //Размер кодируемого файла в байтах
+            int clusterSize = (int)fileSize / 32; //Размер кластера
+            int blocksInCluster = (int)clusterSize / 4; //Кол-во блоков данных в кластере
+            clusterSize = blocksInCluster * 4; //Расчитанный размер кластера
+            int byteOffset = 0; //Кол-во дополнительных байт, необходимых для кодирования файла с текущей разметкой
+            int partialSize = clusterSize * 32; //Кол-во байт файла, которые можно записать с текущей разметкой
+            //Вычисление смещения
+            while (((double)(fileSize + byteOffset - partialSize) / 4) - Math.Truncate(((double)(fileSize + byteOffset - partialSize) / 4)) != 0)
+                byteOffset++;
+            //Дописываем нулевые байты в конец файла
+            for (int i = 0; i < byteOffset; i++)
+                encBytes.Add(0);
+            //Формирование заголовка файла
+            header = fileName + ";" + fileSize + ";" + clusterSize + ";" + blocksInCluster + ";" + byteOffset + ";" + (fileSize - partialSize + byteOffset).ToString() + ";";
+            string temp = "";
+            //Вычисление хеш-сумм кластеров
+            for (int i = 0; i < encBytes.Count;)
+            {
+                string cluster = ""; //Текущий кластер
+                for (int p = 0, k = 0; p < 32; p++, k += clusterSize)
+                {
+                    //КОД ОБНОВЛЕНИЯ ПРОГРЕСС БАРА ДЛЯ ХЕШ-СУММ
+
+                    cluster = "";
+                    if (p == 31) //Коррекция условий для последнего кластера
+                        clusterSize += fileSize - partialSize + byteOffset;
+                    while (i < k + clusterSize)
+                    {
+                        temp = encBytes[i].ToString();
+                        temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                        temp = temp.PadLeft(8, '0');
+                        cluster += temp;
+                        i++;
+                    }
+                    header += BinaryHandler.GetHash(cluster) + ";"; //Записываем хеш-сумму кластера в оглавление
+                }
+            }
+            clusterSize -= fileSize - partialSize + byteOffset; //Возвращаем оригинальное значение
+            header += RawData.GetHash(header) + ";";//Добавляет хеш-сумму текущего оглавления в конец оглавления
+            //Запись оглавления в WAV
+            int length = header.Length; //Кол-во символов в оглавлении
+            string binSymbol = ""; //Бинарный код текущего символа
+            string currentSymbol = ""; //Текущий символ
+            temp = "";
+            string[] block = null;
+            //Перебор символов текста
+            for (int i = 0; i < length; i++)
+            {
+                //Остановить кодирование, при ручной отмене
+                if (GeneralForm.switch_disposeEncoding == true)
+                    Thread.CurrentThread.Abort();
+                currentSymbol = header[i].ToString();
+                GeneralForm.temp_currentSymbolLibrary = GeneralForm.locOut.GetLibrary(currentSymbol); //Получить индекс символьной библиотеки для текущего символа текста
+                //Закодировать символ согласно его символьной библиотеке
+                switch (GeneralForm.temp_currentSymbolLibrary)
+                {
+                    case -1:
+                        binSymbol = "0";
+                        break;
+                    case 0:
+                        binSymbol = GeneralForm.locOut.SymbolLibEncode(currentSymbol);
+                        GeneralForm.temp_currentSymbolLibrary = GeneralForm.temp_lastSymbolLibrary;
+                        break;
+                    case 1:
+                        binSymbol = Array.IndexOf(GeneralForm.locOut.alphabetEN, currentSymbol).ToString();
+                        break;
+                    case 2:
+                        binSymbol = Array.IndexOf(GeneralForm.locOut.alphabetRU, currentSymbol).ToString();
+                        break;
+                }
+                //Если произошла смена символьной библиотеки, сгенерировать маркер символьной библиотеки
+                if (GeneralForm.temp_currentSymbolLibrary != GeneralForm.temp_lastSymbolLibrary && (GeneralForm.locOut.CheckLibForExist(GeneralForm.temp_currentSymbolLibrary) == true))
+                    GenerateTextMarker(fs_output, GeneralForm.temp_currentSymbolLibrary.ToString(), 3);
+                GeneralForm.temp_lastSymbolLibrary = GeneralForm.temp_currentSymbolLibrary;
+                binSymbol = Convert.ToString(Convert.ToInt16(binSymbol), 2); //Перевести символ в двоичную систему
+                binSymbol = binSymbol.PadLeft(8, '0'); //Дописать нули слева до 8 знаков
+                block = GeneralForm.rawData.Construct(binSymbol); //Дополнить блок данных контрольными битами
+                //Перебираем финальную бинарную последовательность
+                for (int u = 0; u < block.Length; u++)
+                {
+                    if (block[u] == "0")
+                        GenerateZero(fs_output);
+                    else
+                        GenerateOne(fs_output);
+                }            
+                GenerateSync(fs_output); //Генерация синхроимпульса
+            }            
+            GenerateTextMarker(fs_output, "252", 1); //Генерация маркера конца оглавления файла         
+            GenerateTextMarker(fs_output, "251", 3); //Генерация маркера команды на переход в режим получения данных файла          
+            GenerateDataMarker(fs_output, "00000000000000000000000000000000", 512); //Генерация маркера начала потока данных
+            //Кодирование кластеров
+            for (int i = 0; i < encBytes.Count;)
+            {
+                var cluster = new List<string>(); //Список блоков данных в кластере
+                string currentBlock = ""; //Буфер для одного 4 байт под блок данных
+                for (int p = 0, k = 0; p < 32; p++, k += clusterSize)
+                {
+                    //КОД ОБНОВЛЕНИЯ ПРОГРЕСС БАРА ДЛЯ КОДИРОВАНИЯ КЛАСТЕРОВ
+
+                    cluster.Clear();
+                    if (p == 31) //Коррекция условий для последнего кластера
+                        clusterSize += fileSize - partialSize + byteOffset;
+                    while (i < k + clusterSize)
+                    {
+                        temp = encBytes[i].ToString();
+                        temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                        temp = temp.PadLeft(8, '0');
+                        currentBlock += temp;
+                        //Когда буфер наполнился, записываем блок в список
+                        if (currentBlock.Length == 32)
+                        {
+                            cluster.Add(currentBlock);
+                            currentBlock = "";
+                        }
+                        i++;
+                    }                 
+                    GenerateDataMarker(fs_output, "01010101010101010101010101010101", 1); //Генерация маркера начала кластера
+                    //Кодируем текущий кластер
+                    for (int n = 0; n < cluster.Count; n++)
+                    {
+                        string[] tempBlock = BinaryHandler.HCMake(cluster[n]); //Дополнить блок данных контрольными битами
+                        //Перебираем финальную кодовую последовательность
+                        for (int u = 0; u < tempBlock.Length; u++)
+                        {
+                            if (tempBlock[u] == "0")
+                                GenerateZero(fs_output);
+                            else
+                                GenerateOne(fs_output);
+                        }                        
+                        GenerateSync(fs_output); //Генерация синхроимпульса
+                    }                    
+                    GenerateDataMarker(fs_output, "10101010101010101010101010101010", 1); //Генерация маркера конца кластера
+                }
+            }
+            clusterSize -= fileSize - partialSize + byteOffset; //Возвращаем оригинальное значение       
+            GenerateDataMarker(fs_output, "00100100100100100100100100100100", 3); //Генерация маркера конца файла           
+            GenerateDataMarker(fs_output, "00000000000000000000000000000000", 512); //Генерация маркера начала потока данных
+            fs_output.Seek(0, SeekOrigin.Begin);
+            GeneralForm.writeHeader(fs_output, sampleRate, 1);
+            fs_output.Close();
+            fs_input.Close();
+            GeneralForm.temp_progressValue = GeneralForm.progress.GetPercent(100, 100);
+        }
+
         public static void EncodeFileStream()
         {
             encoder_forceStop = false;
@@ -609,7 +788,7 @@ namespace AudioDataInterface
                 binSymbol += tempB;
                 i++;
                 encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
-                block = HCECHandler.Compute(binSymbol); //Дополнить блок данных контрольными битами
+                block = BinaryHandler.Compute(binSymbol); //Дополнить блок данных контрольными битами
                 binSymbol = "";
                 //Перебираем финальную кодовую последовательность
                 for (int u = 0; u < block.Length; u++)

@@ -2,13 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace AudioDataInterface
 {
-    //Обработка Hamming Code Error Correction
-    public class HCECHandler
+    public class BinaryHandler
     {
-        public static string[] Compute(string bin)
+        /// <summary>
+        /// Возвращает хеш-сумму MD5 для строчки input
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
+        public static string GetHash(string input)
+        {
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
+
+            return Convert.ToBase64String(hash);
+        }
+
+        /// <summary>
+        /// Дополняет строчку bin контрольными битами по коду Хэмминга и возвращает бит-массив
+        /// </summary>
+        /// <param name="bin"></param>
+        /// <returns></returns>
+        public static string[] HCMake(string bin)
         {
             List<string> binary = new List<string>();
             foreach (var s in bin)

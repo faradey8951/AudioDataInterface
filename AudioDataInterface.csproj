@@ -73,7 +73,7 @@
       <DependentUpon>EncoderWindow.cs</DependentUpon>
     </Compile>
     <Compile Include="FileHandler.cs" />
-    <Compile Include="HCECHandler.cs" />
+    <Compile Include="BinaryHandler.cs" />
     <Compile Include="LangHandler.cs" />
     <Compile Include="LogMonitorWindow.cs">
       <SubType>Form</SubType>
