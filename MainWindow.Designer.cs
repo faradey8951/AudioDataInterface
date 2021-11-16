@@ -39,15 +39,16 @@ namespace AudioDataInterface
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.column_block = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_data = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.column_ = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.column_hcecIn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.column_hsecOut = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.column_hcecReturn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.column_type = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.column_hcIn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.column_hcOut = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.column_hcReturn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listView = new System.Windows.Forms.ListView();
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.menu_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.column_markerCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -123,32 +124,43 @@ namespace AudioDataInterface
             // column_data
             // 
             this.column_data.Text = "Данные";
+            this.column_data.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.column_data.Width = 200;
             // 
-            // column_hcecIn
+            // column_type
             // 
-            this.column_hcecIn.Text = "HCEC-in";
-            this.column_hcecIn.Width = 100;
+            this.column_type.Text = "Тип";
+            this.column_type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_type.Width = 50;
             // 
-            // column_hsecOut
+            // column_hcIn
             // 
-            this.column_hsecOut.Text = "HCEC-out";
-            this.column_hsecOut.Width = 100;
+            this.column_hcIn.Text = "HC-in";
+            this.column_hcIn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_hcIn.Width = 100;
             // 
-            // column_hcecReturn
+            // column_hcOut
             // 
-            this.column_hcecReturn.Text = "HCEC return";
-            this.column_hcecReturn.Width = 100;
+            this.column_hcOut.Text = "HC-out";
+            this.column_hcOut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_hcOut.Width = 100;
+            // 
+            // column_hcReturn
+            // 
+            this.column_hcReturn.Text = "HC-return";
+            this.column_hcReturn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_hcReturn.Width = 100;
             // 
             // listView
             // 
             this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column_block,
             this.column_data,
-            this.column_,
-            this.column_hcecIn,
-            this.column_hsecOut,
-            this.column_hcecReturn});
+            this.column_type,
+            this.column_markerCode,
+            this.column_hcIn,
+            this.column_hcOut,
+            this.column_hcReturn});
             this.listView.ContextMenuStrip = this.contextMenuStrip;
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView.FullRowSelect = true;
@@ -190,6 +202,12 @@ namespace AudioDataInterface
             this.menu_remove.Size = new System.Drawing.Size(191, 22);
             this.menu_remove.Text = "Удалить";
             // 
+            // column_markerCode
+            // 
+            this.column_markerCode.Text = "Код маркера";
+            this.column_markerCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_markerCode.Width = 80;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -228,16 +246,17 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripButton button_capture;
         private System.Windows.Forms.ColumnHeader column_block;
         private System.Windows.Forms.ColumnHeader column_data;
-        private System.Windows.Forms.ColumnHeader column_;
-        private System.Windows.Forms.ColumnHeader column_hcecIn;
-        private System.Windows.Forms.ColumnHeader column_hsecOut;
-        private System.Windows.Forms.ColumnHeader column_hcecReturn;
+        private System.Windows.Forms.ColumnHeader column_type;
+        private System.Windows.Forms.ColumnHeader column_hcIn;
+        private System.Windows.Forms.ColumnHeader column_hcOut;
+        private System.Windows.Forms.ColumnHeader column_hcReturn;
         private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.ToolStripButton button_encoder;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
         private System.Windows.Forms.ToolStripMenuItem menu_edit;
         private System.Windows.Forms.ToolStripSeparator menuSeparator;
         private System.Windows.Forms.ToolStripMenuItem menu_remove;
+        private System.Windows.Forms.ColumnHeader column_markerCode;
     }
 }
 
