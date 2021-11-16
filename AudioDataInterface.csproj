@@ -143,5 +143,8 @@
   <ItemGroup>
     <None Include="Resources\icon_encode.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\icon_remove.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

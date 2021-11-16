@@ -555,6 +555,7 @@ namespace AudioDataInterface
             list_outputFileSamples.Clear();
         }
 
+        /*
         /// <summary>
         /// Конвертирует файл в аудиопоток с оболочкой ADI-FShell
         /// </summary>
@@ -733,6 +734,7 @@ namespace AudioDataInterface
             fs_input.Close();
             GeneralForm.temp_progressValue = GeneralForm.progress.GetPercent(100, 100);
         }
+        */
 
         public static void EncodeFileStream()
         {
@@ -788,7 +790,7 @@ namespace AudioDataInterface
                 binSymbol += tempB;
                 i++;
                 encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
-                block = BinaryHandler.Compute(binSymbol); //Дополнить блок данных контрольными битами
+                block = BinaryHandler.HCMake(binSymbol); //Дополнить блок данных контрольными битами
                 binSymbol = "";
                 //Перебираем финальную кодовую последовательность
                 for (int u = 0; u < block.Length; u++)

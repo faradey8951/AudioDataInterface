@@ -29,6 +29,7 @@ namespace AudioDataInterface
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,8 +44,13 @@ namespace AudioDataInterface
             this.column_hsecOut = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_hcecReturn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listView = new System.Windows.Forms.ListView();
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.menu_edit = new System.Windows.Forms.ToolStripMenuItem();
+            this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
+            this.menu_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -68,7 +74,7 @@ namespace AudioDataInterface
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             // 
             // toolStrip
@@ -143,15 +149,46 @@ namespace AudioDataInterface
             this.column_hcecIn,
             this.column_hsecOut,
             this.column_hcecReturn});
+            this.listView.ContextMenuStrip = this.contextMenuStrip;
             this.listView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView.FullRowSelect = true;
             this.listView.GridLines = true;
             this.listView.HideSelection = false;
             this.listView.Location = new System.Drawing.Point(0, 49);
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size(711, 421);
+            this.listView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView.TabIndex = 3;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
+            // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.menu_edit,
+            this.menuSeparator,
+            this.menu_remove});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(192, 54);
+            // 
+            // menu_edit
+            // 
+            this.menu_edit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.menu_edit.Name = "menu_edit";
+            this.menu_edit.Size = new System.Drawing.Size(191, 22);
+            this.menu_edit.Text = "Редактировать блок";
+            // 
+            // menuSeparator
+            // 
+            this.menuSeparator.Name = "menuSeparator";
+            this.menuSeparator.Size = new System.Drawing.Size(188, 6);
+            // 
+            // menu_remove
+            // 
+            this.menu_remove.Image = global::AudioDataInterface.Properties.Resources.icon_remove;
+            this.menu_remove.Name = "menu_remove";
+            this.menu_remove.Size = new System.Drawing.Size(191, 22);
+            this.menu_remove.Text = "Удалить";
             // 
             // MainWindow
             // 
@@ -175,6 +212,7 @@ namespace AudioDataInterface
             this.menuStrip.PerformLayout();
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -196,6 +234,10 @@ namespace AudioDataInterface
         private System.Windows.Forms.ColumnHeader column_hcecReturn;
         private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.ToolStripButton button_encoder;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem menu_edit;
+        private System.Windows.Forms.ToolStripSeparator menuSeparator;
+        private System.Windows.Forms.ToolStripMenuItem menu_remove;
     }
 }
 
