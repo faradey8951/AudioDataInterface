@@ -23,7 +23,7 @@ namespace AudioDataInterface
         public static string encoder_outputFilePath = "output.wav";
         public static string encoder_inputFilePath = "output.wav";
         public static int encoder_signalGain = 2; //Коэффициент усиления аудиосигнала выходного файла
-        public static int encoder_sampleRate = 48000; //Частота дискретизации выходного файла
+        public static int encoder_sampleRate = 72000; //Частота дискретизации выходного файла
         public static bool encoder_ADIFShell = false; //Функция ADIFShell
         public static bool encoder_forceStop = false; //Принудительная остановка конвертации
         public static int encoder_samplesPerBit = 8; //Кол-во аудиосэмплов, описывающих один бит информации в аудиопотоке
@@ -555,6 +555,120 @@ namespace AudioDataInterface
             list_outputFileSamples.Clear();
         }
 
+        /// <summary>
+        /// Генерирует блок маркер с кодом markerCode [0-255], в количестве count
+        /// </summary>
+        /// <param name="markerCode"></param>
+        /// <param name="count"></param>
+        static void GenerateMarkerDataBlock(int markerCode, int count)
+        {
+            for (int k = 0; k < count; k++)
+            {
+                string bin = ""; //Бинарный код маркера
+                bin = Convert.ToString(Convert.ToInt16(markerCode), 2);
+                bin = bin.PadLeft(8, '0');
+                //Дописать биты до 32
+                for (int i = bin.Length; i < 32; i++)
+                    bin += "0";
+                string[] dataBlock = BinaryHandler.HCMake(bin); //Массив бит блока данных
+                                                                //Перебираем финальную кодовую последовательность
+                for (int i = 0; i < dataBlock.Length; i++)
+                {
+                    if (dataBlock[i] == "0")
+                        GenerateZero();
+                    else
+                        GenerateOne();
+                }
+                GenerateOne(); //Генерируем указатель маркер-блока
+                GenerateSync(); //Генерируем синхроимпульс
+            }
+        }
+
+        /// <summary>
+        /// Генерирует 39-битный блок данных bin
+        /// </summary>
+        /// <param name="bin"></param>
+        static void GenerateRAWDataBlock(string bin)
+        {
+            //Дописать биты до 32
+            for (int i = bin.Length; i < 32; i++)
+                bin += "0";
+            string[] dataBlock = BinaryHandler.HCMake(bin); //Массив бит блока данных
+            //Перебираем финальную кодовую последовательность
+            for (int i = 0; i < dataBlock.Length; i++)
+            {
+                if (dataBlock[i] == "0")
+                    GenerateZero();
+                else
+                    GenerateOne();
+            }
+            GenerateZero(); //Генерируем указатель RAW-блока
+            GenerateSync(); //Генерируем синхроимпульс
+        }
+
+        public static void EncodeFileStream()
+        {
+            encoder_forceStop = false;
+            try
+            {
+                if (File.Exists("output.wav"))
+                    File.Delete("output.wav");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                DebugHandler.Write("Encoder.cs->EncodeFileStream", ex.Message);
+                encoder_forceStop = true;
+            }
+            if (encoder_forceStop == true)
+                Thread.CurrentThread.Abort();
+            encoder_forceStop = false;
+            CreateInputStream();
+            CreateOutputStream();
+            fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
+            GenerateVoid(2); //Генерация тишины 2 сек.
+            GenerateSync(); //Генерация синхроимпульса       
+            GenerateMarkerDataBlock(0, 3); //Генерация маркера начала потока
+            string binSymbol = "";
+            string tempB = "";
+            //Преобразование данных в бинарный код
+            for (int i = 0; i < fs_input.Length;)
+            {
+                if (encoder_forceStop == true)
+                    Thread.CurrentThread.Abort();
+                tempB = fs_input.ReadByte().ToString();
+                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
+                tempB = tempB.PadLeft(8, '0');
+                binSymbol += tempB;
+                i++;
+                tempB = fs_input.ReadByte().ToString();
+                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
+                tempB = tempB.PadLeft(8, '0');
+                binSymbol += tempB;
+                i++;
+                tempB = fs_input.ReadByte().ToString();
+                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
+                tempB = tempB.PadLeft(8, '0');
+                binSymbol += tempB;
+                i++;
+                tempB = fs_input.ReadByte().ToString();
+                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
+                tempB = tempB.PadLeft(8, '0');
+                binSymbol += tempB;
+                i++;
+                encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
+                GenerateRAWDataBlock(binSymbol);
+                binSymbol = "";
+            }
+            fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для нанесения оглавления wave файла
+            WriteHeader(fs_output, encoder_sampleRate, 1);
+            fs_output.Close();
+            fs_output.Dispose();
+            fs_input.Close();
+            fs_input.Dispose();
+            encoder_progress = ProgressHandler.GetPercent(100, 100);
+        }
+
         /*
         /// <summary>
         /// Конвертирует файл в аудиопоток с оболочкой ADI-FShell
@@ -735,80 +849,5 @@ namespace AudioDataInterface
             GeneralForm.temp_progressValue = GeneralForm.progress.GetPercent(100, 100);
         }
         */
-
-        public static void EncodeFileStream()
-        {
-            encoder_forceStop = false;
-            try
-            {
-                if (File.Exists("output.wav"))
-                    File.Delete("output.wav");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DebugHandler.Write("Encoder.cs->EncodeFileStream", ex.Message);
-                encoder_forceStop = true;
-            }
-            if (encoder_forceStop == true)
-                Thread.CurrentThread.Abort();
-            encoder_forceStop = false;
-            CreateInputStream();
-            CreateOutputStream();
-            fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
-            GenerateVoid(2); //Генерация тишины 2 сек.
-            GenerateSync(); //Генерируем синхроимпульс         
-
-            //ВСТАВИТЬ МАРКЕР НАЧАЛА ПОТОКА
-
-            string binSymbol = "";
-            string tempB = "";
-            string[] block = null;
-            //Преобразование данных в бинарный код
-            for (int i = 0; i < fs_input.Length;)
-            {
-                if (encoder_forceStop == true)
-                    Thread.CurrentThread.Abort();
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
-                i++;
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
-                i++;
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
-                i++;
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
-                i++;
-                encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
-                block = BinaryHandler.HCMake(binSymbol); //Дополнить блок данных контрольными битами
-                binSymbol = "";
-                //Перебираем финальную кодовую последовательность
-                for (int u = 0; u < block.Length; u++)
-                {
-                    if (block[u] == "0")
-                        GenerateZero();
-                    else
-                        GenerateOne();
-                }
-                GenerateSync(); //Генерируем синхроимпульс
-            }          
-            fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для нанесения оглавления wave файла
-            WriteHeader(fs_output, encoder_sampleRate, 1);
-            fs_output.Close();
-            fs_output.Dispose();
-            fs_input.Close();
-            fs_input.Dispose();
-            encoder_progress = ProgressHandler.GetPercent(100, 100);
-        }
     }
 }

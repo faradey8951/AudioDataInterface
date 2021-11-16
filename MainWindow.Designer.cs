@@ -30,6 +30,14 @@ namespace AudioDataInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
+            "1",
+            "000000000000000000000000000000000000000",
+            "MARKER",
+            "255",
+            "000000",
+            "000000",
+            "00000000000000000000000000000000"}, -1);
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -60,7 +68,7 @@ namespace AudioDataInterface
             this.справкаToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
-            this.menuStrip.Size = new System.Drawing.Size(711, 24);
+            this.menuStrip.Size = new System.Drawing.Size(748, 24);
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
@@ -86,7 +94,7 @@ namespace AudioDataInterface
             this.button_encoder});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(711, 25);
+            this.toolStrip.Size = new System.Drawing.Size(748, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip";
             // 
@@ -110,46 +118,43 @@ namespace AudioDataInterface
             // 
             // statusStrip
             // 
-            this.statusStrip.Location = new System.Drawing.Point(0, 470);
+            this.statusStrip.Location = new System.Drawing.Point(0, 474);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(711, 22);
+            this.statusStrip.Size = new System.Drawing.Size(748, 22);
             this.statusStrip.TabIndex = 2;
             this.statusStrip.Text = "statusStrip";
             // 
             // column_block
             // 
-            this.column_block.Text = "Блок";
+            this.column_block.Text = "Block";
             this.column_block.Width = 50;
             // 
             // column_data
             // 
-            this.column_data.Text = "Данные";
+            this.column_data.Text = "Data";
             this.column_data.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_data.Width = 200;
+            this.column_data.Width = 250;
             // 
             // column_type
             // 
-            this.column_type.Text = "Тип";
+            this.column_type.Text = "Type";
             this.column_type.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_type.Width = 50;
             // 
             // column_hcIn
             // 
             this.column_hcIn.Text = "HC-in";
             this.column_hcIn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_hcIn.Width = 100;
             // 
             // column_hcOut
             // 
             this.column_hcOut.Text = "HC-out";
             this.column_hcOut.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_hcOut.Width = 100;
             // 
             // column_hcReturn
             // 
             this.column_hcReturn.Text = "HC-return";
             this.column_hcReturn.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_hcReturn.Width = 100;
+            this.column_hcReturn.Width = 210;
             // 
             // listView
             // 
@@ -166,9 +171,11 @@ namespace AudioDataInterface
             this.listView.FullRowSelect = true;
             this.listView.GridLines = true;
             this.listView.HideSelection = false;
+            this.listView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
+            listViewItem1});
             this.listView.Location = new System.Drawing.Point(0, 49);
             this.listView.Name = "listView";
-            this.listView.Size = new System.Drawing.Size(711, 421);
+            this.listView.Size = new System.Drawing.Size(748, 425);
             this.listView.Sorting = System.Windows.Forms.SortOrder.Ascending;
             this.listView.TabIndex = 3;
             this.listView.UseCompatibleStateImageBehavior = false;
@@ -204,22 +211,23 @@ namespace AudioDataInterface
             // 
             // column_markerCode
             // 
-            this.column_markerCode.Text = "Код маркера";
+            this.column_markerCode.Text = "Code";
             this.column_markerCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_markerCode.Width = 80;
+            this.column_markerCode.Width = 50;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(711, 492);
+            this.ClientSize = new System.Drawing.Size(748, 496);
             this.Controls.Add(this.listView);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.menuStrip);
             this.DoubleBuffered = true;
             this.MainMenuStrip = this.menuStrip;
+            this.MinimumSize = new System.Drawing.Size(764, 535);
             this.Name = "MainWindow";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
