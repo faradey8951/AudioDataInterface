@@ -33,7 +33,7 @@ namespace AudioDataInterface
             this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
             this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
             this.label_recDevice = new System.Windows.Forms.Label();
-            this.listView1 = new System.Windows.Forms.ListView();
+            this.listView = new System.Windows.Forms.ListView();
             this.button_clear = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
             this.button_ok = new System.Windows.Forms.Button();
@@ -48,12 +48,13 @@ namespace AudioDataInterface
             // 
             // comboBox_recDevices
             // 
-            this.comboBox_recDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox_recDevices.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.comboBox_recDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_recDevices.FormattingEnabled = true;
-            this.comboBox_recDevices.Location = new System.Drawing.Point(151, 37);
+            this.comboBox_recDevices.Location = new System.Drawing.Point(153, 37);
             this.comboBox_recDevices.Name = "comboBox_recDevices";
-            this.comboBox_recDevices.Size = new System.Drawing.Size(246, 21);
+            this.comboBox_recDevices.Size = new System.Drawing.Size(528, 21);
             this.comboBox_recDevices.TabIndex = 1;
             this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged);
             // 
@@ -63,7 +64,6 @@ namespace AudioDataInterface
             // 
             // label_recDevice
             // 
-            this.label_recDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.label_recDevice.AutoSize = true;
             this.label_recDevice.Location = new System.Drawing.Point(9, 40);
             this.label_recDevice.Name = "label_recDevice";
@@ -71,23 +71,23 @@ namespace AudioDataInterface
             this.label_recDevice.TabIndex = 2;
             this.label_recDevice.Text = "Устройство записи:";
             // 
-            // listView1
+            // listView
             // 
-            this.listView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(12, 138);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(385, 296);
-            this.listView1.TabIndex = 3;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView.HideSelection = false;
+            this.listView.Location = new System.Drawing.Point(12, 138);
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(720, 315);
+            this.listView.TabIndex = 3;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
             // 
             // button_clear
             // 
             this.button_clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_clear.Location = new System.Drawing.Point(12, 441);
+            this.button_clear.Location = new System.Drawing.Point(12, 460);
             this.button_clear.Name = "button_clear";
             this.button_clear.Size = new System.Drawing.Size(75, 23);
             this.button_clear.TabIndex = 4;
@@ -97,7 +97,7 @@ namespace AudioDataInterface
             // button_cancel
             // 
             this.button_cancel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_cancel.Location = new System.Drawing.Point(322, 441);
+            this.button_cancel.Location = new System.Drawing.Point(657, 460);
             this.button_cancel.Name = "button_cancel";
             this.button_cancel.Size = new System.Drawing.Size(75, 23);
             this.button_cancel.TabIndex = 5;
@@ -108,7 +108,7 @@ namespace AudioDataInterface
             // button_ok
             // 
             this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_ok.Location = new System.Drawing.Point(241, 441);
+            this.button_ok.Location = new System.Drawing.Point(576, 460);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(75, 23);
             this.button_ok.TabIndex = 6;
@@ -118,7 +118,8 @@ namespace AudioDataInterface
             // 
             // trackBar
             // 
-            this.trackBar.Location = new System.Drawing.Point(378, 64);
+            this.trackBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.trackBar.Location = new System.Drawing.Point(687, 64);
             this.trackBar.Maximum = 8;
             this.trackBar.Minimum = 1;
             this.trackBar.Name = "trackBar";
@@ -130,9 +131,12 @@ namespace AudioDataInterface
             // 
             // pictureBox
             // 
+            this.pictureBox.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox.Location = new System.Drawing.Point(12, 64);
             this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(360, 68);
+            this.pictureBox.Size = new System.Drawing.Size(669, 68);
             this.pictureBox.TabIndex = 8;
             this.pictureBox.TabStop = false;
             // 
@@ -143,7 +147,7 @@ namespace AudioDataInterface
             this.button_debug});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(409, 25);
+            this.toolStrip1.Size = new System.Drawing.Size(744, 25);
             this.toolStrip1.TabIndex = 9;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -163,19 +167,23 @@ namespace AudioDataInterface
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(409, 473);
+            this.ClientSize = new System.Drawing.Size(744, 492);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.trackBar);
             this.Controls.Add(this.button_ok);
             this.Controls.Add(this.button_cancel);
             this.Controls.Add(this.button_clear);
-            this.Controls.Add(this.listView1);
+            this.Controls.Add(this.listView);
             this.Controls.Add(this.label_recDevice);
             this.Controls.Add(this.comboBox_recDevices);
             this.DoubleBuffered = true;
-            this.MinimumSize = new System.Drawing.Size(425, 483);
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.Fixed3D;
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
+            this.MinimumSize = new System.Drawing.Size(764, 535);
             this.Name = "CaptureWindow";
+            this.Opacity = 0.95D;
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Audio Data Interface - Запись";
@@ -195,7 +203,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.ComboBox comboBox_recDevices;
         private System.Windows.Forms.Timer timer_drawWaveGraphFrame;
         private System.Windows.Forms.Label label_recDevice;
-        private System.Windows.Forms.ListView listView1;
+        private System.Windows.Forms.ListView listView;
         private System.Windows.Forms.Button button_clear;
         private System.Windows.Forms.Button button_cancel;
         private System.Windows.Forms.Button button_ok;

@@ -17,7 +17,7 @@ namespace AudioDataInterface
         //Экземпляры классов
         //Префикс: "class_"
         //////////////////////////////////////////////////////////////////////////////////////
-        public static MainWindow class_MainWindow;
+        public static MainWindow class_mainWindow;
         public static TextHandler class_TextHandler = new TextHandler();
         public static AudioIO class_audioIO = new AudioIO();
         public static CaptureWindow class_captureWindow = new CaptureWindow();
@@ -29,7 +29,7 @@ namespace AudioDataInterface
         public MainWindow()
         {
             InitializeComponent();
-            class_MainWindow = this; //Передача статического доступа классу
+            class_mainWindow = this; //Передача статического доступа классу
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -41,7 +41,7 @@ namespace AudioDataInterface
         {
             if (class_captureWindow != null)
                 class_captureWindow = new CaptureWindow();
-            class_captureWindow.ShowDialog();
+            class_captureWindow.Show();
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)

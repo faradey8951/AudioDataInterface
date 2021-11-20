@@ -8,6 +8,9 @@ using System.Windows.Forms;
 
 namespace AudioDataInterface
 {
+    /// <summary>
+    /// Конвертатор цифровых данных в звуковые аудиофайлы
+    /// </summary>
     public class Encoder
     {
         //Другое
@@ -15,13 +18,15 @@ namespace AudioDataInterface
         public static FileStream fs_output = null;
         public static FileStream fs_input = null;
         public static List<short> list_outputFileSamples = new List<short>(); //Коллекция сэмплов для записи выходного файла
+        public static string[] alphabets = { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 
+                                             "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"}; //Алфавиты символов
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Энкодер
         //Префикс: "encoder_"
         //////////////////////////////////////////////////////////////////////////////////////
         public static string encoder_outputFilePath = "output.wav";
-        public static string encoder_inputFilePath = "output.wav";
+        public static string encoder_inputFilePath = "";
         public static int encoder_signalGain = 2; //Коэффициент усиления аудиосигнала выходного файла
         public static int encoder_sampleRate = 72000; //Частота дискретизации выходного файла
         public static bool encoder_ADIFShell = false; //Функция ADIFShell

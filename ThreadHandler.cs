@@ -6,6 +6,9 @@ using System.Threading;
 
 namespace AudioDataInterface
 {
+    /// <summary>
+    /// Обработчик потоков
+    /// </summary>
     public class ThreadHandler
     {
         /// <summary>

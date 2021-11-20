@@ -58,5 +58,41 @@ namespace AudioDataInterface.Properties {
                 this["langId"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int mainWindowHeight {
+            get {
+                return ((int)(this["mainWindowHeight"]));
+            }
+            set {
+                this["mainWindowHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int mainWindowWidth {
+            get {
+                return ((int)(this["mainWindowWidth"]));
+            }
+            set {
+                this["mainWindowWidth"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool mainWindowMaximized {
+            get {
+                return ((bool)(this["mainWindowMaximized"]));
+            }
+            set {
+                this["mainWindowMaximized"] = value;
+            }
+        }
     }
 }

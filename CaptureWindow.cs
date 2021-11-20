@@ -47,14 +47,21 @@ namespace AudioDataInterface
         {
             if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_waveGraphSamples.Count > 0)
             {
-                graphics_waveGraph.Clear(Color.LightGray);
-                PointF[] points = new PointF[pictureBox.Width]; //Массив точек кадра сигналограммы
-                graphics_waveGraph.DrawLine(new Pen(Color.Green), 0, pictureBox.Height / 2, pictureBox.Width, pictureBox.Height / 2); //Отрисовать горизонтальную ось
-                for (int i = 0, k = 0; i < pictureBox.Width; i++, k += MainWindow.class_captureWindow.trackBar.Value)
-                    points[i] = new PointF(i, (((pictureBox.Height / 2) * -AudioIO.buff_waveGraphSamples[k]) / 32767) + (pictureBox.Height / 2));
-                graphics_waveGraph.DrawLines(new Pen(Color.Blue), points);
-                pictureBox.Image = bitmap_waveGraph;
-                AudioIO.buff_waveGraphSamples.RemoveRange(0, AudioIO.buff_waveGraphSamples.Count - 512);
+                try
+                {
+                    graphics_waveGraph.Clear(Color.LightGray);
+                    PointF[] points = new PointF[pictureBox.Width]; //Массив точек кадра сигналограммы
+                    graphics_waveGraph.DrawLine(new Pen(Color.Green), 0, pictureBox.Height / 2, pictureBox.Width, pictureBox.Height / 2); //Отрисовать горизонтальную ось
+                    for (int i = 0, k = 0; i < pictureBox.Width; i++, k += MainWindow.class_captureWindow.trackBar.Value)
+                        points[i] = new PointF(i, (((pictureBox.Height / 2) * -AudioIO.buff_waveGraphSamples[k]) / 32767) + (pictureBox.Height / 2));
+                    graphics_waveGraph.DrawLines(new Pen(Color.Blue), points);
+                    pictureBox.Image = bitmap_waveGraph;
+                    AudioIO.buff_waveGraphSamples.RemoveRange(0, AudioIO.buff_waveGraphSamples.Count - 512);
+                }
+                catch (Exception ex)
+                {
+                    DebugHandler.Write("CaptureWindow.cs -> DrawGraphFrame()", ex.Message);
+                }
             }
         }
 
