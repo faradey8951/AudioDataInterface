@@ -30,7 +30,8 @@ namespace AudioDataInterface
                 {
                     try
                     {
-                        File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                        var file = File.Open(filePath, FileMode.Open, FileAccess.ReadWrite, FileShare.None);
+                        file.Close();
                     }
                     catch
                     {

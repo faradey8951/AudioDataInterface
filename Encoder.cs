@@ -42,7 +42,15 @@ namespace AudioDataInterface
         /// </summary>
         public static void CreateOutputStream()
         {
-            fs_output = new FileStream(encoder_outputFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            try
+            {
+                fs_output = new FileStream(encoder_outputFilePath, FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+            }
+            catch (Exception ex)
+            {
+                LogHandler.WriteError("Encoder.cs->CreateOutputStream()", ex.Message);
+                encoder_forceStop = true;
+            }
         }
 
         /// <summary>
@@ -50,7 +58,13 @@ namespace AudioDataInterface
         /// </summary>
         public static void CreateInputStream()
         {
-            fs_input = new FileStream(encoder_inputFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            if (FileHandler.CheckStatus(encoder_inputFilePath, false) == "available")
+                fs_input = new FileStream(encoder_inputFilePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            else
+            {
+                LogHandler.WriteError("Encoder.cs->CreateInputStream()", encoder_inputFilePath + " is " + FileHandler.CheckStatus(encoder_inputFilePath, false));
+                encoder_forceStop = true;
+            }
         }
 
         /// <summary>
@@ -613,23 +627,19 @@ namespace AudioDataInterface
 
         public static void EncodeFileStream()
         {
-            encoder_forceStop = false;
-            try
-            {
-                if (File.Exists("output.wav"))
-                    File.Delete("output.wav");
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                LogHandler.Write("Encoder.cs->EncodeFileStream", ex.Message);
-                encoder_forceStop = true;
-            }
-            if (encoder_forceStop == true)
-                Thread.CurrentThread.Abort();
+            LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding started");
             encoder_forceStop = false;
             CreateInputStream();
             CreateOutputStream();
+            if (encoder_forceStop == true)
+            {
+                LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding aborted");
+                if (fs_output != null)
+                    fs_output.Close();
+                if (fs_input != null)
+                    fs_input.Close();
+                Thread.CurrentThread.Abort();
+            }    
             fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
             GenerateVoid(2); //Генерация тишины 2 сек.
             GenerateSync(); //Генерация синхроимпульса       
@@ -640,7 +650,14 @@ namespace AudioDataInterface
             for (int i = 0; i < fs_input.Length;)
             {
                 if (encoder_forceStop == true)
+                {
+                    LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding aborted");
+                    if (fs_output != null)
+                        fs_output.Close();
+                    if (fs_input != null)
+                        fs_input.Close();
                     Thread.CurrentThread.Abort();
+                }
                 tempB = fs_input.ReadByte().ToString();
                 tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
                 tempB = tempB.PadLeft(8, '0');
@@ -672,6 +689,7 @@ namespace AudioDataInterface
             fs_input.Close();
             fs_input.Dispose();
             encoder_progress = ProgressHandler.GetPercent(100, 100);
+            LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding finished");
         }
 
         /*

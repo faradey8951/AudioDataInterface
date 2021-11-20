@@ -39,7 +39,7 @@ namespace AudioDataInterface
             }
             catch (Exception ex)
             {
-                LogHandler.Write("Settings.cs", ex.Message);
+                LogHandler.WriteError("Settings.cs", ex.Message);
             }
         }
     }

@@ -60,7 +60,7 @@ namespace AudioDataInterface
                 }
                 catch (Exception ex)
                 {
-                    LogHandler.Write("CaptureWindow.cs -> DrawGraphFrame()", ex.Message);
+                    LogHandler.WriteError("CaptureWindow.cs->DrawGraphFrame()", ex.Message);
                 }
             }
         }

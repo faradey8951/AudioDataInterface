@@ -52,11 +52,11 @@ namespace AudioDataInterface
             this.column_hcOut = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_hcReturn = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.listView = new System.Windows.Forms.ListView();
+            this.column_markerCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.menu_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.menu_remove = new System.Windows.Forms.ToolStripMenuItem();
-            this.column_markerCode = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -88,7 +88,7 @@ namespace AudioDataInterface
             // 
             // toolStrip
             // 
-            this.toolStrip.BackColor = System.Drawing.Color.LightGray;
+            this.toolStrip.BackColor = System.Drawing.SystemColors.Window;
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.button_capture,
             this.button_encoder});
@@ -181,6 +181,12 @@ namespace AudioDataInterface
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
             // 
+            // column_markerCode
+            // 
+            this.column_markerCode.Text = "Code";
+            this.column_markerCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_markerCode.Width = 50;
+            // 
             // contextMenuStrip
             // 
             this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -208,12 +214,6 @@ namespace AudioDataInterface
             this.menu_remove.Name = "menu_remove";
             this.menu_remove.Size = new System.Drawing.Size(191, 22);
             this.menu_remove.Text = "Удалить";
-            // 
-            // column_markerCode
-            // 
-            this.column_markerCode.Text = "Code";
-            this.column_markerCode.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_markerCode.Width = 50;
             // 
             // MainWindow
             // 

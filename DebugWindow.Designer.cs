@@ -59,7 +59,7 @@ namespace AudioDataInterface
             // 
             // listView_buffers
             // 
-            this.listView_buffers.BackColor = System.Drawing.Color.LightGray;
+            this.listView_buffers.BackColor = System.Drawing.SystemColors.Window;
             this.listView_buffers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column_buffer,
             this.column_size});
@@ -119,7 +119,7 @@ namespace AudioDataInterface
             // 
             // listView_threads
             // 
-            this.listView_threads.BackColor = System.Drawing.Color.LightGray;
+            this.listView_threads.BackColor = System.Drawing.SystemColors.Window;
             this.listView_threads.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
             this.column_thread,
             this.column_status});

@@ -59,7 +59,7 @@ namespace AudioDataInterface
             }
             catch (Exception ex)
             {
-                LogHandler.Write("EncoderWindow.cs->button_select_Click", ex.Message);
+                LogHandler.WriteError("EncoderWindow.cs->button_select_Click", ex.Message);
             }
         }
 
@@ -90,7 +90,7 @@ namespace AudioDataInterface
             }
             catch (Exception ex)
             {
-                LogHandler.Write("EncoderWindow.cs->button_convert_Click", ex.Message);
+                LogHandler.WriteError("EncoderWindow.cs->button_convert_Click", ex.Message);
             }
         }
 

@@ -13,18 +13,23 @@ namespace AudioDataInterface
         public static List<string> list_log = new List<string>(); //Журнал ошибок
         public static bool logListening = false; //Указывает прослушивается ли журнал ошибок через LogMonitorWindow
 
-        /// <summary>
-        /// Сохраняет ошибку в список list_log. errSrc - источник ошибки, errMsg - сообщение об ошибке
-        /// </summary>
-        /// <param name="errSrc"></param>
-        /// <param name="errMsg"></param>
-        public static void Write(string errSrc, string errMsg)
+        public static void WriteError(string source, string message)
         {
-            list_log.Add("[" + errSrc + "]: " + errMsg);
+            list_log.Add("-[ERROR] in ( " + source + " ): " + message + "\r\n");
 
             //В случае прослушивания журнала
             if (logListening == true)
-                LogMonitorWindow.buff_log.Add("[" + errSrc + "]: " + errMsg + "\r\n");
+                LogMonitorWindow.buff_log.Add("-[ERROR] in ( " + source + " ): " + message + "\r\n");
         }
+
+        public static void WriteStatus(string source, string message)
+        {
+            list_log.Add("-[STATUS] in ( " + source + " ): " + message + "\r\n");
+
+            //В случае прослушивания журнала
+            if (logListening == true)
+                LogMonitorWindow.buff_log.Add("-[STATUS] in ( " + source + " ): " + message + "\r\n");
+        }
+
     }
 }
