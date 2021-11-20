@@ -19,6 +19,7 @@ namespace AudioDataInterface
         private void timer_controlHandler_tick(object sender, EventArgs e)
         {
             listView_buffers.Items[0].SubItems[1].Text = AudioIO.buff_waveGraphSamples.Count().ToString();
+            listView_buffers.Items[1].SubItems[1].Text = LogHandler.list_log.Count().ToString();
             listView_threads.Items[0].SubItems[1].Text = ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStream);
         }
 
@@ -30,7 +31,10 @@ namespace AudioDataInterface
         private void button_logMonitor_Click(object sender, EventArgs e)
         {
             if (MainWindow.class_logMonitorWindow != null)
+            {
+                MainWindow.class_logMonitorWindow.Close();
                 MainWindow.class_logMonitorWindow = new LogMonitorWindow();
+            }
             MainWindow.class_logMonitorWindow.Show();
         }
 

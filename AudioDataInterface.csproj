@@ -57,7 +57,7 @@
     <Compile Include="CaptureWindow.Designer.cs">
       <DependentUpon>CaptureWindow.cs</DependentUpon>
     </Compile>
-    <Compile Include="DebugHandler.cs" />
+    <Compile Include="LogHandler.cs" />
     <Compile Include="DebugWindow.cs">
       <SubType>Form</SubType>
     </Compile>

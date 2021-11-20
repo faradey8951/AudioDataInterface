@@ -59,7 +59,7 @@ namespace AudioDataInterface
             }
             catch (Exception ex)
             {
-                DebugHandler.Write("EncoderWindow.cs->button_select_Click", ex.Message);
+                LogHandler.Write("EncoderWindow.cs->button_select_Click", ex.Message);
             }
         }
 
@@ -90,7 +90,7 @@ namespace AudioDataInterface
             }
             catch (Exception ex)
             {
-                DebugHandler.Write("EncoderWindow.cs->button_convert_Click", ex.Message);
+                LogHandler.Write("EncoderWindow.cs->button_convert_Click", ex.Message);
             }
         }
 
@@ -107,7 +107,10 @@ namespace AudioDataInterface
         private void button_debug_Click(object sender, EventArgs e)
         {
             if (MainWindow.class_debugWindow != null)
+            {
+                MainWindow.class_debugWindow.Dispose();
                 MainWindow.class_debugWindow = new DebugWindow();
+            }
             MainWindow.class_debugWindow.Show();
         }
 
@@ -121,6 +124,11 @@ namespace AudioDataInterface
         {
             if (MainWindow.class_debugWindow != null)
                 MainWindow.class_debugWindow.Close();
+        }
+
+        private void EncoderWindow_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

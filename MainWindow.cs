@@ -40,7 +40,10 @@ namespace AudioDataInterface
         private void button_capture_Click(object sender, EventArgs e)
         {
             if (class_captureWindow != null)
+            {
+                class_captureWindow.Close();
                 class_captureWindow = new CaptureWindow();
+            }
             class_captureWindow.Show();
         }
 
@@ -52,7 +55,10 @@ namespace AudioDataInterface
         private void button_encoder_Click(object sender, EventArgs e)
         {
             if (class_encoderWindow != null)
+            {
+                class_encoderWindow.Dispose();
                 class_encoderWindow = new EncoderWindow();
+            }
             class_encoderWindow.ShowDialog();
         }
     }

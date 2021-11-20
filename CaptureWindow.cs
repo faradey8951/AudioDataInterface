@@ -60,7 +60,7 @@ namespace AudioDataInterface
                 }
                 catch (Exception ex)
                 {
-                    DebugHandler.Write("CaptureWindow.cs -> DrawGraphFrame()", ex.Message);
+                    LogHandler.Write("CaptureWindow.cs -> DrawGraphFrame()", ex.Message);
                 }
             }
         }
@@ -102,7 +102,10 @@ namespace AudioDataInterface
         private void button_debug_Click(object sender, EventArgs e)
         {
             if (MainWindow.class_debugWindow != null)
+            {
+                MainWindow.class_debugWindow.Dispose();
                 MainWindow.class_debugWindow = new DebugWindow();
+            }
             MainWindow.class_debugWindow.Show();
         }
     }

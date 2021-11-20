@@ -12,7 +12,7 @@ namespace AudioDataInterface
 {
     public partial class LogMonitorWindow : Form
     {
-        static List<string> buff_log = new List<string>(); //Буфер ошибок для вывода
+        public static List<string> buff_log = new List<string>(); //Буфер ошибок для вывода
 
         public LogMonitorWindow()
         {
@@ -25,14 +25,18 @@ namespace AudioDataInterface
             {
                 richTextBox.AppendText(buff_log[0]);
                 buff_log.RemoveAt(0);
-                Thread.Sleep(10);
             }
         }
 
         private void LogMonitorWindow_Load(object sender, EventArgs e)
         {
-            buff_log.AddRange(DebugHandler.list_log); //Вписать list_log в буфер ошибок
+            LogHandler.logListening = true;
+            buff_log.AddRange(LogHandler.list_log); //Вписать list_log в буфер ошибок
+        }
 
+        private void LogMonitorWindow_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            LogHandler.logListening = false;
         }
     }
 }

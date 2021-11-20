@@ -338,6 +338,7 @@ namespace AudioDataInterface
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Audio Data Interface - Энкодер";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EncoderWindow_FormClosing);
+            this.Load += new System.EventHandler(this.EncoderWindow_Load);
             this.statusStrip.ResumeLayout(false);
             this.statusStrip.PerformLayout();
             this.groupBox_text.ResumeLayout(false);

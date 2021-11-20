@@ -622,7 +622,7 @@ namespace AudioDataInterface
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                DebugHandler.Write("Encoder.cs->EncodeFileStream", ex.Message);
+                LogHandler.Write("Encoder.cs->EncodeFileStream", ex.Message);
                 encoder_forceStop = true;
             }
             if (encoder_forceStop == true)

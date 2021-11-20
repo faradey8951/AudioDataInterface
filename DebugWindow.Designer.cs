@@ -30,10 +30,13 @@ namespace AudioDataInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
             "waveGraphSamples",
             "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
+            "log",
+            "0"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
             "EncodeFileStream()",
             "status"}, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DebugWindow));
@@ -63,9 +66,10 @@ namespace AudioDataInterface
             this.listView_buffers.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView_buffers.GridLines = true;
             this.listView_buffers.HideSelection = false;
-            listViewItem7.StateImageIndex = 0;
+            listViewItem1.StateImageIndex = 0;
             this.listView_buffers.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7});
+            listViewItem1,
+            listViewItem2});
             this.listView_buffers.Location = new System.Drawing.Point(3, 16);
             this.listView_buffers.Name = "listView_buffers";
             this.listView_buffers.Size = new System.Drawing.Size(361, 153);
@@ -123,7 +127,7 @@ namespace AudioDataInterface
             this.listView_threads.GridLines = true;
             this.listView_threads.HideSelection = false;
             this.listView_threads.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem8});
+            listViewItem3});
             this.listView_threads.Location = new System.Drawing.Point(3, 16);
             this.listView_threads.Name = "listView_threads";
             this.listView_threads.Size = new System.Drawing.Size(361, 153);

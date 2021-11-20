@@ -91,6 +91,7 @@ namespace AudioDataInterface
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LogMonitorWindow";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogMonitorWindow_FormClosing);
             this.Load += new System.EventHandler(this.LogMonitorWindow_Load);
             this.toolStrip.ResumeLayout(false);
             this.toolStrip.PerformLayout();
