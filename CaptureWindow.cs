@@ -37,7 +37,9 @@ namespace AudioDataInterface
                 Properties.Settings.Default.Reset();
                 Settings.Load();
             }
-            AudioIO.WaveGraphCaptureInit();
+            AudioIO.GraphCaptureInit();
+            AudioIO.SignalCaptureInit();
+            Decoder.Start();
         }
 
         /// <summary>
@@ -45,7 +47,7 @@ namespace AudioDataInterface
         /// </summary>
         public void DrawWaveGraphFrame()
         {
-            if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_waveGraphSamples.Count > 0)
+            if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_graphSamples.Count > 0)
             {
                 try
                 {
@@ -53,10 +55,10 @@ namespace AudioDataInterface
                     PointF[] points = new PointF[pictureBox.Width]; //Массив точек кадра сигналограммы
                     graphics_waveGraph.DrawLine(new Pen(Color.Green), 0, pictureBox.Height / 2, pictureBox.Width, pictureBox.Height / 2); //Отрисовать горизонтальную ось
                     for (int i = 0, k = 0; i < pictureBox.Width; i++, k += MainWindow.class_captureWindow.trackBar.Value)
-                        points[i] = new PointF(i, (((pictureBox.Height / 2) * -AudioIO.buff_waveGraphSamples[k]) / 32767) + (pictureBox.Height / 2));
+                        points[i] = new PointF(i, (((pictureBox.Height / 2) * -AudioIO.buff_graphSamples[k]) / 32767) + (pictureBox.Height / 2));
                     graphics_waveGraph.DrawLines(new Pen(Color.Blue), points);
                     pictureBox.Image = bitmap_waveGraph;
-                    AudioIO.buff_waveGraphSamples.RemoveRange(0, AudioIO.buff_waveGraphSamples.Count - 512);
+                    AudioIO.buff_graphSamples.RemoveRange(0, AudioIO.buff_graphSamples.Count - 512);
                 }
                 catch (Exception ex)
                 {
@@ -79,7 +81,8 @@ namespace AudioDataInterface
         private void comboBox_recDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
             AudioIO.audio_recDeviceId = comboBox_recDevices.SelectedIndex;
-            AudioIO.WaveGraphCaptureInit();
+            AudioIO.GraphCaptureInit();
+            AudioIO.SignalCaptureInit();
         }
 
         private void button_ok_Click(object sender, EventArgs e)
@@ -94,7 +97,8 @@ namespace AudioDataInterface
 
         private void CaptureWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            AudioIO.WaveGraphCaptureClose();
+            AudioIO.GraphCaptureClose();
+            AudioIO.SignalCaptureClose();
             if (MainWindow.class_debugWindow != null)
                 MainWindow.class_debugWindow.Close();
         }
@@ -107,6 +111,16 @@ namespace AudioDataInterface
                 MainWindow.class_debugWindow = new DebugWindow();
             }
             MainWindow.class_debugWindow.Show();
+        }
+
+        private void timer_controlHandler_Tick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void trackBar_Scroll(object sender, EventArgs e)
+        {
+
         }
     }
 }

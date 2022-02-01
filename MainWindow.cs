@@ -61,5 +61,12 @@ namespace AudioDataInterface
             }
             class_encoderWindow.ShowDialog();
         }
+
+        private void timer_controlHandler_Tick(object sender, EventArgs e)
+        {
+            //Анимация запуска
+            if (this.Opacity < 100)
+                this.Opacity += 0.04;
+        }
     }
 }

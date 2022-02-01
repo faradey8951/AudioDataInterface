@@ -39,11 +39,11 @@ namespace AudioDataInterface
             this.button_ok = new System.Windows.Forms.Button();
             this.trackBar = new System.Windows.Forms.TrackBar();
             this.pictureBox = new System.Windows.Forms.PictureBox();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.button_debug = new System.Windows.Forms.ToolStripButton();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBox_recDevices
@@ -128,6 +128,7 @@ namespace AudioDataInterface
             this.trackBar.TabIndex = 7;
             this.trackBar.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar.Value = 1;
+            this.trackBar.Scroll += new System.EventHandler(this.trackBar_Scroll);
             // 
             // pictureBox
             // 
@@ -140,16 +141,16 @@ namespace AudioDataInterface
             this.pictureBox.TabIndex = 8;
             this.pictureBox.TabStop = false;
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.BackColor = System.Drawing.Color.LightGray;
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.BackColor = System.Drawing.Color.LightGray;
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.button_debug});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(744, 25);
-            this.toolStrip1.TabIndex = 9;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(744, 25);
+            this.toolStrip.TabIndex = 9;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // button_debug
             // 
@@ -168,7 +169,7 @@ namespace AudioDataInterface
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(744, 492);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.pictureBox);
             this.Controls.Add(this.trackBar);
             this.Controls.Add(this.button_ok);
@@ -183,7 +184,6 @@ namespace AudioDataInterface
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(764, 535);
             this.Name = "CaptureWindow";
-            this.Opacity = 0.95D;
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Audio Data Interface - Запись";
@@ -192,8 +192,8 @@ namespace AudioDataInterface
             this.ResizeEnd += new System.EventHandler(this.CaptureWindow_ResizeEnd);
             ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -209,7 +209,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.Button button_ok;
         public System.Windows.Forms.TrackBar trackBar;
         private System.Windows.Forms.PictureBox pictureBox;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton button_debug;
     }
 }

@@ -9,7 +9,7 @@ using System.Windows.Forms;
 namespace AudioDataInterface
 {
     /// <summary>
-    /// Конвертатор цифровых данных в звуковые аудиофайлы
+    /// Конвертер цифровых данных в аудио
     /// </summary>
     public class Encoder
     {

@@ -31,12 +31,18 @@ namespace AudioDataInterface
         {
             this.components = new System.ComponentModel.Container();
             System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "waveGraphSamples",
+            "graphSamples",
             "0"}, -1);
             System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
-            "log",
+            "signalSamples",
             "0"}, -1);
             System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
+            "log",
+            "0"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
+            "signalAmplitudes",
+            "0"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
             "EncodeFileStream()",
             "status"}, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(DebugWindow));
@@ -49,12 +55,12 @@ namespace AudioDataInterface
             this.listView_threads = new System.Windows.Forms.ListView();
             this.column_thread = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStrip = new System.Windows.Forms.ToolStrip();
             this.button_test = new System.Windows.Forms.ToolStripButton();
             this.button_logMonitor = new System.Windows.Forms.ToolStripButton();
             this.groupBox_buffers.SuspendLayout();
             this.groupBox_threads.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
+            this.toolStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // listView_buffers
@@ -69,7 +75,9 @@ namespace AudioDataInterface
             listViewItem1.StateImageIndex = 0;
             this.listView_buffers.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem1,
-            listViewItem2});
+            listViewItem2,
+            listViewItem3,
+            listViewItem4});
             this.listView_buffers.Location = new System.Drawing.Point(3, 16);
             this.listView_buffers.Name = "listView_buffers";
             this.listView_buffers.Size = new System.Drawing.Size(361, 153);
@@ -127,7 +135,7 @@ namespace AudioDataInterface
             this.listView_threads.GridLines = true;
             this.listView_threads.HideSelection = false;
             this.listView_threads.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem3});
+            listViewItem5});
             this.listView_threads.Location = new System.Drawing.Point(3, 16);
             this.listView_threads.Name = "listView_threads";
             this.listView_threads.Size = new System.Drawing.Size(361, 153);
@@ -145,16 +153,16 @@ namespace AudioDataInterface
             this.column_status.Text = "Статус";
             this.column_status.Width = 75;
             // 
-            // toolStrip1
+            // toolStrip
             // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.button_test,
             this.button_logMonitor});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(391, 25);
-            this.toolStrip1.TabIndex = 4;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip.Name = "toolStrip";
+            this.toolStrip.Size = new System.Drawing.Size(391, 25);
+            this.toolStrip.TabIndex = 4;
+            this.toolStrip.Text = "toolStrip1";
             // 
             // button_test
             // 
@@ -184,7 +192,7 @@ namespace AudioDataInterface
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
             this.ClientSize = new System.Drawing.Size(391, 408);
-            this.Controls.Add(this.toolStrip1);
+            this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.groupBox_threads);
             this.Controls.Add(this.groupBox_buffers);
             this.DoubleBuffered = true;
@@ -197,8 +205,8 @@ namespace AudioDataInterface
             this.Load += new System.EventHandler(this.DebugWindow_Load);
             this.groupBox_buffers.ResumeLayout(false);
             this.groupBox_threads.ResumeLayout(false);
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
+            this.toolStrip.ResumeLayout(false);
+            this.toolStrip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -214,7 +222,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.ListView listView_threads;
         private System.Windows.Forms.ColumnHeader column_thread;
         private System.Windows.Forms.ColumnHeader column_status;
-        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.ToolStripButton button_test;
         private System.Windows.Forms.ToolStripButton button_logMonitor;
     }

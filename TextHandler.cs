@@ -45,9 +45,7 @@ namespace AudioDataInterface
                     value1 += line[i];
                     temp = temp.Remove(0, 1);
                 }
-
                 value1 = value1.Remove(value1.Count() - 1, 1);
-
                 return new string[2] { value1, temp };
             }
             else

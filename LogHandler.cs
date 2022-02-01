@@ -16,7 +16,6 @@ namespace AudioDataInterface
         public static void WriteError(string source, string message)
         {
             list_log.Add("-[ERROR] in ( " + source + " ): " + message + "\r\n");
-
             //В случае прослушивания журнала
             if (logListening == true)
                 LogMonitorWindow.buff_log.Add("-[ERROR] in ( " + source + " ): " + message + "\r\n");
@@ -25,7 +24,6 @@ namespace AudioDataInterface
         public static void WriteStatus(string source, string message)
         {
             list_log.Add("-[STATUS] in ( " + source + " ): " + message + "\r\n");
-
             //В случае прослушивания журнала
             if (logListening == true)
                 LogMonitorWindow.buff_log.Add("-[STATUS] in ( " + source + " ): " + message + "\r\n");

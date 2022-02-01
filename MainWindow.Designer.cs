@@ -57,6 +57,7 @@ namespace AudioDataInterface
             this.menu_edit = new System.Windows.Forms.ToolStripMenuItem();
             this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
             this.menu_remove = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -215,6 +216,12 @@ namespace AudioDataInterface
             this.menu_remove.Size = new System.Drawing.Size(191, 22);
             this.menu_remove.Text = "Удалить";
             // 
+            // timer_controlHandler
+            // 
+            this.timer_controlHandler.Enabled = true;
+            this.timer_controlHandler.Interval = 25;
+            this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -229,6 +236,7 @@ namespace AudioDataInterface
             this.MainMenuStrip = this.menuStrip;
             this.MinimumSize = new System.Drawing.Size(764, 535);
             this.Name = "MainWindow";
+            this.Opacity = 0D;
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Audio Data Interface - Main";
@@ -265,6 +273,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripSeparator menuSeparator;
         private System.Windows.Forms.ToolStripMenuItem menu_remove;
         private System.Windows.Forms.ColumnHeader column_markerCode;
+        private System.Windows.Forms.Timer timer_controlHandler;
     }
 }
 
