@@ -151,14 +151,18 @@ namespace AudioDataInterface
             {
                 //if (Decoder.maxAmplitude < 25000 && audio_signalGain < 50) audio_signalGain += Math.Log10(1 + 5*audio_signalGain);
                 //if (Decoder.maxAmplitude > 32000 && audio_signalGain > 1) audio_signalGain -= Math.Log10(1 + 5*audio_signalGain);
-                audio_signalGain = 9;
+                audio_signalGain = 1;
                 Thread.Sleep(100);
             }
         }
 
         static void Signal_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
-            lock (buff_signalBytes) buff_signalBytes.AddRange(e.Buffer);
+            try
+            {
+                lock (buff_signalBytes) buff_signalBytes.AddRange(e.Buffer);
+            }
+            catch { }
         }
     }
 }

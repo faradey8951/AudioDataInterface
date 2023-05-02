@@ -30,7 +30,7 @@ namespace AudioDataInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("0");
+            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("0");
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,6 +61,7 @@ namespace AudioDataInterface
             this.panel_dataControl = new System.Windows.Forms.Panel();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
+            this.button1 = new System.Windows.Forms.Button();
             this.button_buffMp3 = new System.Windows.Forms.Button();
             this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
             this.radioButton_verticalBIAS = new System.Windows.Forms.RadioButton();
@@ -72,7 +73,6 @@ namespace AudioDataInterface
             this.pictureBox_waveGraph = new System.Windows.Forms.PictureBox();
             this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
             this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
-            this.button1 = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -267,7 +267,7 @@ namespace AudioDataInterface
             this.listView.GridLines = true;
             this.listView.HideSelection = false;
             this.listView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem2});
+            listViewItem1});
             this.listView.Location = new System.Drawing.Point(3, 3);
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size(826, 335);
@@ -361,6 +361,17 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.TabIndex = 12;
             this.groupBox_signalCapture.TabStop = false;
             this.groupBox_signalCapture.Text = "Захват сигнала";
+            this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(614, 160);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 15;
+            this.button1.Text = "buff_mp3";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // button_buffMp3
             // 
@@ -481,16 +492,6 @@ namespace AudioDataInterface
             // 
             this.timer_drawWaveGraphFrame.Interval = 40;
             this.timer_drawWaveGraphFrame.Tick += new System.EventHandler(this.timer_drawWaveGraphFrame_Tick);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(614, 160);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(75, 23);
-            this.button1.TabIndex = 15;
-            this.button1.Text = "buff_mp3";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
             // form_main
             // 

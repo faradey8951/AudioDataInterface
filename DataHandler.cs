@@ -12,6 +12,8 @@ namespace AudioDataInterface
 {
     public class DataHandler
     {
+        public static Thread thread_bufferMp3 = null;
+        public static Thread thread_playMp3 = null;
         public MemoryStream ms;
         int mp3_buffSize = 512;
         public string mp3_message = "";
@@ -37,25 +39,42 @@ namespace AudioDataInterface
                         bytes[p + 3] = Convert.ToByte(Decoder.buff_decodedData[(int)i][9].Substring(24, 8), 2);
                     }
                 }
+                lock (Decoder.buff_decodedData) Decoder.buff_decodedData.RemoveRange(0, mp3_buffSize);
+                i = 0;
                 ms.Write(bytes, 0, bytes.Length);
                 ms.Position = pos;
-                Thread.Sleep(10);
+                Thread.Sleep(100);
             }
         }
 
         public static void StartMp3Listening()
         {
-            Thread t1 = new Thread(form_main.class_dataHandler.BufferMp3);
-            t1.Start();
-            Thread t2 = new Thread(form_main.class_dataHandler.PlayMp3);
-            t2.Start();
+            thread_bufferMp3 = new Thread(form_main.class_dataHandler.BufferMp3);
+            thread_bufferMp3.Start();
+            thread_playMp3 = new Thread(form_main.class_dataHandler.PlayMp3);
+            thread_playMp3.Start();
         }
 
         //Метод очистки mp3 данных
         public void ClearMp3()
         {
+            thread_bufferMp3.Abort();
+            Decoder.thread_samplesDecoder.Abort();
+            Decoder.thread_amplitudeDecoderL.Abort();
+            Decoder.thread_amplitudeDecoderR.Abort();
+            Decoder.thread_binaryDecoder.Abort();
+            //thread_playMp3.Abort();
+            ms = new MemoryStream();
             //AudioIO.naudio_wasapiOut.Dispose();
-            //ms = new MemoryStream();
+            lock (AudioIO.buff_signalSamplesL) AudioIO.buff_signalSamplesL.Clear();
+            lock (AudioIO.buff_signalSamplesR) AudioIO.buff_signalSamplesR.Clear();
+            lock (AudioIO.buff_signalBytes) AudioIO.buff_signalBytes.Clear();
+            lock (Decoder.buff_signalAmplitudesL) Decoder.buff_signalAmplitudesL.Clear();
+            lock (Decoder.buff_signalAmplitudesR) Decoder.buff_signalAmplitudesR.Clear();
+            lock (AudioIO.buff_graphSamples) AudioIO.buff_graphSamples.Clear();
+            Decoder.Start();
+            StartMp3Listening();
+            //Thread.Sleep(100);
         }
 
         //Процесс воспроизведения MP3
@@ -102,10 +121,7 @@ namespace AudioDataInterface
                 {
                     mp3_message = "MP3 Player: " + ex.Message;
                     //mp3_currentTime = "--:--:--";
-                    ms = new MemoryStream();
-                    //AudioIO.buff_signalBytes.Clear();
-                    //AudioIO.buff_signalSamples.Clear();
-                    Thread.Sleep(10);
+                    ClearMp3();
                 }
             }
         }

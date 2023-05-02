@@ -303,9 +303,12 @@ namespace AudioDataInterface
 
         private void button1_Click(object sender, EventArgs e)
         {
-            var test = BinaryHandler.HammingEncode("01010000010010110000001100000100");
-            Thread.Sleep(10);
-            MessageBox.Show(BinaryHandler.HammingDecode("01001011000001010101100000011001000100"));
+            class_dataHandler.ClearMp3();
+        }
+
+        private void groupBox_signalCapture_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }
