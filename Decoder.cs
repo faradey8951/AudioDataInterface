@@ -141,7 +141,19 @@ namespace AudioDataInterface
                     //}
                     while (AudioIO.buff_signalSamples.Count == 0) Thread.Sleep(10);
                 }
-                lock (buff_signalAmplitudes) buff_signalAmplitudes.Add(tempList.Max());
+                //Сепарация стерео потока
+                var l = new List<short>();
+                var r = new List<short>();
+                for (int i = 0; i < tempList.Count - 1; i += 2)
+                l.Add(tempList[i]);
+                for (int i = 1; i < tempList.Count - 1; i += 2)
+                r.Add(tempList[i]);
+                lock (buff_signalAmplitudes)
+                {
+                    buff_signalAmplitudes.Add(l.Max());
+                    buff_signalAmplitudes.Add(r.Max());
+                }
+                //lock (buff_signalAmplitudes) buff_signalAmplitudes.Add(tempList.Max());
                 tempList.Clear();
             }
         }
@@ -723,12 +735,12 @@ namespace AudioDataInterface
 
         public static void Start()
         {
-            thread_samplesDecoder = new Thread(SamplesDecoderStereo);
+            thread_samplesDecoder = new Thread(SamplesDecoder);
             thread_samplesDecoder.Start();
-            thread_amplitudeDecoderL = new Thread(AmplitudeDecoderL);
+            thread_amplitudeDecoderL = new Thread(AmplitudeDecoder);
             thread_amplitudeDecoderL.Start();
-            thread_amplitudeDecoderR = new Thread(AmplitudeDecoderR);
-            thread_amplitudeDecoderR.Start();
+            //thread_amplitudeDecoderR = new Thread(AmplitudeDecoderR);
+            //thread_amplitudeDecoderR.Start();
             thread_binaryDecoder = new Thread(BinaryDecoderStereo);
             thread_binaryDecoder.Start();
             AudioIO.thread_signalAutoGainControl = new Thread(AudioIO.SignalAutoGainControll);

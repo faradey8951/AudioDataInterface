@@ -119,8 +119,7 @@ namespace AudioDataInterface
         {
             try
             {
-                if (naudio_signalWaveIn != null)
-                    naudio_signalWaveIn.Dispose();
+                if (naudio_signalWaveIn != null) naudio_signalWaveIn.Dispose();
                 naudio_signalWaveIn = new WaveIn();
                 naudio_signalWaveIn.DeviceNumber = audio_recDeviceId;
                 naudio_signalWaveIn.WaveFormat = new NAudio.Wave.WaveFormat(128000, 2);
@@ -137,13 +136,15 @@ namespace AudioDataInterface
         {
             try
             {
-                if (naudio_signalWaveIn != null)
-                    naudio_signalWaveIn.Dispose();
+                if (naudio_signalWaveIn != null) naudio_signalWaveIn.Dispose();
                 buff_signalSamples.Clear();
             }
             catch { }
         }
 
+        /// <summary>
+        /// Автоматический регулятор усиления входного сигнала
+        /// </summary>
         public static void SignalAutoGainControll()
         {
             while (true)
@@ -157,14 +158,7 @@ namespace AudioDataInterface
 
         static void Signal_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
-            try
-            {
-                lock (buff_signalBytes) buff_signalBytes.AddRange(e.Buffer);
-            }
-            catch
-            {
-
-            }
+            lock (buff_signalBytes) buff_signalBytes.AddRange(e.Buffer);
         }
     }
 }
