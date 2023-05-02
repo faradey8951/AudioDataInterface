@@ -103,6 +103,8 @@ namespace AudioDataInterface
                     mp3_message = "MP3 Player: " + ex.Message;
                     //mp3_currentTime = "--:--:--";
                     ms = new MemoryStream();
+                    //AudioIO.buff_signalBytes.Clear();
+                    //AudioIO.buff_signalSamples.Clear();
                     Thread.Sleep(10);
                 }
             }
