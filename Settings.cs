@@ -18,9 +18,9 @@ namespace AudioDataInterface
         {
             Properties.Settings.Default.recDeviceId = AudioIO.audio_recDeviceId;
             Properties.Settings.Default.playDeviceId = AudioIO.audio_playDeviceId;
-            Properties.Settings.Default.mainWindowMaximized = MainWindow.class_mainWindow.WindowState == FormWindowState.Maximized ? true : false;
-            Properties.Settings.Default.mainWindowHeight = MainWindow.class_mainWindow.Height;
-            Properties.Settings.Default.mainWindowWidth = MainWindow.class_mainWindow.Width;
+            Properties.Settings.Default.mainWindowMaximized = form_main.window_main.WindowState == FormWindowState.Maximized ? true : false;
+            Properties.Settings.Default.mainWindowHeight = form_main.window_main.Height;
+            Properties.Settings.Default.mainWindowWidth = form_main.window_main.Width;
             Properties.Settings.Default.Save();
         }
 
@@ -31,11 +31,11 @@ namespace AudioDataInterface
                 AudioIO.audio_recDeviceId = Properties.Settings.Default.recDeviceId;
                 AudioIO.audio_playDeviceId = Properties.Settings.Default.playDeviceId;
                 if (Properties.Settings.Default.mainWindowMaximized == true)
-                    MainWindow.class_mainWindow.WindowState = FormWindowState.Maximized;
+                    form_main.window_main.WindowState = FormWindowState.Maximized;
                 else
-                    MainWindow.class_mainWindow.WindowState = FormWindowState.Normal;
-                MainWindow.class_mainWindow.Width = Properties.Settings.Default.mainWindowWidth;
-                MainWindow.class_mainWindow.Height = Properties.Settings.Default.mainWindowHeight;
+                    form_main.window_main.WindowState = FormWindowState.Normal;
+                form_main.window_main.Width = Properties.Settings.Default.mainWindowWidth;
+                form_main.window_main.Height = Properties.Settings.Default.mainWindowHeight;
             }
             catch (Exception ex)
             {

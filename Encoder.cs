@@ -19,23 +19,29 @@ namespace AudioDataInterface
         public static FileStream fs_input = null;
         public static List<short> list_outputFileSamples = new List<short>(); //Коллекция сэмплов для записи выходного файла
         public static string[] alphabets = { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 
-                                             "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ"}; //Алфавиты символов
+                                             "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
+                                             "1234567890",
+                                             @"~!@#$%^&*()_+`-=<>,.?/|\"}; //Алфавиты символов
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Энкодер
         //Префикс: "encoder_"
         //////////////////////////////////////////////////////////////////////////////////////
-        public static string encoder_outputFilePath = "output.wav";
-        public static string encoder_inputFilePath = "";
+        public static string encoder_outputFilePath = "output.wav"; //Путь к выходному файлу энкодера
+        public static string encoder_inputFilePath = ""; //Путь ко входному файлу энкодера
         public static int encoder_signalGain = 2; //Коэффициент усиления аудиосигнала выходного файла
-        public static int encoder_sampleRate = 72000; //Частота дискретизации выходного файла
+        public static int encoder_sampleRate = 82000; //Частота дискретизации выходного файла
         public static bool encoder_ADIFShell = false; //Функция ADIFShell
         public static bool encoder_forceStop = false; //Принудительная остановка конвертации
         public static int encoder_samplesPerBit = 8; //Кол-во аудиосэмплов, описывающих один бит информации в аудиопотоке
         public static int encoder_progress = 0; //Прогресс конвертации [%]
         //////////////////////////////////////////////////////////////////////////////////////
 
+        //Потоки
+        //Префикс: thread_
+        //////////////////////////////////////////////////////////////////////////////////////
         public static Thread thread_encodeFileStream = null;
+        //////////////////////////////////////////////////////////////////////////////////////
 
         /// <summary>
         /// Создает поток записи выходного файла
@@ -589,7 +595,7 @@ namespace AudioDataInterface
                 //Дописать биты до 32
                 for (int i = bin.Length; i < 32; i++)
                     bin += "0";
-                string[] dataBlock = BinaryHandler.HCMake(bin); //Массив бит блока данных
+                string[] dataBlock = BinaryHandler.HammingEncode(bin); //Массив бит блока данных
                                                                 //Перебираем финальную кодовую последовательность
                 for (int i = 0; i < dataBlock.Length; i++)
                 {
@@ -612,8 +618,8 @@ namespace AudioDataInterface
             //Дописать биты до 32
             for (int i = bin.Length; i < 32; i++)
                 bin += "0";
-            string[] dataBlock = BinaryHandler.HCMake(bin); //Массив бит блока данных
-            //Перебираем финальную кодовую последовательность
+            string[] dataBlock = BinaryHandler.HammingEncode(bin); //Массив бит блока данных
+            //Перебираем финальную последовательность
             for (int i = 0; i < dataBlock.Length; i++)
             {
                 if (dataBlock[i] == "0")
@@ -625,8 +631,118 @@ namespace AudioDataInterface
             GenerateSync(); //Генерируем синхроимпульс
         }
 
+        static void GenerateRAWDataBlockStereo(string binL, string binR)
+        {
+            //Дописать биты до 32
+            for (int i = binL.Length; i < 32; i++) binL += "0";
+            for (int i = binR.Length; i < 32; i++) binR += "0";
+            string[] dataBlockL = BinaryHandler.HammingEncode(binL); //Массив бит блока данных левого канала
+            string[] dataBlockR = BinaryHandler.HammingEncode(binR); //Массив бит блока данных правого канала
+            //Перебираем финальную последовательность
+            for (int i = 0; i < dataBlockL.Length; i++)
+            {
+                if (dataBlockL[i] == "0" && dataBlockR[i] == "0") GenerateStereo00();
+                if (dataBlockL[i] == "1" && dataBlockR[i] == "1") GenerateStereo11();
+                if (dataBlockL[i] == "1" && dataBlockR[i] == "0") GenerateStereo10();
+                if (dataBlockL[i] == "0" && dataBlockR[i] == "1") GenerateStereo01();
+            }
+            GenerateStereo00(); //Генерируем указатель RAW-блока
+            GenerateStereoSync(); //Генерируем синхроимпульс
+        }
+
+        public static void EncodeFileStereoStream()
+        {
+            string temp = "";
+            string binaryL = "";
+            string binaryR = "";
+            LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding started");
+            encoder_forceStop = false;
+            CreateInputStream();
+            CreateOutputStream();
+            if (encoder_forceStop == true)
+            {
+                LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding aborted");
+                if (fs_output != null)
+                    fs_output.Close();
+                if (fs_input != null)
+                    fs_input.Close();
+                Thread.CurrentThread.Abort();
+            }
+            fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
+            GenerateVoid(2); //Генерация тишины 2 сек.
+            GenerateSync(); //Генерация синхроимпульса       
+            GenerateMarkerDataBlock(0, 3); //Генерация маркера начала потока
+            //Преобразование данных в бинарный код
+            for (int i = 0; i < fs_input.Length;)
+            {
+                if (encoder_forceStop == true)
+                {
+                    LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding aborted");
+                    if (fs_output != null)
+                        fs_output.Close();
+                    if (fs_input != null)
+                        fs_input.Close();
+                    Thread.CurrentThread.Abort();
+                }
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryL += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryL += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryL += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryL += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryR += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryR += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryR += temp;
+                i++;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binaryR += temp;
+                i++;
+                encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
+                GenerateRAWDataBlockStereo(binaryL, binaryR);
+                binaryL = "";
+                binaryR = "";
+            }
+            fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
+            WriteHeader(fs_output, encoder_sampleRate, 2);
+            fs_output.Close();
+            fs_output.Dispose();
+            fs_input.Close();
+            fs_input.Dispose();
+            encoder_progress = ProgressHandler.GetPercent(100, 100);
+            LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding finished");
+        }
+
         public static void EncodeFileStream()
         {
+            string temp = "";
+            string binary = "";
             LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding started");
             encoder_forceStop = false;
             CreateInputStream();
@@ -644,8 +760,6 @@ namespace AudioDataInterface
             GenerateVoid(2); //Генерация тишины 2 сек.
             GenerateSync(); //Генерация синхроимпульса       
             GenerateMarkerDataBlock(0, 3); //Генерация маркера начала потока
-            string binSymbol = "";
-            string tempB = "";
             //Преобразование данных в бинарный код
             for (int i = 0; i < fs_input.Length;)
             {
@@ -658,31 +772,31 @@ namespace AudioDataInterface
                         fs_input.Close();
                     Thread.CurrentThread.Abort();
                 }
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binary += temp;
                 i++;
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binary += temp;
                 i++;
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binary += temp;
                 i++;
-                tempB = fs_input.ReadByte().ToString();
-                tempB = Convert.ToString(Convert.ToInt16(tempB), 2);
-                tempB = tempB.PadLeft(8, '0');
-                binSymbol += tempB;
+                temp = fs_input.ReadByte().ToString();
+                temp = Convert.ToString(Convert.ToInt16(temp), 2);
+                temp = temp.PadLeft(8, '0');
+                binary += temp;
                 i++;
                 encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
-                GenerateRAWDataBlock(binSymbol);
-                binSymbol = "";
+                GenerateRAWDataBlock(binary);
+                binary = "";
             }
-            fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для нанесения оглавления wave файла
+            fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
             WriteHeader(fs_output, encoder_sampleRate, 1);
             fs_output.Close();
             fs_output.Dispose();
@@ -769,7 +883,7 @@ namespace AudioDataInterface
             header += RawData.GetHash(header) + ";";//Добавляет хеш-сумму текущего оглавления в конец оглавления
             //Запись оглавления в WAV
             int length = header.Length; //Кол-во символов в оглавлении
-            string binSymbol = ""; //Бинарный код текущего символа
+            string binary = ""; //Бинарный код текущего символа
             string currentSymbol = ""; //Текущий символ
             temp = "";
             string[] block = null;
@@ -785,26 +899,26 @@ namespace AudioDataInterface
                 switch (GeneralForm.temp_currentSymbolLibrary)
                 {
                     case -1:
-                        binSymbol = "0";
+                        binary = "0";
                         break;
                     case 0:
-                        binSymbol = GeneralForm.locOut.SymbolLibEncode(currentSymbol);
+                        binary = GeneralForm.locOut.SymbolLibEncode(currentSymbol);
                         GeneralForm.temp_currentSymbolLibrary = GeneralForm.temp_lastSymbolLibrary;
                         break;
                     case 1:
-                        binSymbol = Array.IndexOf(GeneralForm.locOut.alphabetEN, currentSymbol).ToString();
+                        binary = Array.IndexOf(GeneralForm.locOut.alphabetEN, currentSymbol).ToString();
                         break;
                     case 2:
-                        binSymbol = Array.IndexOf(GeneralForm.locOut.alphabetRU, currentSymbol).ToString();
+                        binary = Array.IndexOf(GeneralForm.locOut.alphabetRU, currentSymbol).ToString();
                         break;
                 }
                 //Если произошла смена символьной библиотеки, сгенерировать маркер символьной библиотеки
                 if (GeneralForm.temp_currentSymbolLibrary != GeneralForm.temp_lastSymbolLibrary && (GeneralForm.locOut.CheckLibForExist(GeneralForm.temp_currentSymbolLibrary) == true))
                     GenerateTextMarker(fs_output, GeneralForm.temp_currentSymbolLibrary.ToString(), 3);
                 GeneralForm.temp_lastSymbolLibrary = GeneralForm.temp_currentSymbolLibrary;
-                binSymbol = Convert.ToString(Convert.ToInt16(binSymbol), 2); //Перевести символ в двоичную систему
-                binSymbol = binSymbol.PadLeft(8, '0'); //Дописать нули слева до 8 знаков
-                block = GeneralForm.rawData.Construct(binSymbol); //Дополнить блок данных контрольными битами
+                binary = Convert.ToString(Convert.ToInt16(binary), 2); //Перевести символ в двоичную систему
+                binary = binary.PadLeft(8, '0'); //Дописать нули слева до 8 знаков
+                block = GeneralForm.rawData.Construct(binary); //Дополнить блок данных контрольными битами
                 //Перебираем финальную бинарную последовательность
                 for (int u = 0; u < block.Length; u++)
                 {

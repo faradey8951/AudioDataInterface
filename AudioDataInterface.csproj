@@ -51,41 +51,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AudioIO.cs" />
-    <Compile Include="CaptureWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="CaptureWindow.Designer.cs">
-      <DependentUpon>CaptureWindow.cs</DependentUpon>
-    </Compile>
+    <Compile Include="DataHandler.cs" />
     <Compile Include="LogHandler.cs" />
-    <Compile Include="DebugWindow.cs">
+    <Compile Include="form_debug.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="DebugWindow.Designer.cs">
-      <DependentUpon>DebugWindow.cs</DependentUpon>
+    <Compile Include="form_debug.Designer.cs">
+      <DependentUpon>form_debug.cs</DependentUpon>
     </Compile>
     <Compile Include="Decoder.cs" />
     <Compile Include="Encoder.cs" />
-    <Compile Include="EncoderWindow.cs">
+    <Compile Include="form_encoder.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="EncoderWindow.Designer.cs">
-      <DependentUpon>EncoderWindow.cs</DependentUpon>
+    <Compile Include="form_encoder.Designer.cs">
+      <DependentUpon>form_encoder.cs</DependentUpon>
     </Compile>
     <Compile Include="FileHandler.cs" />
     <Compile Include="BinaryHandler.cs" />
     <Compile Include="LangHandler.cs" />
-    <Compile Include="LogMonitorWindow.cs">
+    <Compile Include="form_logMonitor.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="LogMonitorWindow.Designer.cs">
-      <DependentUpon>LogMonitorWindow.cs</DependentUpon>
+    <Compile Include="form_logMonitor.Designer.cs">
+      <DependentUpon>form_logMonitor.cs</DependentUpon>
     </Compile>
-    <Compile Include="MainWindow.cs">
+    <Compile Include="form_main.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="MainWindow.Designer.cs">
-      <DependentUpon>MainWindow.cs</DependentUpon>
+    <Compile Include="form_main.Designer.cs">
+      <DependentUpon>form_main.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="ProgressHandler.cs" />
@@ -94,20 +89,17 @@
     <Compile Include="ListViewHandler.cs" />
     <Compile Include="TextHandler.cs" />
     <Compile Include="ThreadHandler.cs" />
-    <EmbeddedResource Include="CaptureWindow.resx">
-      <DependentUpon>CaptureWindow.cs</DependentUpon>
+    <EmbeddedResource Include="form_debug.resx">
+      <DependentUpon>form_debug.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="DebugWindow.resx">
-      <DependentUpon>DebugWindow.cs</DependentUpon>
+    <EmbeddedResource Include="form_encoder.resx">
+      <DependentUpon>form_encoder.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="EncoderWindow.resx">
-      <DependentUpon>EncoderWindow.cs</DependentUpon>
+    <EmbeddedResource Include="form_logMonitor.resx">
+      <DependentUpon>form_logMonitor.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="LogMonitorWindow.resx">
-      <DependentUpon>LogMonitorWindow.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="MainWindow.resx">
-      <DependentUpon>MainWindow.cs</DependentUpon>
+    <EmbeddedResource Include="form_main.resx">
+      <DependentUpon>form_main.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
