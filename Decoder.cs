@@ -114,9 +114,10 @@ namespace AudioDataInterface
                         try
                         {
                             tempList.Add(AudioIO.buff_signalSamplesR[0]);
+                            AudioIO.buff_signalSamplesR.RemoveAt(0);
                         }
                         catch { }
-                        AudioIO.buff_signalSamplesR.RemoveAt(0);
+                        
                     }
                     //if (tempList.Count >= 512)
                     //{
@@ -248,7 +249,7 @@ namespace AudioDataInterface
                         maxSyncPulse = amplitudeBuffCopy.Max(); //Максимальная амплитуда буфера
                         maxSyncPulseIndex = amplitudeBuffCopy.IndexOf((short)maxSyncPulse); //Индекс максимальной амплитуды
                         amplitudeBuffCopy[maxSyncPulseIndex] = 0; //Занулить максимальную амплитуду
-                        maxAmplitude = (short)maxSyncPulse;
+                        //maxAmplitude = (short)maxSyncPulse;
                         for (int i = 0; i < amplitudeBuffCopy.Count;) //Парсинг синхроимпульсов
                         {
                             syncPulse = amplitudeBuffCopy.Max(); //Теоретическая амплитуда второго синхроимпульса
@@ -458,7 +459,6 @@ namespace AudioDataInterface
                         if (buff_signalAmplitudesL.Count > 0) lock (buff_signalAmplitudesL) buff_signalAmplitudesL.RemoveRange(0, buff_signalAmplitudesL.Count - 1);
                     }
                     else if (buff_signalAmplitudesR.Count > 0) lock (buff_signalAmplitudesR) buff_signalAmplitudesR.RemoveRange(0, buff_signalAmplitudesR.Count - 1);
-
                     Thread.Sleep(10);
                 }
                 if (channelSwitch == 0) channelSwitch = 1;

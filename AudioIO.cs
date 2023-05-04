@@ -45,7 +45,7 @@ namespace AudioDataInterface
         //////////////////////////////////////////////////////////////////////////////////////
         public static int audio_recDeviceId = 0;                                                //ID текущего устройства записи
         public static int audio_playDeviceId = 0;                                               //ID текущего устройства воспроизведения
-        public static int audio_signalHeight = 0;                                               //Высота сигнала
+        public static int audio_signalHeight = 2000;                                               //Высота сигнала
         public static bool audio_invertSignal = true;                                          //Инверсия сигнала
         public static double audio_signalGain = 1;
         //////////////////////////////////////////////////////////////////////////////////////
@@ -149,10 +149,11 @@ namespace AudioDataInterface
         {
             while (true)
             {
-                //if (Decoder.maxAmplitude < 25000 && audio_signalGain < 50) audio_signalGain += Math.Log10(1 + 5*audio_signalGain);
-                //if (Decoder.maxAmplitude > 32000 && audio_signalGain > 1) audio_signalGain -= Math.Log10(1 + 5*audio_signalGain);
-                audio_signalGain = 1;
-                Thread.Sleep(100);
+                //naudio_signalWaveIn.AudioEndpointVolume.MasterVolumeLevelScalar
+                //if (Decoder.maxAmplitude < 20000 && audio_signalGain < 50) audio_signalGain += 1;
+                //if (Decoder.maxAmplitude > 32000 && audio_signalGain > 1) audio_signalGain -= 1;
+                //audio_signalGain = 7;
+                Thread.Sleep(500);
             }
         }
 

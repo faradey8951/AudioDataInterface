@@ -30,7 +30,7 @@ namespace AudioDataInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("0");
+            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("0");
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,6 +73,8 @@ namespace AudioDataInterface
             this.pictureBox_waveGraph = new System.Windows.Forms.PictureBox();
             this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
             this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.label2 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -267,7 +269,7 @@ namespace AudioDataInterface
             this.listView.GridLines = true;
             this.listView.HideSelection = false;
             this.listView.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1});
+            listViewItem2});
             this.listView.Location = new System.Drawing.Point(3, 3);
             this.listView.Name = "listView";
             this.listView.Size = new System.Drawing.Size(826, 335);
@@ -347,6 +349,8 @@ namespace AudioDataInterface
             // 
             // groupBox_signalCapture
             // 
+            this.groupBox_signalCapture.Controls.Add(this.label2);
+            this.groupBox_signalCapture.Controls.Add(this.label1);
             this.groupBox_signalCapture.Controls.Add(this.button1);
             this.groupBox_signalCapture.Controls.Add(this.button_buffMp3);
             this.groupBox_signalCapture.Controls.Add(this.groupBox_BIASAdjust);
@@ -493,6 +497,24 @@ namespace AudioDataInterface
             this.timer_drawWaveGraphFrame.Interval = 40;
             this.timer_drawWaveGraphFrame.Tick += new System.EventHandler(this.timer_drawWaveGraphFrame_Tick);
             // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(321, 124);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(35, 13);
+            this.label1.TabIndex = 16;
+            this.label1.Text = "label1";
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(321, 141);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(35, 13);
+            this.label2.TabIndex = 17;
+            this.label2.Text = "label2";
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -580,6 +602,8 @@ namespace AudioDataInterface
         private System.Windows.Forms.RadioButton radioButton_horizontalScale;
         private System.Windows.Forms.Button button_buffMp3;
         private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Label label1;
     }
 }
 

@@ -17,6 +17,7 @@ namespace AudioDataInterface
         public MemoryStream ms;
         int mp3_buffSize = 512;
         public string mp3_message = "";
+        public static string mp3_currentTime = "";
         long i = 0;
         //Процесс буферизации данных для MP3 плеера
         public void BufferMp3()
@@ -58,23 +59,13 @@ namespace AudioDataInterface
         //Метод очистки mp3 данных
         public void ClearMp3()
         {
-            thread_bufferMp3.Abort();
-            Decoder.thread_samplesDecoder.Abort();
-            Decoder.thread_amplitudeDecoderL.Abort();
-            Decoder.thread_amplitudeDecoderR.Abort();
-            Decoder.thread_binaryDecoder.Abort();
-            //thread_playMp3.Abort();
             ms = new MemoryStream();
-            //AudioIO.naudio_wasapiOut.Dispose();
-            lock (AudioIO.buff_signalSamplesL) AudioIO.buff_signalSamplesL.Clear();
-            lock (AudioIO.buff_signalSamplesR) AudioIO.buff_signalSamplesR.Clear();
-            lock (AudioIO.buff_signalBytes) AudioIO.buff_signalBytes.Clear();
+            AudioIO.naudio_wasapiOut.Dispose();
+            lock (AudioIO.buff_signalBytes) AudioIO.buff_signalBytes.RemoveRange(0, 2);
+            lock (AudioIO.buff_graphSamples) AudioIO.buff_graphSamples.Clear();
             lock (Decoder.buff_signalAmplitudesL) Decoder.buff_signalAmplitudesL.Clear();
             lock (Decoder.buff_signalAmplitudesR) Decoder.buff_signalAmplitudesR.Clear();
-            lock (AudioIO.buff_graphSamples) AudioIO.buff_graphSamples.Clear();
-            Decoder.Start();
-            StartMp3Listening();
-            //Thread.Sleep(100);
+            lock (Decoder.buff_decodedData) Decoder.buff_decodedData.Clear();
         }
 
         //Процесс воспроизведения MP3
@@ -104,8 +95,12 @@ namespace AudioDataInterface
                         //mp3_status = "PLAY";
                         mp3_message = "MP3 Player: " + AudioIO.naudio_wasapiOut.PlaybackState.ToString();
                         currentTime = reader.CurrentTime.Minutes.ToString() + ":" + reader.CurrentTime.Seconds.ToString() + ":" + reader.CurrentTime.Milliseconds.ToString();
-                        //mp3_currentTime = currentTime;
+                        mp3_currentTime = currentTime;
                         //Если воспроизведение прервалось
+                        
+                        //mp3_currentTime = reader.HasData(2).ToString();                     
+                        //mp3_currentTime = frame.ToString();
+                        //mp3_currentTime = reader.Mp3WaveFormat.AverageBytesPerSecond.ToString();
                         if (buff_time.Count > 5 && buff_time[4] == buff_time[3] && buff_time[2] == buff_time[0])
                         {
                             buff_time.Clear();
@@ -122,6 +117,7 @@ namespace AudioDataInterface
                     mp3_message = "MP3 Player: " + ex.Message;
                     //mp3_currentTime = "--:--:--";
                     ClearMp3();
+                    Thread.Sleep(10);
                 }
             }
         }

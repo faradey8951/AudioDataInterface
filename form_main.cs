@@ -180,6 +180,8 @@ namespace AudioDataInterface
             try
             {
                 this.Text = class_dataHandler.mp3_message;
+                label1.Text = DataHandler.mp3_currentTime.ToString();
+                label2.Text = Decoder.maxAmplitude.ToString();
             }
             catch
             {
