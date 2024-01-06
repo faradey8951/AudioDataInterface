@@ -781,6 +781,7 @@ namespace AudioDataInterface
             {
                 mpsPlayer_tapeSkin = true;
                 if (form_main.mpsPlayer_mode == "play") form_main.MpsPlayerRunningIndicatorPlay();
+                else form_main.MpsPlayerRunningIndicatorStop();
             }
             else
             {
