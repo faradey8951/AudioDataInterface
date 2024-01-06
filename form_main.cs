@@ -611,6 +611,7 @@ namespace AudioDataInterface
                     pictureBox_disc1.Image = Properties.Resources.disc1Selected;
                     pictureBox_disc2.Image = Properties.Resources.disc2Empty;
                     pictureBox_disc3.Image = Properties.Resources.disc3Empty;
+                    pictureBox_cassette.Image = null;
                     //Отображение текущего времени воспроизведения
                     if (mpsPlayer_remainingTime == false)
                     {
@@ -669,6 +670,21 @@ namespace AudioDataInterface
                     pictureBox_disc1.Image = null;
                     pictureBox_disc2.Image = null;
                     pictureBox_disc3.Image = null;
+                    if (mpsPlayer_disc1Detected == true) pictureBox_cassette.Image = Properties.Resources.cassette;
+                    else pictureBox_cassette.Image = null;
+                    mpsPlayer_time = new int[4];
+                    int currentTapeTime = 0;
+                    if (mpsPlayer_remainingTime == false) currentTapeTime = mpsPlayer_timeSeconds;
+                    else currentTapeTime = mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds;
+                    for (int i = 3, k = currentTapeTime.ToString().Length - 1; i >= 0; i--)
+                    {
+                        if (k >= 0)
+                        {
+                            mpsPlayer_time[i] = Convert.ToInt16(currentTapeTime.ToString()[k].ToString());
+                            k--;
+                        }
+                    }
+                    for (int i = 0; i < mpsPlayer_time.Length; i++) if (mpsPlayer_time[i] != 0 || i > 0) pictureBox_timeSymbols[i].Image = symbolImages[mpsPlayer_time[i]];
                 }
             }
         }
@@ -750,6 +766,7 @@ namespace AudioDataInterface
         {
             if (checkBox_remainingTime.Checked) mpsPlayer_remainingTime = true;
             else mpsPlayer_remainingTime = false;
+            if (form_main.mpsPlayer_mode == "play" && mpsPlayer_tapeSkin == true) form_main.MpsPlayerRunningIndicatorPlay();
         }
 
         private void checkBox_autoGain_CheckedChanged(object sender, EventArgs e)
@@ -760,9 +777,23 @@ namespace AudioDataInterface
 
         private void checkBox_tapeSkin_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox_tapeSkin.Checked) mpsPlayer_tapeSkin = true;
-            else mpsPlayer_tapeSkin=false;
-            mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5 };
+            if (checkBox_tapeSkin.Checked)
+            {
+                mpsPlayer_tapeSkin = true;
+                if (form_main.mpsPlayer_mode == "play") form_main.MpsPlayerRunningIndicatorPlay();
+            }
+            else
+            {
+                mpsPlayer_tapeSkin = false;
+                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5 };
+                if (form_main.mpsPlayer_mode == "play") form_main.MpsPlayerRunningIndicatorPlay();
+            }
+
+        }
+
+        private void groupBox_signalCapture_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

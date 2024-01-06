@@ -343,6 +343,16 @@ namespace AudioDataInterface.Properties {
         /// <summary>
         ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap cassette {
+            get {
+                object obj = ResourceManager.GetObject("cassette", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Поиск локализованного ресурса типа System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap CD_Playback_Transparrent {
             get {
                 object obj = ResourceManager.GetObject("CD_Playback_Transparrent", resourceCulture);

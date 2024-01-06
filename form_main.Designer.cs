@@ -50,6 +50,7 @@ namespace AudioDataInterface
             this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
             this.tabControl_dataControl = new System.Windows.Forms.TabControl();
             this.tabPage_graphicalView = new System.Windows.Forms.TabPage();
+            this.pictureBox_cassette = new System.Windows.Forms.PictureBox();
             this.pictureBox_disc3 = new System.Windows.Forms.PictureBox();
             this.pictureBox_disc2 = new System.Windows.Forms.PictureBox();
             this.pictureBox_disc1 = new System.Windows.Forms.PictureBox();
@@ -93,6 +94,7 @@ namespace AudioDataInterface
             this.label_signalGainL = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
+            this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
             this.groupBox_decoderSettings = new System.Windows.Forms.GroupBox();
             this.checkBox_autoGain = new System.Windows.Forms.CheckBox();
             this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
@@ -112,12 +114,12 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
-            this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
             this.tabPage_graphicalView.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_cassette)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_disc3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_disc2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_disc1)).BeginInit();
@@ -320,6 +322,7 @@ namespace AudioDataInterface
             // 
             // tabPage_graphicalView
             // 
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_cassette);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_disc3);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_disc2);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_disc1);
@@ -362,6 +365,17 @@ namespace AudioDataInterface
             this.tabPage_graphicalView.TabIndex = 1;
             this.tabPage_graphicalView.Text = "Графический";
             this.tabPage_graphicalView.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox_cassette
+            // 
+            this.pictureBox_cassette.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_cassette.Image = global::AudioDataInterface.Properties.Resources.cassette;
+            this.pictureBox_cassette.Location = new System.Drawing.Point(6, 176);
+            this.pictureBox_cassette.Name = "pictureBox_cassette";
+            this.pictureBox_cassette.Size = new System.Drawing.Size(33, 22);
+            this.pictureBox_cassette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_cassette.TabIndex = 35;
+            this.pictureBox_cassette.TabStop = false;
             // 
             // pictureBox_disc3
             // 
@@ -840,6 +854,18 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.TabIndex = 12;
             this.groupBox_signalCapture.TabStop = false;
             this.groupBox_signalCapture.Text = "Захват сигнала";
+            this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
+            // 
+            // checkBox_tapeSkin
+            // 
+            this.checkBox_tapeSkin.AutoSize = true;
+            this.checkBox_tapeSkin.Location = new System.Drawing.Point(536, 144);
+            this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
+            this.checkBox_tapeSkin.Size = new System.Drawing.Size(78, 17);
+            this.checkBox_tapeSkin.TabIndex = 16;
+            this.checkBox_tapeSkin.Text = "TAPE Skin";
+            this.checkBox_tapeSkin.UseVisualStyleBackColor = true;
+            this.checkBox_tapeSkin.CheckedChanged += new System.EventHandler(this.checkBox_tapeSkin_CheckedChanged);
             // 
             // groupBox_decoderSettings
             // 
@@ -1035,17 +1061,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater.Interval = 1000;
             this.timer_mpsPlayerTimeUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerTimeUpdate_Tick);
             // 
-            // checkBox_tapeSkin
-            // 
-            this.checkBox_tapeSkin.AutoSize = true;
-            this.checkBox_tapeSkin.Location = new System.Drawing.Point(536, 144);
-            this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
-            this.checkBox_tapeSkin.Size = new System.Drawing.Size(78, 17);
-            this.checkBox_tapeSkin.TabIndex = 16;
-            this.checkBox_tapeSkin.Text = "TAPE Skin";
-            this.checkBox_tapeSkin.UseVisualStyleBackColor = true;
-            this.checkBox_tapeSkin.CheckedChanged += new System.EventHandler(this.checkBox_tapeSkin_CheckedChanged);
-            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1074,6 +1089,7 @@ namespace AudioDataInterface
             this.contextMenuStrip.ResumeLayout(false);
             this.tabControl_dataControl.ResumeLayout(false);
             this.tabPage_graphicalView.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_cassette)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_disc3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_disc2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_disc1)).EndInit();
@@ -1212,6 +1228,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_disc2;
         private System.Windows.Forms.CheckBox checkBox_autoGain;
         private System.Windows.Forms.CheckBox checkBox_tapeSkin;
+        private System.Windows.Forms.PictureBox pictureBox_cassette;
     }
 }
 

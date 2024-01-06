@@ -324,5 +324,8 @@
   <ItemGroup>
     <None Include="Resources\Tsymbol.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\cassette.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
