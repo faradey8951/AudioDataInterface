@@ -19,9 +19,9 @@ namespace AudioDataInterface
         private void timer_controlHandler_tick(object sender, EventArgs e)
         {
             listView_buffers.Items[0].SubItems[1].Text = AudioIO.buff_graphSamples.Count().ToString();
-            listView_buffers.Items[1].SubItems[1].Text = AudioIO.buff_signalSamples.Count().ToString();
+            listView_buffers.Items[1].SubItems[1].Text = AudioIO.buff_signalSamplesL.Count().ToString();
             listView_buffers.Items[2].SubItems[1].Text = LogHandler.list_log.Count().ToString();
-            listView_buffers.Items[3].SubItems[1].Text = Decoder.buff_signalAmplitudes.Count().ToString();
+            listView_buffers.Items[3].SubItems[1].Text = Decoder.buff_signalAmplitudesL.Count().ToString();
             listView_buffers.Items[4].SubItems[1].Text = Decoder.buff_decodedData.Count().ToString();
             listView_threads.Items[0].SubItems[1].Text = ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStream);
             listView_threads.Items[1].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_amplitudeDecoder);

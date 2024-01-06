@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+using System.Windows.Forms;
 
 namespace AudioDataInterface
 {
@@ -17,8 +18,15 @@ namespace AudioDataInterface
         public static Thread thread_amplitudeDecoderL = null;
         public static Thread thread_amplitudeDecoderR = null;
         public static Thread thread_samplesDecoder = null;
-        //public static Thread thread_samplesDecoderStereo = null;
-        public static short maxAmplitude = 0;
+        public static Thread thread_samplesDecoderStereo = null;
+        public static short maxAmplitudeL = 0;
+        public static short maxAmplitudeR = 0;
+        public static int signalContrast = 0;
+        public static int errorCount = 0;
+        static bool samplesLBusy = false;
+        static bool samplesRBusy = false;
+        static bool amplitudesLBusy = false;
+        static bool amplitudesRBusy = false;
 
         static void SamplesDecoder()
         {
@@ -35,16 +43,28 @@ namespace AudioDataInterface
         {
             while (true)
             {
-                while (AudioIO.buff_signalBytes.Count < 128) Thread.Sleep(10);
+                while (AudioIO.buff_signalBytes.Count < 96000) Thread.Sleep(10);
                 if (!AudioIO.audio_invertSignal)
                 {
-                    lock (AudioIO.buff_signalSamplesL) AudioIO.buff_signalSamplesL.Add((short)(AudioIO.audio_signalGain * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
-                    lock (AudioIO.buff_signalSamplesR) AudioIO.buff_signalSamplesR.Add((short)(AudioIO.audio_signalGain * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight));
+                    while (samplesLBusy == true) Thread.Sleep(10);
+                    samplesLBusy = true;
+                    AudioIO.buff_signalSamplesL.Add((short)(AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
+                    samplesLBusy = false;
+                    while (samplesRBusy == true) Thread.Sleep(10);
+                    samplesRBusy = true;
+                    AudioIO.buff_signalSamplesR.Add((short)(AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight));
+                    samplesRBusy = false;
                 }
                 else
                 {
-                    lock (AudioIO.buff_signalSamplesL) AudioIO.buff_signalSamplesL.Add((short)(-AudioIO.audio_signalGain * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
-                    lock (AudioIO.buff_signalSamplesR) AudioIO.buff_signalSamplesR.Add((short)(-AudioIO.audio_signalGain * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight));
+                    while (samplesLBusy == true) Thread.Sleep(10);
+                    samplesLBusy = true;
+                    AudioIO.buff_signalSamplesL.Add((short)(-AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
+                    samplesLBusy = false;
+                    while (samplesRBusy == true) Thread.Sleep(10);
+                    samplesRBusy = true;
+                    AudioIO.buff_signalSamplesR.Add((short)(-AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight));
+                    samplesRBusy = false;
                 }
                 AudioIO.buff_signalBytes.RemoveRange(0, 4);
             }
@@ -59,25 +79,20 @@ namespace AudioDataInterface
                 while (AudioIO.buff_signalSamplesL.Count == 0) Thread.Sleep(10);
                 while (AudioIO.buff_signalSamplesL[0] < 0)
                 {
-                    try
-                    {
-                        lock (AudioIO.buff_signalSamplesL) AudioIO.buff_signalSamplesL.RemoveAt(0);
-                    }
-                    catch { }
+                    while(samplesLBusy == true) Thread.Sleep(10);
+                    samplesLBusy = true;
+                    AudioIO.buff_signalSamplesL.RemoveAt(0);
+                    samplesLBusy = false;
                     while (AudioIO.buff_signalSamplesL.Count == 0) Thread.Sleep(10);
                 }
                 while (AudioIO.buff_signalSamplesL.Count == 0) Thread.Sleep(10);
                 while (AudioIO.buff_signalSamplesL[0] >= 0)
                 {
-                    lock (AudioIO.buff_signalSamplesL)
-                    {
-                        try
-                        {
-                            tempList.Add(AudioIO.buff_signalSamplesL[0]);
-                            AudioIO.buff_signalSamplesL.RemoveAt(0);
-                        }
-                        catch { }
-                    }
+                    while (samplesLBusy == true) Thread.Sleep(10);
+                    samplesLBusy = true;
+                    tempList.Add(AudioIO.buff_signalSamplesL[0]);
+                    AudioIO.buff_signalSamplesL.RemoveAt(0);
+                    samplesLBusy = false;
                     //if (tempList.Count >= 512)
                     //{
                     //tempList.Clear();
@@ -85,7 +100,10 @@ namespace AudioDataInterface
                     //}
                     while (AudioIO.buff_signalSamplesL.Count == 0) Thread.Sleep(10);
                 }
-                lock (buff_signalAmplitudesL) buff_signalAmplitudesL.Add(tempList.Max());
+                while (amplitudesLBusy == true) Thread.Sleep(10);
+                amplitudesLBusy = true;
+                buff_signalAmplitudesL.Add(tempList.Max());
+                amplitudesLBusy = false;
                 tempList.Clear();
             }
         }
@@ -99,26 +117,20 @@ namespace AudioDataInterface
                 while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 while (AudioIO.buff_signalSamplesR[0] < 0)
                 {
-                    try
-                    {
-                        lock (AudioIO.buff_signalSamplesR) AudioIO.buff_signalSamplesR.RemoveAt(0);
-                    }
-                    catch { }
+                    while (samplesRBusy == true) Thread.Sleep(10);
+                    samplesRBusy = true;
+                    AudioIO.buff_signalSamplesR.RemoveAt(0);
+                    samplesRBusy = false;
                     while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 }
                 while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 while (AudioIO.buff_signalSamplesR[0] >= 0)
                 {
-                    lock (AudioIO.buff_signalSamplesR)
-                    {
-                        try
-                        {
-                            tempList.Add(AudioIO.buff_signalSamplesR[0]);
-                            AudioIO.buff_signalSamplesR.RemoveAt(0);
-                        }
-                        catch { }
-                        
-                    }
+                    while (samplesRBusy == true) Thread.Sleep(10);
+                    samplesRBusy = true;
+                    tempList.Add(AudioIO.buff_signalSamplesR[0]);
+                    AudioIO.buff_signalSamplesR.RemoveAt(0);
+                    samplesRBusy = false;
                     //if (tempList.Count >= 512)
                     //{
                     //tempList.Clear();
@@ -126,7 +138,10 @@ namespace AudioDataInterface
                     //}
                     while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 }
-                lock (buff_signalAmplitudesR) buff_signalAmplitudesR.Add(tempList.Max());
+                while (amplitudesRBusy == true) Thread.Sleep(10);
+                amplitudesRBusy = true;
+                buff_signalAmplitudesR.Add(tempList.Max());
+                amplitudesRBusy = false;
                 tempList.Clear();
             }
         }
@@ -210,29 +225,18 @@ namespace AudioDataInterface
                 {
                     if (buff_signalAmplitudesL.Count >= 80)
                     {
-                        for (int i = 0; i < 80; i++) lock (buff_signalAmplitudesL) amplitudeBuff.Add(buff_signalAmplitudesL[i]);
+                        while (amplitudesLBusy == true) Thread.Sleep(10);
+                        amplitudesLBusy = true;
+                        for (int i = 0; i < 80; i++) amplitudeBuff.Add(buff_signalAmplitudesL[i]);
+                        amplitudesLBusy = false;
                         amplitudeBuffCopy.AddRange(amplitudeBuff);
-                        maxSyncPulse = amplitudeBuffCopy.Max(); //Максимальная амплитуда буфера
-                        maxSyncPulseIndex = amplitudeBuffCopy.IndexOf((short)maxSyncPulse); //Индекс максимальной амплитуды
-                        amplitudeBuffCopy[maxSyncPulseIndex] = 0; //Занулить максимальную амплитуду
-                        maxAmplitude = (short)maxSyncPulse;
-                        for (int i = 0; i < amplitudeBuffCopy.Count;) //Парсинг синхроимпульсов
-                        {
-                            syncPulse = amplitudeBuffCopy.Max(); //Теоретическая амплитуда второго синхроимпульса
-                            syncPulseIndex = amplitudeBuffCopy.IndexOf((short)syncPulse); //Индекс теоретической амплитуды второго сиенхроимпульса
-                            if (maxSyncPulseIndex > syncPulseIndex)
-                                difference = maxSyncPulseIndex - syncPulseIndex - 1; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-                            else
-                                difference = syncPulseIndex - maxSyncPulseIndex - 1; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-                            amplitudeBuffCopy[syncPulseIndex] = 0; //Занулить максимальную амплитуду буфера
-                            if (difference == 39) break;
-                            else
-                                //Thread.Sleep(10);
-                                i++;
-                            //Если второй синхроимпульс не обнаружен
-                            if (i == amplitudeBuffCopy.Count)
-                                sync = false;
-                        }
+
+                        List<int> suncPulsePower = new List<int>();
+                        for (int i = 0; i <= 39; i++) suncPulsePower.Add((int)(amplitudeBuffCopy[i] + amplitudeBuffCopy[i + 39 + 1]));
+                        int syncPulsePowerMax = suncPulsePower.IndexOf(suncPulsePower.Max());
+                        maxAmplitudeL = (short)(suncPulsePower.Max() / 2);
+                        maxSyncPulseIndex = syncPulsePowerMax;
+                        syncPulseIndex = syncPulsePowerMax + 39 + 1;
                     }
                     else
                     {
@@ -244,29 +248,18 @@ namespace AudioDataInterface
                 {
                     if (buff_signalAmplitudesR.Count >= 80)
                     {
-                        for (int i = 0; i < 80; i++) lock (buff_signalAmplitudesR) amplitudeBuff.Add(buff_signalAmplitudesR[i]);
+                        while (amplitudesRBusy == true) Thread.Sleep(10);
+                        amplitudesRBusy = true;
+                        for (int i = 0; i < 80; i++) amplitudeBuff.Add(buff_signalAmplitudesR[i]);
+                        amplitudesRBusy = false;
                         amplitudeBuffCopy.AddRange(amplitudeBuff);
-                        maxSyncPulse = amplitudeBuffCopy.Max(); //Максимальная амплитуда буфера
-                        maxSyncPulseIndex = amplitudeBuffCopy.IndexOf((short)maxSyncPulse); //Индекс максимальной амплитуды
-                        amplitudeBuffCopy[maxSyncPulseIndex] = 0; //Занулить максимальную амплитуду
-                        //maxAmplitude = (short)maxSyncPulse;
-                        for (int i = 0; i < amplitudeBuffCopy.Count;) //Парсинг синхроимпульсов
-                        {
-                            syncPulse = amplitudeBuffCopy.Max(); //Теоретическая амплитуда второго синхроимпульса
-                            syncPulseIndex = amplitudeBuffCopy.IndexOf((short)syncPulse); //Индекс теоретической амплитуды второго сиенхроимпульса
-                            if (maxSyncPulseIndex > syncPulseIndex)
-                                difference = maxSyncPulseIndex - syncPulseIndex - 1; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-                            else
-                                difference = syncPulseIndex - maxSyncPulseIndex - 1; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-                            amplitudeBuffCopy[syncPulseIndex] = 0; //Занулить максимальную амплитуду буфера
-                            if (difference == 39) break;
-                            else
-                                //Thread.Sleep(10);
-                                i++;
-                            //Если второй синхроимпульс не обнаружен
-                            if (i == amplitudeBuffCopy.Count)
-                                sync = false;
-                        }
+
+                        List<int> suncPulsePower = new List<int>();
+                        for (int i = 0; i <= 39; i++) suncPulsePower.Add((int)(amplitudeBuffCopy[i] + amplitudeBuffCopy[i + 39 + 1]));
+                        int syncPulsePowerMax = suncPulsePower.IndexOf(suncPulsePower.Max());
+                        maxAmplitudeR = (short)(suncPulsePower.Max() / 2);
+                        maxSyncPulseIndex = syncPulsePowerMax;
+                        syncPulseIndex = syncPulsePowerMax + 39 + 1;
                     }
                     else
                     {
@@ -286,59 +279,45 @@ namespace AudioDataInterface
                         dataBlockBuff.Add(amplitudeBuff[i]);
                         dataBlockBuffLnr.Add(amplitudeBuff[i]);
                     }
-                    lock (buff_decodedData)
-                    {
-                        buff_decodedData.Add(new string[10]);
-                        buff_decodedData.Last()[0] = String.Join(":", amplitudeBuff);
-                        buff_decodedData.Last()[1] = String.Join(":", dataBlockBuff);
-                    }
-                    double lnrGain = 0.25; //Коэффициент усиления линеаризации
-                    double lnrCorrLength = 0.75; //Часть амплитуд, подвергаемая линеаризации
-                    int lnrTrendLevelLimit = 3000; //Порог уровня тренда 
-                    if (dataBlockBuff.Count == 39)
-                    {
-                        int lnrTrendLevel = maxSyncPulse - syncPulse; //Уровень тренда                    
-                        int lnrCorrIncr = (int)(lnrTrendLevel * lnrGain) / (int)(dataBlockBuff.Count * lnrCorrLength); //Приращение амплитуды
-                        if (lnrTrendLevel >= lnrTrendLevelLimit)
-                        {
-                            if (amplitudeBuff[tempSyncIndexes[1]] > amplitudeBuff[tempSyncIndexes[0]]) //Если амплитуда второго синхроимпульса больше амплитуды первого - тренд растущий
-                            {
-                                for (int i = (int)(lnrTrendLevel * lnrGain), k = dataBlockBuff.Count - 1; i > 0 && k >= 0; i -= lnrCorrIncr, k--)
-                                    dataBlockBuffLnr[k] = (short)(dataBlockBuffLnr[k] - i);
-                            }
-                            else //Тренд убывающий
-                            {
-                                for (int i = (int)(lnrTrendLevel * lnrGain), k = 0; i > 0 && k < dataBlockBuff.Count; i -= lnrCorrIncr, k++)
-                                    dataBlockBuffLnr[k] = (short)(dataBlockBuffLnr[k] - i);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Thread.Sleep(10);
-                    }
-                    lock (buff_decodedData) buff_decodedData.Last()[2] = String.Join(":", dataBlockBuffLnr);
-
-                    if (dataBlockBuffLnr.Min() >= 0) //Проверка выхода линеаризатора за пределы границ
-                    {
-                        dataBlockBuff.Clear();
-                        dataBlockBuff.AddRange(dataBlockBuffLnr);
-                        lock (buff_decodedData) buff_decodedData.Last()[3] = "True";
-                    }
-                    else //Если линеаризатор вышел за границы
-                    {
-                        dataBlockBuffLnr.Clear();
-                        dataBlockBuffLnr.AddRange(dataBlockBuff);
-                        lock (buff_decodedData) buff_decodedData.Last()[3] = "False";
-                    }
+                    buff_decodedData.Add(new string[10]);
+                    buff_decodedData.Last()[0] = String.Join(":", amplitudeBuff);
+                    buff_decodedData.Last()[1] = String.Join(":", dataBlockBuff);
                     if (dataBlockBuff.Count == 39) //Если блок данных обнаружен
                     {
-                        dataBlockBuffCopy.AddRange(dataBlockBuff); //Копируем буфер амплитуд
+                        int jumpIndex = 0;
+                        List<int> dataBlockBuffCopyIndexes = new List<int>(); //Буфер индексов амлитуд
+                        List<short> dataBlockBuffCopySorted = new List<short>(); //Отсортированный по убыванию буфер амплитуд
+                        List<int> dataBlockBuffCopySortedDynamics = new List<int>(); //Буфер относительной динамики амплитуд (принимает значения [0-100]%), показывает степень изменения амплитуды в отсортированном по убыванию буфере
+                        dataBlockBuffCopy.AddRange(dataBlockBuff);
+                        dataBlockBuffCopySorted.AddRange(dataBlockBuff);
+                        dataBlockBuffCopySorted.Sort();
+                        dataBlockBuffCopySorted.Reverse();
+                        //Связываем амплитуды в отсортированном буфере с индексами в исходном dataBlockBuff
+                        for (int i = 0; i < dataBlockBuffCopySorted.Count; i++)
+                        {
+                            dataBlockBuffCopyIndexes.Add(dataBlockBuffCopy.IndexOf(dataBlockBuffCopySorted[i]));
+                            dataBlockBuffCopy[dataBlockBuffCopyIndexes[i]] = 0;
+                        }
+                        dataBlockBuffCopySorted.Clear();
+                        dataBlockBuffCopySorted.AddRange(dataBlockBuff);
+                        dataBlockBuffCopySorted.Sort();
+                        dataBlockBuffCopySorted.Reverse();
+                        //Расчитываем степень изменения амплитуды в отсортированном буфере
+                        for (int i = 0; i < dataBlockBuffCopySorted.Count - 2; i++) dataBlockBuffCopySortedDynamics.Add((int)Math.Round(100 - (((double)dataBlockBuffCopySorted[i + 1] * 100) / (double)dataBlockBuffCopySorted[i])));
+                        jumpIndex = dataBlockBuffCopySortedDynamics.IndexOf(dataBlockBuffCopySortedDynamics.Max());
+                        signalContrast = dataBlockBuffCopySortedDynamics.Max();
+                        for (int i = 0; i <= jumpIndex; i++)
+                        {
+                            tempOneIndexes.Add(dataBlockBuffCopyIndexes[i]);
+                        }
+                        tempOneIndexes.Sort();
+
+                        //dataBlockBuffLnr.Clear();
+                        //dataBlockBuffLnr.AddRange(dataBlockBuff);
+                        /*
                         int oneLevel = dataBlockBuff.Max(); //Определяем первую максимальную амплитуду в буфере
                         dataBlockBuffCopy[dataBlockBuff.IndexOf((short)oneLevel)] = 0; //Зануляем первую максимальную амплитуду в копии буфера
                         int trapPercent = 20 + (int)(((double)oneLevel / (double)syncPulse) * 90); //Степень понижения амплитуды [%]
-                        if (trapPercent < 30 && trapPercent > 90)
-                            trapPercent = 70;
                         var aplitudeDynamics = new List<string>(); //Динамика амплитуд
                         aplitudeDynamics.Add("");
                         bool approxSuccess = true;
@@ -352,7 +331,7 @@ namespace AudioDataInterface
                                     if (dataBlockBuff[i + 1] >= dataBlockBuff[i]) //Если пара амплитуд растущая
                                     {
                                         int perc = (int)((dataBlockBuff[i] * 100) / dataBlockBuff[i + 1]);
-                                        if (perc > trapPercent) //Если обе амплитуды совпадают
+                                        if (perc >= trapPercent) //Если обе амплитуды совпадают
                                             dataBlockBuffLnr[i + 1] = dataBlockBuffLnr[i];
                                         else //Если амплитуды отличаются
                                         {
@@ -371,7 +350,7 @@ namespace AudioDataInterface
                                     else //Если пара амплитуд убывающая
                                     {
                                         int perc = (int)((dataBlockBuff[i + 1] * 100) / dataBlockBuff[i]);
-                                        if (perc > trapPercent) //Если обе амплитуды совпадают
+                                        if (perc >= trapPercent) //Если обе амплитуды совпадают
                                             dataBlockBuffLnr[i + 1] = dataBlockBuffLnr[i];
                                         else //Если амплитуды отличаются
                                         {
@@ -389,13 +368,12 @@ namespace AudioDataInterface
                                     }
                                 }
                             }
-                        }
-                        lock (buff_decodedData)
-                        {
-                            buff_decodedData.Last()[5] = String.Join(":", dataBlockBuffLnr);
-                            buff_decodedData.Last()[6] = approxSuccess.ToString();
-                        }
-                        if (approxSuccess == true) //Если аппроксимация успешна
+                        */
+
+                        buff_decodedData.Last()[5] = String.Join(":", dataBlockBuffLnr);
+                        //buff_decodedData.Last()[6] = approxSuccess.ToString();
+                        /*
+                        if (true) //Если аппроксимация успешна
                         {
                             dataBlockBuff.Clear();
                             dataBlockBuff.AddRange(dataBlockBuffLnr);
@@ -415,6 +393,9 @@ namespace AudioDataInterface
                         }
                         else //Если аппроксимация не удалась - использовать альтернативный алгоритм кластеризации
                         {
+
+                            
+                            currentApproxFailCount++;
                             int aClustMax = dataBlockBuff.Max();
                             int aClustMin = dataBlockBuff.Min();
                             int aClustMidLine = (int)(aClustMax - ((aClustMax - aClustMin) / 2));
@@ -424,7 +405,9 @@ namespace AudioDataInterface
                                 if (dataBlockBuff[i] >= aClustMidLine)
                                     tempOneIndexes.Add(i);
                             }
+                            
                         }
+                        */
                         //Составляем финальную бинарную последовательность, учитывая существующие индексные списки
                         if (tempOneIndexes.Count == dataBlockBuff.Count) //Учитываем случай односоставного блока данных
                         {
@@ -442,28 +425,142 @@ namespace AudioDataInterface
                             }
                         }
                         BinaryDecode(tempBin);
+                        
+                        //Контроль канальной синхронизации
+                        bool channelSyncSucc = false;
+                        if (channelSwitch == 1 && buff_decodedData.Last()[8][38].ToString() == "1") //Детектируем наличие субкода
+                        {
+                            string subCode = buff_decodedData.Last()[9]; //Получаем двоичный субкод
+                                                                         //Выделяем составляющие байты субкода
+                            byte subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
+                            byte subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
+                            byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
+                            byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
+                            if (subCodeByte1 == 255)
+                            {
+                                if (subCodeByte2 == 255 || subCodeByte3 == 255 || subCodeByte4 == 255) //Определяем субкод контроля канальной синхронизации правого канала
+                                {
+                                    if (buff_decodedData[buff_decodedData.Count - 2][8][38].ToString() == "1") //Проверяем предыдущий блок на наличие субкода
+                                    {
+                                        subCode = buff_decodedData[buff_decodedData.Count - 2][9]; //Получаем двоичный субкод
+                                                                                                   //Выделяем составляющие байты субкода
+                                        subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
+                                        subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
+                                        subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
+                                        subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
+                                        //Определяем субкод контроля канальной синхронизации левого канала
+                                        if (subCodeByte1 == 255 && (subCodeByte2 == 0 || subCodeByte3 == 0 || subCodeByte4 == 0)) channelSyncSucc = true;
+                                    }
+                                }
+                            }
+                            else
+                            {
+
+                                channelSyncSucc = true;
+                            }
+                        }
+                        else channelSyncSucc = true;
+                        if (channelSyncSucc == false)
+                        {
+                            form_main.mpsPlayer_disc1Detected = false;
+                            string test = "";
+                            while (amplitudesLBusy == true) Thread.Sleep(10);
+                            amplitudesLBusy = true;
+                            Decoder.buff_signalAmplitudesL.Clear();
+                            amplitudesLBusy = false;
+                            while (amplitudesRBusy == true) Thread.Sleep(10);
+                            amplitudesRBusy = true;
+                            Decoder.buff_signalAmplitudesR.Clear();
+                            amplitudesRBusy = false;
+                            form_main.class_dataHandler.ms = new System.IO.MemoryStream();
+                        }
+                        
+
                     }
                     else
                         Thread.Sleep(10);
-
-                    if (channelSwitch == 0)
+                    //try
+                    //{
+                    if (buff_signalAmplitudesL != null && buff_signalAmplitudesR!= null && buff_signalAmplitudesL.Count > 0 && buff_signalAmplitudesR.Count > 0)
                     {
-                        if (buff_signalAmplitudesL.Count > 0) lock (buff_signalAmplitudesL) buff_signalAmplitudesL.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
+                        if (channelSwitch == 0)
+                        {
+                            while (amplitudesLBusy == true) Thread.Sleep(10);
+                            amplitudesLBusy = true;
+                            buff_signalAmplitudesL.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
+                            amplitudesLBusy = false;
+                        }
+                        else
+                        {
+                            while (amplitudesRBusy == true) Thread.Sleep(10);
+                            amplitudesRBusy = true;
+                            buff_signalAmplitudesR.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
+                            amplitudesRBusy = false;
+                        }
                     }
-                    else if (buff_signalAmplitudesR.Count > 0) lock (buff_signalAmplitudesR) buff_signalAmplitudesR.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
+                    //}
+                    //catch
+                    //{
+
+                    //}
                 }
                 else
                 {
                     if (channelSwitch == 0)
                     {
-                        if (buff_signalAmplitudesL.Count > 0) lock (buff_signalAmplitudesL) buff_signalAmplitudesL.RemoveRange(0, buff_signalAmplitudesL.Count - 1);
+                        if (buff_signalAmplitudesL.Count > 0)
+                        {
+                            while (amplitudesLBusy == true) Thread.Sleep(10);
+                            amplitudesLBusy = true;
+                            buff_signalAmplitudesL.RemoveRange(0, buff_signalAmplitudesL.Count - 1);
+                            amplitudesLBusy = false;
+                        }
                     }
-                    else if (buff_signalAmplitudesR.Count > 0) lock (buff_signalAmplitudesR) buff_signalAmplitudesR.RemoveRange(0, buff_signalAmplitudesR.Count - 1);
-                    Thread.Sleep(10);
+                    else if (buff_signalAmplitudesR.Count > 0)
+                    {
+                        while (amplitudesRBusy == true) Thread.Sleep(10);
+                        amplitudesRBusy = true;
+                        buff_signalAmplitudesR.RemoveRange(0, buff_signalAmplitudesR.Count - 1);
+                        amplitudesRBusy = false;
+                    }
+
+                    //Thread.Sleep(10);
                 }
                 if (channelSwitch == 0) channelSwitch = 1;
                 else channelSwitch = 0;
             }
+        }
+
+        public static int[] GetTimeFromSeconds(int sec)
+        {
+            if (sec < 0) sec = 0;
+            double time = Math.Round((double)((double)sec / 60), 3);
+            int minutes = (int)Math.Truncate(time);
+            //MessageBox.Show((time - Math.Truncate(time)).ToString());
+            int seconds = (int)Math.Round(((time - Math.Truncate(time)) * 6000) / 100);
+            int a, b, c, d;
+            if (minutes < 10)
+            {
+                a = 0;
+                b = minutes;
+            }
+            else
+            {
+                a = Convert.ToInt16(minutes.ToString()[0].ToString());
+                b = Convert.ToInt16(minutes.ToString()[1].ToString());
+            }
+            if (seconds < 10)
+            {
+                c = 0;
+                d = seconds;
+            }
+            else
+            {
+                c = Convert.ToInt16(seconds.ToString()[0].ToString());
+                d = Convert.ToInt16((string)seconds.ToString()[1].ToString());
+            }
+            if (a < 10 && b < 10 && c < 10 && d < 10) return new[] { a, b, c, d };
+            else return new[] { 0, 0, 0, 0 };
         }
 
         //Метод получения первичного бинарного кода из амплитуд входного сигнала
@@ -515,7 +612,6 @@ namespace AudioDataInterface
                     maxSyncPulse = amplitudeBuffCopy.Max(); //Максимальная амплитуда буфера
                     maxSyncPulseIndex = amplitudeBuffCopy.IndexOf((short)maxSyncPulse); //Индекс максимальной амплитуды
                     amplitudeBuffCopy[maxSyncPulseIndex] = 0; //Занулить максимальную амплитуду
-                    maxAmplitude = (short)maxSyncPulse;
                     for (int i = 0; i < amplitudeBuffCopy.Count;) //Парсинг синхроимпульсов
                     {
                         syncPulse = amplitudeBuffCopy.Max(); //Теоретическая амплитуда второго синхроимпульса
@@ -725,19 +821,18 @@ namespace AudioDataInterface
         /// <param name="bin"></param>
         public static void BinaryDecode(string bin)
         {
-            lock (buff_decodedData) buff_decodedData.Last()[8] = bin;
-            string data = ""; //Данные
-            if (Convert.ToString(bin.Last()) == "0") //Блок данных - RawData
-            {              
-                bin = bin.Remove(38); //Удаляем бит-маркер
-                data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
-                lock (buff_decodedData) buff_decodedData.Last()[9] = data;
-            }
-            else //Блок данных - Marker
+            try
             {
+                buff_decodedData.Last()[8] = bin;
+                string[] data = null; //Данные
                 bin = bin.Remove(38); //Удаляем бит-маркер
                 data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
-                lock (buff_decodedData) buff_decodedData.Last()[9] = data;
+                if (data[1] == "error") errorCount++;
+                buff_decodedData.Last()[9] = data[0];
+            }
+            catch
+            {
+
             }
         }
 

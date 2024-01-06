@@ -13,6 +13,8 @@ namespace AudioDataInterface
 {
     public partial class form_encoder : Form
     {
+        public static int trackNumber = 1;
+        public static int trackCount = 1;
         public form_encoder()
         {
             InitializeComponent();
@@ -21,10 +23,6 @@ namespace AudioDataInterface
         private void timer_controlHandler_Tick(object sender, EventArgs e)
         {
             //Доступность и видимость контролов
-            if (richTextBox.Text != "" || textBox.Text != "")
-                button_convert.Enabled = true;
-            else
-                button_convert.Enabled = false;
             if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStream) == "Running")
             {
                 button_clear.Enabled = false;
@@ -41,8 +39,10 @@ namespace AudioDataInterface
                 label_encoding.Visible = false;
                 progressBar.Visible = false;
                 label_percent.Visible = false;
+                button_convert.Enabled = true;
             }
-
+            label_trackNumber.Text = "Номер дорожки: " + trackNumber.ToString();
+            label_trackCount.Text = "Количество дорожек: " + trackCount.ToString();
             //Обновление прогресс бара
             progressBar.Value = Encoder.encoder_progress;
             label_percent.Text = Encoder.encoder_progress.ToString() + "%";
@@ -65,7 +65,6 @@ namespace AudioDataInterface
 
         private void button_clear_Click(object sender, EventArgs e)
         {
-            richTextBox.Text = "";
             textBox.Text = "";          
         }
 
@@ -73,18 +72,14 @@ namespace AudioDataInterface
         {
             try
             {
-                if (radioButton_file.Checked == true)
+                if (Encoder.encoder_ADIFShell == false)
                 {
-                    if (Encoder.encoder_ADIFShell == false)
-                    {
-                        folderBrowserDialog.ShowDialog();
-                        Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
-                        if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null)
-                            Encoder.encoder_outputFilePath = "output.wav";
-                        Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
-                        Encoder.thread_encodeFileStream.Start();
-                    }
-                    else { }
+                    folderBrowserDialog.ShowDialog();
+                    Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
+                    if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null)
+                        Encoder.encoder_outputFilePath = "output.wav";
+                    Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
+                    Encoder.thread_encodeFileStream.Start();
                 }
                 else { }
             }
@@ -129,6 +124,16 @@ namespace AudioDataInterface
         private void EncoderWindow_Load(object sender, EventArgs e)
         {
 
+        }
+
+        private void trackBar_trackNumber_Scroll(object sender, EventArgs e)
+        {
+            trackNumber = trackBar_trackNumber.Value;
+        }
+
+        private void trackBar_trackCount_Scroll(object sender, EventArgs e)
+        {
+            trackCount = trackBar_trackCount.Value;
         }
     }
 }

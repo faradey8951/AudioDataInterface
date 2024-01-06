@@ -21,6 +21,7 @@ namespace AudioDataInterface
             Properties.Settings.Default.mainWindowMaximized = form_main.window_main.WindowState == FormWindowState.Maximized ? true : false;
             Properties.Settings.Default.mainWindowHeight = form_main.window_main.Height;
             Properties.Settings.Default.mainWindowWidth = form_main.window_main.Width;
+            Properties.Settings.Default.invertSignal = AudioIO.audio_invertSignal;
             Properties.Settings.Default.Save();
         }
 
@@ -36,6 +37,8 @@ namespace AudioDataInterface
                     form_main.window_main.WindowState = FormWindowState.Normal;
                 form_main.window_main.Width = Properties.Settings.Default.mainWindowWidth;
                 form_main.window_main.Height = Properties.Settings.Default.mainWindowHeight;
+                AudioIO.audio_invertSignal = Properties.Settings.Default.invertSignal;
+                form_main.window_main.checkBox_invertSignal.Checked = AudioIO.audio_invertSignal;
             }
             catch (Exception ex)
             {

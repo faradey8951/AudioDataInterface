@@ -12,6 +12,8 @@
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,37 +37,29 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Win32.Registry, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\Microsoft.Win32.Registry.5.0.0\lib\net461\Microsoft.Win32.Registry.dll</HintPath>
+    <Reference Include="FftSharp, Version=2.1.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\FftSharp.2.1.0\lib\netstandard2.0\FftSharp.dll</HintPath>
     </Reference>
-    <Reference Include="NAudio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.2.1.0\lib\net472\NAudio.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Asio, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.Asio.2.1.0\lib\netstandard2.0\NAudio.Asio.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Core, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.Core.2.1.0\lib\netstandard2.0\NAudio.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Midi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.Midi.2.1.0\lib\netstandard2.0\NAudio.Midi.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.Wasapi, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.Wasapi.2.1.0\lib\netstandard2.0\NAudio.Wasapi.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.WinForms, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.WinForms.2.1.0\lib\net472\NAudio.WinForms.dll</HintPath>
-    </Reference>
-    <Reference Include="NAudio.WinMM, Version=2.1.0.0, Culture=neutral, PublicKeyToken=e279aa5131008a41, processorArchitecture=MSIL">
-      <HintPath>packages\NAudio.WinMM.2.1.0\lib\netstandard2.0\NAudio.WinMM.dll</HintPath>
+    <Reference Include="NAudio, Version=1.10.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\NAudio.1.10.0\lib\net35\NAudio.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Security.AccessControl, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Security.AccessControl.6.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
     </Reference>
-    <Reference Include="System.Security.Principal.Windows, Version=5.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
+    <Reference Include="System.Core" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=4.0.4.1, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.CompilerServices.Unsafe.4.5.3\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>packages\System.ValueTuple.4.5.0\lib\net47\System.ValueTuple.dll</HintPath>
     </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -164,6 +158,171 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\icon_remove.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\RI.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Running Indicator.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CD Playback.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CD SKIP.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CD Playback Transparrent.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CD Skip Transparrent.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\13 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\12 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\11 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\10 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\16 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\15 trackNumber.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\border.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\0symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\9symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\8symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\7symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\6symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1symbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Csymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Dsymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DOTS.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pause.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\play.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\DASHsymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Psymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Msymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc2Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc2Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc1Detected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc1Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc1Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc3Detected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc3Selected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc3Empty.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\disc2Detected.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TAPE RVS Playback Transparrent.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\TAPE FWD Playback Transparrent.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Esymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Asymbol.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Tsymbol.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

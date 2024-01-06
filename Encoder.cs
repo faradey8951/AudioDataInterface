@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.Wave;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -35,6 +36,8 @@ namespace AudioDataInterface
         public static bool encoder_forceStop = false; //Принудительная остановка конвертации
         public static int encoder_samplesPerBit = 8; //Кол-во аудиосэмплов, описывающих один бит информации в аудиопотоке
         public static int encoder_progress = 0; //Прогресс конвертации [%]
+        public static double minSampleDeltaCoefficient = 0.5;
+        public static double maxSampleDeltaCoefficient = 1.0;
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Потоки
@@ -71,6 +74,13 @@ namespace AudioDataInterface
                 LogHandler.WriteError("Encoder.cs->CreateInputStream()", encoder_inputFilePath + " is " + FileHandler.CheckStatus(encoder_inputFilePath, false));
                 encoder_forceStop = true;
             }
+        }
+
+        public static int GetMp3FileDuration()
+        {
+            Mp3FileReader reader = new Mp3FileReader(encoder_inputFilePath);
+            int minutes = reader.TotalTime.Minutes;
+            return reader.TotalTime.Seconds + (minutes * 60);
         }
 
         /// <summary>
@@ -133,59 +143,65 @@ namespace AudioDataInterface
 
         static void GenerateStereoSync()
         {
-            list_outputFileSamples.Add(Convert.ToInt16(4096 * encoder_signalGain));
+            double maxSampleLevelL = 4096;
+            double minSampleDeltaL = maxSampleLevelL * minSampleDeltaCoefficient;
+            double maxSampleDeltaL = maxSampleLevelL * maxSampleDeltaCoefficient;
+            double maxSampleLevelR = 4096;
+            double minSampleDeltaR = maxSampleLevelR * minSampleDeltaCoefficient;
+            double maxSampleDeltaR = maxSampleLevelR * maxSampleDeltaCoefficient;
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaL * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16(4096 * encoder_signalGain));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2560 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2560 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2560 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2560 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaR * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (4096 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (4096 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (4096 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (4096 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2560 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2560 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2560 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2560 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (4096 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (4096 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
@@ -305,246 +321,274 @@ namespace AudioDataInterface
 
         static void GenerateStereo00()
         {
-            list_outputFileSamples.Add(Convert.ToInt16(1024 * encoder_signalGain));
+            double maxSampleLevelL = 1024;
+            double minSampleDeltaL = maxSampleLevelL * minSampleDeltaCoefficient;
+            double maxSampleDeltaL = maxSampleLevelL * maxSampleDeltaCoefficient;
+            double maxSampleLevelR = 1024;
+            double minSampleDeltaR = maxSampleLevelR * minSampleDeltaCoefficient;
+            double maxSampleDeltaR = maxSampleLevelR * maxSampleDeltaCoefficient;
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaL * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16(1024 * encoder_signalGain));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaR * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
             list_outputFileSamples.Clear();
+
         }
 
         static void GenerateStereo01()
         {
-            list_outputFileSamples.Add(Convert.ToInt16(1024 * encoder_signalGain));
+            double maxSampleLevelL = 1024;
+            double minSampleDeltaL = maxSampleLevelL * minSampleDeltaCoefficient;
+            double maxSampleDeltaL = maxSampleLevelL * maxSampleDeltaCoefficient;
+            double maxSampleLevelR = 2048;
+            double minSampleDeltaR = maxSampleLevelR * minSampleDeltaCoefficient;
+            double maxSampleDeltaR = maxSampleLevelR * maxSampleDeltaCoefficient;
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaL * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16(2048 * encoder_signalGain));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaR * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
             list_outputFileSamples.Clear();
+
         }
 
         static void GenerateStereo10()
         {
-            list_outputFileSamples.Add(Convert.ToInt16(2048 * encoder_signalGain));
+            double maxSampleLevelL = 2048;
+            double minSampleDeltaL = maxSampleLevelL * minSampleDeltaCoefficient;
+            double maxSampleDeltaL = maxSampleLevelL * maxSampleDeltaCoefficient;
+            double maxSampleLevelR = 1024;
+            double minSampleDeltaR = maxSampleLevelR * minSampleDeltaCoefficient;
+            double maxSampleDeltaR = maxSampleLevelR * maxSampleDeltaCoefficient;
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaL * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16(1024 * encoder_signalGain));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaR * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (576 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (576 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1024 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
             list_outputFileSamples.Clear();
+
         }
 
         static void GenerateStereo11()
         {
-            list_outputFileSamples.Add(Convert.ToInt16(2048 * encoder_signalGain));
+            double maxSampleLevelL = 2048;
+            double minSampleDeltaL = maxSampleLevelL * minSampleDeltaCoefficient;
+            double maxSampleDeltaL = maxSampleLevelL * maxSampleDeltaCoefficient;
+            double maxSampleLevelR = 2048;
+            double minSampleDeltaR = maxSampleLevelR * minSampleDeltaCoefficient;
+            double maxSampleDeltaR = maxSampleLevelR * maxSampleDeltaCoefficient;
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaL * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16(2048 * encoder_signalGain));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16(maxSampleDeltaR * encoder_signalGain));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
-            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
-                fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (1280 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
-            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (2048 * encoder_signalGain))));
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (maxSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] - (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (minSampleDeltaR * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaL * encoder_signalGain))));
+            foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
+                fs_output.WriteByte(element);
+            list_outputFileSamples.Add(Convert.ToInt16((list_outputFileSamples[list_outputFileSamples.Count - 2] + (maxSampleDeltaR * encoder_signalGain))));
             foreach (byte element in BitConverter.GetBytes(list_outputFileSamples[list_outputFileSamples.Count - 1]))
                 fs_output.WriteByte(element);
 
             list_outputFileSamples.Clear();
+
         }
 
         /// <summary>
@@ -650,6 +694,53 @@ namespace AudioDataInterface
             GenerateStereoSync(); //Генерируем синхроимпульс
         }
 
+        static void GenerateSubCodeBlockStereo(byte byte1L, byte byte2L, byte byte3L, byte byte4L, byte byte1R, byte byte2R, byte byte3R, byte byte4R)
+        {
+            string binL = "";
+            string binR = "";
+            string temp = "";
+            temp = Convert.ToString(Convert.ToInt16(byte1L), 2);
+            temp = temp.PadLeft(8, '0');
+            binL += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte2L), 2);
+            temp = temp.PadLeft(8, '0');
+            binL += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte3L), 2);
+            temp = temp.PadLeft(8, '0');
+            binL += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte4L), 2);
+            temp = temp.PadLeft(8, '0');
+            binL += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte1R), 2);
+            temp = temp.PadLeft(8, '0');
+            binR += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte2R), 2);
+            temp = temp.PadLeft(8, '0');
+            binR += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte3R), 2);
+            temp = temp.PadLeft(8, '0');
+            binR += temp;
+            temp = Convert.ToString(Convert.ToInt16(byte4R), 2);
+            temp = temp.PadLeft(8, '0');
+            binR += temp;
+
+            //Дописать биты до 32
+            for (int i = binL.Length; i < 32; i++) binL += "0";
+            for (int i = binR.Length; i < 32; i++) binR += "0";
+            string[] dataBlockL = BinaryHandler.HammingEncode(binL); //Массив бит блока данных левого канала
+            string[] dataBlockR = BinaryHandler.HammingEncode(binR); //Массив бит блока данных правого канала
+            //Перебираем финальную последовательность
+            for (int i = 0; i < dataBlockL.Length; i++)
+            {
+                if (dataBlockL[i] == "0" && dataBlockR[i] == "0") GenerateStereo00();
+                if (dataBlockL[i] == "1" && dataBlockR[i] == "1") GenerateStereo11();
+                if (dataBlockL[i] == "1" && dataBlockR[i] == "0") GenerateStereo10();
+                if (dataBlockL[i] == "0" && dataBlockR[i] == "1") GenerateStereo01();
+            }
+            GenerateStereo11(); //Генерируем указатель Субкод-блока
+            GenerateStereoSync(); //Генерируем синхроимпульс
+        }
+
         public static void EncodeFileStereoStream()
         {
             string temp = "";
@@ -659,6 +750,13 @@ namespace AudioDataInterface
             encoder_forceStop = false;
             CreateInputStream();
             CreateOutputStream();
+            //Расставляем время воспроизведения по файлу
+            int mp3Duration = GetMp3FileDuration();
+            int deltaByte = (int)Math.Round((double)((3 * fs_input.Length) / mp3Duration));
+            List<int> targetBytePositions = new List<int>();          
+            for (int i = 0; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
+            List<int> targetDurations = new List<int>();
+            for (int i = 0; i < targetBytePositions.Count; i++) targetDurations.Add((int)Math.Round((double)((targetBytePositions[i] * (double)mp3Duration) / fs_input.Length)));
             if (encoder_forceStop == true)
             {
                 LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding aborted");
@@ -670,10 +768,10 @@ namespace AudioDataInterface
             }
             fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
             GenerateVoid(2); //Генерация тишины 2 сек.
-            GenerateSync(); //Генерация синхроимпульса       
-            GenerateMarkerDataBlock(0, 3); //Генерация маркера начала потока
+            GenerateStereoSync(); //Генерация синхроимпульса       
+            for (int i = 0; i < 128; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
             //Преобразование данных в бинарный код
-            for (int i = 0; i < fs_input.Length;)
+            for (int i = 0, k = 0; i < fs_input.Length;)
             {
                 if (encoder_forceStop == true)
                 {
@@ -688,47 +786,80 @@ namespace AudioDataInterface
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryL += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryL += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryL += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryL += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryR += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryR += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryR += temp;
-                i++;
+                i++;k++;
                 temp = fs_input.ReadByte().ToString();
                 temp = Convert.ToString(Convert.ToInt16(temp), 2);
                 temp = temp.PadLeft(8, '0');
                 binaryR += temp;
-                i++;
+                i++;k++;
                 encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
                 GenerateRAWDataBlockStereo(binaryL, binaryR);
                 binaryL = "";
                 binaryR = "";
+
+                if (targetBytePositions.Count > 0)
+                {
+                    if (fs_input.Position >= targetBytePositions[0])
+                    {
+                        string part1 = Convert.ToString(targetDurations[0], 2);
+                        string part2 = Convert.ToString(mp3Duration, 2);
+                        part1 = part1.PadLeft(12, '0');
+                        part2 = part2.PadLeft(12, '0');
+                        string sum = part1 + part2;
+                        byte byteL1 = 100;
+                        byte byteL2 = Convert.ToByte(sum.Substring(0, 8), 2);
+                        byte byteL3 = Convert.ToByte(sum.Substring(8, 8), 2);
+                        byte byteL4 = Convert.ToByte(sum.Substring(16, 8), 2);
+                        targetDurations.RemoveAt(0);
+                        targetBytePositions.RemoveAt(0);
+                        byte byteR1 = 200;
+                        byte byteR2 = Convert.ToByte(form_encoder.trackNumber);
+                        byte byteR3 = Convert.ToByte(form_encoder.trackCount);
+                        byte byteR4 = Convert.ToByte(0);
+                        GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
+                        GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
+                    }
+                }
+
+                /*
+                if (k == 3096) //Записываем субкод контроля канальной синхронизации
+                {
+                    k = 0;
+                    GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
+                }
+                */
             }
+            for (int i = 0; i < 128; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
             fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
             WriteHeader(fs_output, encoder_sampleRate, 2);
             fs_output.Close();
@@ -737,6 +868,7 @@ namespace AudioDataInterface
             fs_input.Dispose();
             encoder_progress = ProgressHandler.GetPercent(100, 100);
             LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding finished");
+            form_encoder.trackNumber++;
         }
 
         public static void EncodeFileStream()

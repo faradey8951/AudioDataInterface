@@ -1,11 +1,14 @@
-﻿using NAudio;
+﻿
+using NAudio;
 using NAudio.CoreAudioApi;
+using NAudio.Dsp;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
@@ -35,6 +38,8 @@ namespace AudioDataInterface
         //////////////////////////////////////////////////////////////////////////////////////
         static Graphics graphics_waveGraph = null;
         static Bitmap bitmap_waveGraph = null;
+        static Graphics graphics_mpsPlayerInterface = null;
+        static Bitmap bitmap_mpsPlayerInterface = null;
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Настройка осциллографа
@@ -51,6 +56,35 @@ namespace AudioDataInterface
         public static bool scope_verticalBIASDec = false;
         //////////////////////////////////////////////////////////////////////////////////////
 
+        //MPS Player
+        //Префикс: mpsPlayer_
+        //////////////////////////////////////////////////////////////////////////////////////
+        int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9 }; //Массив мгновенных уровней спектра [0-9]
+        int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 }; //Массив динамических уровней спектра [0-9]
+        int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 }; //Массив пиков спектра [0-9]
+        int[] mpsPlayer_spectrumFreq = { 68, 100, 170, 250, 420, 600, 1000, 2400, 3450, 7300, 12500, 14400 }; //Массив опорных частот, для которых строится спектр [Гц]
+        int mpsPlayer_peakHoldTimeDelay = 50; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 50
+        int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
+        public static bool mpsPlayer_showTime = true; //Указывает необходимость показа времени воспроизведения
+        public static bool mpsPlayer_disc1Detected = false;
+        public static int[] mpsPlayer_time = { 0, 0, 0, 0 }; //Массив таймера воспроизведения
+        public static int mpsPlayer_timeSeconds = 0; //Текущее время воспроизведения, выраженное в секундах
+        public static int mpsPlayer_timeDurationSeconds = 0; //Длительность дорожки в секундах
+        int mpsPlayer_timeUpdateDelay = 10; //Задержка обновления времени воспроизведения на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 50
+        int mpsPlayer_timeUpdateCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
+        public static int mpsPlayer_currentTrackNumber = -1; //Номер текущего проигрываемой дорожки
+        public static int mpsPlayer_trackCount = 16; //Количество дорожен
+        public static string mpsPlayer_mode = ""; //Статус работы плеера
+        public double[] mpsPlayer_RAWspectrum = null; //Массив необработанных мгновенных уровней спектра
+        public static bool mpsPlayer_remainingTime = false; //Включает режим отображения оставшегося времени воспроизведения дорожки
+        public static bool mpsPlayer_tapeSkin = false;
+        //////////////////////////////////////////////////////////////////////////////////////
+
+        byte[] buffer_fftBytes = new byte[512];
+        public RawSourceWaveStream rs = null;
+
+        double[] bandIntensity = new double[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
         string[] decodedData = null;
         bool worker_timerControlHandler = false;
 
@@ -59,9 +93,9 @@ namespace AudioDataInterface
             InitializeComponent();
             window_main = this; //Передача статического доступа классу
             scope_verticalBIAS = pictureBox_waveGraph.Height / 2;
-            Type type = listView.GetType();
-            PropertyInfo propertyInfo = type.GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance);
-            propertyInfo.SetValue(listView, true, null);
+            //Type type = listView.GetType();
+            //PropertyInfo propertyInfo = type.GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance);
+            //propertyInfo.SetValue(listView, true, null);
             decodedData = new string[10];
         }
 
@@ -99,12 +133,208 @@ namespace AudioDataInterface
             }
         }
 
+        /// <summary>
+        /// Отрисовка интерфейса проигрывателя аудио потока ADI-MPS
+        /// </summary>
+        public void DrawMPSPlayerInterface()
+        {
+            double spectrumBarY0 = 0.99;
+            double spectrumBarX0 = 0.02;
+            double spectrumBarWidth = 0.65;
+            double spectrumBarHeight = 0.4;
+            int spectrumBarY0P = (int)Math.Ceiling((double)(pictureBox_mpsPlayer.Height * spectrumBarY0));
+            int spectrumBarX0P = (int)Math.Ceiling((double)(pictureBox_mpsPlayer.Width * spectrumBarX0));
+            int spectrumBarWidthP = (int)Math.Ceiling((double)pictureBox_mpsPlayer.Width * spectrumBarWidth);
+            int spectrumBarHeightP = (int)Math.Ceiling((double)(pictureBox_mpsPlayer.Height * spectrumBarHeight));
+            int spectrumBarSegmentWidthP = (int)Math.Ceiling((double)spectrumBarWidthP / 35);
+            int spectrumBarSegmentHeightP = (int)Math.Ceiling((double)spectrumBarHeightP / 35);
+            int spectrumBarSegmentDeltaP = (int)Math.Ceiling((double)spectrumBarSegmentWidthP / 12);
+
+            graphics_mpsPlayerInterface.Clear(Color.FromArgb(34, 31, 31));
+
+            //Отрисовка спектра
+            for (int i = 1; i < mpsPlayer_liveSpectrum[0] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + spectrumBarSegmentWidthP + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + spectrumBarSegmentWidthP + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[1] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (3 * spectrumBarSegmentWidthP) + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (3 * spectrumBarSegmentWidthP) + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (4 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (4 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[2] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (6 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (6 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (7 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (7 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[3] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (9 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (9 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (10 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (10 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[4] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (12 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (12 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (13 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (13 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[5] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (15 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (15 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (16 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (16 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[6] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (18 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (18 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (19 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (19 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[7] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (21 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (21 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (22 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (22 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[8] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (24 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (24 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (25 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (25 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[9] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (27 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (27 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (28 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (28 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[10] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (30 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (30 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (31 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (31 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[11] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (33 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (33 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+
+            //Отрисовка пиков
+            for (int i = mpsPlayer_spectrumPeakHold[0] * 2; i >= ((mpsPlayer_spectrumPeakHold[0] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + spectrumBarSegmentWidthP + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + spectrumBarSegmentWidthP + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[1] * 2; i >= ((mpsPlayer_spectrumPeakHold[1] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (3 * spectrumBarSegmentWidthP) + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (3 * spectrumBarSegmentWidthP) + spectrumBarSegmentDeltaP, spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (4 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (4 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[2] * 2; i >= ((mpsPlayer_spectrumPeakHold[2] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (6 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (6 * spectrumBarSegmentWidthP) + (2 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (7 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (7 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[3] * 2; i >= ((mpsPlayer_spectrumPeakHold[3] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (9 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (9 * spectrumBarSegmentWidthP) + (3 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (10 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (10 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[4] * 2; i >= ((mpsPlayer_spectrumPeakHold[4] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (12 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (12 * spectrumBarSegmentWidthP) + (4 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (13 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (13 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[5] * 2; i >= ((mpsPlayer_spectrumPeakHold[5] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (15 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (15 * spectrumBarSegmentWidthP) + (5 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (16 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (16 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[6] * 2; i >= ((mpsPlayer_spectrumPeakHold[6] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (18 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (18 * spectrumBarSegmentWidthP) + (6 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (19 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (19 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[7] * 2; i >= ((mpsPlayer_spectrumPeakHold[7] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (21 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (21 * spectrumBarSegmentWidthP) + (7 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (22 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (22 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[8] * 2; i >= ((mpsPlayer_spectrumPeakHold[8] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (24 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (24 * spectrumBarSegmentWidthP) + (8 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (25 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (25 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[9] * 2; i >= ((mpsPlayer_spectrumPeakHold[9] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (27 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (27 * spectrumBarSegmentWidthP) + (9 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (28 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (28 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[10] * 2; i >= ((mpsPlayer_spectrumPeakHold[10] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (30 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (30 * spectrumBarSegmentWidthP) + (10 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (31 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (31 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[11] * 2; i >= ((mpsPlayer_spectrumPeakHold[11] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (33 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (33 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+
+            pictureBox_mpsPlayer.Image = bitmap_mpsPlayerInterface;
+        }
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
             Settings.Load();
 
             bitmap_waveGraph = new Bitmap(pictureBox_waveGraph.Width, pictureBox_waveGraph.Height);
             graphics_waveGraph = Graphics.FromImage(bitmap_waveGraph); //Инициализация графики
+            bitmap_mpsPlayerInterface = new Bitmap(pictureBox_mpsPlayer.Width, pictureBox_mpsPlayer.Height);
+            graphics_mpsPlayerInterface = Graphics.FromImage(bitmap_mpsPlayerInterface);
             try
             {
                 comboBox_recDevices.Items.AddRange(AudioIO.GetRecDevices());
@@ -116,13 +346,13 @@ namespace AudioDataInterface
                 Settings.Load();
             }
             AudioIO.GraphCaptureInit();
-            AudioIO.SignalCaptureInit();
             Decoder.Start();
+            MpsPlayerRunningIndicatorStop();
         }
 
         private void button_capture_Click(object sender, EventArgs e)
         {
-
+            window_debug.Show();
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -132,7 +362,7 @@ namespace AudioDataInterface
             if (window_debug != null)
                 window_debug.Close();
             Settings.Save();
-            Close();
+            //Close();
             Environment.Exit(0);
         }
 
@@ -150,43 +380,14 @@ namespace AudioDataInterface
         {
             //Анимация запуска
             if (this.Opacity < 100) this.Opacity += 0.04;
+            label_signalGainL.Text = "Усиление ЛК: " + Math.Round(AudioIO.audio_signalGainL, 2).ToString();
+            label_signalGainR.Text = "Усиление ПК: " + Math.Round(AudioIO.audio_signalGainR, 2).ToString();
+            label_errorDensity.Text = "Плотность ошибок: " + Decoder.errorCount.ToString();
 
-            /*
-            if (Decoder.buff_decodedData.Count() > 17 && worker_timerControlHandler == false)
-            {
-                worker_timerControlHandler = true;
-                int m = 0;
-                if (Decoder.buff_decodedData.Count() >= 16)
-                    m = 16;
-             
-                for (int i = 0; i < m; i++)
-                {
-                    Decoder.buff_decodedData[i].CopyTo(decodedData, 0);
-                    listView.Items.Add(listView.Items.Count.ToString());
-                    listView.Items[listView.Items.Count - 1].SubItems.Add(decodedData[8]);
-                    listView.Items[listView.Items.Count - 1].SubItems.Add("-");
-                    listView.Items[listView.Items.Count - 1].SubItems.Add("-");
-                    listView.Items[listView.Items.Count - 1].SubItems.Add(decodedData[9]);
-                    //listView.Items[listView.Items.Count - 1].EnsureVisible();
-                }
-                Decoder.buff_decodedData.RemoveRange(0, m);
-                worker_timerControlHandler = false;
-            }
-            */
             if (scope_horizontalBIASInc == true) scope_horizontalBIAS -= 1;
             if (scope_horizontalBIASDec == true) scope_horizontalBIAS += 1;
             if (scope_verticalBIASInc == true) scope_verticalBIAS += 2;
             if (scope_verticalBIASDec == true) scope_verticalBIAS -= 2;
-            try
-            {
-                this.Text = class_dataHandler.mp3_message;
-                label1.Text = DataHandler.mp3_currentTime.ToString();
-                label2.Text = Decoder.maxAmplitude.ToString();
-            }
-            catch
-            {
-
-            }
         }
 
         private void statusStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -194,6 +395,7 @@ namespace AudioDataInterface
 
         }
 
+        /*
         async void ListViewUpdate()
         {
             while (true)
@@ -217,10 +419,11 @@ namespace AudioDataInterface
         {
             await Task.Run(() => ListViewUpdate());
         }
+        */
 
         private void toolStripLabel_Click(object sender, EventArgs e)
         {
-            TaskListViewUpdate();
+            //TaskListViewUpdate();
         }
 
         private void pictureBox_Click(object sender, EventArgs e)
@@ -249,6 +452,8 @@ namespace AudioDataInterface
         {
             bitmap_waveGraph = new Bitmap(pictureBox_waveGraph.Width, pictureBox_waveGraph.Height);
             graphics_waveGraph = Graphics.FromImage(bitmap_waveGraph); //Инициализация графики
+            bitmap_mpsPlayerInterface = new Bitmap(pictureBox_mpsPlayer.Width, pictureBox_mpsPlayer.Height);
+            graphics_mpsPlayerInterface = Graphics.FromImage(bitmap_mpsPlayerInterface);
         }
 
         private void pictureBox_waveGraph_MouseWheel(object sender, MouseEventArgs e)
@@ -300,17 +505,264 @@ namespace AudioDataInterface
 
         private void button_buffMp3_Click(object sender, EventArgs e)
         {
+            AudioIO.SignalCaptureInit();
+
+            mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5 };
             DataHandler.StartMp3Listening();
+            AudioIO.MPSAudioOutputCaptureInit();
+            //DrawMPSPlayerInterface();
+            MpsPlayerTrackCalendarSetAmount(16);
+            MpsPlayerTrackCalendarSetCurrentTrack(1);
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            class_dataHandler.ClearMp3();
+            //window_debug.Show();
+
         }
 
-        private void groupBox_signalCapture_Enter(object sender, EventArgs e)
+        public static void MpsPlayerRunningIndicatorPlay()
+        {
+            if (mpsPlayer_tapeSkin == false)
+            {
+                window_main.pictureBox_runningIndicator.Image = Properties.Resources.CD_Playback_Transparrent;
+                window_main.pictureBox_playPause.Image = Properties.Resources.play;
+            }
+            else
+            {
+                if (mpsPlayer_remainingTime == false)
+                {
+                    window_main.pictureBox_runningIndicator.Image = Properties.Resources.TAPE_FWD_Playback_Transparrent;
+                }
+                else
+                {
+                    window_main.pictureBox_runningIndicator.Image = Properties.Resources.TAPE_RVS_Playback_Transparrent;
+                }
+            }
+        }
+
+        public static void MpsPlayerRunningIndicatorSeek()
+        {
+            if (mpsPlayer_tapeSkin == false)
+            {
+                window_main.pictureBox_runningIndicator.Image = Properties.Resources.CD_Skip_Transparrent;
+                window_main.pictureBox_playPause.Image = Properties.Resources.pause;
+            }
+            else
+            {
+                window_main.pictureBox_runningIndicator.Image = Properties.Resources.Running_Indicator;
+            }
+        }
+
+        public static void MpsPlayerRunningIndicatorStop()
+        {
+            window_main.pictureBox_runningIndicator.Image = Properties.Resources.Running_Indicator;
+            window_main.pictureBox_playPause.Image = null;
+        }
+
+        public void MpsPlayerTrackCalendarSetAmount(int trackCount)
+        {
+            if (trackCount > 16) trackCount = 16;
+            PictureBox[] pictureBox_trackNumber = { window_main.pictureBox_track1, window_main.pictureBox_track2, window_main.pictureBox_track3, window_main.pictureBox_track4, window_main.pictureBox_track5, window_main.pictureBox_track6, window_main.pictureBox_track7, window_main.pictureBox_track8, window_main.pictureBox_track9, window_main.pictureBox_track10, window_main.pictureBox_track11, window_main.pictureBox_track12, window_main.pictureBox_track13, window_main.pictureBox_track14, window_main.pictureBox_track15, window_main.pictureBox_track16 };
+
+            for (int i = 0; i < 16; i++)
+            {
+
+                if (i < trackCount) pictureBox_trackNumber[i].Visible = true;
+                else pictureBox_trackNumber[i].Visible = false;
+
+            }
+        }
+
+        public static void MpsPlayerTrackCalendarSetCurrentTrack(int currentTrackNum)
+        {
+            try
+            {
+                PictureBox[] pictureBox_trackNumber = { window_main.pictureBox_track1, window_main.pictureBox_track2, window_main.pictureBox_track3, window_main.pictureBox_track4, window_main.pictureBox_track5, window_main.pictureBox_track6, window_main.pictureBox_track7, window_main.pictureBox_track8, window_main.pictureBox_track9, window_main.pictureBox_track10, window_main.pictureBox_track11, window_main.pictureBox_track12, window_main.pictureBox_track13, window_main.pictureBox_track14, window_main.pictureBox_track15, window_main.pictureBox_track16 };
+
+                for (int i = 0; i < currentTrackNum - 1; i++) pictureBox_trackNumber[i].Visible = false;
+            }
+            catch
+            {
+
+            }
+        }
+
+        private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
+        {
+            DrawMPSPlayerInterface();           
+            mpsPlayer_timeUpdateCount++;
+            if (mpsPlayer_timeUpdateCount == mpsPlayer_timeUpdateDelay)
+            {               
+                window_main.pictureBox_dots.Image = Properties.Resources.DOTS;
+                Bitmap[] symbolImages = { Properties.Resources._0symbol, Properties.Resources._1symbol, Properties.Resources._2symbol, Properties.Resources._3symbol, Properties.Resources._4symbol, Properties.Resources._5symbol, Properties.Resources._6symbol, Properties.Resources._7symbol, Properties.Resources._8symbol, Properties.Resources._9symbol };
+                PictureBox[] pictureBox_timeSymbols = { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
+                PictureBox[] pictureBox_trackNumberSymbols = { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
+                mpsPlayer_timeUpdateCount = 0;
+                if (mpsPlayer_tapeSkin == false)
+                {
+                    pictureBox_symbol1.Image = Properties.Resources.Msymbol;
+                    pictureBox_symbol2.Image = Properties.Resources.Psymbol;
+                    pictureBox_symbol3.Image = null;
+                    pictureBox_symbol4.Image = Properties.Resources.DASHsymbol;
+                    pictureBox_symbol5.Image = Properties.Resources.DASHsymbol;
+                    pictureBox_symbol7.Image = null;
+                    pictureBox_dots.Image = Properties.Resources.DOTS;
+                    pictureBox_disc1.Image = Properties.Resources.disc1Selected;
+                    pictureBox_disc2.Image = Properties.Resources.disc2Empty;
+                    pictureBox_disc3.Image = Properties.Resources.disc3Empty;
+                    //Отображение текущего времени воспроизведения
+                    if (mpsPlayer_remainingTime == false)
+                    {
+                        pictureBox_symbol6.Image = null;
+                        pictureBox_symbol7.Image = null;
+                        mpsPlayer_time = Decoder.GetTimeFromSeconds(mpsPlayer_timeSeconds);
+                    }
+                    else
+                    {
+                        if (mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds >= 600) pictureBox_symbol6.Image = Properties.Resources.DASHsymbol;
+                        else
+                        {
+                            pictureBox_symbol6.Image = null;
+                            pictureBox_symbol7.Image = Properties.Resources.DASHsymbol;
+                        }
+                        mpsPlayer_time = Decoder.GetTimeFromSeconds(mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds);
+                    }
+                    if (mpsPlayer_showTime == true)
+                    {
+                        for (int i = 0; i < mpsPlayer_time.Length; i++) if (mpsPlayer_time[i] != 0 || i > 0) pictureBox_timeSymbols[i].Image = symbolImages[mpsPlayer_time[i]];
+                    }
+                    else
+                    {
+                        pictureBox_symbol7.Image = null;
+                        window_main.pictureBox_dots.Image = null;
+                        for (int k = 0; k < pictureBox_timeSymbols.Length; k++) pictureBox_timeSymbols[k].Image = null;
+                    }
+                    MpsPlayerTrackCalendarSetAmount(mpsPlayer_trackCount);
+                    MpsPlayerTrackCalendarSetCurrentTrack(mpsPlayer_currentTrackNumber);
+                    //Отображение текущей проигрываемой дорожки
+                    string currentTrackNumber = "";
+                    if (mpsPlayer_currentTrackNumber != -1 && mpsPlayer_currentTrackNumber <= 99)
+                    {
+                        if (mpsPlayer_currentTrackNumber < 10) currentTrackNumber += "0";
+                        currentTrackNumber += mpsPlayer_currentTrackNumber.ToString();
+                        for (int i = 0; i < currentTrackNumber.Length; i++) pictureBox_trackNumberSymbols[i].Image = symbolImages[Convert.ToInt16(currentTrackNumber[i].ToString())];
+                    }
+                    else
+                    {
+                        pictureBox_trackNumberSymbols[0].Image = Properties.Resources.DASHsymbol;
+                        pictureBox_trackNumberSymbols[1].Image = Properties.Resources.DASHsymbol;
+                    }
+                    if (mpsPlayer_disc1Detected == true) pictureBox_disc1.Image = Properties.Resources.disc1Detected;
+                    else pictureBox_disc1.Image = Properties.Resources.disc1Selected;
+                }
+                else
+                {
+                    MpsPlayerTrackCalendarSetAmount(0);
+                    pictureBox_symbol1.Image = Properties.Resources.Tsymbol;
+                    pictureBox_symbol2.Image = Properties.Resources.Asymbol;
+                    pictureBox_symbol3.Image = Properties.Resources.Psymbol;
+                    pictureBox_symbol4.Image = Properties.Resources.Esymbol;
+                    pictureBox_symbol5.Image = null;
+                    pictureBox_symbol7.Image = Properties.Resources._0symbol;
+                    pictureBox_dots.Image = null;
+                    pictureBox_disc1.Image = null;
+                    pictureBox_disc2.Image = null;
+                    pictureBox_disc3.Image = null;
+                }
+            }
+        }
+
+        private void timer_mpsPlayerSpectrumHandler_Tick(object sender, EventArgs e)
+        {
+            if (mpsPlayer_peakHoldTimeCount == mpsPlayer_peakHoldTimeDelay)
+            {
+                mpsPlayer_peakHoldTimeCount = 0;
+                mpsPlayer_spectrumPeakHold = new int[]{ 0,0,0,0,0,0,0,0,0,0,0,0};
+            }
+            for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
+            {
+                if (mpsPlayer_instantSpectrum[i] > mpsPlayer_liveSpectrum[i] && mpsPlayer_liveSpectrum[i] < 9) mpsPlayer_liveSpectrum[i]++;
+                else if (mpsPlayer_liveSpectrum[i] > 0) mpsPlayer_liveSpectrum[i]--;
+            }
+            for (int i = 0; i < mpsPlayer_liveSpectrum.Length; i++)
+            {
+                if (mpsPlayer_spectrumPeakHold[i] < mpsPlayer_liveSpectrum[i]) mpsPlayer_spectrumPeakHold[i] = mpsPlayer_liveSpectrum[i];
+            }
+            mpsPlayer_peakHoldTimeCount++;
+        }
+
+        private void timer_mpsPlayerSpectrumUpdater_Tick(object sender, EventArgs e)
+        {
+            if (AudioIO.buff_fftValues != null)
+            {
+                double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioIO.buff_fftSamples);
+                var complex = FftSharp.FFT.Forward(paddedAudio);
+                double[] fftMag = FftSharp.FFT.Magnitude(complex);
+                double[] frequencyValues = FftSharp.FFT.FrequencyScale(fftMag.Length, AudioIO.waveLoop.WaveFormat.SampleRate);
+                Array.Copy(fftMag, AudioIO.buff_fftValues, fftMag.Length);
+                double[] RAWspectrumSelection = new double[12];
+                
+                //Выборка заданных частот
+                for (int i = 4, k = 0; i < AudioIO.buff_fftValues.Length - 4 && k < mpsPlayer_spectrumFreq.Length; i++)
+                {
+                    if (Math.Round(frequencyValues[i]) >= mpsPlayer_spectrumFreq[k])
+                    {
+                        RAWspectrumSelection[k] = Math.Round((AudioIO.buff_fftValues[i - 3] + AudioIO.buff_fftValues[i - 2] + AudioIO.buff_fftValues[i - 1] + AudioIO.buff_fftValues[i] + AudioIO.buff_fftValues[i + 1] + AudioIO.buff_fftValues[i + 2] + AudioIO.buff_fftValues[i + 3]) / 7);
+                        k++;
+                    }
+                }
+                //Преобразование уровня спектра к шкале 0-9
+                for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
+                {
+                    if (i > 3) RAWspectrumSelection[i] = 10 * Math.Log10(i*3) * RAWspectrumSelection[i]; //Фильтр АЧХ
+                    mpsPlayer_instantSpectrum[i] = (int)Math.Floor((9 * (double)(2 * RAWspectrumSelection[i])) / 1800);
+                }
+            }
+            else
+            {
+                for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++) mpsPlayer_instantSpectrum[i] = 0;
+            }
+        }
+
+        private void pictureBox_mpsPlayer_Click(object sender, EventArgs e)
         {
 
+        }
+
+        private void pictureBox4_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void timer_mpsPlayerTimeUpdate_Tick(object sender, EventArgs e)
+        {
+            if (mpsPlayer_mode == "play") mpsPlayer_timeSeconds++;
+        }
+
+        private void checkBox_invertSignal_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_invertSignal.Checked) AudioIO.audio_invertSignal = true;
+            else AudioIO.audio_invertSignal = false;
+        }
+
+        private void checkBox_remainingTime_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_remainingTime.Checked) mpsPlayer_remainingTime = true;
+            else mpsPlayer_remainingTime = false;
+        }
+
+        private void checkBox_autoGain_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_autoGain.Checked) AudioIO.audio_autoSignalGain = true;
+            else AudioIO.audio_autoSignalGain = false;
+        }
+
+        private void checkBox_tapeSkin_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_tapeSkin.Checked) mpsPlayer_tapeSkin = true;
+            else mpsPlayer_tapeSkin=false;
+            mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5 };
         }
     }
 }
