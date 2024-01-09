@@ -352,6 +352,11 @@ namespace AudioDataInterface
 
         private void button_capture_Click(object sender, EventArgs e)
         {
+            if (window_debug != null)
+            {
+                window_debug.Dispose();
+                window_debug = new form_debug();
+            }
             window_debug.Show();
         }
 

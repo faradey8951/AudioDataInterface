@@ -187,7 +187,7 @@ namespace AudioDataInterface
                     if (Decoder.maxAmplitudeR > 24000 && audio_signalGainR > 1) audio_signalGainR -= Math.Log10(1 + 5 * audio_signalGainR);
                     if (audio_signalGainR < 1 || audio_signalGainR > 256) audio_signalGainR = 6;
                 }
-                Thread.Sleep(100);
+                Thread.Sleep(50);
             }
         }
 
