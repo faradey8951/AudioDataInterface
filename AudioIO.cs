@@ -21,7 +21,9 @@ namespace AudioDataInterface
         static WaveIn naudio_signalWaveIn = null;                                               //Поток аудиозахвата сигнала
         public static WasapiOut naudio_wasapiOut = new WasapiOut();                                    //Вывод звука для mp3
         static AudioFileReader naudio_audioFileReader = null;                                   //Читалка аудио файлов для встроенного плеера
-        
+        public static MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
+        public static MMDeviceCollection mm_dev = null;
+
         public static WasapiCapture waveLoop = null;
         //WaveFormat fmt = waveLoop.WaveFormat;
 
@@ -79,6 +81,16 @@ namespace AudioDataInterface
             return recDevices;
         }
 
+        public static string[] GetPlayDevices()
+        {
+            string[] playDevices = null;
+            
+            mm_dev = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active);
+            playDevices = new string[mm_dev.Count];
+            for (int i = 0; i < playDevices.Length; i++) playDevices[i] = mm_dev[i].DeviceFriendlyName;
+            return playDevices;
+        }
+
         /// <summary>
         /// Инициализация захвата звука для сигналограммы
         /// </summary>
@@ -125,9 +137,7 @@ namespace AudioDataInterface
 
         public static void MPSAudioOutputCaptureInit()
         {
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-            var mm_dev = enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active)[1];
-            waveLoop = new WasapiLoopbackCapture(mm_dev);
+            waveLoop = new WasapiLoopbackCapture(mm_dev[audio_playDeviceId]);
             waveLoop.DataAvailable += new EventHandler<WaveInEventArgs>(MPS_DataAvailable);
             waveLoop.StartRecording();
         }

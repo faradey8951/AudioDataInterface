@@ -333,6 +333,8 @@ namespace AudioDataInterface
             {
                 comboBox_recDevices.Items.AddRange(AudioIO.GetRecDevices());
                 comboBox_recDevices.Text = AudioIO.GetRecDevices()[AudioIO.audio_recDeviceId];
+                comboBox_playDevices.Items.AddRange(AudioIO.GetPlayDevices());
+                comboBox_playDevices.Text = AudioIO.GetPlayDevices()[AudioIO.audio_playDeviceId];
             }
             catch
             {
@@ -730,7 +732,8 @@ namespace AudioDataInterface
                 //Преобразование уровня спектра к шкале 0-9
                 for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
                 {
-                    if (i > 3) RAWspectrumSelection[i] = 10 * Math.Log10(i*3) * RAWspectrumSelection[i]; //Фильтр АЧХ
+                    if (i > 3) RAWspectrumSelection[i] = 6 * Math.Log10(i*3) * RAWspectrumSelection[i]; //Фильтр АЧХ
+                    if (i > 7) RAWspectrumSelection[i] = 2 * Math.Log10(i) * RAWspectrumSelection[i]; //Фильтр АЧХ
                     mpsPlayer_instantSpectrum[i] = (int)Math.Floor((9 * (double)(2 * RAWspectrumSelection[i])) / 1800);
                 }
             }
@@ -794,6 +797,12 @@ namespace AudioDataInterface
         private void groupBox_signalCapture_Enter(object sender, EventArgs e)
         {
 
+        }
+
+        private void comboBox_playDevices_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AudioIO.audio_playDeviceId = comboBox_playDevices.SelectedIndex;
+            AudioIO.MPSAudioOutputCaptureInit();
         }
     }
 }

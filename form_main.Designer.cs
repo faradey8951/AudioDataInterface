@@ -114,6 +114,8 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -370,7 +372,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_cassette.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_cassette.Image = global::AudioDataInterface.Properties.Resources.cassette;
-            this.pictureBox_cassette.Location = new System.Drawing.Point(6, 176);
+            this.pictureBox_cassette.Location = new System.Drawing.Point(8, 168);
             this.pictureBox_cassette.Name = "pictureBox_cassette";
             this.pictureBox_cassette.Size = new System.Drawing.Size(33, 22);
             this.pictureBox_cassette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -830,7 +832,9 @@ namespace AudioDataInterface
             // panel_signalCapture
             // 
             this.panel_signalCapture.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_signalCapture.Controls.Add(this.checkBox_tapeSkin);
             this.panel_signalCapture.Controls.Add(this.groupBox_signalCapture);
+            this.panel_signalCapture.Controls.Add(this.button_buffMp3);
             this.panel_signalCapture.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel_signalCapture.Location = new System.Drawing.Point(0, 369);
             this.panel_signalCapture.Name = "panel_signalCapture";
@@ -839,9 +843,9 @@ namespace AudioDataInterface
             // 
             // groupBox_signalCapture
             // 
-            this.groupBox_signalCapture.Controls.Add(this.checkBox_tapeSkin);
+            this.groupBox_signalCapture.Controls.Add(this.label1);
+            this.groupBox_signalCapture.Controls.Add(this.comboBox_playDevices);
             this.groupBox_signalCapture.Controls.Add(this.groupBox_decoderSettings);
-            this.groupBox_signalCapture.Controls.Add(this.button_buffMp3);
             this.groupBox_signalCapture.Controls.Add(this.groupBox_BIASAdjust);
             this.groupBox_signalCapture.Controls.Add(this.groupBox_scaleAdjust);
             this.groupBox_signalCapture.Controls.Add(this.label_recDevice);
@@ -859,7 +863,7 @@ namespace AudioDataInterface
             // checkBox_tapeSkin
             // 
             this.checkBox_tapeSkin.AutoSize = true;
-            this.checkBox_tapeSkin.Location = new System.Drawing.Point(536, 144);
+            this.checkBox_tapeSkin.Location = new System.Drawing.Point(848, 8);
             this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
             this.checkBox_tapeSkin.Size = new System.Drawing.Size(78, 17);
             this.checkBox_tapeSkin.TabIndex = 16;
@@ -919,7 +923,7 @@ namespace AudioDataInterface
             // 
             // button_buffMp3
             // 
-            this.button_buffMp3.Location = new System.Drawing.Point(736, 152);
+            this.button_buffMp3.Location = new System.Drawing.Point(936, 160);
             this.button_buffMp3.Name = "button_buffMp3";
             this.button_buffMp3.Size = new System.Drawing.Size(96, 32);
             this.button_buffMp3.TabIndex = 14;
@@ -1040,19 +1044,19 @@ namespace AudioDataInterface
             // timer_mpsPlayerHandler
             // 
             this.timer_mpsPlayerHandler.Enabled = true;
-            this.timer_mpsPlayerHandler.Interval = 20;
+            this.timer_mpsPlayerHandler.Interval = 25;
             this.timer_mpsPlayerHandler.Tick += new System.EventHandler(this.timer_mpsPlayerHandler_Tick);
             // 
             // timer_mpsPlayerSpectrumHandler
             // 
             this.timer_mpsPlayerSpectrumHandler.Enabled = true;
-            this.timer_mpsPlayerSpectrumHandler.Interval = 30;
+            this.timer_mpsPlayerSpectrumHandler.Interval = 25;
             this.timer_mpsPlayerSpectrumHandler.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumHandler_Tick);
             // 
             // timer_mpsPlayerSpectrumUpdater
             // 
             this.timer_mpsPlayerSpectrumUpdater.Enabled = true;
-            this.timer_mpsPlayerSpectrumUpdater.Interval = 20;
+            this.timer_mpsPlayerSpectrumUpdater.Interval = 40;
             this.timer_mpsPlayerSpectrumUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumUpdater_Tick);
             // 
             // timer_mpsPlayerTimeUpdater
@@ -1060,6 +1064,27 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater.Enabled = true;
             this.timer_mpsPlayerTimeUpdater.Interval = 1000;
             this.timer_mpsPlayerTimeUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerTimeUpdate_Tick);
+            // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(528, 144);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Устройство воспр.:";
+            // 
+            // comboBox_playDevices
+            // 
+            this.comboBox_playDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_playDevices.FormattingEnabled = true;
+            this.comboBox_playDevices.Location = new System.Drawing.Point(640, 141);
+            this.comboBox_playDevices.Name = "comboBox_playDevices";
+            this.comboBox_playDevices.Size = new System.Drawing.Size(194, 21);
+            this.comboBox_playDevices.TabIndex = 16;
+            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
             // 
             // form_main
             // 
@@ -1130,6 +1155,7 @@ namespace AudioDataInterface
             this.groupBox_info.ResumeLayout(false);
             this.groupBox_info.PerformLayout();
             this.panel_signalCapture.ResumeLayout(false);
+            this.panel_signalCapture.PerformLayout();
             this.groupBox_signalCapture.ResumeLayout(false);
             this.groupBox_signalCapture.PerformLayout();
             this.groupBox_decoderSettings.ResumeLayout(false);
@@ -1229,6 +1255,8 @@ namespace AudioDataInterface
         private System.Windows.Forms.CheckBox checkBox_autoGain;
         private System.Windows.Forms.CheckBox checkBox_tapeSkin;
         private System.Windows.Forms.PictureBox pictureBox_cassette;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBox_playDevices;
     }
 }
 
