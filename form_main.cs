@@ -106,30 +106,24 @@ namespace AudioDataInterface
         {
             if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_graphSamples.Count > 0)
             {
-                try
-                {
-                    graphics_waveGraph.Clear(Color.FromArgb(34,31,31));                   
-                    int pointsCount = (pictureBox_waveGraph.Width / scope_horizontalScale) + 8;
-                    PointF[] points = new PointF[pointsCount]; //Массив точек кадра сигналограммы
-                    //graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251,176,64)), 0, (pictureBox_waveGraph.Height / 2) + 1, pictureBox_waveGraph.Width, (pictureBox_waveGraph.Height / 2) + 1);
-                    for (int i = 0; i < pictureBox_waveGraph.Width; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraph.Height);
-                    for (int i = 0; i < pictureBox_waveGraph.Width; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraph.Height);
-                    for (int i = 0; i < pictureBox_waveGraph.Height; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraph.Width, i);
-                    for (int i = 0; i < pictureBox_waveGraph.Height; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraph.Width, i + 1);
-                    graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraph.Height / 2) - 1, pictureBox_waveGraph.Width, (pictureBox_waveGraph.Height / 2) - 1);
-                    graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraph.Height / 2, pictureBox_waveGraph.Width, pictureBox_waveGraph.Height / 2);
-                    for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += scope_additionalHorizontalScale, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraph.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS);
-                    graphics_waveGraph.DrawLines(new Pen(Color.FromArgb(153,255,153)), points);
-                    points = new PointF[pointsCount];
-                    for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += scope_additionalHorizontalScale, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraph.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS - 1);
-                    graphics_waveGraph.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
-                    pictureBox_waveGraph.Image = bitmap_waveGraph;
-                    AudioIO.buff_graphSamples.RemoveRange(0, AudioIO.buff_graphSamples.Count);
-                }
-                catch (Exception ex)
-                {
-                    LogHandler.WriteError("CaptureWindow.cs->DrawGraphFrame()", ex.Message);
-                }
+
+                graphics_waveGraph.Clear(Color.FromArgb(34, 31, 31));
+                int pointsCount = (pictureBox_waveGraph.Width / scope_horizontalScale) + 8;
+                PointF[] points = new PointF[pointsCount]; //Массив точек кадра сигналограммы
+                                                           //graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251,176,64)), 0, (pictureBox_waveGraph.Height / 2) + 1, pictureBox_waveGraph.Width, (pictureBox_waveGraph.Height / 2) + 1);
+                for (int i = 0; i < pictureBox_waveGraph.Width; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraph.Height);
+                for (int i = 0; i < pictureBox_waveGraph.Width; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraph.Height);
+                for (int i = 0; i < pictureBox_waveGraph.Height; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraph.Width, i);
+                for (int i = 0; i < pictureBox_waveGraph.Height; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraph.Width, i + 1);
+                graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraph.Height / 2) - 1, pictureBox_waveGraph.Width, (pictureBox_waveGraph.Height / 2) - 1);
+                graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraph.Height / 2, pictureBox_waveGraph.Width, pictureBox_waveGraph.Height / 2);
+                for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += scope_additionalHorizontalScale, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraph.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS);
+                graphics_waveGraph.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
+                points = new PointF[pointsCount];
+                for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += scope_additionalHorizontalScale, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraph.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS - 1);
+                graphics_waveGraph.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
+                pictureBox_waveGraph.Image = bitmap_waveGraph;
+                AudioIO.buff_graphSamples.RemoveRange(0, AudioIO.buff_graphSamples.Count);
             }
         }
 

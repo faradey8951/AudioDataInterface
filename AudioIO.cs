@@ -193,7 +193,7 @@ namespace AudioDataInterface
 
         static void Signal_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
-            buff_signalBytes.AddRange(e.Buffer);
+            lock (Decoder.bytesLocker) buff_signalBytes.AddRange(e.Buffer);
         }
 
         static void MPS_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)

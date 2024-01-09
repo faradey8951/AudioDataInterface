@@ -16,7 +16,7 @@ namespace AudioDataInterface
         public Mp3FileReader reader = null;
         int mp3_buffSize = 256;
         public string mp3_message = "";
-        
+
         long i = 0;
         //Процесс буферизации данных для MP3 плеера
         public void BufferMp3()
@@ -32,11 +32,11 @@ namespace AudioDataInterface
                 for (int p = 0; p < mp3_buffSize * 4 && i < Decoder.buff_decodedData.Count; p += 4, i++)
                 {
                     //while (Decoder.buff_decodedData.Count < i + mp3_buffSize * 2) Thread.Sleep(10);
-                    lock (Decoder.buff_decodedData)
+                    lock (Decoder.decodedDataLocker)
                     {
                         if (Decoder.buff_decodedData[(int)i][8][38].ToString() == "0")
                         {
-                            
+
                             bytes[p] = Convert.ToByte(Decoder.buff_decodedData[(int)i][9].Substring(0, 8), 2);
                             bytes[p + 1] = Convert.ToByte(Decoder.buff_decodedData[(int)i][9].Substring(8, 8), 2);
                             bytes[p + 2] = Convert.ToByte(Decoder.buff_decodedData[(int)i][9].Substring(16, 8), 2);
@@ -57,7 +57,7 @@ namespace AudioDataInterface
                                 string part1 = sum.Substring(0, 12);
                                 string part2 = sum.Substring(12, 12);
                                 int currentTime = Convert.ToInt32(part1, 2);
-                                int duration = Convert.ToInt32(part2, 2);                              
+                                int duration = Convert.ToInt32(part2, 2);
                                 form_main.mpsPlayer_timeSeconds = currentTime;
                                 form_main.mpsPlayer_timeDurationSeconds = duration;
                             }
@@ -71,7 +71,7 @@ namespace AudioDataInterface
                         }
                     }
                 }
-                lock (Decoder.buff_decodedData) Decoder.buff_decodedData.RemoveRange(0, (int)i);
+                lock (Decoder.decodedDataLocker) Decoder.buff_decodedData.RemoveRange(0, (int)i);
                 i = 0;
                 ms.Write(bytes, 0, bytes.Length);
                 ms.Position = pos;
@@ -97,7 +97,7 @@ namespace AudioDataInterface
 
         //Процесс воспроизведения MP3
         public void PlayMp3()
-        {          
+        {
             List<string> buff_time = new List<string>(); //Буфер текущего времени воспроизведения
             string currentTime = "0"; //Текущее время воспроизведения
 
@@ -135,7 +135,7 @@ namespace AudioDataInterface
                         if (buff_time.Count > 5) buff_time.Clear();
                         buff_time.Add(currentTime);
                         Thread.Sleep(10);
-                    }                
+                    }
                     if (form_main.mpsPlayer_mode != "") form_main.MpsPlayerRunningIndicatorStop();
                     form_main.mpsPlayer_mode = "";
                     form_main.mpsPlayer_showTime = true;
