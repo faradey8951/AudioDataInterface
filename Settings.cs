@@ -22,6 +22,17 @@ namespace AudioDataInterface
             Properties.Settings.Default.mainWindowHeight = form_main.window_main.Height;
             Properties.Settings.Default.mainWindowWidth = form_main.window_main.Width;
             Properties.Settings.Default.invertSignal = AudioIO.audio_invertSignal;
+
+            Properties.Settings.Default.signalHeight = AudioIO.audio_signalHeight;
+            Properties.Settings.Default.mp3BufferSize = DataHandler.mp3_buffSize;
+            Properties.Settings.Default.encoderSampleRate = Encoder.encoder_sampleRate;
+            Properties.Settings.Default.encoderSignalGain = Encoder.encoder_signalGain;
+            Properties.Settings.Default.encoderSilenceSeconds = Encoder.encoder_silenceSeconds;
+            Properties.Settings.Default.encoderLeadInOutSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount;
+            Properties.Settings.Default.encoderMpsPlayerSubcodeInterval = Encoder.encoder_mpsPlayerSubCodeInterval;
+            Properties.Settings.Default.mpsFftSize = form_main.mpsPlayer_fftSize;
+            Properties.Settings.Default.mpsSpectrumMode = form_main.mpsPlayer_spectrumMode;
+            Properties.Settings.Default.mpsSpectrumVescosity = form_main.mpsPlayer_spectrumVescosity;
             Properties.Settings.Default.Save();
         }
 
@@ -39,6 +50,19 @@ namespace AudioDataInterface
                 form_main.window_main.Height = Properties.Settings.Default.mainWindowHeight;
                 AudioIO.audio_invertSignal = Properties.Settings.Default.invertSignal;
                 form_main.window_main.checkBox_invertSignal.Checked = AudioIO.audio_invertSignal;
+
+                AudioIO.audio_signalHeight = Properties.Settings.Default.signalHeight;
+                DataHandler.mp3_buffSize = Properties.Settings.Default.mp3BufferSize;
+                Encoder.encoder_sampleRate = Properties.Settings.Default.encoderSampleRate;
+                Encoder.encoder_signalGain = Properties.Settings.Default.encoderSignalGain;
+                Encoder.encoder_silenceSeconds = Properties.Settings.Default.encoderSilenceSeconds;
+                Encoder.encoder_leadInOutSubcodesAmount = Properties.Settings.Default.encoderLeadInOutSubcodesAmount;
+                Encoder.encoder_mpsPlayerSubCodeInterval = Properties.Settings.Default.encoderMpsPlayerSubcodeInterval;
+                form_main.mpsPlayer_fftSize = Properties.Settings.Default.mpsFftSize;
+                form_main.mpsPlayer_spectrumMode = Properties.Settings.Default.mpsSpectrumMode;
+                form_main.mpsPlayer_spectrumVescosity = Properties.Settings.Default.mpsSpectrumVescosity;
+
+                form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;            
             }
             catch (Exception ex)
             {

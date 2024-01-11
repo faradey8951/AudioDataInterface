@@ -23,5 +23,35 @@
     <Setting Name="invertSignal" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
+    <Setting Name="signalHeight" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">500</Value>
+    </Setting>
+    <Setting Name="mp3BufferSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">256</Value>
+    </Setting>
+    <Setting Name="encoderSampleRate" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">82000</Value>
+    </Setting>
+    <Setting Name="encoderSignalGain" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="encoderSilenceSeconds" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">2</Value>
+    </Setting>
+    <Setting Name="encoderLeadInOutSubcodesAmount" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">128</Value>
+    </Setting>
+    <Setting Name="encoderMpsPlayerSubcodeInterval" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">3</Value>
+    </Setting>
+    <Setting Name="mpsFftSize" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">512</Value>
+    </Setting>
+    <Setting Name="mpsSpectrumMode" Type="System.String" Scope="User">
+      <Value Profile="(Default)">peakHold</Value>
+    </Setting>
+    <Setting Name="mpsSpectrumVescosity" Type="System.Int32" Scope="User">
+      <Value Profile="(Default)">25</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

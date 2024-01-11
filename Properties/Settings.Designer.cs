@@ -106,5 +106,125 @@ namespace AudioDataInterface.Properties {
                 this["invertSignal"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        public int signalHeight {
+            get {
+                return ((int)(this["signalHeight"]));
+            }
+            set {
+                this["signalHeight"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("256")]
+        public int mp3BufferSize {
+            get {
+                return ((int)(this["mp3BufferSize"]));
+            }
+            set {
+                this["mp3BufferSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("82000")]
+        public int encoderSampleRate {
+            get {
+                return ((int)(this["encoderSampleRate"]));
+            }
+            set {
+                this["encoderSampleRate"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int encoderSignalGain {
+            get {
+                return ((int)(this["encoderSignalGain"]));
+            }
+            set {
+                this["encoderSignalGain"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        public int encoderSilenceSeconds {
+            get {
+                return ((int)(this["encoderSilenceSeconds"]));
+            }
+            set {
+                this["encoderSilenceSeconds"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("128")]
+        public int encoderLeadInOutSubcodesAmount {
+            get {
+                return ((int)(this["encoderLeadInOutSubcodesAmount"]));
+            }
+            set {
+                this["encoderLeadInOutSubcodesAmount"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int encoderMpsPlayerSubcodeInterval {
+            get {
+                return ((int)(this["encoderMpsPlayerSubcodeInterval"]));
+            }
+            set {
+                this["encoderMpsPlayerSubcodeInterval"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("512")]
+        public int mpsFftSize {
+            get {
+                return ((int)(this["mpsFftSize"]));
+            }
+            set {
+                this["mpsFftSize"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("peakHold")]
+        public string mpsSpectrumMode {
+            get {
+                return ((string)(this["mpsSpectrumMode"]));
+            }
+            set {
+                this["mpsSpectrumMode"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("25")]
+        public int mpsSpectrumVescosity {
+            get {
+                return ((int)(this["mpsSpectrumVescosity"]));
+            }
+            set {
+                this["mpsSpectrumVescosity"] = value;
+            }
+        }
     }
 }

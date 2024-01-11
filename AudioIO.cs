@@ -208,7 +208,7 @@ namespace AudioDataInterface
 
         static void MPS_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
-            buff_fftSamples = new double[1024];
+            buff_fftSamples = new double[form_main.mpsPlayer_fftSize];
             int bytesPerSamplePerChannel = waveLoop.WaveFormat.BitsPerSample / 8;
             int bytesPerSample = bytesPerSamplePerChannel * waveLoop.WaveFormat.Channels;
             int bufferSampleCount = buff_fftSamples.Length;

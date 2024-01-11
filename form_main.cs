@@ -29,6 +29,7 @@ namespace AudioDataInterface
         public static form_debug window_debug = new form_debug();
         public static form_encoder window_encoder = new form_encoder();
         public static form_logMonitor window_logMonitor = new form_logMonitor();
+        public static form_settings window_settings = new form_settings();
         //////////////////////////////////////////////////////////////////////////////////////
 
         public static form_main window_main;
@@ -59,11 +60,11 @@ namespace AudioDataInterface
         //MPS Player
         //Префикс: mpsPlayer_
         //////////////////////////////////////////////////////////////////////////////////////
-        int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9 }; //Массив мгновенных уровней спектра [0-9]
-        int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 }; //Массив динамических уровней спектра [0-9]
-        int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 }; //Массив пиков спектра [0-9]
-        int[] mpsPlayer_spectrumFreq = { 69, 119, 172, 295, 421, 711, 1011, 1711, 2411, 5911, 10151, 14411 }; //Массив опорных частот, для которых строится спектр [Гц]
-        int mpsPlayer_peakHoldTimeDelay = 50; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 50
+        public static int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9 }; //Массив мгновенных уровней спектра [0-9]
+        public static int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 }; //Массив динамических уровней спектра [0-9]
+        public static int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 }; //Массив пиков спектра [0-9]
+        int[] mpsPlayer_spectrumFreq = { 69, 111, 189, 295, 421, 711, 1011, 1711, 2411, 5911, 10151, 14411 }; //Массив опорных частот, для которых строится спектр [Гц]
+        int mpsPlayer_peakHoldTimeDelay = 20; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 40
         int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
         public static bool mpsPlayer_showTime = true; //Указывает необходимость показа времени воспроизведения
         public static bool mpsPlayer_disc1Detected = false;
@@ -79,6 +80,9 @@ namespace AudioDataInterface
         public double[] mpsPlayer_RAWspectrum = null; //Массив необработанных мгновенных уровней спектра
         public static bool mpsPlayer_remainingTime = false; //Включает режим отображения оставшегося времени воспроизведения дорожки
         public static bool mpsPlayer_tapeSkin = false;
+        public static int mpsPlayer_fftSize = 0;
+        public static string mpsPlayer_spectrumMode = "";
+        public static int mpsPlayer_spectrumVescosity = 0;
         //////////////////////////////////////////////////////////////////////////////////////
 
         byte[] buffer_fftBytes = new byte[512];
@@ -87,7 +91,6 @@ namespace AudioDataInterface
         double[] bandIntensity = new double[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
 
         string[] decodedData = null;
-        bool worker_timerControlHandler = false;
 
         public form_main()
         {
@@ -344,7 +347,7 @@ namespace AudioDataInterface
             }
             AudioIO.GraphCaptureInit();
             Decoder.Start();
-            MpsPlayerRunningIndicatorStop();
+            MpsPlayerRunningIndicatorStop();         
         }
 
         private void button_capture_Click(object sender, EventArgs e)
@@ -602,7 +605,7 @@ namespace AudioDataInterface
 
         private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
         {
-            DrawMPSPlayerInterface();           
+            if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();           
             mpsPlayer_timeUpdateCount++;
             if (mpsPlayer_timeUpdateCount == mpsPlayer_timeUpdateDelay)
             {               
@@ -718,6 +721,7 @@ namespace AudioDataInterface
                 if (mpsPlayer_spectrumPeakHold[i] < mpsPlayer_liveSpectrum[i]) mpsPlayer_spectrumPeakHold[i] = mpsPlayer_liveSpectrum[i];
             }
             mpsPlayer_peakHoldTimeCount++;
+            if (mpsPlayer_spectrumMode == "noPeak") mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         }
 
         private void timer_mpsPlayerSpectrumUpdater_Tick(object sender, EventArgs e)
@@ -819,6 +823,16 @@ namespace AudioDataInterface
         {
             AudioIO.audio_playDeviceId = comboBox_playDevices.SelectedIndex;
             AudioIO.MPSAudioOutputCaptureInit();
+        }
+
+        private void button_settings_Click(object sender, EventArgs e)
+        {
+            if (window_settings != null)
+            {
+                window_settings.Dispose();
+                window_settings = new form_settings();
+            }
+            window_settings.ShowDialog();
         }
     }
 }

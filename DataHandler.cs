@@ -14,7 +14,7 @@ namespace AudioDataInterface
     {
         public MemoryStream ms;
         public Mp3FileReader reader = null;
-        int mp3_buffSize = 256;
+        public static int mp3_buffSize = 256;
         public string mp3_message = "";
 
         long i = 0;

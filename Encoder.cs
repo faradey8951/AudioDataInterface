@@ -38,6 +38,9 @@ namespace AudioDataInterface
         public static int encoder_progress = 0; //Прогресс конвертации [%]
         public static double minSampleDeltaCoefficient = 0.5;
         public static double maxSampleDeltaCoefficient = 1.0;
+        public static int encoder_silenceSeconds = 0;
+        public static int encoder_leadInOutSubcodesAmount = 0;
+        public static int encoder_mpsPlayerSubCodeInterval = 0;
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Потоки
@@ -752,7 +755,7 @@ namespace AudioDataInterface
             CreateOutputStream();
             //Расставляем время воспроизведения по файлу
             int mp3Duration = GetMp3FileDuration();
-            int deltaByte = (int)Math.Round((double)((3 * fs_input.Length) / mp3Duration));
+            int deltaByte = (int)Math.Round((double)((encoder_mpsPlayerSubCodeInterval * fs_input.Length) / mp3Duration));
             List<int> targetBytePositions = new List<int>();          
             for (int i = 0; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
             List<int> targetDurations = new List<int>();
@@ -767,9 +770,9 @@ namespace AudioDataInterface
                 Thread.CurrentThread.Abort();
             }
             fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
-            GenerateVoid(2); //Генерация тишины 2 сек.
+            GenerateVoid(encoder_silenceSeconds); //Генерация тишины 2 сек.
             GenerateStereoSync(); //Генерация синхроимпульса       
-            for (int i = 0; i < 128; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
+            for (int i = 0; i < encoder_leadInOutSubcodesAmount; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
             //Преобразование данных в бинарный код
             for (int i = 0, k = 0; i < fs_input.Length;)
             {
@@ -850,16 +853,8 @@ namespace AudioDataInterface
                         GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
                     }
                 }
-
-                /*
-                if (k == 3096) //Записываем субкод контроля канальной синхронизации
-                {
-                    k = 0;
-                    GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
-                }
-                */
             }
-            for (int i = 0; i < 128; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
+            for (int i = 0; i < encoder_leadInOutSubcodesAmount; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
             fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
             WriteHeader(fs_output, encoder_sampleRate, 2);
             fs_output.Close();
