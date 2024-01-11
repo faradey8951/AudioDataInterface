@@ -66,6 +66,7 @@ namespace AudioDataInterface
                                 form_main.mpsPlayer_currentTrackNumber = subCodeByte2;
                                 form_main.mpsPlayer_trackCount = subCodeByte3;
                             }
+
                             //deltaBytes += 4;
                             p -= 4;
                         }

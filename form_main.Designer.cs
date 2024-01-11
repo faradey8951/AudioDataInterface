@@ -89,17 +89,18 @@ namespace AudioDataInterface
             this.panel_base = new System.Windows.Forms.Panel();
             this.panel_dataControl = new System.Windows.Forms.Panel();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
-            this.label_errorDensity = new System.Windows.Forms.Label();
+            this.label_fixedErrorCount = new System.Windows.Forms.Label();
             this.label_signalGainR = new System.Windows.Forms.Label();
             this.label_signalGainL = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
-            this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
             this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
+            this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
             this.groupBox_decoderSettings = new System.Windows.Forms.GroupBox();
             this.checkBox_autoGain = new System.Windows.Forms.CheckBox();
             this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
             this.checkBox_invertSignal = new System.Windows.Forms.CheckBox();
-            this.button_buffMp3 = new System.Windows.Forms.Button();
             this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
             this.radioButton_verticalBIAS = new System.Windows.Forms.RadioButton();
             this.radioButton_horizontalBIAS = new System.Windows.Forms.RadioButton();
@@ -109,13 +110,17 @@ namespace AudioDataInterface
             this.label_recDevice = new System.Windows.Forms.Label();
             this.pictureBox_waveGraph = new System.Windows.Forms.PictureBox();
             this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
+            this.button_buffMp3 = new System.Windows.Forms.Button();
             this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
+            this.label_unfixedErrorCount = new System.Windows.Forms.Label();
+            this.label_frameSyncErrorCount = new System.Windows.Forms.Label();
+            this.label_border2 = new System.Windows.Forms.Label();
+            this.label3 = new System.Windows.Forms.Label();
+            this.label_border1 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -429,7 +434,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol10.Image = global::AudioDataInterface.Properties.Resources._0symbol;
             this.pictureBox_symbol10.Location = new System.Drawing.Point(392, 96);
             this.pictureBox_symbol10.Name = "pictureBox_symbol10";
-            this.pictureBox_symbol10.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol10.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol10.TabIndex = 30;
             this.pictureBox_symbol10.TabStop = false;
@@ -440,7 +445,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol9.Image = global::AudioDataInterface.Properties.Resources._0symbol;
             this.pictureBox_symbol9.Location = new System.Drawing.Point(352, 96);
             this.pictureBox_symbol9.Name = "pictureBox_symbol9";
-            this.pictureBox_symbol9.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol9.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol9.TabIndex = 29;
             this.pictureBox_symbol9.TabStop = false;
@@ -462,7 +467,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol8.Image = global::AudioDataInterface.Properties.Resources._0symbol;
             this.pictureBox_symbol8.Location = new System.Drawing.Point(288, 96);
             this.pictureBox_symbol8.Name = "pictureBox_symbol8";
-            this.pictureBox_symbol8.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol8.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol8.TabIndex = 27;
             this.pictureBox_symbol8.TabStop = false;
@@ -472,7 +477,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_symbol7.Location = new System.Drawing.Point(248, 96);
             this.pictureBox_symbol7.Name = "pictureBox_symbol7";
-            this.pictureBox_symbol7.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol7.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol7.TabIndex = 26;
             this.pictureBox_symbol7.TabStop = false;
@@ -482,7 +487,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_symbol6.Location = new System.Drawing.Point(208, 96);
             this.pictureBox_symbol6.Name = "pictureBox_symbol6";
-            this.pictureBox_symbol6.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol6.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol6.TabIndex = 25;
             this.pictureBox_symbol6.TabStop = false;
@@ -493,7 +498,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol5.Image = global::AudioDataInterface.Properties.Resources.DASHsymbol;
             this.pictureBox_symbol5.Location = new System.Drawing.Point(168, 96);
             this.pictureBox_symbol5.Name = "pictureBox_symbol5";
-            this.pictureBox_symbol5.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol5.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol5.TabIndex = 24;
             this.pictureBox_symbol5.TabStop = false;
@@ -504,7 +509,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol4.Image = global::AudioDataInterface.Properties.Resources.DASHsymbol;
             this.pictureBox_symbol4.Location = new System.Drawing.Point(128, 96);
             this.pictureBox_symbol4.Name = "pictureBox_symbol4";
-            this.pictureBox_symbol4.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol4.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol4.TabIndex = 23;
             this.pictureBox_symbol4.TabStop = false;
@@ -514,7 +519,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_symbol3.Location = new System.Drawing.Point(88, 96);
             this.pictureBox_symbol3.Name = "pictureBox_symbol3";
-            this.pictureBox_symbol3.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol3.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol3.TabIndex = 22;
             this.pictureBox_symbol3.TabStop = false;
@@ -525,7 +530,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol2.Image = global::AudioDataInterface.Properties.Resources.Psymbol;
             this.pictureBox_symbol2.Location = new System.Drawing.Point(48, 96);
             this.pictureBox_symbol2.Name = "pictureBox_symbol2";
-            this.pictureBox_symbol2.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol2.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol2.TabIndex = 21;
             this.pictureBox_symbol2.TabStop = false;
@@ -537,7 +542,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol1.Image = global::AudioDataInterface.Properties.Resources.Msymbol;
             this.pictureBox_symbol1.Location = new System.Drawing.Point(8, 96);
             this.pictureBox_symbol1.Name = "pictureBox_symbol1";
-            this.pictureBox_symbol1.Size = new System.Drawing.Size(44, 55);
+            this.pictureBox_symbol1.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol1.TabIndex = 20;
             this.pictureBox_symbol1.TabStop = false;
@@ -789,9 +794,14 @@ namespace AudioDataInterface
             // 
             // groupBox_info
             // 
-            this.groupBox_info.Controls.Add(this.label_errorDensity);
-            this.groupBox_info.Controls.Add(this.label_signalGainR);
+            this.groupBox_info.Controls.Add(this.label_frameSyncErrorCount);
+            this.groupBox_info.Controls.Add(this.label_unfixedErrorCount);
+            this.groupBox_info.Controls.Add(this.label_fixedErrorCount);
+            this.groupBox_info.Controls.Add(this.label_border2);
+            this.groupBox_info.Controls.Add(this.label3);
+            this.groupBox_info.Controls.Add(this.label_border1);
             this.groupBox_info.Controls.Add(this.label_signalGainL);
+            this.groupBox_info.Controls.Add(this.label_signalGainR);
             this.groupBox_info.Location = new System.Drawing.Point(843, 22);
             this.groupBox_info.Name = "groupBox_info";
             this.groupBox_info.Size = new System.Drawing.Size(185, 339);
@@ -799,21 +809,21 @@ namespace AudioDataInterface
             this.groupBox_info.TabStop = false;
             this.groupBox_info.Text = "Информация";
             // 
-            // label_errorDensity
+            // label_fixedErrorCount
             // 
-            this.label_errorDensity.AutoSize = true;
-            this.label_errorDensity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_errorDensity.Location = new System.Drawing.Point(3, 42);
-            this.label_errorDensity.Name = "label_errorDensity";
-            this.label_errorDensity.Size = new System.Drawing.Size(105, 13);
-            this.label_errorDensity.TabIndex = 2;
-            this.label_errorDensity.Text = "Плотность ошибок:";
+            this.label_fixedErrorCount.AutoSize = true;
+            this.label_fixedErrorCount.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_fixedErrorCount.Location = new System.Drawing.Point(3, 81);
+            this.label_fixedErrorCount.Name = "label_fixedErrorCount";
+            this.label_fixedErrorCount.Size = new System.Drawing.Size(72, 13);
+            this.label_fixedErrorCount.TabIndex = 2;
+            this.label_fixedErrorCount.Text = "Исправлено:";
             // 
             // label_signalGainR
             // 
             this.label_signalGainR.AutoSize = true;
             this.label_signalGainR.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_signalGainR.Location = new System.Drawing.Point(3, 29);
+            this.label_signalGainR.Location = new System.Drawing.Point(3, 16);
             this.label_signalGainR.Name = "label_signalGainR";
             this.label_signalGainR.Size = new System.Drawing.Size(151, 13);
             this.label_signalGainR.TabIndex = 1;
@@ -823,7 +833,7 @@ namespace AudioDataInterface
             // 
             this.label_signalGainL.AutoSize = true;
             this.label_signalGainL.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_signalGainL.Location = new System.Drawing.Point(3, 16);
+            this.label_signalGainL.Location = new System.Drawing.Point(3, 29);
             this.label_signalGainL.Name = "label_signalGainL";
             this.label_signalGainL.Size = new System.Drawing.Size(151, 13);
             this.label_signalGainL.TabIndex = 0;
@@ -840,6 +850,17 @@ namespace AudioDataInterface
             this.panel_signalCapture.Name = "panel_signalCapture";
             this.panel_signalCapture.Size = new System.Drawing.Size(1040, 196);
             this.panel_signalCapture.TabIndex = 6;
+            // 
+            // checkBox_tapeSkin
+            // 
+            this.checkBox_tapeSkin.AutoSize = true;
+            this.checkBox_tapeSkin.Location = new System.Drawing.Point(848, 8);
+            this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
+            this.checkBox_tapeSkin.Size = new System.Drawing.Size(78, 17);
+            this.checkBox_tapeSkin.TabIndex = 16;
+            this.checkBox_tapeSkin.Text = "TAPE Skin";
+            this.checkBox_tapeSkin.UseVisualStyleBackColor = true;
+            this.checkBox_tapeSkin.CheckedChanged += new System.EventHandler(this.checkBox_tapeSkin_CheckedChanged);
             // 
             // groupBox_signalCapture
             // 
@@ -860,16 +881,26 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.Text = "Захват сигнала";
             this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
             // 
-            // checkBox_tapeSkin
+            // label1
             // 
-            this.checkBox_tapeSkin.AutoSize = true;
-            this.checkBox_tapeSkin.Location = new System.Drawing.Point(848, 8);
-            this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
-            this.checkBox_tapeSkin.Size = new System.Drawing.Size(78, 17);
-            this.checkBox_tapeSkin.TabIndex = 16;
-            this.checkBox_tapeSkin.Text = "TAPE Skin";
-            this.checkBox_tapeSkin.UseVisualStyleBackColor = true;
-            this.checkBox_tapeSkin.CheckedChanged += new System.EventHandler(this.checkBox_tapeSkin_CheckedChanged);
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(528, 144);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(106, 13);
+            this.label1.TabIndex = 17;
+            this.label1.Text = "Устройство воспр.:";
+            // 
+            // comboBox_playDevices
+            // 
+            this.comboBox_playDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
+            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_playDevices.FormattingEnabled = true;
+            this.comboBox_playDevices.Location = new System.Drawing.Point(640, 141);
+            this.comboBox_playDevices.Name = "comboBox_playDevices";
+            this.comboBox_playDevices.Size = new System.Drawing.Size(194, 21);
+            this.comboBox_playDevices.TabIndex = 16;
+            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
             // 
             // groupBox_decoderSettings
             // 
@@ -920,16 +951,6 @@ namespace AudioDataInterface
             this.checkBox_invertSignal.Text = "Инвертировать сигнал";
             this.checkBox_invertSignal.UseVisualStyleBackColor = true;
             this.checkBox_invertSignal.CheckedChanged += new System.EventHandler(this.checkBox_invertSignal_CheckedChanged);
-            // 
-            // button_buffMp3
-            // 
-            this.button_buffMp3.Location = new System.Drawing.Point(936, 160);
-            this.button_buffMp3.Name = "button_buffMp3";
-            this.button_buffMp3.Size = new System.Drawing.Size(96, 32);
-            this.button_buffMp3.TabIndex = 14;
-            this.button_buffMp3.Text = "PLAY";
-            this.button_buffMp3.UseVisualStyleBackColor = true;
-            this.button_buffMp3.Click += new System.EventHandler(this.button_buffMp3_Click);
             // 
             // groupBox_BIASAdjust
             // 
@@ -1036,6 +1057,16 @@ namespace AudioDataInterface
             this.comboBox_recDevices.TabIndex = 10;
             this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged);
             // 
+            // button_buffMp3
+            // 
+            this.button_buffMp3.Location = new System.Drawing.Point(936, 160);
+            this.button_buffMp3.Name = "button_buffMp3";
+            this.button_buffMp3.Size = new System.Drawing.Size(96, 32);
+            this.button_buffMp3.TabIndex = 14;
+            this.button_buffMp3.Text = "PLAY";
+            this.button_buffMp3.UseVisualStyleBackColor = true;
+            this.button_buffMp3.Click += new System.EventHandler(this.button_buffMp3_Click);
+            // 
             // timer_drawWaveGraphFrame
             // 
             this.timer_drawWaveGraphFrame.Interval = 40;
@@ -1056,7 +1087,7 @@ namespace AudioDataInterface
             // timer_mpsPlayerSpectrumUpdater
             // 
             this.timer_mpsPlayerSpectrumUpdater.Enabled = true;
-            this.timer_mpsPlayerSpectrumUpdater.Interval = 40;
+            this.timer_mpsPlayerSpectrumUpdater.Interval = 25;
             this.timer_mpsPlayerSpectrumUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumUpdater_Tick);
             // 
             // timer_mpsPlayerTimeUpdater
@@ -1065,26 +1096,55 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater.Interval = 1000;
             this.timer_mpsPlayerTimeUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerTimeUpdate_Tick);
             // 
-            // label1
+            // label_unfixedErrorCount
             // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(528, 144);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 13);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Устройство воспр.:";
+            this.label_unfixedErrorCount.AutoSize = true;
+            this.label_unfixedErrorCount.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_unfixedErrorCount.Location = new System.Drawing.Point(3, 94);
+            this.label_unfixedErrorCount.Name = "label_unfixedErrorCount";
+            this.label_unfixedErrorCount.Size = new System.Drawing.Size(88, 13);
+            this.label_unfixedErrorCount.TabIndex = 3;
+            this.label_unfixedErrorCount.Text = "Неисправимые:";
             // 
-            // comboBox_playDevices
+            // label_frameSyncErrorCount
             // 
-            this.comboBox_playDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_playDevices.FormattingEnabled = true;
-            this.comboBox_playDevices.Location = new System.Drawing.Point(640, 141);
-            this.comboBox_playDevices.Name = "comboBox_playDevices";
-            this.comboBox_playDevices.Size = new System.Drawing.Size(194, 21);
-            this.comboBox_playDevices.TabIndex = 16;
-            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
+            this.label_frameSyncErrorCount.AutoSize = true;
+            this.label_frameSyncErrorCount.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_frameSyncErrorCount.Location = new System.Drawing.Point(3, 107);
+            this.label_frameSyncErrorCount.Name = "label_frameSyncErrorCount";
+            this.label_frameSyncErrorCount.Size = new System.Drawing.Size(94, 13);
+            this.label_frameSyncErrorCount.TabIndex = 4;
+            this.label_frameSyncErrorCount.Text = "Кадровая синхр.:";
+            // 
+            // label_border2
+            // 
+            this.label_border2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_border2.Location = new System.Drawing.Point(3, 68);
+            this.label_border2.Name = "label_border2";
+            this.label_border2.Size = new System.Drawing.Size(179, 13);
+            this.label_border2.TabIndex = 5;
+            this.label_border2.Text = "____________________________";
+            this.label_border2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Location = new System.Drawing.Point(3, 55);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(179, 13);
+            this.label3.TabIndex = 6;
+            this.label3.Text = "Ошибки";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
+            // 
+            // label_border1
+            // 
+            this.label_border1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_border1.Location = new System.Drawing.Point(3, 42);
+            this.label_border1.Name = "label_border1";
+            this.label_border1.Size = new System.Drawing.Size(179, 13);
+            this.label_border1.TabIndex = 7;
+            this.label_border1.Text = "____________________________";
+            this.label_border1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // form_main
             // 
@@ -1248,7 +1308,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.GroupBox groupBox_info;
         private System.Windows.Forms.Label label_signalGainR;
         private System.Windows.Forms.Label label_signalGainL;
-        private System.Windows.Forms.Label label_errorDensity;
+        private System.Windows.Forms.Label label_fixedErrorCount;
         private System.Windows.Forms.PictureBox pictureBox_disc1;
         private System.Windows.Forms.PictureBox pictureBox_disc3;
         private System.Windows.Forms.PictureBox pictureBox_disc2;
@@ -1257,6 +1317,11 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_cassette;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox_playDevices;
+        private System.Windows.Forms.Label label_frameSyncErrorCount;
+        private System.Windows.Forms.Label label_unfixedErrorCount;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label_border2;
+        private System.Windows.Forms.Label label_border1;
     }
 }
 

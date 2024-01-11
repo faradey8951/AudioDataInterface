@@ -137,6 +137,7 @@ namespace AudioDataInterface
 
         public static void MPSAudioOutputCaptureInit()
         {
+            if (waveLoop != null) waveLoop.Dispose();
             waveLoop = new WasapiLoopbackCapture(mm_dev[audio_playDeviceId]);
             waveLoop.DataAvailable += new EventHandler<WaveInEventArgs>(MPS_DataAvailable);
             waveLoop.StartRecording();
@@ -149,8 +150,7 @@ namespace AudioDataInterface
         {
             //try
             //{
-            if (naudio_signalWaveIn != null)
-                naudio_signalWaveIn.StopRecording();
+            if (naudio_signalWaveIn != null) naudio_signalWaveIn.Dispose();
             naudio_signalWaveIn = new WaveIn();
             naudio_signalWaveIn.DeviceNumber = audio_recDeviceId;
             naudio_signalWaveIn.WaveFormat = new NAudio.Wave.WaveFormat(96000, 2);
@@ -190,12 +190,12 @@ namespace AudioDataInterface
             {
                 if (audio_autoSignalGain == true)
                 {
-                    if (Decoder.maxAmplitudeL < 15000 && audio_signalGainL < 256) audio_signalGainL += Math.Log10(1 + 5 * audio_signalGainL);
+                    if (Decoder.maxAmplitudeL < 15000 && audio_signalGainL < 128) audio_signalGainL += Math.Log10(1 + 5 * audio_signalGainL);
                     if (Decoder.maxAmplitudeL > 24000 && audio_signalGainL > 1) audio_signalGainL -= Math.Log10(1 + 5 * audio_signalGainL);
-                    if (audio_signalGainL < 1 || audio_signalGainL > 256) audio_signalGainL = 6;
-                    if (Decoder.maxAmplitudeR < 15000 && audio_signalGainR < 256) audio_signalGainR += Math.Log10(1 + 5 * audio_signalGainR);
+                    if (audio_signalGainL < 1 || audio_signalGainL > 128) audio_signalGainL = 6;
+                    if (Decoder.maxAmplitudeR < 15000 && audio_signalGainR < 128) audio_signalGainR += Math.Log10(1 + 5 * audio_signalGainR);
                     if (Decoder.maxAmplitudeR > 24000 && audio_signalGainR > 1) audio_signalGainR -= Math.Log10(1 + 5 * audio_signalGainR);
-                    if (audio_signalGainR < 1 || audio_signalGainR > 256) audio_signalGainR = 6;
+                    if (audio_signalGainR < 1 || audio_signalGainR > 128) audio_signalGainR = 6;
                 }
                 Thread.Sleep(50);
             }
@@ -208,10 +208,10 @@ namespace AudioDataInterface
 
         static void MPS_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
-            buff_fftSamples = new double[waveLoop.WaveFormat.SampleRate / 10];
+            buff_fftSamples = new double[1024];
             int bytesPerSamplePerChannel = waveLoop.WaveFormat.BitsPerSample / 8;
             int bytesPerSample = bytesPerSamplePerChannel * waveLoop.WaveFormat.Channels;
-            int bufferSampleCount = e.Buffer.Length / bytesPerSample;
+            int bufferSampleCount = buff_fftSamples.Length;
 
             //Выбор режима декодирования
             if (bytesPerSamplePerChannel == 2 && waveLoop.WaveFormat.Encoding == WaveFormatEncoding.Pcm) //Преобразование байт в 16-битные сэмплы

@@ -155,7 +155,7 @@ namespace AudioDataInterface
             {
                 if (summ <= bin.Length) //Если исправление возможно
                 {
-                    unfixableErrorFound = "error";
+                    unfixableErrorFound = "fixed";
                     if (bin[summ - 1] == '0')
                     {
                         for (int i = 0; i < block.Length; i++)

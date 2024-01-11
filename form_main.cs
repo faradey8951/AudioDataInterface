@@ -62,7 +62,7 @@ namespace AudioDataInterface
         int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9 }; //Массив мгновенных уровней спектра [0-9]
         int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 }; //Массив динамических уровней спектра [0-9]
         int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 }; //Массив пиков спектра [0-9]
-        int[] mpsPlayer_spectrumFreq = { 68, 100, 170, 250, 420, 600, 1000, 2400, 3450, 7300, 12500, 14400 }; //Массив опорных частот, для которых строится спектр [Гц]
+        int[] mpsPlayer_spectrumFreq = { 69, 119, 172, 295, 421, 711, 1011, 1711, 2411, 5911, 10151, 14411 }; //Массив опорных частот, для которых строится спектр [Гц]
         int mpsPlayer_peakHoldTimeDelay = 50; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 50
         int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
         public static bool mpsPlayer_showTime = true; //Указывает необходимость показа времени воспроизведения
@@ -73,6 +73,7 @@ namespace AudioDataInterface
         int mpsPlayer_timeUpdateDelay = 10; //Задержка обновления времени воспроизведения на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 50
         int mpsPlayer_timeUpdateCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
         public static int mpsPlayer_currentTrackNumber = -1; //Номер текущего проигрываемой дорожки
+        public static int mpsPlayer_lastTrackNumber = -1; //Номер последней проигрываемой дорожки
         public static int mpsPlayer_trackCount = 16; //Количество дорожен
         public static string mpsPlayer_mode = ""; //Статус работы плеера
         public double[] mpsPlayer_RAWspectrum = null; //Массив необработанных мгновенных уровней спектра
@@ -383,7 +384,17 @@ namespace AudioDataInterface
             if (this.Opacity < 100) this.Opacity += 0.04;
             label_signalGainL.Text = "Усиление ЛК: " + Math.Round(AudioIO.audio_signalGainL, 2).ToString();
             label_signalGainR.Text = "Усиление ПК: " + Math.Round(AudioIO.audio_signalGainR, 2).ToString();
-            label_errorDensity.Text = "Плотность ошибок: " + Decoder.errorCount.ToString();
+            label_fixedErrorCount.Text = "Исправлено: " + Decoder.fixedErrorCount.ToString();
+            label_unfixedErrorCount.Text = "Неисправимые: " + Decoder.unfixedErrorCount.ToString();
+            label_frameSyncErrorCount.Text = "Кадровая синхр.: " + Decoder.frameSyncErrorCount.ToString();
+
+            if (form_main.mpsPlayer_currentTrackNumber != form_main.mpsPlayer_lastTrackNumber)
+            {
+                Decoder.unfixedErrorCount = 0;
+                Decoder.fixedErrorCount = 0;
+                Decoder.frameSyncErrorCount = 0;
+                form_main.mpsPlayer_lastTrackNumber = form_main.mpsPlayer_currentTrackNumber;
+            }
 
             if (scope_horizontalBIASInc == true) scope_horizontalBIAS -= 1;
             if (scope_horizontalBIASDec == true) scope_horizontalBIAS += 1;
@@ -714,27 +725,32 @@ namespace AudioDataInterface
             if (AudioIO.buff_fftValues != null)
             {
                 double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioIO.buff_fftSamples);
-                var complex = FftSharp.FFT.Forward(paddedAudio);
+                System.Numerics.Complex[] complex = FftSharp.FFT.Forward(paddedAudio);
                 double[] fftMag = FftSharp.FFT.Magnitude(complex);
                 double[] frequencyValues = FftSharp.FFT.FrequencyScale(fftMag.Length, AudioIO.waveLoop.WaveFormat.SampleRate);
+                this.Text = AudioIO.buff_fftSamples.Max().ToString();
                 Array.Copy(fftMag, AudioIO.buff_fftValues, fftMag.Length);
                 double[] RAWspectrumSelection = new double[12];
-                
+
                 //Выборка заданных частот
-                for (int i = 4, k = 0; i < AudioIO.buff_fftValues.Length - 4 && k < mpsPlayer_spectrumFreq.Length; i++)
+                for (int i = 0, k = 0; i < AudioIO.buff_fftValues.Length && k < mpsPlayer_spectrumFreq.Length; )
                 {
                     if (Math.Round(frequencyValues[i]) >= mpsPlayer_spectrumFreq[k])
                     {
-                        RAWspectrumSelection[k] = Math.Round((AudioIO.buff_fftValues[i - 3] + AudioIO.buff_fftValues[i - 2] + AudioIO.buff_fftValues[i - 1] + AudioIO.buff_fftValues[i] + AudioIO.buff_fftValues[i + 1] + AudioIO.buff_fftValues[i + 2] + AudioIO.buff_fftValues[i + 3]) / 7);
+                        RAWspectrumSelection[k] = AudioIO.buff_fftValues[i];
+                        //RAWspectrumSelection[k] = Math.Round((AudioIO.buff_fftValues[i - 3] + AudioIO.buff_fftValues[i - 2] + AudioIO.buff_fftValues[i - 1] + AudioIO.buff_fftValues[i] + AudioIO.buff_fftValues[i + 1] + AudioIO.buff_fftValues[i + 2] + AudioIO.buff_fftValues[i + 3]) / 7);
                         k++;
+                        i = 0;
                     }
+                    else i++;
                 }
                 //Преобразование уровня спектра к шкале 0-9
                 for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
-                {
-                    if (i > 3) RAWspectrumSelection[i] = 6 * Math.Log10(i*3) * RAWspectrumSelection[i]; //Фильтр АЧХ
-                    if (i > 7) RAWspectrumSelection[i] = 2 * Math.Log10(i) * RAWspectrumSelection[i]; //Фильтр АЧХ
-                    mpsPlayer_instantSpectrum[i] = (int)Math.Floor((9 * (double)(2 * RAWspectrumSelection[i])) / 1800);
+                {   if (i == 0) RAWspectrumSelection[i] = 0.8 * RAWspectrumSelection[i];
+                    if (i > 3) RAWspectrumSelection[i] = 4 * Math.Log10(i * 2) * RAWspectrumSelection[i]; //Фильтр АЧХ
+                    if (i > 8) RAWspectrumSelection[i] = 5 * Math.Log10(i) * RAWspectrumSelection[i]; //Фильтр АЧХ
+                    if (RAWspectrumSelection[i] > 3000) RAWspectrumSelection[i] = 3000;
+                    mpsPlayer_instantSpectrum[i] = (int)Math.Floor((9 * RAWspectrumSelection[i]) / 3000.0);
                 }
             }
             else

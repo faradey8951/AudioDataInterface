@@ -22,7 +22,9 @@ namespace AudioDataInterface
         public static short maxAmplitudeL = 0;
         public static short maxAmplitudeR = 0;
         public static int signalContrast = 0;
-        public static int errorCount = 0;
+        public static int fixedErrorCount = 0;
+        public static int unfixedErrorCount = 0;
+        public static int frameSyncErrorCount = 0;
         public static Object bytesLocker = new Object();
         public static Object samplesLLocker = new object();
         public static Object samplesRLocker = new object();
@@ -315,13 +317,13 @@ namespace AudioDataInterface
                                 }
                                 else
                                 {
-
                                     channelSyncSucc = true;
                                 }
                             }
                             else channelSyncSucc = true;
                             if (channelSyncSucc == false)
                             {
+                                frameSyncErrorCount++;
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
@@ -667,7 +669,8 @@ namespace AudioDataInterface
             string[] data = null; //Данные
             bin = bin.Remove(38); //Удаляем бит-маркер
             data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
-            if (data[1] == "error") errorCount++;
+            if (data[1] == "fixed") fixedErrorCount++;
+            if (data[1] == "error") unfixedErrorCount++;
             buff_decodedData.Last()[9] = data[0];
         }
 
