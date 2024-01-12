@@ -60,11 +60,11 @@ namespace AudioDataInterface
         //MPS Player
         //Префикс: mpsPlayer_
         //////////////////////////////////////////////////////////////////////////////////////
-        public static int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9 }; //Массив мгновенных уровней спектра [0-9]
-        public static int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 }; //Массив динамических уровней спектра [0-9]
-        public static int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 }; //Массив пиков спектра [0-9]
-        int[] mpsPlayer_spectrumFreq = { 69, 111, 189, 295, 421, 711, 1011, 1711, 2411, 5911, 10151, 14411 }; //Массив опорных частот, для которых строится спектр [Гц]
-        int mpsPlayer_peakHoldTimeDelay = 20; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 40
+        public static int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9, 9 }; //Массив мгновенных уровней спектра [0-9]
+        public static int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 , 9}; //Массив динамических уровней спектра [0-9]
+        public static int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 , 5}; //Массив пиков спектра [0-9]
+        int[] mpsPlayer_spectrumFreq = { 68, 170, 420, 1000, 2400, 5900, 14400}; //Массив опорных частот, для которых строится спектр [Гц]
+        int mpsPlayer_peakHoldTimeDelay = 30; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 40
         int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
         public static bool mpsPlayer_showTime = true; //Указывает необходимость показа времени воспроизведения
         public static bool mpsPlayer_disc1Detected = false;
@@ -144,9 +144,9 @@ namespace AudioDataInterface
             int spectrumBarX0P = (int)Math.Ceiling((double)(pictureBox_mpsPlayer.Width * spectrumBarX0));
             int spectrumBarWidthP = (int)Math.Ceiling((double)pictureBox_mpsPlayer.Width * spectrumBarWidth);
             int spectrumBarHeightP = (int)Math.Ceiling((double)(pictureBox_mpsPlayer.Height * spectrumBarHeight));
-            int spectrumBarSegmentWidthP = (int)Math.Ceiling((double)spectrumBarWidthP / 35);
-            int spectrumBarSegmentHeightP = (int)Math.Ceiling((double)spectrumBarHeightP / 35);
-            int spectrumBarSegmentDeltaP = (int)Math.Ceiling((double)spectrumBarSegmentWidthP / 12);
+            int spectrumBarSegmentWidthP = (int)Math.Ceiling((double)spectrumBarWidthP / 39.0);
+            int spectrumBarSegmentHeightP = (int)Math.Ceiling((double)spectrumBarHeightP / 39.0);
+            int spectrumBarSegmentDeltaP = (int)Math.Ceiling((double)spectrumBarSegmentWidthP / 12.0);
 
             graphics_mpsPlayerInterface.Clear(Color.FromArgb(34, 31, 31));
 
@@ -235,6 +235,13 @@ namespace AudioDataInterface
                 if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
                 else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
             }
+            for (int i = 1; i < mpsPlayer_liveSpectrum[12] * 2; i++)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (36 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (36 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (37 * spectrumBarSegmentWidthP) + (13 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (37 * spectrumBarSegmentWidthP) + (13 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
 
             //Отрисовка пиков
             for (int i = mpsPlayer_spectrumPeakHold[0] * 2; i >= ((mpsPlayer_spectrumPeakHold[0] * 2) - 1); i--)
@@ -320,6 +327,13 @@ namespace AudioDataInterface
                 else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (33 * spectrumBarSegmentWidthP) + (11 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
                 if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
                 else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (34 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+            }
+            for (int i = mpsPlayer_spectrumPeakHold[12] * 2; i >= ((mpsPlayer_spectrumPeakHold[12] * 2) - 1); i--)
+            {
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (36 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (36 * spectrumBarSegmentWidthP) + (12 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                if (i <= 9) graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(205, 255, 191)), spectrumBarX0P + (37 * spectrumBarSegmentWidthP) + (13 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
+                else graphics_mpsPlayerInterface.FillRectangle(new SolidBrush(Color.FromArgb(255, 72, 30)), spectrumBarX0P + (37 * spectrumBarSegmentWidthP) + (13 * spectrumBarSegmentDeltaP), spectrumBarY0P - ((i * spectrumBarSegmentHeightP) + ((i - 1) * spectrumBarSegmentHeightP)), spectrumBarSegmentWidthP, spectrumBarSegmentHeightP);
             }
 
             pictureBox_mpsPlayer.Image = bitmap_mpsPlayerInterface;
@@ -522,7 +536,7 @@ namespace AudioDataInterface
         {
             AudioIO.SignalCaptureInit();
 
-            mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5 };
+            mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
             DataHandler.StartMp3Listening();
             AudioIO.MPSAudioOutputCaptureInit();
             //DrawMPSPlayerInterface();
@@ -709,7 +723,7 @@ namespace AudioDataInterface
             if (mpsPlayer_peakHoldTimeCount == mpsPlayer_peakHoldTimeDelay)
             {
                 mpsPlayer_peakHoldTimeCount = 0;
-                mpsPlayer_spectrumPeakHold = new int[]{ 0,0,0,0,0,0,0,0,0,0,0,0};
+                mpsPlayer_spectrumPeakHold = new int[]{ 0,0,0,0,0,0,0,0,0,0,0,0,0};
             }
             for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
             {
@@ -721,7 +735,7 @@ namespace AudioDataInterface
                 if (mpsPlayer_spectrumPeakHold[i] < mpsPlayer_liveSpectrum[i]) mpsPlayer_spectrumPeakHold[i] = mpsPlayer_liveSpectrum[i];
             }
             mpsPlayer_peakHoldTimeCount++;
-            if (mpsPlayer_spectrumMode == "noPeak") mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+            if (mpsPlayer_spectrumMode == "noPeak") mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
         }
 
         private void timer_mpsPlayerSpectrumUpdater_Tick(object sender, EventArgs e)
@@ -734,20 +748,27 @@ namespace AudioDataInterface
                 double[] frequencyValues = FftSharp.FFT.FrequencyScale(fftMag.Length, AudioIO.waveLoop.WaveFormat.SampleRate);
                 this.Text = AudioIO.buff_fftSamples.Max().ToString();
                 Array.Copy(fftMag, AudioIO.buff_fftValues, fftMag.Length);
-                double[] RAWspectrumSelection = new double[12];
+                double[] RAWspectrumSelection = new double[mpsPlayer_instantSpectrum.Length];
+                double[] RAWspectrumSelectionKenwood = new double[mpsPlayer_spectrumFreq.Length];
 
                 //Выборка заданных частот
                 for (int i = 0, k = 0; i < AudioIO.buff_fftValues.Length && k < mpsPlayer_spectrumFreq.Length; )
                 {
                     if (Math.Round(frequencyValues[i]) >= mpsPlayer_spectrumFreq[k])
                     {
-                        RAWspectrumSelection[k] = AudioIO.buff_fftValues[i];
-                        //RAWspectrumSelection[k] = Math.Round((AudioIO.buff_fftValues[i - 3] + AudioIO.buff_fftValues[i - 2] + AudioIO.buff_fftValues[i - 1] + AudioIO.buff_fftValues[i] + AudioIO.buff_fftValues[i + 1] + AudioIO.buff_fftValues[i + 2] + AudioIO.buff_fftValues[i + 3]) / 7);
+                        RAWspectrumSelectionKenwood[k] = AudioIO.buff_fftValues[i];
                         k++;
                         i = 0;
                     }
                     else i++;
                 }
+                //Интерполяция промежуточных значений
+                for (int i = 0, k = 0, j = 1; (i < RAWspectrumSelectionKenwood.Length); i++, k+=2, j+=2)
+                {
+                    RAWspectrumSelection[k] = RAWspectrumSelectionKenwood[i];
+                    if (j < RAWspectrumSelection.Length) RAWspectrumSelection[j] = 0.5*(RAWspectrumSelectionKenwood[i] + RAWspectrumSelectionKenwood[i + 1]);
+                }
+
                 //Преобразование уровня спектра к шкале 0-9
                 for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
                 {   if (i == 0) RAWspectrumSelection[i] = 0.8 * RAWspectrumSelection[i];
@@ -808,7 +829,7 @@ namespace AudioDataInterface
             else
             {
                 mpsPlayer_tapeSkin = false;
-                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5 };
+                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
                 if (form_main.mpsPlayer_mode == "play") form_main.MpsPlayerRunningIndicatorPlay();
             }
 
