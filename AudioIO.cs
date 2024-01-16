@@ -190,12 +190,20 @@ namespace AudioDataInterface
             {
                 if (audio_autoSignalGain == true)
                 {
+                    
                     if (Decoder.maxAmplitudeL < 15000 && audio_signalGainL < 128) audio_signalGainL += Math.Log10(1 + 5 * audio_signalGainL);
                     if (Decoder.maxAmplitudeL > 24000 && audio_signalGainL > 1) audio_signalGainL -= Math.Log10(1 + 5 * audio_signalGainL);
                     if (audio_signalGainL < 1 || audio_signalGainL > 128) audio_signalGainL = 6;
                     if (Decoder.maxAmplitudeR < 15000 && audio_signalGainR < 128) audio_signalGainR += Math.Log10(1 + 5 * audio_signalGainR);
                     if (Decoder.maxAmplitudeR > 24000 && audio_signalGainR > 1) audio_signalGainR -= Math.Log10(1 + 5 * audio_signalGainR);
                     if (audio_signalGainR < 1 || audio_signalGainR > 128) audio_signalGainR = 6;
+                    
+                    /*
+                    audio_signalGainL = Math.Pow((double)Decoder.maxAmplitudeL / 20000.0, -1);
+                    audio_signalGainR = Math.Pow((double)Decoder.maxAmplitudeR / 20000.0, -1);
+                    if (audio_signalGainL < 1 || audio_signalGainL > 128) audio_signalGainL = 7;
+                    if (audio_signalGainR < 1 || audio_signalGainR > 128) audio_signalGainR = 7;
+                    */
                 }
                 Thread.Sleep(50);
             }

@@ -271,16 +271,14 @@
             // trackBar_leadInOutSubcodesAmount
             // 
             this.trackBar_leadInOutSubcodesAmount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar_leadInOutSubcodesAmount.LargeChange = 256;
+            this.trackBar_leadInOutSubcodesAmount.LargeChange = 128;
             this.trackBar_leadInOutSubcodesAmount.Location = new System.Drawing.Point(3, 229);
             this.trackBar_leadInOutSubcodesAmount.Maximum = 4096;
-            this.trackBar_leadInOutSubcodesAmount.Minimum = 16;
             this.trackBar_leadInOutSubcodesAmount.Name = "trackBar_leadInOutSubcodesAmount";
             this.trackBar_leadInOutSubcodesAmount.Size = new System.Drawing.Size(559, 45);
             this.trackBar_leadInOutSubcodesAmount.TabIndex = 13;
-            this.trackBar_leadInOutSubcodesAmount.TickFrequency = 256;
+            this.trackBar_leadInOutSubcodesAmount.TickFrequency = 128;
             this.trackBar_leadInOutSubcodesAmount.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar_leadInOutSubcodesAmount.Value = 16;
             this.trackBar_leadInOutSubcodesAmount.Scroll += new System.EventHandler(this.trackBar_leadInOutSubcodesAmount_Scroll);
             // 
             // label_leadInOutSubcodesAmount

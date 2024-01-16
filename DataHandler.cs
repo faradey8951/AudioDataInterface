@@ -12,7 +12,7 @@ namespace AudioDataInterface
 {
     public class DataHandler
     {
-        public MemoryStream ms;
+        public static MemoryStream ms;
         public Mp3FileReader reader = null;
         public static int mp3_buffSize = 256;
         public string mp3_message = "";
@@ -29,6 +29,8 @@ namespace AudioDataInterface
                 ms.Position = ms.Length;
                 //string[] bytes = { Decoder.buff_decodedData[(int)i][9].Substring(0, 8), Decoder.buff_decodedData[(int)i][9].Substring(8, 8), Decoder.buff_decodedData[(int)i][9].Substring(16, 8), Decoder.buff_decodedData[(int)i][9].Substring(24, 8) };
                 byte[] bytes = new byte[mp3_buffSize * 4];
+                int byteCount = mp3_buffSize * 4;
+                bool leadIn = false;
                 for (int p = 0; p < mp3_buffSize * 4 && i < Decoder.buff_decodedData.Count; p += 4, i++)
                 {
                     //while (Decoder.buff_decodedData.Count < i + mp3_buffSize * 2) Thread.Sleep(10);
@@ -66,8 +68,14 @@ namespace AudioDataInterface
                                 form_main.mpsPlayer_currentTrackNumber = subCodeByte2;
                                 form_main.mpsPlayer_trackCount = subCodeByte3;
                             }
-
-                            //deltaBytes += 4;
+                            if (subCodeByte1 == 50)
+                            {
+                                pos = 0;
+                                ms = new MemoryStream();
+                                Decoder.unfixedErrorCount = 0;
+                                Decoder.fixedErrorCount = 0;
+                                Decoder.frameSyncErrorCount = 0;
+                            }
                             p -= 4;
                         }
                     }

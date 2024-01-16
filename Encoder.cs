@@ -41,6 +41,7 @@ namespace AudioDataInterface
         public static int encoder_silenceSeconds = 0;
         public static int encoder_leadInOutSubcodesAmount = 0;
         public static int encoder_mpsPlayerSubCodeInterval = 0;
+        public static string encoder_mode = "";
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Потоки
@@ -84,6 +85,16 @@ namespace AudioDataInterface
             Mp3FileReader reader = new Mp3FileReader(encoder_inputFilePath);
             int minutes = reader.TotalTime.Minutes;
             return reader.TotalTime.Seconds + (minutes * 60);
+        }
+
+        public static int GetEncodingAudioDuration()
+        {
+            FileInfo fileInfo = new FileInfo(encoder_inputFilePath);
+            long fileLength = fileInfo.Length;
+            double bitsPerSec = (encoder_sampleRate * 2.0) / encoder_samplesPerBit;
+            double realBitsPerSec = (32.0 / 41.0) * bitsPerSec;
+            int bytesPerSec = (int)Math.Round(realBitsPerSec / 8.0);
+            return (int)Math.Round((double)fileLength / (double)bytesPerSec);
         }
 
         /// <summary>
@@ -693,7 +704,7 @@ namespace AudioDataInterface
                 if (dataBlockL[i] == "1" && dataBlockR[i] == "0") GenerateStereo10();
                 if (dataBlockL[i] == "0" && dataBlockR[i] == "1") GenerateStereo01();
             }
-            GenerateStereo00(); //Генерируем указатель RAW-блока
+            GenerateStereo11(); //Генерируем указатель RAW-блока
             GenerateStereoSync(); //Генерируем синхроимпульс
         }
 
@@ -740,7 +751,7 @@ namespace AudioDataInterface
                 if (dataBlockL[i] == "1" && dataBlockR[i] == "0") GenerateStereo10();
                 if (dataBlockL[i] == "0" && dataBlockR[i] == "1") GenerateStereo01();
             }
-            GenerateStereo11(); //Генерируем указатель Субкод-блока
+            GenerateStereo00(); //Генерируем указатель Субкод-блока
             GenerateStereoSync(); //Генерируем синхроимпульс
         }
 
@@ -754,7 +765,9 @@ namespace AudioDataInterface
             CreateInputStream();
             CreateOutputStream();
             //Расставляем время воспроизведения по файлу
-            int mp3Duration = GetMp3FileDuration();
+            int mp3Duration = 0;
+            if (encoder_mode == "mp3") mp3Duration = GetMp3FileDuration();
+            else mp3Duration = GetEncodingAudioDuration();
             int deltaByte = (int)Math.Round((double)((encoder_mpsPlayerSubCodeInterval * fs_input.Length) / mp3Duration));
             List<int> targetBytePositions = new List<int>();          
             for (int i = 0; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
@@ -834,23 +847,26 @@ namespace AudioDataInterface
                 {
                     if (fs_input.Position >= targetBytePositions[0])
                     {
-                        string part1 = Convert.ToString(targetDurations[0], 2);
-                        string part2 = Convert.ToString(mp3Duration, 2);
-                        part1 = part1.PadLeft(12, '0');
-                        part2 = part2.PadLeft(12, '0');
-                        string sum = part1 + part2;
-                        byte byteL1 = 100;
-                        byte byteL2 = Convert.ToByte(sum.Substring(0, 8), 2);
-                        byte byteL3 = Convert.ToByte(sum.Substring(8, 8), 2);
-                        byte byteL4 = Convert.ToByte(sum.Substring(16, 8), 2);
+                        if (encoder_mode == "mp3")
+                        {
+                            string part1 = Convert.ToString(targetDurations[0], 2);
+                            string part2 = Convert.ToString(mp3Duration, 2);
+                            part1 = part1.PadLeft(12, '0');
+                            part2 = part2.PadLeft(12, '0');
+                            string sum = part1 + part2;
+                            byte byteL1 = 100;
+                            byte byteL2 = Convert.ToByte(sum.Substring(0, 8), 2);
+                            byte byteL3 = Convert.ToByte(sum.Substring(8, 8), 2);
+                            byte byteL4 = Convert.ToByte(sum.Substring(16, 8), 2);
+                            byte byteR1 = 200;
+                            byte byteR2 = Convert.ToByte(form_encoder.trackNumber);
+                            byte byteR3 = Convert.ToByte(form_encoder.trackCount);
+                            byte byteR4 = Convert.ToByte(0);
+                            GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
+                        }
+                        GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
                         targetDurations.RemoveAt(0);
                         targetBytePositions.RemoveAt(0);
-                        byte byteR1 = 200;
-                        byte byteR2 = Convert.ToByte(form_encoder.trackNumber);
-                        byte byteR3 = Convert.ToByte(form_encoder.trackCount);
-                        byte byteR4 = Convert.ToByte(0);
-                        GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
-                        GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
                     }
                 }
             }
