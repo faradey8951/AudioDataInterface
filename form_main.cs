@@ -84,6 +84,7 @@ namespace AudioDataInterface
         public static int mpsPlayer_fftSize = 0;
         public static string mpsPlayer_spectrumMode = "";
         public static int mpsPlayer_spectrumVescosity = 0;
+        public static int mpsPlayer_mp3Bitrate = 0;
         //////////////////////////////////////////////////////////////////////////////////////
 
         byte[] buffer_fftBytes = new byte[512];
@@ -420,6 +421,10 @@ namespace AudioDataInterface
             label_unfixedErrorCount.Text = "Неисправимые: " + Decoder.unfixedErrorCount.ToString();
             label_frameSyncErrorCount.Text = "Кадровая синхр.: " + Decoder.frameSyncErrorCount.ToString();
             label_linearizedBlockCount.Text = "Нормализовано блоков: " + Decoder.linearizedBlockCount.ToString();
+            if (AudioIO.audio_autoSignalGain == true) checkBox_autoGain.Checked = true;
+            else checkBox_autoGain.Checked = false;
+            //if (DataHandler.ms != null) label_audioBuffer.Text = "Буфер аудио: " + (((double)DataHandler.ms.Length - DataHandler.ms.Position).ToString()) + " байт";
+
             //if (DataHandler.ms != null) this.Text = DataHandler.ms.Length.ToString();
 
             if (form_main.mpsPlayer_currentTrackNumber != form_main.mpsPlayer_lastTrackNumber)
@@ -427,6 +432,7 @@ namespace AudioDataInterface
                 Decoder.unfixedErrorCount = 0;
                 Decoder.fixedErrorCount = 0;
                 Decoder.frameSyncErrorCount = 0;
+                Decoder.linearizedBlockCount = 0;
                 form_main.mpsPlayer_lastTrackNumber = form_main.mpsPlayer_currentTrackNumber;
             }
 
@@ -879,6 +885,10 @@ namespace AudioDataInterface
         {
             try
             {
+                string[] test = BinaryHandler.HammingDecode("110000010000111111111000000001101111110");
+                string[] test2 = BinaryHandler.HammingEncode("11111111111111111111111111111111");
+                string test3 = "";
+                foreach (string s in test2) test3 += s;
                 groupBox_info.BackgroundImage = Image.FromStream(DataHandler.ms);
             }
             catch (Exception ex)

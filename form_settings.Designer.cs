@@ -370,16 +370,16 @@
             // trackBar_encodingSampleRate
             // 
             this.trackBar_encodingSampleRate.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar_encodingSampleRate.LargeChange = 4096;
+            this.trackBar_encodingSampleRate.LargeChange = 2000;
             this.trackBar_encodingSampleRate.Location = new System.Drawing.Point(3, 16);
             this.trackBar_encodingSampleRate.Maximum = 328000;
-            this.trackBar_encodingSampleRate.Minimum = 44100;
+            this.trackBar_encodingSampleRate.Minimum = 40000;
             this.trackBar_encodingSampleRate.Name = "trackBar_encodingSampleRate";
             this.trackBar_encodingSampleRate.Size = new System.Drawing.Size(559, 45);
             this.trackBar_encodingSampleRate.TabIndex = 4;
-            this.trackBar_encodingSampleRate.TickFrequency = 4096;
+            this.trackBar_encodingSampleRate.TickFrequency = 10000;
             this.trackBar_encodingSampleRate.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar_encodingSampleRate.Value = 44100;
+            this.trackBar_encodingSampleRate.Value = 40000;
             this.trackBar_encodingSampleRate.Scroll += new System.EventHandler(this.trackBar_encodingSampleRate_Scroll);
             // 
             // label_encodingDensity
@@ -553,6 +553,7 @@
             this.button2.TabIndex = 1;
             this.button2.Text = "По-умолчанию";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button_save
             // 

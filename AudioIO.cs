@@ -192,10 +192,10 @@ namespace AudioDataInterface
                 {
                     
                     if (Decoder.maxAmplitudeL < 15000 && audio_signalGainL < 128) audio_signalGainL += Math.Log10(1 + 5 * audio_signalGainL);
-                    if (Decoder.maxAmplitudeL > 24000 && audio_signalGainL > 1) audio_signalGainL -= Math.Log10(1 + 5 * audio_signalGainL);
+                    if (Decoder.maxAmplitudeL > 25000 && audio_signalGainL > 1) audio_signalGainL -= Math.Log10(1 + 5 * audio_signalGainL);
                     if (audio_signalGainL < 1 || audio_signalGainL > 128) audio_signalGainL = 6;
                     if (Decoder.maxAmplitudeR < 15000 && audio_signalGainR < 128) audio_signalGainR += Math.Log10(1 + 5 * audio_signalGainR);
-                    if (Decoder.maxAmplitudeR > 24000 && audio_signalGainR > 1) audio_signalGainR -= Math.Log10(1 + 5 * audio_signalGainR);
+                    if (Decoder.maxAmplitudeR > 25000 && audio_signalGainR > 1) audio_signalGainR -= Math.Log10(1 + 5 * audio_signalGainR);
                     if (audio_signalGainR < 1 || audio_signalGainR > 128) audio_signalGainR = 6;
                     
                     /*

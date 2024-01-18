@@ -24,10 +24,10 @@
       <Value Profile="(Default)">False</Value>
     </Setting>
     <Setting Name="signalHeight" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">500</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="mp3BufferSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">256</Value>
+      <Value Profile="(Default)">128</Value>
     </Setting>
     <Setting Name="encoderSampleRate" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">82000</Value>
@@ -36,7 +36,7 @@
       <Value Profile="(Default)">2</Value>
     </Setting>
     <Setting Name="encoderSilenceSeconds" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">2</Value>
+      <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="encoderLeadInOutSubcodesAmount" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">128</Value>

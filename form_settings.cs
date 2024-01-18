@@ -13,6 +13,11 @@ namespace AudioDataInterface
     public partial class form_settings : Form
     {
         string spectrumMode = "";
+        double sampleRate = 0;
+        double maxBitrate = 0;
+        double maxBlockrate = 0;
+        double effectiveBlockRate = 0;
+        double effectiveBitrate = 0;
         public form_settings()
         {
             InitializeComponent();
@@ -60,7 +65,12 @@ namespace AudioDataInterface
 
         private void trackBar_encodingSampleRate_Scroll(object sender, EventArgs e)
         {
-            label_encodingDensityValue.Text = trackBar_encodingSampleRate.Value.ToString();
+            sampleRate = trackBar_encodingSampleRate.Value;
+            maxBitrate = sampleRate / 8.0;
+            maxBlockrate = maxBitrate / 39.0;
+            effectiveBlockRate = maxBitrate / 41.0;
+            effectiveBitrate = Math.Round(((effectiveBlockRate * 32.0) / 1000),2);
+            label_encodingDensityValue.Text = effectiveBitrate.ToString();
         }
 
         private void trackBar_fftSize_Scroll(object sender, EventArgs e)
@@ -134,6 +144,12 @@ namespace AudioDataInterface
         private void radioButton_offMode_CheckedChanged(object sender, EventArgs e)
         {
             if (radioButton_offMode.Checked) spectrumMode = "off";
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            Settings.Default();
+            form_settings_Load(this, EventArgs.Empty);
         }
     }
 }

@@ -32,13 +32,13 @@ namespace AudioDataInterface
             List<string> binary = new List<string>();
             foreach (var s in bin)
                 binary.Add(s.ToString());
-            string[] block = new string[bin.Length + 1 + (int)Math.Ceiling(Math.Log(bin.Length, 2))];
+            string[] block = new string[bin.Length + 1 + (int)Math.Floor(Math.Log(bin.Length, 2))];
             List<int> controlBitPos = new List<int>(); //Список индексов контрольных бит          
             for (int i = 1; i <= bin.Length; i += i) //Расставляем нули на местах контрольных битов
             {
                 block[i - 1] = "0";
                 controlBitPos.Add(i);
-            }           
+            }
             for (int i = 0; binary.Count > 0; i++) //В остальные позиции переписываем полезные биты
             {
                 if (block[i] != "0")
@@ -46,7 +46,7 @@ namespace AudioDataInterface
                     block[i] = binary[0];
                     binary.RemoveAt(0);
                 }
-            }           
+            }
             while (controlBitPos.Count > 0) //Вычисляем контрольные биты
             {
                 List<string> temp = new List<string>(); //Формируемая последовательность
@@ -90,7 +90,6 @@ namespace AudioDataInterface
         public static string[] HammingDecode(string bin)
         {
             string unfixableErrorFound = "";
-            bool returnZero = false;
             string[] block = new string[bin.Length];
             string decodedData = "";
             List<int> controlBitPos = new List<int>(); //Список индексов контрольных бит 
@@ -100,12 +99,12 @@ namespace AudioDataInterface
                 block[i - 1] = "0";
                 controlBitPos.Add(i);
                 controlBitPos1.Add(i);
-            }            
+            }
             for (int i = 0; i < block.Length; i++) //В остальные позиции переписываем полезные биты
             {
                 if (block[i] != "0")
                     block[i] = bin[i].ToString();
-            }        
+            }
             while (controlBitPos.Count > 0) //Вычисляем контрольные биты по полученным данным
             {
                 List<string> temp = new List<string>(); //Формируемая последовательность
@@ -128,7 +127,7 @@ namespace AudioDataInterface
                 //Суммируем единицы
                 int c = 0;
                 foreach (string bit in temp)
-                    if (bit == "1") c++;             
+                    if (bit == "1") c++;
                 if (((double)c / 2) - Math.Truncate((double)c / 2) == 0 && c != 0) //Проверяем четность и записываем бит четности на место контрольного бита
                     block[controlBitPos[0] - 1] = "0";
                 else
@@ -149,7 +148,7 @@ namespace AudioDataInterface
             for (int i = 0; i < badList.Count; i++)
                 summ += badList[i];
             if (badList.Count == 0) //Если ошибки не обнаружены
-            {              
+            {
                 block = null;
             }
             else
@@ -182,116 +181,78 @@ namespace AudioDataInterface
                 {
                     //При наличии неисправимых ошибок в блоке - вернуть нули
                     unfixableErrorFound = "error";
-                    returnZero = true;
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    decodedData += "0";
-                    
                     block = null;
                 }
             }
-
-            if (returnZero == false)
+            if (block != null) //Возвращаем исправленный вариант
             {
-                if (block != null) //Возвращаем исправленный вариант
-                {
-                    decodedData += block[2];
-                    decodedData += block[4];
-                    decodedData += block[5];
-                    decodedData += block[6];
-                    decodedData += block[8];
-                    decodedData += block[9];
-                    decodedData += block[10];
-                    decodedData += block[11];
-                    decodedData += block[12];
-                    decodedData += block[13];
-                    decodedData += block[14];
-                    decodedData += block[16];
-                    decodedData += block[17];
-                    decodedData += block[18];
-                    decodedData += block[19];
-                    decodedData += block[20];
-                    decodedData += block[21];
-                    decodedData += block[22];
-                    decodedData += block[23];
-                    decodedData += block[24];
-                    decodedData += block[25];
-                    decodedData += block[26];
-                    decodedData += block[27];
-                    decodedData += block[28];
-                    decodedData += block[29];
-                    decodedData += block[30];
-                    decodedData += block[32];
-                    decodedData += block[33];
-                    decodedData += block[34];
-                    decodedData += block[35];
-                    decodedData += block[36];
-                    decodedData += block[37];
-                }
-                else //Возвращаем исходный вариант
-                {
-                    decodedData += bin[2];
-                    decodedData += bin[4];
-                    decodedData += bin[5];
-                    decodedData += bin[6];
-                    decodedData += bin[8];
-                    decodedData += bin[9];
-                    decodedData += bin[10];
-                    decodedData += bin[11];
-                    decodedData += bin[12];
-                    decodedData += bin[13];
-                    decodedData += bin[14];
-                    decodedData += bin[16];
-                    decodedData += bin[17];
-                    decodedData += bin[18];
-                    decodedData += bin[19];
-                    decodedData += bin[20];
-                    decodedData += bin[21];
-                    decodedData += bin[22];
-                    decodedData += bin[23];
-                    decodedData += bin[24];
-                    decodedData += bin[25];
-                    decodedData += bin[26];
-                    decodedData += bin[27];
-                    decodedData += bin[28];
-                    decodedData += bin[29];
-                    decodedData += bin[30];
-                    decodedData += bin[32];
-                    decodedData += bin[33];
-                    decodedData += bin[34];
-                    decodedData += bin[35];
-                    decodedData += bin[36];
-                    decodedData += bin[37];
-                }
+                decodedData += block[2];
+                decodedData += block[4];
+                decodedData += block[5];
+                decodedData += block[6];
+                decodedData += block[8];
+                decodedData += block[9];
+                decodedData += block[10];
+                decodedData += block[11];
+                decodedData += block[12];
+                decodedData += block[13];
+                decodedData += block[14];
+                decodedData += block[16];
+                decodedData += block[17];
+                decodedData += block[18];
+                decodedData += block[19];
+                decodedData += block[20];
+                decodedData += block[21];
+                decodedData += block[22];
+                decodedData += block[23];
+                decodedData += block[24];
+                decodedData += block[25];
+                decodedData += block[26];
+                decodedData += block[27];
+                decodedData += block[28];
+                decodedData += block[29];
+                decodedData += block[30];
+                decodedData += block[32];
+                decodedData += block[33];
+                decodedData += block[34];
+                decodedData += block[35];
+                decodedData += block[36];
+                decodedData += block[37];
+            }
+            else //Возвращаем исходный вариант
+            {
+                decodedData += bin[2];
+                decodedData += bin[4];
+                decodedData += bin[5];
+                decodedData += bin[6];
+                decodedData += bin[8];
+                decodedData += bin[9];
+                decodedData += bin[10];
+                decodedData += bin[11];
+                decodedData += bin[12];
+                decodedData += bin[13];
+                decodedData += bin[14];
+                decodedData += bin[16];
+                decodedData += bin[17];
+                decodedData += bin[18];
+                decodedData += bin[19];
+                decodedData += bin[20];
+                decodedData += bin[21];
+                decodedData += bin[22];
+                decodedData += bin[23];
+                decodedData += bin[24];
+                decodedData += bin[25];
+                decodedData += bin[26];
+                decodedData += bin[27];
+                decodedData += bin[28];
+                decodedData += bin[29];
+                decodedData += bin[30];
+                decodedData += bin[32];
+                decodedData += bin[33];
+                decodedData += bin[34];
+                decodedData += bin[35];
+                decodedData += bin[36];
+                decodedData += bin[37];
             }
             return new string[] { decodedData, unfixableErrorFound };
         }

@@ -69,5 +69,10 @@ namespace AudioDataInterface
                 LogHandler.WriteError("Settings.cs", ex.Message);
             }
         }
+        public static void Default()
+        {
+            Properties.Settings.Default.Reset();
+            Load();
+        }
     }
 }

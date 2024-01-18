@@ -109,7 +109,7 @@ namespace AudioDataInterface.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("500")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int signalHeight {
             get {
                 return ((int)(this["signalHeight"]));
@@ -121,7 +121,7 @@ namespace AudioDataInterface.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("256")]
+        [global::System.Configuration.DefaultSettingValueAttribute("128")]
         public int mp3BufferSize {
             get {
                 return ((int)(this["mp3BufferSize"]));
@@ -157,7 +157,7 @@ namespace AudioDataInterface.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2")]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
         public int encoderSilenceSeconds {
             get {
                 return ((int)(this["encoderSilenceSeconds"]));

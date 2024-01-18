@@ -9,6 +9,8 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using System.Diagnostics;
+
 
 namespace AudioDataInterface
 {
@@ -102,9 +104,27 @@ namespace AudioDataInterface
                     }
                     else Encoder.encoder_mode = "mp3";
                     Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
-                    if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
-                    Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
-                    Encoder.thread_encodeFileStream.Start();
+
+                    if (File.Exists("output.mp3")) File.Delete("output.mp3");
+                    if (File.Exists("output.mp3")) File.Delete("output2.mp3");
+                    string eqEffectCmd = " -af " + @"""" + "equalizer=f=5000:width_type=h:width=1000:g=20" + @"""";
+                    string firstCmd = "/C ffmpeg -i " + @"""" + Encoder.encoder_inputFilePath + @"""" + " -vn -ar 11025 -ac 1 -b:a 16k -map 0:a -map_metadata -1 output.mp3 && ffmpeg -i output.mp3 -vn -ar 11025 -ac 1 -b:a 16k" + eqEffectCmd + " output2.mp3";
+                    //System.Diagnostics.Process.Start("CMD.exe", firstCmd);
+                    Process p = new Process();
+                    p.StartInfo.UseShellExecute = false;
+                    p.StartInfo.FileName = "cmd.exe";
+                    p.StartInfo.Arguments = firstCmd;
+                    p.StartInfo.CreateNoWindow = true;
+                    p.Start();
+                    p.WaitForExit();
+                    if (File.Exists("output.mp3"))
+                    {
+                        Encoder.encoder_inputFilePath = "output2.mp3";
+                        if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
+                        Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
+                        Encoder.thread_encodeFileStream.Start();
+                    }
+                    else MessageBox.Show("Не удалось выполнить преобразование указанного файла в формат MP3 16kbps с помощью FFMPEG! Проверьте входной файл", "FFMPEG ERROR");
                 }
                 else { }
             }

@@ -12,6 +12,8 @@ namespace AudioDataInterface
         public static readonly List<short> buff_signalAmplitudes = new List<short>();
         public static readonly List<short> buff_signalAmplitudesL = new List<short>();
         public static readonly List<short> buff_signalAmplitudesR = new List<short>();
+        public static string[] decodedDataBlock = new string[6]; //Декодированный блок данных
+        public static string[] lastDecodedDataBlock = new string[6]; //Последний декодированный блок данных
         public static readonly List<string[]> buff_decodedData = new List<string[]>(); //Буфер декодированных данных
         public static Thread thread_binaryDecoder = null;
         public static Thread thread_amplitudeDecoder = null;
@@ -145,9 +147,8 @@ namespace AudioDataInterface
         static void BinaryDecoderStereo()
         {
             //Установить приоритет процесса на максимум
-            //System.Diagnostics.Process thisProc = System.Diagnostics.Process.GetCurrentProcess();
-            //thisProc.PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
-
+            System.Diagnostics.Process thisProc = System.Diagnostics.Process.GetCurrentProcess();
+            thisProc.PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
             string tempBin = ""; //Временное бинарное слово
             var amplitudeBuff = new List<short>(); //Буфер амплитуд
             var amplitudeBuffCopy = new List<short>(); //Копия буфера амплитуд
@@ -162,7 +163,6 @@ namespace AudioDataInterface
             int syncPulseIndex = 0; //Индекс второго синхроимпульса
             int maxSyncPulseIndex = 0; //Индекс максимального синхроимпульса
             int difference = 0; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-
             int channelSwitch = 0;
 
             while (true)
@@ -170,6 +170,8 @@ namespace AudioDataInterface
                 if (channelSwitch == 0) while (buff_signalAmplitudesL.Count < 80) Thread.Sleep(10);
                 else while (buff_signalAmplitudesR.Count < 80) Thread.Sleep(10);
 
+                decodedDataBlock = new string[6];
+                lastDecodedDataBlock = new string[6]; 
                 tempBin = "";
                 amplitudeBuff.Clear();
                 amplitudeBuffCopy.Clear();
@@ -227,236 +229,189 @@ namespace AudioDataInterface
 
                 if (sync == true) //Если синхронизация обнаружена
                 {
-                    lock (decodedDataLocker)
+                    lock (decodedDataLocker) if (buff_decodedData.Count > 0) lastDecodedDataBlock = buff_decodedData.Last();
+                    tempSyncIndexes.Add(syncPulseIndex);
+                    tempSyncIndexes.Add(maxSyncPulseIndex);
+                    tempSyncIndexes.Sort(); //Сортировка индексов синхроимпульсов по возрастанию
+                    syncPulse = Convert.ToInt16(amplitudeBuff[maxSyncPulseIndex]);
+                    maxSyncPulse = Convert.ToInt16(amplitudeBuff[syncPulseIndex]);
+                    for (int i = tempSyncIndexes[0] + 1; i < tempSyncIndexes[1]; i++) //Составляем буфер данных между синхроимпульсами
                     {
-                        tempSyncIndexes.Add(syncPulseIndex);
-                        tempSyncIndexes.Add(maxSyncPulseIndex);
-                        tempSyncIndexes.Sort(); //Сортировка индексов синхроимпульсов по возрастанию
-                        syncPulse = Convert.ToInt16(amplitudeBuff[tempSyncIndexes[0]]);
-                        maxSyncPulse = Convert.ToInt16(amplitudeBuff[tempSyncIndexes[1]]);
-                        for (int i = tempSyncIndexes[0] + 1; i < tempSyncIndexes[1]; i++) //Составляем буфер данных между синхроимпульсами
+                        dataBlockBuff.Add(amplitudeBuff[i]);
+                        dataBlockBuffLnr.Add(amplitudeBuff[i]);
+                    }
+                    decodedDataBlock[0] = String.Join(":", amplitudeBuff);
+                    decodedDataBlock[1] = String.Join(":", dataBlockBuff);
+                    if (dataBlockBuff.Count == 39) //Если блок данных обнаружен
+                    {
+                        //Дифференциальный метод декодирования
+                        double[] derivative = new double[dataBlockBuff.Count - 1]; //Первая производная сигнала
+                        List<double> lnrDerivative = new List<double>(); //Линеаризованная первая производная сигнала
+                        List<double> sortedLnrDerivative = new List<double>(); //Упорядоченная первая производная сигнала
+                        List<double> sortedLnrSecondDerivative = new List<double>();
+                        double sortedLnrSecondDerivativeMaxValue = 0;
+                        double sortedLnrDerivativeJumpValue = 0;
+                        List<string> derivativeDirection = new List<string>(); //Знак первой производной
+                        List<string> derivativeBinaryValue = new List<string>(); //Бинарное значение производной
+                        List<string> derivativeDecryptor = new List<string>();
+                        for (int i = 0; i < derivative.Length; i++)
                         {
-                            dataBlockBuff.Add(amplitudeBuff[i]);
-                            dataBlockBuffLnr.Add(amplitudeBuff[i]);
+                            double derivativeValue = dataBlockBuff[i + 1] - dataBlockBuff[i];
+                            derivative[i] = Math.Abs(derivativeValue);
+                            if (derivativeValue < 0) derivativeDirection.Add("-");
+                            else derivativeDirection.Add("+");
                         }
-                        buff_decodedData.Add(new string[10]);
-                        buff_decodedData.Last()[0] = String.Join(":", amplitudeBuff);
-                        buff_decodedData.Last()[1] = String.Join(":", dataBlockBuff);
-                        if (dataBlockBuff.Count == 39) //Если блок данных обнаружен
+                        double perc = (100 * (double)syncPulse) / (double)maxSyncPulse;
+                        if (perc < 80)
                         {
-                            /*
-                            dataBlockBuff = new List<short>() { 8366,
-9473,
-10119,
-4699,
-10119,
-9582,
-9977,
-9675,
-10279,
-9633,
-9297,
-9708,
-9448,
-9054,
-9817,
-5093,
-5177,
-5152,
-4858,
-10119,
-10111,
-4799,
-5101,
-10254,
-4825,
-5253,
-4648,
-9851,
-4288,
-9389,
-9456,
-4665,
-5001,
-5211,
-5143,
-5169,
-5286,
-5085,
-4531,
-};
-                            */
-                            //Дифференциальный метод декодирования
-                            double[] derivative = new double[dataBlockBuff.Count - 1]; //Первая производная сигнала
-                            List<double> lnrDerivative = new List<double>(); //Линеаризованная первая производная сигнала
-                            List<double> sortedLnrDerivative = new List<double>(); //Упорядоченная первая производная сигнала
-                            List<double> sortedLnrSecondDerivative = new List<double>();
-                            double sortedLnrSecondDerivativeMaxValue = 0;
-                            double sortedLnrDerivativeJumpValue = 0;
-                            List<string> derivativeDirection = new List<string>(); //Знак первой производной
-                            List<string> derivativeBinaryValue = new List<string>(); //Бинарное значение производной
-                            List<string> derivativeDecryptor = new List<string>();
-                            for (int i = 0; i < derivative.Length; i++)
+                            linearizedBlockCount++;
+                            //Линеаризация данных с помощью линейного полинома (A = k*i + b) методом наименьших квадратов
+                            double[] I = new double[derivative.Length];
+                            double[] iSquare = new double[derivative.Length];
+                            double[] Ai = new double[derivative.Length];
+                            double[] trend = new double[derivative.Length];
+                            double iSumm = 0;
+                            double iSquareSumm = 0;
+                            double AiSumm = 0;
+                            double ASumm = 0;
+                            double n = derivative.Length;
+                            for (int p = 0; p < derivative.Length; p++)
                             {
-                                double derivativeValue = dataBlockBuff[i + 1] - dataBlockBuff[i];
-                                derivative[i] = Math.Abs(derivativeValue);
-                                if (derivativeValue < 0) derivativeDirection.Add("-");
-                                else derivativeDirection.Add("+");
+                                I[p] = p + 1;
+                                iSquare[p] = Math.Pow((p + 1), 2);
+                                Ai[p] = derivative[p] * (p + 1);
                             }
-                            double perc = (100 * (double)syncPulse) / (double)maxSyncPulse;
-                            if (perc < 60)
+                            for (int p = 0; p < derivative.Length; p++)
                             {
-                                //Линеаризация данных с помощью линейного полинома (A = k*i + b) методом наименьших квадратов
-                                double[] I = new double[derivative.Length];
-                                double[] iSquare = new double[derivative.Length];
-                                double[] Ai = new double[derivative.Length];
-                                double[] trend = new double[derivative.Length];
-                                double iSumm = 0;
-                                double iSquareSumm = 0;
-                                double AiSumm = 0;
-                                double ASumm = 0;
-                                double n = derivative.Length;
-                                for (int p = 0; p < derivative.Length; p++)
-                                {
-                                    I[p] = p + 1;
-                                    iSquare[p] = Math.Pow((p + 1), 2);
-                                    Ai[p] = derivative[p] * (p + 1);
-                                }
-                                for (int p = 0; p < derivative.Length; p++)
-                                {
-                                    iSumm += I[p];
-                                    iSquareSumm += iSquare[p];
-                                    AiSumm += Ai[p];
-                                    ASumm += derivative[p];
-                                }
-                                double k = ((n * AiSumm) - (ASumm * iSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
-                                double b = ((ASumm * iSquareSumm) - (iSumm * AiSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
-                                for (int p = 0; p < trend.Length; p++) trend[p] = Math.Round((k * (p + 1)) + b);
-                                for (int p = 1; p <= derivative.Length; p++)
-                                {
-                                    double linearizedAmplitude = (double)derivative[p - 1] - ((trend[p - 1] - trend[0]) / 2.0);
-                                    lnrDerivative.Add(Convert.ToInt32(linearizedAmplitude));
-                                }
+                                iSumm += I[p];
+                                iSquareSumm += iSquare[p];
+                                AiSumm += Ai[p];
+                                ASumm += derivative[p];
                             }
-                            else
+                            double k = ((n * AiSumm) - (ASumm * iSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
+                            double b = ((ASumm * iSquareSumm) - (iSumm * AiSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
+                            for (int p = 0; p < trend.Length; p++) trend[p] = Math.Round((k * (p + 1)) + b);
+                            for (int p = 1; p <= derivative.Length; p++)
                             {
-                                lnrDerivative.Clear();
-                                lnrDerivative.AddRange(derivative);
+                                double linearizedAmplitude = (double)derivative[p - 1] - ((trend[p - 1] - trend[0]) / 2.0);
+                                lnrDerivative.Add(Convert.ToInt32(linearizedAmplitude));
                             }
-                            sortedLnrDerivative.AddRange(lnrDerivative);
-                            sortedLnrDerivative.Sort();
-                            sortedLnrDerivative.Reverse();
-                            for (int i = 0; i < derivative.Length - 1; i++) sortedLnrSecondDerivative.Add(sortedLnrDerivative[i] - sortedLnrDerivative[i + 1]);
-                            sortedLnrSecondDerivativeMaxValue = sortedLnrSecondDerivative.Max();
-                            sortedLnrDerivativeJumpValue = sortedLnrDerivative[sortedLnrSecondDerivative.IndexOf(sortedLnrSecondDerivativeMaxValue)];
-                            for (int i = 0; i < lnrDerivative.Count; i++)
+                        }
+                        else
+                        {
+                            lnrDerivative.Clear();
+                            lnrDerivative.AddRange(derivative);
+                        }
+                        sortedLnrDerivative.AddRange(lnrDerivative);
+                        sortedLnrDerivative.Sort();
+                        sortedLnrDerivative.Reverse();
+                        for (int i = 0; i < derivative.Length - 1; i++) sortedLnrSecondDerivative.Add(Math.Pow(sortedLnrDerivative[i] - sortedLnrDerivative[i + 1], 2));
+                        sortedLnrSecondDerivativeMaxValue = sortedLnrSecondDerivative.Max();
+                        sortedLnrDerivativeJumpValue = sortedLnrDerivative[sortedLnrSecondDerivative.IndexOf(sortedLnrSecondDerivativeMaxValue)];
+                        for (int i = 0; i < lnrDerivative.Count; i++)
+                        {
+                            if (lnrDerivative[i] >= sortedLnrDerivativeJumpValue) derivativeBinaryValue.Add("1");
+                            else derivativeBinaryValue.Add("0");
+                        }
+                        int derivativeChangeCount = 0;
+                        for (int i = 0; i < derivative.Length; i++)
+                        {
+                            if (derivativeBinaryValue[i] == "0") derivativeDecryptor.Add("-");
+                            if (derivativeBinaryValue[i] == "1" && derivativeDirection[i] == "+")
                             {
-                                if (lnrDerivative[i] >= sortedLnrDerivativeJumpValue) derivativeBinaryValue.Add("1");
-                                else derivativeBinaryValue.Add("0");
+                                derivativeDecryptor.Add("01");
+                                derivativeChangeCount++;
                             }
-                            int derivativeChangeCount = 0;
-                            for (int i = 0; i < derivative.Length; i++)
+                            if (derivativeBinaryValue[i] == "1" && derivativeDirection[i] == "-")
                             {
-                                if (derivativeBinaryValue[i] == "0") derivativeDecryptor.Add("-");
-                                if (derivativeBinaryValue[i] == "1" && derivativeDirection[i] == "+")
+                                derivativeDecryptor.Add("10");
+                                derivativeChangeCount++;
+                            }
+                        }
+                        if (derivativeChangeCount < 2)
+                        {
+                            tempBin = null;
+                        }
+                        else
+                        {
+                            derivativeDecryptor.Add("-");
+                            while (derivativeDecryptor.IndexOf("-") != -1)
+                            {
+                                for (int i = 1; i < derivative.Length; i++)
                                 {
-                                    derivativeDecryptor.Add("01");
-                                    derivativeChangeCount++;
-                                }
-                                if (derivativeBinaryValue[i] == "1" && derivativeDirection[i] == "-")
-                                {
-                                    derivativeDecryptor.Add("10");
-                                    derivativeChangeCount++;
-                                }
-                            }
-                            if (derivativeChangeCount < 2)
-                            {
-                                tempBin = "000000000000000000000000000000000000001";
-                            }
-                            else
-                            {
-                                derivativeDecryptor.Add("-");
-                                while (derivativeDecryptor.IndexOf("-") != -1)
-                                {
-                                    for (int i = 1; i < derivative.Length; i++)
+                                    if (derivativeDecryptor[i] != "-")
                                     {
-                                        if (derivativeDecryptor[i] != "-")
-                                        {
-                                            if (derivativeDecryptor[i - 1] == "-") derivativeDecryptor[i - 1] = derivativeDecryptor[i][0].ToString() + derivativeDecryptor[i][0].ToString();
-                                            if (derivativeDecryptor[i + 1] == "-") derivativeDecryptor[i + 1] = derivativeDecryptor[i][1].ToString() + derivativeDecryptor[i][1].ToString();
-                                        }
+                                        if (derivativeDecryptor[i - 1] == "-") derivativeDecryptor[i - 1] = derivativeDecryptor[i][0].ToString() + derivativeDecryptor[i][0].ToString();
+                                        if (derivativeDecryptor[i + 1] == "-") derivativeDecryptor[i + 1] = derivativeDecryptor[i][1].ToString() + derivativeDecryptor[i][1].ToString();
                                     }
                                 }
-                                for (int i = 0; i < derivativeDecryptor.Count; i++) tempBin += derivativeDecryptor[i][0].ToString();
                             }
-                            
-                            buff_decodedData.Last()[2] = String.Join(":", dataBlockBuff);
-                            if (tempBin != "") BinaryDecode(tempBin);
+                            for (int i = 0; i < derivativeDecryptor.Count; i++) tempBin += derivativeDecryptor[i][0].ToString();
+                        }
 
+                        decodedDataBlock[2] = String.Join(":", dataBlockBuff);
+                        BinaryDecode(tempBin);
+                        if (decodedDataBlock[3] != null)
+                        {
                             //Контроль канальной синхронизации
-                            bool channelSyncSucc = false;
-                            if (channelSwitch == 1 && buff_decodedData.Last()[8][38].ToString() == "1") //Детектируем наличие субкода
+                            bool channelSyncSucc = true;
+                            if (decodedDataBlock[3][38] == '0') //Детектируем наличие субкода
                             {
-                                string subCode = buff_decodedData.Last()[9]; //Получаем двоичный субкод
-                                                                             //Выделяем составляющие байты субкода
+                                string subCode = decodedDataBlock[4]; //Получаем двоичный субкод                                        
                                 byte subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
                                 byte subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
                                 byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
                                 byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
-                                if (subCodeByte1 == 255)
+                                if (subCodeByte1 == 123)
                                 {
-                                    if (subCodeByte2 == 255 || subCodeByte3 == 255 || subCodeByte4 == 255) //Определяем субкод контроля канальной синхронизации правого канала
+                                    if (subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Определяем субкод контроля канальной синхронизации правого канала
                                     {
-                                        if (buff_decodedData[buff_decodedData.Count - 2][8][38].ToString() == "1") //Проверяем предыдущий блок на наличие субкода
+                                        channelSyncSucc = false;
+                                        if (lastDecodedDataBlock[3][38] == '0') //Проверяем предыдущий блок на наличие субкода
                                         {
-                                            subCode = buff_decodedData[buff_decodedData.Count - 2][9]; //Получаем двоичный субкод
-                                                                                                       //Выделяем составляющие байты субкода
+                                            subCode = lastDecodedDataBlock[4]; //Получаем двоичный субкод
                                             subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
                                             subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
                                             subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
                                             subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
                                             //Определяем субкод контроля канальной синхронизации левого канала
-                                            if (subCodeByte1 == 255 && (subCodeByte2 == 0 || subCodeByte3 == 0 || subCodeByte4 == 0)) channelSyncSucc = true;
+                                            if (subCodeByte1 == 123 && (subCodeByte2 == 0 && subCodeByte3 == 0 && subCodeByte4 == 0)) channelSyncSucc = true;
                                         }
                                     }
-                                }
-                                else
-                                {
-                                    channelSyncSucc = true;
+                                    else channelSyncSucc = true;
                                 }
                             }
-                            else channelSyncSucc = true;
                             if (channelSyncSucc == false)
                             {
                                 frameSyncErrorCount++;
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
+                                lock (decodedDataLocker) buff_decodedData.Clear();
                                 DataHandler.ms = new System.IO.MemoryStream();
                             }
-
-
+                            if (channelSyncSucc == true) lock (decodedDataLocker) buff_decodedData.Add(decodedDataBlock);
                         }
-                        else
-                            Thread.Sleep(10);
-                        try
+                    }
+                    else
+                        Thread.Sleep(10);
+                    try
+                    {
+                        if (buff_signalAmplitudesL != null && buff_signalAmplitudesR != null && buff_signalAmplitudesL.Count > 0 && buff_signalAmplitudesR.Count > 0)
                         {
-                            if (buff_signalAmplitudesL != null && buff_signalAmplitudesR != null && buff_signalAmplitudesL.Count > 0 && buff_signalAmplitudesR.Count > 0)
+                            if (channelSwitch == 0)
                             {
-                                if (channelSwitch == 0)
-                                {
-                                    lock (amplitudesLLocker) buff_signalAmplitudesL.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
-                                }
-                                else
-                                {
-                                    lock (amplitudesRLocker) buff_signalAmplitudesR.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
-                                }
+                                lock (amplitudesLLocker) buff_signalAmplitudesL.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
+                            }
+                            else
+                            {
+                                lock (amplitudesRLocker) buff_signalAmplitudesR.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
                             }
                         }
-                        catch
-                        {
+                    }
+                    catch
+                    {
 
-                        }
                     }
                 }
                 else
@@ -512,272 +467,22 @@ namespace AudioDataInterface
             else return new[] { 0, 0, 0, 0 };
         }
 
-        //Метод получения первичного бинарного кода из амплитуд входного сигнала
-        static void BinaryDecoder()
-        {
-            //Установить приоритет процесса на максимум
-            System.Diagnostics.Process thisProc = System.Diagnostics.Process.GetCurrentProcess();
-            thisProc.PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
-
-            string tempBin = ""; //Временное бинарное слово
-            var amplitudeBuff = new List<short>(); //Буфер амплитуд
-            var amplitudeBuffCopy = new List<short>(); //Копия буфера амплитуд
-            var tempSyncIndexes = new List<int>(); //Список индексов синхроимпульсов
-            var tempOneIndexes = new List<int>(); //Список индексов единиц
-            bool sync = true; //Показатель обнаружения синхронизации
-            var dataBlockBuff = new List<short>(); //Буфер амплитуд блока данных
-            var dataBlockBuffLnr = new List<short>(); //Сглаженный буфер амплитуд блока данных
-            var dataBlockBuffCopy = new List<short>(); //Копия буфера амплитуд блока данных
-            int syncPulse = 0; //Второй синхроимпульс блока данных
-            int maxSyncPulse = 0; //Первый (максимальный) синхроимпульс блока данных
-            int syncPulseIndex = 0; //Индекс второго синхроимпульса
-            int maxSyncPulseIndex = 0; //Индекс максимального синхроимпульса
-            int difference = 0; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-
-            int channelSwitch = 0;
-
-            while (true)
-            {
-                while (buff_signalAmplitudes.Count < 80) Thread.Sleep(10);
-
-                tempBin = "";
-                amplitudeBuff.Clear();
-                amplitudeBuffCopy.Clear();
-                tempSyncIndexes.Clear();
-                tempOneIndexes.Clear();
-                sync = true;
-                dataBlockBuff.Clear();
-                dataBlockBuffLnr.Clear();
-                dataBlockBuffCopy.Clear();
-                syncPulse = 0;
-                maxSyncPulse = 0;
-                syncPulseIndex = 0;
-                maxSyncPulseIndex = 0;
-                difference = 0;
-                if (buff_signalAmplitudes.Count >= 80)
-                {
-                    for (int i = 0; i < 80; i++) lock (buff_signalAmplitudes) amplitudeBuff.Add(buff_signalAmplitudes[i]);
-                    amplitudeBuffCopy.AddRange(amplitudeBuff);
-                    maxSyncPulse = amplitudeBuffCopy.Max(); //Максимальная амплитуда буфера
-                    maxSyncPulseIndex = amplitudeBuffCopy.IndexOf((short)maxSyncPulse); //Индекс максимальной амплитуды
-                    amplitudeBuffCopy[maxSyncPulseIndex] = 0; //Занулить максимальную амплитуду
-                    for (int i = 0; i < amplitudeBuffCopy.Count;) //Парсинг синхроимпульсов
-                    {
-                        syncPulse = amplitudeBuffCopy.Max(); //Теоретическая амплитуда второго синхроимпульса
-                        syncPulseIndex = amplitudeBuffCopy.IndexOf((short)syncPulse); //Индекс теоретической амплитуды второго сиенхроимпульса
-                        if (maxSyncPulseIndex > syncPulseIndex)
-                            difference = maxSyncPulseIndex - syncPulseIndex - 1; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-                        else
-                            difference = syncPulseIndex - maxSyncPulseIndex - 1; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-                        amplitudeBuffCopy[syncPulseIndex] = 0; //Занулить максимальную амплитуду буфера
-                        if (difference == 39) break;
-                        else
-                            //Thread.Sleep(10);
-                            i++;
-                        //Если второй синхроимпульс не обнаружен
-                        if (i == amplitudeBuffCopy.Count)
-                            sync = false;
-                    }
-                }
-                else
-                {
-                    Thread.Sleep(10);
-                    sync = false;
-                }
-
-                if (sync == true) //Если синхронизация обнаружена
-                {
-                    tempSyncIndexes.Add(syncPulseIndex);
-                    tempSyncIndexes.Add(maxSyncPulseIndex);
-                    tempSyncIndexes.Sort(); //Сортировка индексов синхроимпульсов по возрастанию
-                    for (int i = tempSyncIndexes[0] + 1; i < tempSyncIndexes[1]; i++) //Составляем буфер данных между синхроимпульсами
-                    {
-                        dataBlockBuff.Add(amplitudeBuff[i]);
-                        dataBlockBuffLnr.Add(amplitudeBuff[i]);
-                    }
-                    lock (buff_decodedData)
-                    {
-                        buff_decodedData.Add(new string[10]);
-                        buff_decodedData.Last()[0] = String.Join(":", amplitudeBuff);
-                        buff_decodedData.Last()[1] = String.Join(":", dataBlockBuff);
-                    }
-                    double lnrGain = 0.25; //Коэффициент усиления линеаризации
-                    double lnrCorrLength = 0.75; //Часть амплитуд, подвергаемая линеаризации
-                    int lnrTrendLevelLimit = 3000; //Порог уровня тренда 
-                    if (dataBlockBuff.Count == 39)
-                    {
-                        int lnrTrendLevel = maxSyncPulse - syncPulse; //Уровень тренда                    
-                        int lnrCorrIncr = (int)(lnrTrendLevel * lnrGain) / (int)(dataBlockBuff.Count * lnrCorrLength); //Приращение амплитуды
-                        if (lnrTrendLevel >= lnrTrendLevelLimit)
-                        {
-                            if (amplitudeBuff[tempSyncIndexes[1]] > amplitudeBuff[tempSyncIndexes[0]]) //Если амплитуда второго синхроимпульса больше амплитуды первого - тренд растущий
-                            {
-                                for (int i = (int)(lnrTrendLevel * lnrGain), k = dataBlockBuff.Count - 1; i > 0 && k >= 0; i -= lnrCorrIncr, k--)
-                                    dataBlockBuffLnr[k] = (short)(dataBlockBuffLnr[k] - i);
-                            }
-                            else //Тренд убывающий
-                            {
-                                for (int i = (int)(lnrTrendLevel * lnrGain), k = 0; i > 0 && k < dataBlockBuff.Count; i -= lnrCorrIncr, k++)
-                                    dataBlockBuffLnr[k] = (short)(dataBlockBuffLnr[k] - i);
-                            }
-                        }
-                    }
-                    else
-                    {
-                        Thread.Sleep(10);
-                    }
-                    lock (buff_decodedData) buff_decodedData.Last()[2] = String.Join(":", dataBlockBuffLnr);
-
-                    if (dataBlockBuffLnr.Min() >= 0) //Проверка выхода линеаризатора за пределы границ
-                    {
-                        dataBlockBuff.Clear();
-                        dataBlockBuff.AddRange(dataBlockBuffLnr);
-                        lock (buff_decodedData) buff_decodedData.Last()[3] = "True";
-                    }
-                    else //Если линеаризатор вышел за границы
-                    {
-                        dataBlockBuffLnr.Clear();
-                        dataBlockBuffLnr.AddRange(dataBlockBuff);
-                        lock (buff_decodedData) buff_decodedData.Last()[3] = "False";
-                    }
-                    if (dataBlockBuff.Count == 39) //Если блок данных обнаружен
-                    {
-                        dataBlockBuffCopy.AddRange(dataBlockBuff); //Копируем буфер амплитуд
-                        int oneLevel = dataBlockBuff.Max(); //Определяем первую максимальную амплитуду в буфере
-                        dataBlockBuffCopy[dataBlockBuff.IndexOf((short)oneLevel)] = 0; //Зануляем первую максимальную амплитуду в копии буфера
-                        int trapPercent = 20 + (int)(((double)oneLevel / (double)syncPulse) * 90); //Степень понижения амплитуды [%]
-                        if (trapPercent < 30 && trapPercent > 90)
-                            trapPercent = 70;
-                        var aplitudeDynamics = new List<string>(); //Динамика амплитуд
-                        aplitudeDynamics.Add("");
-                        bool approxSuccess = true;
-                        lock (buff_decodedData) buff_decodedData.Last()[4] = trapPercent.ToString();
-                        for (int k = 0; k < 1; k++) //Аппроксимация двоичного сигнала (работа над буфером dataBlockBuffLnr)
-                        {
-                            for (int i = 0; i < dataBlockBuff.Count - 1; i++)
-                            {
-                                if (dataBlockBuff[i] != 0 && dataBlockBuff[i + 1] != 0)
-                                {
-                                    if (dataBlockBuff[i + 1] >= dataBlockBuff[i]) //Если пара амплитуд растущая
-                                    {
-                                        int perc = (int)((dataBlockBuff[i] * 100) / dataBlockBuff[i + 1]);
-                                        if (perc > trapPercent) //Если обе амплитуды совпадают
-                                            dataBlockBuffLnr[i + 1] = dataBlockBuffLnr[i];
-                                        else //Если амплитуды отличаются
-                                        {
-                                            if (aplitudeDynamics.Last() == "+") //Если, с учётом динамики, предыдущая пара амплитуд также была растущей => аппроксимация далее невозможна!
-                                            {
-                                                dataBlockBuffLnr[i + 1] = dataBlockBuffLnr[i];
-                                                approxSuccess = false;
-                                            }
-                                            else //Если аппроксимация адекватна
-                                            {
-                                                dataBlockBuffLnr[i + 1] = (short)(dataBlockBuffLnr[i] * 2);
-                                                aplitudeDynamics.Add("+");
-                                            }
-                                        }
-                                    }
-                                    else //Если пара амплитуд убывающая
-                                    {
-                                        int perc = (int)((dataBlockBuff[i + 1] * 100) / dataBlockBuff[i]);
-                                        if (perc > trapPercent) //Если обе амплитуды совпадают
-                                            dataBlockBuffLnr[i + 1] = dataBlockBuffLnr[i];
-                                        else //Если амплитуды отличаются
-                                        {
-                                            if (aplitudeDynamics.Last() == "-") //Если, с учётом динамики, предыдущая пара амплитуд также была убывающей => аппроксимация далее невозможна!
-                                            {
-                                                dataBlockBuffLnr[i + 1] = dataBlockBuffLnr[i];
-                                                approxSuccess = false;
-                                            }
-                                            else //Если аппроксимация адекватна
-                                            {
-                                                dataBlockBuffLnr[i + 1] = (short)(dataBlockBuffLnr[i] / 2);
-                                                aplitudeDynamics.Add("-");
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        lock (buff_decodedData)
-                        {
-                            buff_decodedData.Last()[5] = String.Join(":", dataBlockBuffLnr);
-                            buff_decodedData.Last()[6] = approxSuccess.ToString();
-                        }
-                        if (approxSuccess == true) //Если аппроксимация успешна
-                        {
-                            dataBlockBuff.Clear();
-                            dataBlockBuff.AddRange(dataBlockBuffLnr);
-                            int one = dataBlockBuff.Max(); //Амплитуда единицы                           
-                            for (int i = 0; i < dataBlockBuff.Count; i++) //Парсинг единиц. Запись индексов единиц в список
-                            {
-                                if (dataBlockBuff[i] == one)
-                                    tempOneIndexes.Add(i);
-                                else
-                                {
-                                    int approxEqualPercentOneLevel = (int)(((double)dataBlockBuff[i] / (double)one) * 100); //Сравнение текущей амплитуды с единичной                                    
-                                    if (approxEqualPercentOneLevel >= 90) //Учёт несовпадения значений объективно одинаковых амплитуд
-                                        tempOneIndexes.Add(i);
-                                }
-                            }
-                            tempOneIndexes.Sort(); //Сортировка индексов единиц по возрастанию
-                        }
-                        else //Если аппроксимация не удалась - использовать альтернативный алгоритм кластеризации
-                        {
-                            int aClustMax = dataBlockBuff.Max();
-                            int aClustMin = dataBlockBuff.Min();
-                            int aClustMidLine = (int)(aClustMax - ((aClustMax - aClustMin) / 2));
-                            lock (buff_decodedData) buff_decodedData.Last()[7] = aClustMidLine.ToString();
-                            for (int i = 0; i < dataBlockBuff.Count; i++)
-                            {
-                                if (dataBlockBuff[i] >= aClustMidLine)
-                                    tempOneIndexes.Add(i);
-                            }
-                        }
-                        //Составляем финальную бинарную последовательность, учитывая существующие индексные списки
-                        if (tempOneIndexes.Count == dataBlockBuff.Count) //Учитываем случай односоставного блока данных
-                        {
-                            for (int i = 0; i < dataBlockBuff.Count; i++)
-                                tempBin += "0";
-                        }
-                        else
-                        {
-                            for (int i = 0; i < dataBlockBuff.Count; i++)
-                            {
-                                if (tempOneIndexes.Contains(i))
-                                    tempBin += "1";
-                                else
-                                    tempBin += "0";
-                            }
-                        }
-                        BinaryDecode(tempBin);
-                    }
-                    else
-                        Thread.Sleep(10);
-                    lock (buff_signalAmplitudes) buff_signalAmplitudes.RemoveRange(0, tempSyncIndexes[1] - 1); //Удалить отработанные амплитуды
-                }
-                else
-                {
-                    if (buff_signalAmplitudes.Count > 0) lock (buff_signalAmplitudes) buff_signalAmplitudes.RemoveRange(0, buff_signalAmplitudes.Count - 1);
-                    Thread.Sleep(10);
-                }
-            }
-        }
-
         /// <summary>
         /// 
         /// </summary>
         /// <param name="bin"></param>
         public static void BinaryDecode(string bin)
         {
-            string[] current = buff_decodedData.Last();
-            buff_decodedData.Last()[8] = bin;
+            decodedDataBlock[3] = bin;
             string[] data = null; //Данные
-            bin = bin.Remove(38); //Удаляем бит-маркер
-            data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
-            if (data[1] == "fixed") fixedErrorCount++;
-            if (data[1] == "error") unfixedErrorCount++;
-            buff_decodedData.Last()[9] = data[0];
+            if (bin != null)
+            {
+                bin = bin.Remove(bin.Length - 1);
+                data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
+                if (data[1] == "fixed") fixedErrorCount++;
+                if (data[1] == "error") unfixedErrorCount++;
+                if (data[0] != "") decodedDataBlock[4] = data[0];
+            }
         }
 
         public static void Start()

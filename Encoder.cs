@@ -693,7 +693,7 @@ namespace AudioDataInterface
         {
             //Дописать биты до 32
             for (int i = binL.Length; i < 32; i++) binL += "0";
-            for (int i = binR.Length; i < 32; i++) binR += "0";
+            for (int i = binR.Length; i < 32; i++) binR += "0";     
             string[] dataBlockL = BinaryHandler.HammingEncode(binL); //Массив бит блока данных левого канала
             string[] dataBlockR = BinaryHandler.HammingEncode(binR); //Массив бит блока данных правого канала
             //Перебираем финальную последовательность
@@ -704,7 +704,7 @@ namespace AudioDataInterface
                 if (dataBlockL[i] == "1" && dataBlockR[i] == "0") GenerateStereo10();
                 if (dataBlockL[i] == "0" && dataBlockR[i] == "1") GenerateStereo01();
             }
-            GenerateStereo11(); //Генерируем указатель RAW-блока
+            GenerateStereo11();
             GenerateStereoSync(); //Генерируем синхроимпульс
         }
 
@@ -751,7 +751,7 @@ namespace AudioDataInterface
                 if (dataBlockL[i] == "1" && dataBlockR[i] == "0") GenerateStereo10();
                 if (dataBlockL[i] == "0" && dataBlockR[i] == "1") GenerateStereo01();
             }
-            GenerateStereo00(); //Генерируем указатель Субкод-блока
+            GenerateStereo00();
             GenerateStereoSync(); //Генерируем синхроимпульс
         }
 
@@ -864,7 +864,7 @@ namespace AudioDataInterface
                             byte byteR4 = Convert.ToByte(0);
                             GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
                         }
-                        GenerateSubCodeBlockStereo(255, 0, 0, 0, 255, 255, 255, 255);
+                        GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1);
                         targetDurations.RemoveAt(0);
                         targetBytePositions.RemoveAt(0);
                     }
@@ -880,6 +880,8 @@ namespace AudioDataInterface
             encoder_progress = ProgressHandler.GetPercent(100, 100);
             LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding finished");
             form_encoder.trackNumber++;
+            File.Delete("output.mp3");
+            File.Delete("output2.mp3");
         }
 
         public static void EncodeFileStream()
