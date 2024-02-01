@@ -57,8 +57,8 @@ namespace AudioDataInterface
         public static int audio_signalHeight = 500;                                               //Высота сигнала
         public static bool audio_invertSignal = true;                                          //Инверсия сигнала
         public static double audio_signalGain = 7;
-        public static double audio_signalGainL = 7;
-        public static double audio_signalGainR = 7;
+        public static double audio_signalGainL = 4;
+        public static double audio_signalGainR = 4;
         public static short audio_maxAmplitude = 0;
         public static bool audio_autoSignalGain = true;
         //////////////////////////////////////////////////////////////////////////////////////
@@ -182,31 +182,6 @@ namespace AudioDataInterface
                 buff_signalSamples.Clear();
             }
             catch { }
-        }
-
-        public static void SignalAutoGainControll()
-        {
-            while (true)
-            {
-                if (audio_autoSignalGain == true)
-                {
-                    
-                    if (Decoder.maxAmplitudeL < 15000 && audio_signalGainL < 128) audio_signalGainL += Math.Log10(1 + 5 * audio_signalGainL);
-                    if (Decoder.maxAmplitudeL > 25000 && audio_signalGainL > 1) audio_signalGainL -= Math.Log10(1 + 5 * audio_signalGainL);
-                    if (audio_signalGainL < 1 || audio_signalGainL > 128) audio_signalGainL = 6;
-                    if (Decoder.maxAmplitudeR < 15000 && audio_signalGainR < 128) audio_signalGainR += Math.Log10(1 + 5 * audio_signalGainR);
-                    if (Decoder.maxAmplitudeR > 25000 && audio_signalGainR > 1) audio_signalGainR -= Math.Log10(1 + 5 * audio_signalGainR);
-                    if (audio_signalGainR < 1 || audio_signalGainR > 128) audio_signalGainR = 6;
-                    
-                    /*
-                    audio_signalGainL = Math.Pow((double)Decoder.maxAmplitudeL / 20000.0, -1);
-                    audio_signalGainR = Math.Pow((double)Decoder.maxAmplitudeR / 20000.0, -1);
-                    if (audio_signalGainL < 1 || audio_signalGainL > 128) audio_signalGainL = 7;
-                    if (audio_signalGainR < 1 || audio_signalGainR > 128) audio_signalGainR = 7;
-                    */
-                }
-                Thread.Sleep(50);
-            }
         }
 
         static void Signal_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)

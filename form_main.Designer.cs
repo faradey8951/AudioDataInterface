@@ -91,7 +91,7 @@ namespace AudioDataInterface
             this.panel_base = new System.Windows.Forms.Panel();
             this.panel_dataControl = new System.Windows.Forms.Panel();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
-            this.label_linearizedBlockCount = new System.Windows.Forms.Label();
+            this.label_signalQuality = new System.Windows.Forms.Label();
             this.label_frameSyncErrorCount = new System.Windows.Forms.Label();
             this.label_unfixedErrorCount = new System.Windows.Forms.Label();
             this.label_fixedErrorCount = new System.Windows.Forms.Label();
@@ -127,7 +127,7 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.label_audioBuffer = new System.Windows.Forms.Label();
+            this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.toolStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -418,7 +418,6 @@ namespace AudioDataInterface
             this.pictureBox_disc3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_disc3.TabIndex = 34;
             this.pictureBox_disc3.TabStop = false;
-            this.pictureBox_disc3.Click += new System.EventHandler(this.pictureBox_disc3_Click);
             // 
             // pictureBox_disc2
             // 
@@ -431,20 +430,18 @@ namespace AudioDataInterface
             this.pictureBox_disc2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_disc2.TabIndex = 33;
             this.pictureBox_disc2.TabStop = false;
-            this.pictureBox_disc2.Click += new System.EventHandler(this.pictureBox_disc2_Click);
             // 
             // pictureBox_disc1
             // 
             this.pictureBox_disc1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_disc1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_disc1.Image = global::AudioDataInterface.Properties.Resources.disc1Selected;
+            this.pictureBox_disc1.Image = global::AudioDataInterface.Properties.Resources.disc1Empty;
             this.pictureBox_disc1.Location = new System.Drawing.Point(480, 128);
             this.pictureBox_disc1.Name = "pictureBox_disc1";
             this.pictureBox_disc1.Size = new System.Drawing.Size(48, 40);
             this.pictureBox_disc1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_disc1.TabIndex = 32;
             this.pictureBox_disc1.TabStop = false;
-            this.pictureBox_disc1.Click += new System.EventHandler(this.pictureBox_disc1_Click);
             // 
             // pictureBox_playPause
             // 
@@ -457,7 +454,6 @@ namespace AudioDataInterface
             this.pictureBox_playPause.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_playPause.TabIndex = 31;
             this.pictureBox_playPause.TabStop = false;
-            this.pictureBox_playPause.Click += new System.EventHandler(this.pictureBox_playPause_Click);
             // 
             // pictureBox_symbol10
             // 
@@ -470,7 +466,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol10.TabIndex = 30;
             this.pictureBox_symbol10.TabStop = false;
-            this.pictureBox_symbol10.Click += new System.EventHandler(this.pictureBox_symbol10_Click);
             // 
             // pictureBox_symbol9
             // 
@@ -483,7 +478,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol9.TabIndex = 29;
             this.pictureBox_symbol9.TabStop = false;
-            this.pictureBox_symbol9.Click += new System.EventHandler(this.pictureBox_symbol9_Click);
             // 
             // pictureBox_dots
             // 
@@ -496,7 +490,6 @@ namespace AudioDataInterface
             this.pictureBox_dots.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_dots.TabIndex = 28;
             this.pictureBox_dots.TabStop = false;
-            this.pictureBox_dots.Click += new System.EventHandler(this.pictureBox_dots_Click);
             // 
             // pictureBox_symbol8
             // 
@@ -509,7 +502,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol8.TabIndex = 27;
             this.pictureBox_symbol8.TabStop = false;
-            this.pictureBox_symbol8.Click += new System.EventHandler(this.pictureBox_symbol8_Click);
             // 
             // pictureBox_symbol7
             // 
@@ -521,7 +513,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol7.TabIndex = 26;
             this.pictureBox_symbol7.TabStop = false;
-            this.pictureBox_symbol7.Click += new System.EventHandler(this.pictureBox_symbol7_Click);
             // 
             // pictureBox_symbol6
             // 
@@ -533,7 +524,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol6.TabIndex = 25;
             this.pictureBox_symbol6.TabStop = false;
-            this.pictureBox_symbol6.Click += new System.EventHandler(this.pictureBox_symbol6_Click);
             // 
             // pictureBox_symbol5
             // 
@@ -546,7 +536,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol5.TabIndex = 24;
             this.pictureBox_symbol5.TabStop = false;
-            this.pictureBox_symbol5.Click += new System.EventHandler(this.pictureBox_symbol5_Click);
             // 
             // pictureBox_symbol4
             // 
@@ -559,7 +548,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol4.TabIndex = 23;
             this.pictureBox_symbol4.TabStop = false;
-            this.pictureBox_symbol4.Click += new System.EventHandler(this.pictureBox_symbol4_Click);
             // 
             // pictureBox_symbol3
             // 
@@ -571,7 +559,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol3.TabIndex = 22;
             this.pictureBox_symbol3.TabStop = false;
-            this.pictureBox_symbol3.Click += new System.EventHandler(this.pictureBox_symbol3_Click);
             // 
             // pictureBox_symbol2
             // 
@@ -597,7 +584,6 @@ namespace AudioDataInterface
             this.pictureBox_symbol1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_symbol1.TabIndex = 20;
             this.pictureBox_symbol1.TabStop = false;
-            this.pictureBox_symbol1.Click += new System.EventHandler(this.pictureBox_symbol1_Click);
             // 
             // pictureBox2
             // 
@@ -610,7 +596,6 @@ namespace AudioDataInterface
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 19;
             this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // pictureBox_spectrumBorder1
             // 
@@ -623,7 +608,6 @@ namespace AudioDataInterface
             this.pictureBox_spectrumBorder1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox_spectrumBorder1.TabIndex = 6;
             this.pictureBox_spectrumBorder1.TabStop = false;
-            this.pictureBox_spectrumBorder1.Click += new System.EventHandler(this.pictureBox1_Click);
             // 
             // pictureBox_track12
             // 
@@ -879,8 +863,7 @@ namespace AudioDataInterface
             // 
             this.groupBox_info.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_info.Controls.Add(this.label_audioBuffer);
-            this.groupBox_info.Controls.Add(this.label_linearizedBlockCount);
+            this.groupBox_info.Controls.Add(this.label_signalQuality);
             this.groupBox_info.Controls.Add(this.label_frameSyncErrorCount);
             this.groupBox_info.Controls.Add(this.label_unfixedErrorCount);
             this.groupBox_info.Controls.Add(this.label_fixedErrorCount);
@@ -895,15 +878,15 @@ namespace AudioDataInterface
             this.groupBox_info.TabStop = false;
             this.groupBox_info.Text = "Информация";
             // 
-            // label_linearizedBlockCount
+            // label_signalQuality
             // 
-            this.label_linearizedBlockCount.AutoSize = true;
-            this.label_linearizedBlockCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_linearizedBlockCount.Location = new System.Drawing.Point(3, 107);
-            this.label_linearizedBlockCount.Name = "label_linearizedBlockCount";
-            this.label_linearizedBlockCount.Size = new System.Drawing.Size(134, 13);
-            this.label_linearizedBlockCount.TabIndex = 8;
-            this.label_linearizedBlockCount.Text = "Нормализовано блоков.:";
+            this.label_signalQuality.AutoSize = true;
+            this.label_signalQuality.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_signalQuality.Location = new System.Drawing.Point(3, 107);
+            this.label_signalQuality.Name = "label_signalQuality";
+            this.label_signalQuality.Size = new System.Drawing.Size(101, 13);
+            this.label_signalQuality.TabIndex = 8;
+            this.label_signalQuality.Text = "Качество сигнала:";
             // 
             // label_frameSyncErrorCount
             // 
@@ -1275,15 +1258,11 @@ namespace AudioDataInterface
             this.timer1.Interval = 500;
             this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
             // 
-            // label_audioBuffer
+            // timer_signalQualityUpdater
             // 
-            this.label_audioBuffer.AutoSize = true;
-            this.label_audioBuffer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_audioBuffer.Location = new System.Drawing.Point(3, 120);
-            this.label_audioBuffer.Name = "label_audioBuffer";
-            this.label_audioBuffer.Size = new System.Drawing.Size(104, 13);
-            this.label_audioBuffer.TabIndex = 9;
-            this.label_audioBuffer.Text = "Буфер аудио: 0 сек";
+            this.timer_signalQualityUpdater.Enabled = true;
+            this.timer_signalQualityUpdater.Interval = 50;
+            this.timer_signalQualityUpdater.Tick += new System.EventHandler(this.timer_signalQualityUpdater_Tick);
             // 
             // form_main
             // 
@@ -1452,7 +1431,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label_linearizedBlockCount;
+        private System.Windows.Forms.Label label_signalQuality;
         public System.Windows.Forms.PictureBox pictureBox_runningIndicator;
         private System.Windows.Forms.PictureBox pictureBox_disc3;
         private System.Windows.Forms.PictureBox pictureBox_disc2;
@@ -1468,7 +1447,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_symbol3;
         private System.Windows.Forms.PictureBox pictureBox_symbol2;
         private System.Windows.Forms.PictureBox pictureBox_symbol1;
-        private System.Windows.Forms.Label label_audioBuffer;
+        private System.Windows.Forms.Timer timer_signalQualityUpdater;
     }
 }
 

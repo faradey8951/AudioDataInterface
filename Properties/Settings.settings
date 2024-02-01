@@ -27,7 +27,7 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="mp3BufferSize" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">128</Value>
+      <Value Profile="(Default)">1024</Value>
     </Setting>
     <Setting Name="encoderSampleRate" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">82000</Value>
@@ -42,7 +42,7 @@
       <Value Profile="(Default)">128</Value>
     </Setting>
     <Setting Name="encoderMpsPlayerSubcodeInterval" Type="System.Int32" Scope="User">
-      <Value Profile="(Default)">3</Value>
+      <Value Profile="(Default)">1</Value>
     </Setting>
     <Setting Name="mpsFftSize" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">512</Value>
@@ -52,6 +52,15 @@
     </Setting>
     <Setting Name="mpsSpectrumVescosity" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">25</Value>
+    </Setting>
+    <Setting Name="encoderFfmpeg1Cmd" Type="System.String" Scope="User">
+      <Value Profile="(Default)">-vn -ar 44100 -ac 1 -b:a 64k -map 0:a -map_metadata -1</Value>
+    </Setting>
+    <Setting Name="encoderFfmpeg2Cmd" Type="System.String" Scope="User">
+      <Value Profile="(Default)">-vn -ar 11025 -ac 1 -b:a 16k</Value>
+    </Setting>
+    <Setting Name="encoderFfmpeg2EffectCmd" Type="System.String" Scope="User">
+      <Value Profile="(Default)">equalizer=f=6000:width_type=h:width=1000:g=50</Value>
     </Setting>
   </Settings>
 </SettingsFile>

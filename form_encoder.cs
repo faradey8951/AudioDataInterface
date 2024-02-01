@@ -78,6 +78,7 @@ namespace AudioDataInterface
                 if (Encoder.encoder_ADIFShell == false)
                 {
                     folderBrowserDialog.ShowDialog();
+                    /*
                     if (Path.GetExtension(Encoder.encoder_inputFilePath) == ".jpg")
                     {
                         try
@@ -103,28 +104,42 @@ namespace AudioDataInterface
                         }
                     }
                     else Encoder.encoder_mode = "mp3";
+                    */
                     Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
-
+                    Encoder.encoder_mode = "mp3";
+                    
                     if (File.Exists("output.mp3")) File.Delete("output.mp3");
-                    if (File.Exists("output.mp3")) File.Delete("output2.mp3");
-                    string eqEffectCmd = " -af " + @"""" + "equalizer=f=5000:width_type=h:width=1000:g=20" + @"""";
-                    string firstCmd = "/C ffmpeg -i " + @"""" + Encoder.encoder_inputFilePath + @"""" + " -vn -ar 11025 -ac 1 -b:a 16k -map 0:a -map_metadata -1 output.mp3 && ffmpeg -i output.mp3 -vn -ar 11025 -ac 1 -b:a 16k" + eqEffectCmd + " output2.mp3";
-                    //System.Diagnostics.Process.Start("CMD.exe", firstCmd);
+                    if (File.Exists("output2.mp3")) File.Delete("output2.mp3");
+                    string secondCmd = "ffmpeg -i output.mp3 " + Encoder.encoder_ffmpeg2Cmd + " -af " + @"""" + Encoder.encoder_ffmpeg2EffectCmd + @"""" + " output2.mp3";
+                    string firstCmd = "/C ffmpeg -i " + @"""" + Encoder.encoder_inputFilePath + @"""" + " " + Encoder.encoder_ffmpeg1Cmd + " output.mp3";
                     Process p = new Process();
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.FileName = "cmd.exe";
-                    p.StartInfo.Arguments = firstCmd;
-                    p.StartInfo.CreateNoWindow = true;
+                    if (Encoder.encoder_ffmpeg2EffectCmd != "" && Encoder.encoder_ffmpeg2Cmd != "") p.StartInfo.Arguments = firstCmd + " && " + secondCmd; else p.StartInfo.Arguments = firstCmd;
+                    p.StartInfo.CreateNoWindow = false;
                     p.Start();
                     p.WaitForExit();
-                    if (File.Exists("output.mp3"))
+                    if (File.Exists("output2.mp3"))
                     {
                         Encoder.encoder_inputFilePath = "output2.mp3";
                         if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
+                        if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
                         Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
                         Encoder.thread_encodeFileStream.Start();
                     }
-                    else MessageBox.Show("Не удалось выполнить преобразование указанного файла в формат MP3 16kbps с помощью FFMPEG! Проверьте входной файл", "FFMPEG ERROR");
+                    else
+                    {
+                        if (File.Exists("output.mp3"))
+                        {
+                            Encoder.encoder_inputFilePath = "output.mp3";
+                            if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
+                            if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
+                            Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
+                            Encoder.thread_encodeFileStream.Start();
+                        }
+                        else MessageBox.Show("Не удалось выполнить преобразование указанного файла. Проверьте исходный файл и команды FFMPEG!", "FFMPEG ERROR");
+                    }
+                    
                 }
                 else { }
             }
@@ -179,6 +194,11 @@ namespace AudioDataInterface
         private void trackBar_trackCount_Scroll(object sender, EventArgs e)
         {
             trackCount = trackBar_trackCount.Value;
+        }
+
+        private void checkBox_longLeadIn_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBox_longLeadIn.Checked) Encoder.encoder_longLeadIn = true; else Encoder.encoder_longLeadIn = false;
         }
     }
 }

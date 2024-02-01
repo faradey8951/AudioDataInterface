@@ -6,23 +6,29 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace AudioDataInterface
 {
     public class DataHandler
     {
         public static MemoryStream ms;
+        public static MemoryStream msFile;
         public Mp3FileReader reader = null;
         public static int mp3_buffSize = 0;
-        public string mp3_message = "";
+        public static string mp3_status = "";
         public static List<string[]> mp3Buffer = new List<string[]>();
+        public static long currentErrorPos = 0;
+        bool writeFile = false;
+
+        FileStream fs = null;
 
         long i = 0;
         //Процесс буферизации данных для MP3 плеера
         public void BufferMp3()
         {
             ms = new MemoryStream();
+            msFile = new MemoryStream();
             while (true)
             {
                 mp3Buffer.Clear();
@@ -30,6 +36,7 @@ namespace AudioDataInterface
                 int pos = (int)ms.Position;
                 ms.Position = ms.Length;
                 List<byte> bytes = new List<byte>();
+                List<byte> bytesFile = new List<byte>();
                 int byteCount = mp3_buffSize * 4;
                 lock (Decoder.decodedDataLocker)
                 {
@@ -39,43 +46,55 @@ namespace AudioDataInterface
                 for (int p = 0; p < mp3Buffer.Count; p++)
                 {
                     if (mp3Buffer[p][3][38] == '1')
-                    {
+                    {                        
                         bytes.Add(Convert.ToByte(mp3Buffer[p][4].Substring(0, 8), 2));
                         bytes.Add(Convert.ToByte(mp3Buffer[p][4].Substring(8, 8), 2));
                         bytes.Add(Convert.ToByte(mp3Buffer[p][4].Substring(16, 8), 2));
                         bytes.Add(Convert.ToByte(mp3Buffer[p][4].Substring(24, 8), 2));
+
+                        //if (writeFile == true) msFile.Write(new byte[] { Convert.ToByte(mp3Buffer[p][4].Substring(0, 8), 2), Convert.ToByte(mp3Buffer[p][4].Substring(8, 8), 2), Convert.ToByte(mp3Buffer[p][4].Substring(16, 8), 2), Convert.ToByte(mp3Buffer[p][4].Substring(24, 8), 2) }, 0, 4);
                     }
                     else
                     {
-                        form_main.mpsPlayer_disc1Detected = true;
-                        string subCode = mp3Buffer[p][4]; //Получаем двоичный субкод
-                        byte subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
-                        byte subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
-                        byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
-                        byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
-                        if (subCodeByte1 == 100)
+                        if (form_main.mpsPlayer_disc1Detected == true)
                         {
-                            string sum = Convert.ToString(subCodeByte2, 2).PadLeft(8, '0') + Convert.ToString(subCodeByte3, 2).PadLeft(8, '0') + Convert.ToString(subCodeByte4, 2).PadLeft(8, '0');
-                            string part1 = sum.Substring(0, 12);
-                            string part2 = sum.Substring(12, 12);
-                            int currentTime = Convert.ToInt32(part1, 2);
-                            int duration = Convert.ToInt32(part2, 2);
-                            form_main.mpsPlayer_timeSeconds = currentTime;
-                            form_main.mpsPlayer_timeDurationSeconds = duration;
-                        }
-                        if (subCodeByte1 == 200) //Субкод
-                        {
-                            form_main.mpsPlayer_currentTrackNumber = subCodeByte2;
-                            form_main.mpsPlayer_trackCount = subCodeByte3;
-                        }
-                        if (subCodeByte1 == 50)
-                        {
-                            pos = 0;
-                            ms = new MemoryStream();
-                            Decoder.unfixedErrorCount = 0;
-                            Decoder.fixedErrorCount = 0;
-                            Decoder.frameSyncErrorCount = 0;
-                            Decoder.linearizedBlockCount = 0;
+                            string subCode = mp3Buffer[p][4]; //Получаем двоичный субкод
+                            byte subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
+                            byte subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
+                            byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
+                            byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
+                            if (subCodeByte1 == 100)
+                            {
+                                string sum = Convert.ToString(subCodeByte2, 2).PadLeft(8, '0') + Convert.ToString(subCodeByte3, 2).PadLeft(8, '0') + Convert.ToString(subCodeByte4, 2).PadLeft(8, '0');
+                                string part1 = sum.Substring(0, 12);
+                                string part2 = sum.Substring(12, 12);
+                                int currentTime = Convert.ToInt32(part1, 2);
+                                int duration = Convert.ToInt32(part2, 2);
+                                form_main.mpsPlayer_timeSeconds = currentTime;
+                                form_main.mpsPlayer_timeDurationSeconds = duration;
+                            }
+                            if (subCodeByte1 == 200) //Субкод
+                            {
+                                form_main.mpsPlayer_currentTrackNumber = subCodeByte2;
+                                form_main.mpsPlayer_trackCount = subCodeByte3;
+                            }
+                            if (subCodeByte1 == 50)
+                            {
+                                i = 0;
+                                Decoder.unfixedErrorCount = 0;
+                                Decoder.fixedErrorCount = 0;
+                                Decoder.frameSyncErrorCount = 0;
+                                //writeFile = true;
+                                //msFile = new MemoryStream();
+                            }
+                            if (subCodeByte1 == 60)
+                            {
+                                //writeFile = false;
+                                //fs = new FileStream("test.mp3", FileMode.Create);
+                                //msFile.Position = 0;
+                                //msFile.CopyTo(fs);
+                                //fs.Close();
+                            }
                         }
                     }
                 }
@@ -93,7 +112,6 @@ namespace AudioDataInterface
             t1.Start();
             Thread t2 = new Thread(form_main.class_dataHandler.PlayMp3);
             t2.Start();
-            form_main.window_main.pictureBox_runningIndicator.Image = Properties.Resources.CD_Skip_Transparrent;
         }
 
         //Метод очистки mp3 данных
@@ -116,9 +134,7 @@ namespace AudioDataInterface
                     //Буферизация данных
                     while (ms.Length - ms.Position < mp3_buffSize)
                     {
-                        mp3_message = "MP3 Player: buffering...";
-                        if (form_main.mpsPlayer_mode != "seek") form_main.MpsPlayerRunningIndicatorSeek();
-                        form_main.mpsPlayer_mode = "seek";
+                        mp3_status = "buffering";
                         form_main.mpsPlayer_showTime = false;
                         //AudioIO.audio_autoSignalGain = true;
                         Thread.Sleep(10);
@@ -128,12 +144,10 @@ namespace AudioDataInterface
                     AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioClientShareMode.Shared, true, 50);
                     AudioIO.naudio_wasapiOut.Init(reader);
                     AudioIO.naudio_wasapiOut.Play();
-                    form_main.window_main.pictureBox_runningIndicator.Image = Properties.Resources.CD_Playback_Transparrent;
                     while (AudioIO.naudio_wasapiOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                     {
-                        //AudioIO.audio_autoSignalGain = false;
-                        if (form_main.mpsPlayer_mode != "play") form_main.MpsPlayerRunningIndicatorPlay();
-                        form_main.mpsPlayer_mode = "play";
+                        mp3_status = "playing";
+                        //AudioIO.audio_autoSignalGain = true;
                         form_main.mpsPlayer_showTime = true;
                         currentTime = reader.CurrentTime.Minutes.ToString() + ":" + reader.CurrentTime.Seconds.ToString() + ":" + reader.CurrentTime.Milliseconds.ToString();
                         //Если воспроизведение прервалось
@@ -146,16 +160,14 @@ namespace AudioDataInterface
                         buff_time.Add(currentTime);
                         Thread.Sleep(10);
                     }
-                    if (form_main.mpsPlayer_mode != "") form_main.MpsPlayerRunningIndicatorStop();
-                    form_main.mpsPlayer_mode = "";
                     form_main.mpsPlayer_showTime = true;
                 }
                 catch (Exception ex)
                 {
-                    mp3_message = "MP3 Player: " + ex.Message;
-                    ms = new MemoryStream();
+                    //ms = new MemoryStream();
                     //lock (Decoder.buff_decodedData) Decoder.buff_decodedData.Clear();
-                    Thread.Sleep(10);
+                    //while (ms.Length - ms.Position > 256) Thread.Sleep(10);
+                    //ms.Position += 256;
                 }
             }
         }

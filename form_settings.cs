@@ -66,7 +66,7 @@ namespace AudioDataInterface
         private void trackBar_encodingSampleRate_Scroll(object sender, EventArgs e)
         {
             sampleRate = trackBar_encodingSampleRate.Value;
-            maxBitrate = sampleRate / 8.0;
+            maxBitrate = 2 * sampleRate / 8.0;
             maxBlockrate = maxBitrate / 39.0;
             effectiveBlockRate = maxBitrate / 41.0;
             effectiveBitrate = Math.Round(((effectiveBlockRate * 32.0) / 1000),2);
@@ -107,6 +107,9 @@ namespace AudioDataInterface
             if (spectrumMode == "peakHold") radioButton_peakHoldMode.Checked = true;
             if (spectrumMode == "noPeak") radioButton_noPeakMode.Checked = true;
             if (spectrumMode == "off") radioButton_offMode.Checked = true;
+            textBox_Ffmpeg1Cmd.Text = Encoder.encoder_ffmpeg1Cmd;
+            textBox_Ffmpeg2Cmd.Text = Encoder.encoder_ffmpeg2Cmd;
+            textBox_Ffmpeg2EffectCmd.Text = Encoder.encoder_ffmpeg2EffectCmd;
             form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
         }
 
@@ -122,6 +125,9 @@ namespace AudioDataInterface
             form_main.mpsPlayer_fftSize = trackBar_fftSize.Value;
             form_main.mpsPlayer_spectrumMode = spectrumMode;
             form_main.mpsPlayer_spectrumVescosity = trackBar_spectrumVescosity.Value;
+            Encoder.encoder_ffmpeg1Cmd = textBox_Ffmpeg1Cmd.Text;
+            Encoder.encoder_ffmpeg2Cmd = textBox_Ffmpeg2Cmd.Text;
+            Encoder.encoder_ffmpeg2EffectCmd = textBox_Ffmpeg2EffectCmd.Text;
 
             form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
             form_main.mpsPlayer_liveSpectrum = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };

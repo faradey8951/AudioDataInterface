@@ -68,6 +68,12 @@
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button_save = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox_Ffmpeg1Cmd = new System.Windows.Forms.TextBox();
+            this.textBox_Ffmpeg2Cmd = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_Ffmpeg2EffectCmd = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_mp3BuffSize)).BeginInit();
@@ -202,6 +208,12 @@
             // tabPage3
             // 
             this.tabPage3.AutoScroll = true;
+            this.tabPage3.Controls.Add(this.textBox_Ffmpeg2EffectCmd);
+            this.tabPage3.Controls.Add(this.label3);
+            this.tabPage3.Controls.Add(this.textBox_Ffmpeg2Cmd);
+            this.tabPage3.Controls.Add(this.label2);
+            this.tabPage3.Controls.Add(this.textBox_Ffmpeg1Cmd);
+            this.tabPage3.Controls.Add(this.label1);
             this.tabPage3.Controls.Add(this.label_mpsPlayerSubcodeIntervalValue);
             this.tabPage3.Controls.Add(this.trackBar_mpsPlayerSubcodeInterval);
             this.tabPage3.Controls.Add(this.label_mpsPlayerSubcodeInterval);
@@ -567,6 +579,63 @@
             this.button_save.UseVisualStyleBackColor = true;
             this.button_save.Click += new System.EventHandler(this.button1_Click);
             // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(3, 358);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(559, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Команда FFMPEG кодера 1 проход";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBox_Ffmpeg1Cmd
+            // 
+            this.textBox_Ffmpeg1Cmd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox_Ffmpeg1Cmd.Location = new System.Drawing.Point(3, 371);
+            this.textBox_Ffmpeg1Cmd.Multiline = true;
+            this.textBox_Ffmpeg1Cmd.Name = "textBox_Ffmpeg1Cmd";
+            this.textBox_Ffmpeg1Cmd.Size = new System.Drawing.Size(559, 52);
+            this.textBox_Ffmpeg1Cmd.TabIndex = 19;
+            // 
+            // textBox_Ffmpeg2Cmd
+            // 
+            this.textBox_Ffmpeg2Cmd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox_Ffmpeg2Cmd.Location = new System.Drawing.Point(3, 436);
+            this.textBox_Ffmpeg2Cmd.Multiline = true;
+            this.textBox_Ffmpeg2Cmd.Name = "textBox_Ffmpeg2Cmd";
+            this.textBox_Ffmpeg2Cmd.Size = new System.Drawing.Size(559, 52);
+            this.textBox_Ffmpeg2Cmd.TabIndex = 21;
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Location = new System.Drawing.Point(3, 423);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(559, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Команда FFMPEG кодера 2 проход";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBox_Ffmpeg2EffectCmd
+            // 
+            this.textBox_Ffmpeg2EffectCmd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox_Ffmpeg2EffectCmd.Location = new System.Drawing.Point(3, 501);
+            this.textBox_Ffmpeg2EffectCmd.Multiline = true;
+            this.textBox_Ffmpeg2EffectCmd.Name = "textBox_Ffmpeg2EffectCmd";
+            this.textBox_Ffmpeg2EffectCmd.Size = new System.Drawing.Size(559, 52);
+            this.textBox_Ffmpeg2EffectCmd.TabIndex = 23;
+            // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Location = new System.Drawing.Point(3, 488);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(559, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Команда FFMPEG аудио фильтра 2 проход";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // form_settings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -647,5 +716,11 @@
         private System.Windows.Forms.RadioButton radioButton_offMode;
         private System.Windows.Forms.RadioButton radioButton_noPeakMode;
         private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.TextBox textBox_Ffmpeg1Cmd;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.TextBox textBox_Ffmpeg2Cmd;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox_Ffmpeg2EffectCmd;
+        private System.Windows.Forms.Label label3;
     }
 }

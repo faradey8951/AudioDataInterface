@@ -37,6 +37,7 @@ namespace AudioDataInterface
             this.button_ok = new System.Windows.Forms.Button();
             this.groupBox_file = new System.Windows.Forms.GroupBox();
             this.groupBox_properties = new System.Windows.Forms.GroupBox();
+            this.checkBox_longLeadIn = new System.Windows.Forms.CheckBox();
             this.trackBar_trackCount = new System.Windows.Forms.TrackBar();
             this.label_trackNumber = new System.Windows.Forms.Label();
             this.label_trackCount = new System.Windows.Forms.Label();
@@ -124,6 +125,7 @@ namespace AudioDataInterface
             // 
             // groupBox_properties
             // 
+            this.groupBox_properties.Controls.Add(this.checkBox_longLeadIn);
             this.groupBox_properties.Controls.Add(this.trackBar_trackCount);
             this.groupBox_properties.Controls.Add(this.label_trackNumber);
             this.groupBox_properties.Controls.Add(this.label_trackCount);
@@ -134,6 +136,17 @@ namespace AudioDataInterface
             this.groupBox_properties.TabIndex = 7;
             this.groupBox_properties.TabStop = false;
             this.groupBox_properties.Text = "Настройки";
+            // 
+            // checkBox_longLeadIn
+            // 
+            this.checkBox_longLeadIn.AutoSize = true;
+            this.checkBox_longLeadIn.Location = new System.Drawing.Point(8, 72);
+            this.checkBox_longLeadIn.Name = "checkBox_longLeadIn";
+            this.checkBox_longLeadIn.Size = new System.Drawing.Size(171, 17);
+            this.checkBox_longLeadIn.TabIndex = 6;
+            this.checkBox_longLeadIn.Text = "Длинная входящая дорожка";
+            this.checkBox_longLeadIn.UseVisualStyleBackColor = true;
+            this.checkBox_longLeadIn.CheckedChanged += new System.EventHandler(this.checkBox_longLeadIn_CheckedChanged);
             // 
             // trackBar_trackCount
             // 
@@ -367,5 +380,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.TrackBar trackBar_trackNumber;
         private System.Windows.Forms.RadioButton radioButton_stereo;
         private System.Windows.Forms.RadioButton radioButton_mono;
+        private System.Windows.Forms.CheckBox checkBox_longLeadIn;
     }
 }

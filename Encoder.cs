@@ -40,8 +40,13 @@ namespace AudioDataInterface
         public static double maxSampleDeltaCoefficient = 1.0;
         public static int encoder_silenceSeconds = 0;
         public static int encoder_leadInOutSubcodesAmount = 0;
+        public static int encoder_leadInSubcodesAmount = 0;
         public static int encoder_mpsPlayerSubCodeInterval = 0;
+        public static bool encoder_longLeadIn = false;
         public static string encoder_mode = "";
+        public static string encoder_ffmpeg1Cmd = "-vn -ar 11025 -ac 1 -b:a 16k -map 0:a -map_metadata -1";
+        public static string encoder_ffmpeg2Cmd = "-vn -ar 11025 -ac 1 -b:a 16k";
+        public static string encoder_ffmpeg2EffectCmd = "equalizer=f=5000:width_type=h:width=1000:g=20";
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Потоки
@@ -785,7 +790,7 @@ namespace AudioDataInterface
             fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
             GenerateVoid(encoder_silenceSeconds); //Генерация тишины 2 сек.
             GenerateStereoSync(); //Генерация синхроимпульса       
-            for (int i = 0; i < encoder_leadInOutSubcodesAmount; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
+            for (int i = 0; i < encoder_leadInSubcodesAmount; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
             //Преобразование данных в бинарный код
             for (int i = 0, k = 0; i < fs_input.Length;)
             {
@@ -870,7 +875,7 @@ namespace AudioDataInterface
                     }
                 }
             }
-            for (int i = 0; i < encoder_leadInOutSubcodesAmount; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
+            for (int i = 0; i < encoder_leadInOutSubcodesAmount; i++) GenerateSubCodeBlockStereo(60, 60, 60, 60, 60, 60, 60, 60);
             fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
             WriteHeader(fs_output, encoder_sampleRate, 2);
             fs_output.Close();
@@ -880,8 +885,6 @@ namespace AudioDataInterface
             encoder_progress = ProgressHandler.GetPercent(100, 100);
             LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding finished");
             form_encoder.trackNumber++;
-            File.Delete("output.mp3");
-            File.Delete("output2.mp3");
         }
 
         public static void EncodeFileStream()

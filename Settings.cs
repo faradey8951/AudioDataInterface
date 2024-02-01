@@ -33,6 +33,9 @@ namespace AudioDataInterface
             Properties.Settings.Default.mpsFftSize = form_main.mpsPlayer_fftSize;
             Properties.Settings.Default.mpsSpectrumMode = form_main.mpsPlayer_spectrumMode;
             Properties.Settings.Default.mpsSpectrumVescosity = form_main.mpsPlayer_spectrumVescosity;
+            Properties.Settings.Default.encoderFfmpeg1Cmd = Encoder.encoder_ffmpeg1Cmd;
+            Properties.Settings.Default.encoderFfmpeg2Cmd = Encoder.encoder_ffmpeg2Cmd;
+            Properties.Settings.Default.encoderFfmpeg2EffectCmd = Encoder.encoder_ffmpeg2EffectCmd;
             Properties.Settings.Default.Save();
         }
 
@@ -61,6 +64,9 @@ namespace AudioDataInterface
                 form_main.mpsPlayer_fftSize = Properties.Settings.Default.mpsFftSize;
                 form_main.mpsPlayer_spectrumMode = Properties.Settings.Default.mpsSpectrumMode;
                 form_main.mpsPlayer_spectrumVescosity = Properties.Settings.Default.mpsSpectrumVescosity;
+                Encoder.encoder_ffmpeg1Cmd = Properties.Settings.Default.encoderFfmpeg1Cmd;
+                Encoder.encoder_ffmpeg2Cmd = Properties.Settings.Default.encoderFfmpeg2Cmd;
+                Encoder.encoder_ffmpeg2EffectCmd = Properties.Settings.Default.encoderFfmpeg2EffectCmd;
 
                 form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;            
             }
