@@ -27,6 +27,7 @@ namespace AudioDataInterface
         public static DataHandler class_dataHandler = new DataHandler();
         public static form_debug window_debug = new form_debug();
         public static form_encoder window_encoder = new form_encoder();
+        public static form_tapeRecordingWizard window_tapeRecordingWizard = new form_tapeRecordingWizard();
         public static form_logMonitor window_logMonitor = new form_logMonitor();
         public static form_settings window_settings = new form_settings();
         //////////////////////////////////////////////////////////////////////////////////////
@@ -930,7 +931,7 @@ namespace AudioDataInterface
             if (Decoder.signalQuality < 0) this.Name = "";
             Decoder.overallErrorCount = 0;
             Decoder.overallBlockCount = 0;
-            if (Decoder.signalQuality >= 70)
+            if (Decoder.signalQuality >= 50)
             {
                 if (form_main.mpsPlayer_mode != "play") { MpsPlayerRunningIndicatorPlay(); Decoder.fixedErrorCount = 0; Decoder.frameSyncErrorCount = 0; Decoder.unfixedErrorCount = 0; }
                 form_main.mpsPlayer_mode = "play";
@@ -945,6 +946,36 @@ namespace AudioDataInterface
                 Decoder.frameSyncErrorCount = 0;
                 Decoder.unfixedErrorCount = 0;
             }
+        }
+
+        private void настройкиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_settings != null)
+            {
+                window_settings.Dispose();
+                window_settings = new form_settings();
+            }
+            window_settings.ShowDialog();
+        }
+
+        private void кодироватьВФайлToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_encoder != null)
+            {
+                window_encoder.Dispose();
+                window_encoder = new form_encoder();
+            }
+            window_encoder.ShowDialog();
+        }
+
+        private void мастерЗаписиНаЛентуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_tapeRecordingWizard != null)
+            {
+                window_tapeRecordingWizard.Dispose();
+                window_tapeRecordingWizard = new form_tapeRecordingWizard();
+            }
+            window_tapeRecordingWizard.ShowDialog();
         }
     }
 }

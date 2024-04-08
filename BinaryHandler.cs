@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Security.Cryptography;
 using System.Windows.Forms;
+using System.IO;
 
 namespace AudioDataInterface
 {
@@ -20,6 +21,13 @@ namespace AudioDataInterface
             var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
 
             return Convert.ToBase64String(hash);
+        }
+
+        public static string GetFileHash(string filePath)
+        {
+            var md5 = MD5.Create();
+            var stream = File.OpenRead(filePath);
+            return Encoding.Default.GetString(md5.ComputeHash(stream));
         }
 
         /// <summary>

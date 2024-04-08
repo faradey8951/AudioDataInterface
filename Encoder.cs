@@ -36,8 +36,8 @@ namespace AudioDataInterface
         public static bool encoder_forceStop = false; //Принудительная остановка конвертации
         public static int encoder_samplesPerBit = 8; //Кол-во аудиосэмплов, описывающих один бит информации в аудиопотоке
         public static int encoder_progress = 0; //Прогресс конвертации [%]
-        public static double minSampleDeltaCoefficient = 0.5;
-        public static double maxSampleDeltaCoefficient = 1.0;
+        public static double minSampleDeltaCoefficient = 0.4;
+        public static double maxSampleDeltaCoefficient = 0.9;
         public static int encoder_silenceSeconds = 0;
         public static int encoder_leadInOutSubcodesAmount = 0;
         public static int encoder_leadInSubcodesAmount = 0;

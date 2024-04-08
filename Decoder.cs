@@ -240,8 +240,6 @@ namespace AudioDataInterface
                         sync = false;
                     }
                 }
-
-
                 if (sync == true) //Если синхронизация обнаружена
                 {
                     lock (decodedDataLocker) if (buff_decodedData.Count > 0) lastDecodedDataBlock = buff_decodedData.Last();
@@ -310,7 +308,7 @@ namespace AudioDataInterface
                         double b2 = ((ASumm * iSquareSumm) - (iSumm * AiSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
                         for (int p = 0; p < median.Length; p++) median[p] = Math.Round((k1 * (p + 1)) + b1);
                         for (int p = 0; p < trend.Length; p++) trend[p] = Math.Round((k2 * (p + 1)) + b2);
-                        for (int p = 0; p < mid.Length; p++) mid[p] = Math.Round((median[p] + trend[p])/2.0);
+                        for (int p = 0; p < mid.Length; p++) mid[p] = Math.Round((median[p] + trend[p]) / 2.0);
 
                         for (int p = 1; p <= derivative.Length; p++)
                         {
@@ -371,7 +369,7 @@ namespace AudioDataInterface
 
                         decodedDataBlock[2] = String.Join(":", dataBlockBuff);
                         BinaryDecode(tempBin);
-                        if (decodedDataBlock[3] != null)
+                        if (decodedDataBlock[3] != null && decodedDataBlock[4] != null)
                         {
                             //Контроль канальной синхронизации
                             bool channelSyncSucc = true;
@@ -410,14 +408,12 @@ namespace AudioDataInterface
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
-                                lock (decodedDataLocker) buff_decodedData.Clear();
+                                //lock (decodedDataLocker) buff_decodedData.Clear();
                                 //DataHandler.ms = new System.IO.MemoryStream();
                             }
                             if (channelSyncSucc == true) lock (decodedDataLocker) buff_decodedData.Add(decodedDataBlock);
                         }
                     }
-                    else
-                        Thread.Sleep(10);
                     try
                     {
                         if (buff_signalAmplitudesL != null && buff_signalAmplitudesR != null && buff_signalAmplitudesL.Count > 0 && buff_signalAmplitudesR.Count > 0)
@@ -504,7 +500,7 @@ namespace AudioDataInterface
                 bin = bin.Remove(bin.Length - 1);
                 data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
                 if (data[1] == "fixed") { fixedErrorCount++; overallErrorCount++; }
-                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; }
+                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; }
                 if (data[0] != "") decodedDataBlock[4] = data[0];
             }
         }

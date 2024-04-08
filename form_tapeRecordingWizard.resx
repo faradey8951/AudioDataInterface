@@ -117,60 +117,13 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="menuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 17</value>
   </metadata>
-  <metadata name="statusStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>230, 17</value>
+  <metadata name="openFileDialog.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>126, 17</value>
   </metadata>
-  <metadata name="contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>339, 17</value>
-  </metadata>
-  <metadata name="timer_controlHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>488, 17</value>
-  </metadata>
-  <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-  <data name="pictureBox_dots.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
-    <value>
-        iVBORw0KGgoAAAANSUhEUgAAABkAAAGbCAYAAAAx5jsEAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAL
-        DAAACwwBP0AiyAAAAyBJREFUeF7t2zFKwFAQRdHsf0F2ru0LAUXkNgMnKWSK09zAf+00uc45j8uoZdQy
-        ahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQy
-        ahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQy
-        ahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQy
-        ahm1jFpGLaN2fZzPbwf7efupgd/ukfogvTJydmRkR0Z2ZGRHRnZkZEdG3hh575B4cuh+Py8+LaOWUcuo
-        ZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuo
-        ZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuo
-        ZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuo
-        ZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuo
-        ZdQyahm1jFpGLaOWUcuoZdQyahm1jFpGLaOWUcuoZdQyahm1jFpG7Z0/mP/EJ/yfkf3Tf2ZHRnZkZEdG
-        dmRkR0beGHnvkHhy6H4/Lz4to5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWM
-        WkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWM
-        WkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWM
-        WkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWM1rm+AHJrFz0pjj+gAAAAAElFTkSuQmCC
-</value>
-  </data>
-  <metadata name="timer_drawWaveGraphFrame.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>651, 17</value>
-  </metadata>
-  <metadata name="timer_mpsPlayerHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>864, 17</value>
-  </metadata>
-  <metadata name="timer_mpsPlayerSpectrumHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1052, 17</value>
-  </metadata>
-  <metadata name="timer_mpsPlayerSpectrumUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1285, 17</value>
-  </metadata>
-  <metadata name="timer_mpsPlayerTimeUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 36</value>
-  </metadata>
-  <metadata name="timer1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>229, 36</value>
-  </metadata>
-  <metadata name="timer_signalQualityUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>316, 36</value>
-  </metadata>
-  <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>58</value>
+  <metadata name="timer.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>259, 17</value>
   </metadata>
 </root>
