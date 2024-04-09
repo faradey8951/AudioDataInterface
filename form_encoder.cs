@@ -26,7 +26,7 @@ namespace AudioDataInterface
         private void timer_controlHandler_Tick(object sender, EventArgs e)
         {
             //Доступность и видимость контролов
-            if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStream) == "Running")
+            if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream) == "Running")
             {
                 button_clear.Enabled = false;
                 button_convert.Enabled = false;
@@ -124,8 +124,8 @@ namespace AudioDataInterface
                         Encoder.encoder_inputFilePath = "output2.mp3";
                         if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
                         if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
-                        Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
-                        Encoder.thread_encodeFileStream.Start();
+                        Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
+                        Encoder.thread_encodeFileStereoStream.Start();
                     }
                     else
                     {
@@ -134,8 +134,8 @@ namespace AudioDataInterface
                             Encoder.encoder_inputFilePath = "output.mp3";
                             if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
                             if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
-                            Encoder.thread_encodeFileStream = new Thread(Encoder.EncodeFileStereoStream);
-                            Encoder.thread_encodeFileStream.Start();
+                            Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
+                            Encoder.thread_encodeFileStereoStream.Start();
                         }
                         else MessageBox.Show("Не удалось выполнить преобразование указанного файла. Проверьте исходный файл и команды FFMPEG!", "FFMPEG ERROR");
                     }
@@ -171,7 +171,7 @@ namespace AudioDataInterface
 
         private void button_ok_Click(object sender, EventArgs e)
         {
-            if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStream) == "Running")
+            if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream) == "Running")
                 Encoder.encoder_forceStop = true;
         }
 

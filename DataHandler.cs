@@ -14,18 +14,20 @@ namespace AudioDataInterface
     {
         public static MemoryStream ms;
         public static MemoryStream msFile;
-        public Mp3FileReader reader = null;
+        public static Mp3FileReader reader = null;
         public static int mp3_buffSize = 0;
         public static string mp3_status = "";
         public static List<string[]> mp3Buffer = new List<string[]>();
         public static long currentErrorPos = 0;
         bool writeFile = false;
+        public static Thread thread_bufferMp3;
+        public static Thread thread_playMp3;
 
         FileStream fs = null;
 
-        long i = 0;
+        static long i = 0;
         //Процесс буферизации данных для MP3 плеера
-        public void BufferMp3()
+        public static void BufferMp3()
         {
             ms = new MemoryStream();
             msFile = new MemoryStream();
@@ -108,10 +110,16 @@ namespace AudioDataInterface
 
         public static void StartMp3Listening()
         {
-            Thread t1 = new Thread(form_main.class_dataHandler.BufferMp3);
-            t1.Start();
-            Thread t2 = new Thread(form_main.class_dataHandler.PlayMp3);
-            t2.Start();
+            thread_bufferMp3 = new Thread(BufferMp3);
+            thread_bufferMp3.Start();
+            thread_playMp3 = new Thread(PlayMp3);
+            thread_playMp3.Start();
+        }
+
+        public static void StopMp3Listening()
+        {
+            if (thread_bufferMp3 != null) thread_bufferMp3.Abort();
+            if (thread_playMp3 != null) thread_playMp3.Abort();
         }
 
         //Метод очистки mp3 данных
@@ -122,7 +130,7 @@ namespace AudioDataInterface
         }
 
         //Процесс воспроизведения MP3
-        public void PlayMp3()
+        public static void PlayMp3()
         {
             List<string> buff_time = new List<string>(); //Буфер текущего времени воспроизведения
             string currentTime = "0"; //Текущее время воспроизведения

@@ -179,7 +179,7 @@ namespace AudioDataInterface
             {
                 if (naudio_signalWaveIn != null)
                     naudio_signalWaveIn.Dispose();
-                buff_signalSamples.Clear();
+                //buff_signalSamples.Clear();
             }
             catch { }
         }

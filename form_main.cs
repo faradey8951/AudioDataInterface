@@ -41,6 +41,10 @@ namespace AudioDataInterface
         static Bitmap bitmap_waveGraph = null;
         static Graphics graphics_mpsPlayerInterface = null;
         static Bitmap bitmap_mpsPlayerInterface = null;
+
+        Bitmap[] symbolImages = { Properties.Resources._0symbol, Properties.Resources._1symbol, Properties.Resources._2symbol, Properties.Resources._3symbol, Properties.Resources._4symbol, Properties.Resources._5symbol, Properties.Resources._6symbol, Properties.Resources._7symbol, Properties.Resources._8symbol, Properties.Resources._9symbol };
+        PictureBox[] pictureBox_timeSymbols;
+        PictureBox[] pictureBox_trackNumberSymbols;
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Настройка осциллографа
@@ -72,8 +76,6 @@ namespace AudioDataInterface
         public static int[] mpsPlayer_time = { 0, 0, 0, 0 }; //Массив таймера воспроизведения
         public static int mpsPlayer_timeSeconds = 0; //Текущее время воспроизведения, выраженное в секундах
         public static int mpsPlayer_timeDurationSeconds = 0; //Длительность дорожки в секундах
-        int mpsPlayer_timeUpdateDelay = 10; //Задержка обновления времени воспроизведения на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 50
-        int mpsPlayer_timeUpdateCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
         public static int mpsPlayer_currentTrackNumber = -1; //Номер текущего проигрываемой дорожки
         public static int mpsPlayer_lastTrackNumber = -1; //Номер последней проигрываемой дорожки
         public static int mpsPlayer_trackCount = 16; //Количество дорожен
@@ -103,6 +105,9 @@ namespace AudioDataInterface
             //PropertyInfo propertyInfo = type.GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance);
             //propertyInfo.SetValue(listView, true, null);
             decodedData = new string[10];
+            pictureBox_timeSymbols = new PictureBox[] { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
+            pictureBox_trackNumberSymbols = new PictureBox[] { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
+            window_main.pictureBox_dots.Image = Properties.Resources.DOTS;
         }
 
         /// <summary>
@@ -380,7 +385,6 @@ namespace AudioDataInterface
                 Settings.Load();
             }
             AudioIO.GraphCaptureInit();
-            Decoder.Start();
             MpsPlayerRunningIndicatorStop();         
         }
 
@@ -417,8 +421,6 @@ namespace AudioDataInterface
 
         private void timer_controlHandler_Tick(object sender, EventArgs e)
         {
-            //Анимация запуска
-            if (this.Opacity < 100) this.Opacity += 0.04;
             label_signalGainL.Text = "Усиление ЛК: " + Math.Round(AudioIO.audio_signalGainL, 2).ToString();
             label_signalGainR.Text = "Усиление ПК: " + Math.Round(AudioIO.audio_signalGainR, 2).ToString();
             label_fixedErrorCount.Text = "Исправлено: " + Decoder.fixedErrorCount.ToString();
@@ -497,7 +499,7 @@ namespace AudioDataInterface
         {
             AudioIO.audio_recDeviceId = comboBox_recDevices.SelectedIndex;
             AudioIO.GraphCaptureInit();
-            AudioIO.SignalCaptureInit();
+            if (Decoder.decoderActive) AudioIO.SignalCaptureInit();
         }
 
         private void form_main_SizeChanged(object sender, EventArgs e)
@@ -560,14 +562,22 @@ namespace AudioDataInterface
 
         private void button_buffMp3_Click(object sender, EventArgs e)
         {
-            AudioIO.SignalCaptureInit();
-
-            mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
-            DataHandler.StartMp3Listening();
-            AudioIO.MPSAudioOutputCaptureInit();
-            //DrawMPSPlayerInterface();
-            MpsPlayerTrackCalendarSetAmount(16);
-            MpsPlayerTrackCalendarSetCurrentTrack(1);
+            if (!Decoder.decoderActive)
+            {
+                Decoder.decoderActive = true;
+                Decoder.Start();
+                AudioIO.SignalCaptureInit();
+                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
+                DataHandler.StartMp3Listening();
+                AudioIO.MPSAudioOutputCaptureInit();
+                timer_mpsPlayerHandler.Enabled = true;
+                timer_mpsPlayerSpectrumHandler.Enabled = true;
+                timer_mpsPlayerSpectrumUpdater.Enabled = true;
+                timer_mpsPlayerTimeUpdater.Enabled = true;
+                timer_signalQualityUpdater.Enabled = true;
+                MpsPlayerTrackCalendarSetAmount(16);
+                MpsPlayerTrackCalendarSetCurrentTrack(1);
+            }
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -611,6 +621,7 @@ namespace AudioDataInterface
 
         public static void MpsPlayerRunningIndicatorStop()
         {
+            mpsPlayer_mode = "stop";
             window_main.pictureBox_runningIndicator.Image = Properties.Resources.Running_Indicator;
             window_main.pictureBox_playPause.Image = null;
         }
@@ -645,105 +656,96 @@ namespace AudioDataInterface
 
         private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
         {
-            if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();           
-            mpsPlayer_timeUpdateCount++;
-            if (mpsPlayer_timeUpdateCount == mpsPlayer_timeUpdateDelay)
-            {               
-                window_main.pictureBox_dots.Image = Properties.Resources.DOTS;
-                Bitmap[] symbolImages = { Properties.Resources._0symbol, Properties.Resources._1symbol, Properties.Resources._2symbol, Properties.Resources._3symbol, Properties.Resources._4symbol, Properties.Resources._5symbol, Properties.Resources._6symbol, Properties.Resources._7symbol, Properties.Resources._8symbol, Properties.Resources._9symbol };
-                PictureBox[] pictureBox_timeSymbols = { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
-                PictureBox[] pictureBox_trackNumberSymbols = { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
-                mpsPlayer_timeUpdateCount = 0;
-                if (mpsPlayer_tapeSkin == false)
+            if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();          
+            if (mpsPlayer_tapeSkin == false)
+            {
+                pictureBox_playPause.Visible = true;
+                pictureBox_symbol1.Image = Properties.Resources.Msymbol;
+                pictureBox_symbol2.Image = Properties.Resources.Psymbol;
+                pictureBox_symbol3.Image = null;
+                pictureBox_symbol4.Image = Properties.Resources.DASHsymbol;
+                pictureBox_symbol5.Image = Properties.Resources.DASHsymbol;
+                pictureBox_symbol7.Image = null;
+                pictureBox_dots.Visible = true;
+                pictureBox_disc1.Visible = true;
+                pictureBox_disc2.Visible = true;
+                pictureBox_disc3.Visible = true;
+                pictureBox_cassette.Image = null;
+                //Отображение текущего времени воспроизведения
+                if (mpsPlayer_remainingTime == false)
                 {
-                    pictureBox_playPause.Visible = true;
-                    pictureBox_symbol1.Image = Properties.Resources.Msymbol;
-                    pictureBox_symbol2.Image = Properties.Resources.Psymbol;
-                    pictureBox_symbol3.Image = null;
-                    pictureBox_symbol4.Image = Properties.Resources.DASHsymbol;
-                    pictureBox_symbol5.Image = Properties.Resources.DASHsymbol;
+                    pictureBox_symbol6.Image = null;
                     pictureBox_symbol7.Image = null;
-                    pictureBox_dots.Visible = true;
-                    pictureBox_disc1.Visible = true;
-                    pictureBox_disc2.Visible = true;
-                    pictureBox_disc3.Visible = true;
-                    pictureBox_cassette.Image = null;
-                    //Отображение текущего времени воспроизведения
-                    if (mpsPlayer_remainingTime == false)
-                    {
-                        pictureBox_symbol6.Image = null;
-                        pictureBox_symbol7.Image = null;
-                        mpsPlayer_time = Decoder.GetTimeFromSeconds(mpsPlayer_timeSeconds);
-                    }
-                    else
-                    {
-                        if (mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds >= 600) pictureBox_symbol6.Image = Properties.Resources.DASHsymbol;
-                        else
-                        {
-                            pictureBox_symbol6.Image = null;
-                            pictureBox_symbol7.Image = Properties.Resources.DASHsymbol;
-                        }
-                        mpsPlayer_time = Decoder.GetTimeFromSeconds(mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds);
-                    }
-                    if (mpsPlayer_showTime == true)
-                    {
-                        for (int i = 0; i < mpsPlayer_time.Length; i++) if (mpsPlayer_time[i] != 0 || i > 0) pictureBox_timeSymbols[i].Image = symbolImages[mpsPlayer_time[i]];
-                    }
-                    else
-                    {
-                        pictureBox_symbol7.Image = null;
-                        window_main.pictureBox_dots.Image = null;
-                        for (int k = 0; k < pictureBox_timeSymbols.Length; k++) pictureBox_timeSymbols[k].Image = null;
-                    }
-                    MpsPlayerTrackCalendarSetAmount(mpsPlayer_trackCount);
-                    MpsPlayerTrackCalendarSetCurrentTrack(mpsPlayer_currentTrackNumber);
-                    //Отображение текущей проигрываемой дорожки
-                    string currentTrackNumber = "";
-                    if (mpsPlayer_currentTrackNumber != -1 && mpsPlayer_currentTrackNumber <= 99)
-                    {
-                        if (mpsPlayer_currentTrackNumber < 10) currentTrackNumber += "0";
-                        currentTrackNumber += mpsPlayer_currentTrackNumber.ToString();
-                        for (int i = 0; i < currentTrackNumber.Length; i++) pictureBox_trackNumberSymbols[i].Image = symbolImages[Convert.ToInt16(currentTrackNumber[i].ToString())];
-                    }
-                    else
-                    {
-                        pictureBox_trackNumberSymbols[0].Image = Properties.Resources.DASHsymbol;
-                        pictureBox_trackNumberSymbols[1].Image = Properties.Resources.DASHsymbol;
-                    }
-                    if (mpsPlayer_disc1Detected == true) pictureBox_disc1.Image = Properties.Resources.disc1Detected;
-                    else pictureBox_disc1.Image = Properties.Resources.disc1Selected;
+                    mpsPlayer_time = Decoder.GetTimeFromSeconds(mpsPlayer_timeSeconds);
                 }
                 else
                 {
-                    MpsPlayerTrackCalendarSetAmount(0);
-                    pictureBox_playPause.Visible = false;
-                    pictureBox_symbol1.Image = Properties.Resources.Tsymbol;
-                    pictureBox_symbol2.Image = Properties.Resources.Asymbol;
-                    pictureBox_symbol3.Image = Properties.Resources.Psymbol;
-                    pictureBox_symbol4.Image = Properties.Resources.Esymbol;
-                    pictureBox_symbol5.Image = null;
-                    pictureBox_symbol7.Image = Properties.Resources._0symbol;
-                    pictureBox_dots.Visible = false;
-                    pictureBox_disc1.Visible = false;
-                    pictureBox_disc2.Visible = false;
-                    pictureBox_disc3.Visible = false;
-                    if (mpsPlayer_disc1Detected == true) pictureBox_cassette.Image = Properties.Resources.cassette;
-                    else pictureBox_cassette.Image = null;
-                    mpsPlayer_time = new int[4];
-                    int currentTapeTime = 0;
-                    if (mpsPlayer_remainingTime == false) currentTapeTime = mpsPlayer_timeSeconds;
-                    else currentTapeTime = mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds;
-                    if (currentTapeTime < 0) currentTapeTime = 0;
-                    for (int i = 3, k = currentTapeTime.ToString().Length - 1; i >= 0; i--)
+                    if (mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds >= 600) pictureBox_symbol6.Image = Properties.Resources.DASHsymbol;
+                    else
                     {
-                        if (k >= 0)
-                        {
-                            mpsPlayer_time[i] = Convert.ToInt16(currentTapeTime.ToString()[k].ToString());
-                            k--;
-                        }
+                        pictureBox_symbol6.Image = null;
+                        pictureBox_symbol7.Image = Properties.Resources.DASHsymbol;
                     }
+                    mpsPlayer_time = Decoder.GetTimeFromSeconds(mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds);
+                }
+                if (mpsPlayer_showTime == true)
+                {
                     for (int i = 0; i < mpsPlayer_time.Length; i++) if (mpsPlayer_time[i] != 0 || i > 0) pictureBox_timeSymbols[i].Image = symbolImages[mpsPlayer_time[i]];
                 }
+                else
+                {
+                    pictureBox_symbol7.Image = null;
+                    window_main.pictureBox_dots.Image = null;
+                    for (int k = 0; k < pictureBox_timeSymbols.Length; k++) pictureBox_timeSymbols[k].Image = null;
+                }
+                MpsPlayerTrackCalendarSetAmount(mpsPlayer_trackCount);
+                MpsPlayerTrackCalendarSetCurrentTrack(mpsPlayer_currentTrackNumber);
+                //Отображение текущей проигрываемой дорожки
+                string currentTrackNumber = "";
+                if (mpsPlayer_currentTrackNumber != -1 && mpsPlayer_currentTrackNumber <= 99)
+                {
+                    if (mpsPlayer_currentTrackNumber < 10) currentTrackNumber += "0";
+                    currentTrackNumber += mpsPlayer_currentTrackNumber.ToString();
+                    for (int i = 0; i < currentTrackNumber.Length; i++) pictureBox_trackNumberSymbols[i].Image = symbolImages[Convert.ToInt16(currentTrackNumber[i].ToString())];
+                }
+                else
+                {
+                    pictureBox_trackNumberSymbols[0].Image = Properties.Resources.DASHsymbol;
+                    pictureBox_trackNumberSymbols[1].Image = Properties.Resources.DASHsymbol;
+                }
+                if (mpsPlayer_disc1Detected == true) pictureBox_disc1.Image = Properties.Resources.disc1Detected;
+                else pictureBox_disc1.Image = Properties.Resources.disc1Selected;
+            }
+            else
+            {
+                MpsPlayerTrackCalendarSetAmount(0);
+                pictureBox_playPause.Visible = false;
+                pictureBox_symbol1.Image = Properties.Resources.Tsymbol;
+                pictureBox_symbol2.Image = Properties.Resources.Asymbol;
+                pictureBox_symbol3.Image = Properties.Resources.Psymbol;
+                pictureBox_symbol4.Image = Properties.Resources.Esymbol;
+                pictureBox_symbol5.Image = null;
+                pictureBox_symbol7.Image = Properties.Resources._0symbol;
+                pictureBox_dots.Visible = false;
+                pictureBox_disc1.Visible = false;
+                pictureBox_disc2.Visible = false;
+                pictureBox_disc3.Visible = false;
+                if (mpsPlayer_disc1Detected == true) pictureBox_cassette.Image = Properties.Resources.cassette;
+                else pictureBox_cassette.Image = null;
+                mpsPlayer_time = new int[4];
+                int currentTapeTime = 0;
+                if (mpsPlayer_remainingTime == false) currentTapeTime = mpsPlayer_timeSeconds;
+                else currentTapeTime = mpsPlayer_timeDurationSeconds - mpsPlayer_timeSeconds;
+                if (currentTapeTime < 0) currentTapeTime = 0;
+                for (int i = 3, k = currentTapeTime.ToString().Length - 1; i >= 0; i--)
+                {
+                    if (k >= 0)
+                    {
+                        mpsPlayer_time[i] = Convert.ToInt16(currentTapeTime.ToString()[k].ToString());
+                        k--;
+                    }
+                }
+                for (int i = 0; i < mpsPlayer_time.Length; i++) if (mpsPlayer_time[i] != 0 || i > 0) pictureBox_timeSymbols[i].Image = symbolImages[mpsPlayer_time[i]];
             }
         }
 
@@ -886,18 +888,21 @@ namespace AudioDataInterface
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            try
-            {
-                string[] test = BinaryHandler.HammingDecode("110000010000111111111000000001101111110");
-                string[] test2 = BinaryHandler.HammingEncode("11111111111111111111111111111111");
-                string test3 = "";
-                foreach (string s in test2) test3 += s;
-                groupBox_info.BackgroundImage = Image.FromStream(DataHandler.ms);
-            }
-            catch (Exception ex)
-            {
-                this.Text = ex.Message;
-            }
+            Decoder.decoderActive = false;
+            Decoder.Stop();
+            AudioIO.SignalCaptureClose();
+            DataHandler.StopMp3Listening();
+            MpsPlayerRunningIndicatorStop();
+            mpsPlayer_currentTrackNumber = -1;
+            mpsPlayer_trackCount = 16;
+            mpsPlayer_timeSeconds = 0;
+            MpsPlayerTrackCalendarSetAmount(16);
+            MpsPlayerTrackCalendarSetCurrentTrack(0);
+            timer_mpsPlayerHandler.Enabled = false;
+            timer_mpsPlayerSpectrumHandler.Enabled = false;
+            timer_mpsPlayerSpectrumUpdater.Enabled = false;
+            timer_mpsPlayerTimeUpdater.Enabled = false;
+            timer_signalQualityUpdater.Enabled = false;
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -976,6 +981,16 @@ namespace AudioDataInterface
                 window_tapeRecordingWizard = new form_tapeRecordingWizard();
             }
             window_tapeRecordingWizard.ShowDialog();
+        }
+
+        private void отладкаToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_debug != null)
+            {
+                window_debug.Dispose();
+                window_debug = new form_debug();
+            }
+            window_debug.Show();
         }
     }
 }

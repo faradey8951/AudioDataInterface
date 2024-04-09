@@ -37,6 +37,8 @@ namespace AudioDataInterface
             this.кодироватьВФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.отладкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -100,7 +102,6 @@ namespace AudioDataInterface
             this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button_buffMp3 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
@@ -122,7 +123,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
@@ -215,7 +215,9 @@ namespace AudioDataInterface
             // правкаToolStripMenuItem
             // 
             this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.настройкиToolStripMenuItem});
+            this.настройкиToolStripMenuItem,
+            this.toolStripSeparator1,
+            this.отладкаToolStripMenuItem});
             this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
             this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.правкаToolStripMenuItem.Text = "Правка";
@@ -226,6 +228,18 @@ namespace AudioDataInterface
             this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator1
+            // 
+            this.toolStripSeparator1.Name = "toolStripSeparator1";
+            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
+            // 
+            // отладкаToolStripMenuItem
+            // 
+            this.отладкаToolStripMenuItem.Name = "отладкаToolStripMenuItem";
+            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.отладкаToolStripMenuItem.Text = "Отладка";
+            this.отладкаToolStripMenuItem.Click += new System.EventHandler(this.отладкаToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -924,19 +938,18 @@ namespace AudioDataInterface
             this.groupBox1.Controls.Add(this.checkBox_tapeSkin);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.button_buffMp3);
-            this.groupBox1.Controls.Add(this.button2);
             this.groupBox1.Location = new System.Drawing.Point(872, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(150, 192);
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "groupBox1";
+            this.groupBox1.Text = "Управление декодером";
             // 
             // checkBox_tapeSkin
             // 
             this.checkBox_tapeSkin.AutoSize = true;
             this.checkBox_tapeSkin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_tapeSkin.Location = new System.Drawing.Point(3, 112);
+            this.checkBox_tapeSkin.Location = new System.Drawing.Point(3, 80);
             this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
             this.checkBox_tapeSkin.Size = new System.Drawing.Size(144, 17);
             this.checkBox_tapeSkin.TabIndex = 16;
@@ -947,35 +960,24 @@ namespace AudioDataInterface
             // button1
             // 
             this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.Location = new System.Drawing.Point(3, 80);
+            this.button1.Location = new System.Drawing.Point(3, 48);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(144, 32);
             this.button1.TabIndex = 17;
-            this.button1.Text = "JPEG";
+            this.button1.Text = "STOP MP3";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click_1);
             // 
             // button_buffMp3
             // 
             this.button_buffMp3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button_buffMp3.Location = new System.Drawing.Point(3, 48);
+            this.button_buffMp3.Location = new System.Drawing.Point(3, 16);
             this.button_buffMp3.Name = "button_buffMp3";
             this.button_buffMp3.Size = new System.Drawing.Size(144, 32);
             this.button_buffMp3.TabIndex = 14;
-            this.button_buffMp3.Text = "PLAY";
+            this.button_buffMp3.Text = "PLAY MP3";
             this.button_buffMp3.UseVisualStyleBackColor = true;
             this.button_buffMp3.Click += new System.EventHandler(this.button_buffMp3_Click);
-            // 
-            // button2
-            // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button2.Location = new System.Drawing.Point(3, 16);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(144, 32);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "CLear MS";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // groupBox_signalCapture
             // 
@@ -1180,36 +1182,26 @@ namespace AudioDataInterface
             // 
             // timer_mpsPlayerHandler
             // 
-            this.timer_mpsPlayerHandler.Enabled = true;
-            this.timer_mpsPlayerHandler.Interval = 25;
+            this.timer_mpsPlayerHandler.Interval = 1000;
             this.timer_mpsPlayerHandler.Tick += new System.EventHandler(this.timer_mpsPlayerHandler_Tick);
             // 
             // timer_mpsPlayerSpectrumHandler
             // 
-            this.timer_mpsPlayerSpectrumHandler.Enabled = true;
             this.timer_mpsPlayerSpectrumHandler.Interval = 25;
             this.timer_mpsPlayerSpectrumHandler.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumHandler_Tick);
             // 
             // timer_mpsPlayerSpectrumUpdater
             // 
-            this.timer_mpsPlayerSpectrumUpdater.Enabled = true;
             this.timer_mpsPlayerSpectrumUpdater.Interval = 25;
             this.timer_mpsPlayerSpectrumUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumUpdater_Tick);
             // 
             // timer_mpsPlayerTimeUpdater
             // 
-            this.timer_mpsPlayerTimeUpdater.Enabled = true;
             this.timer_mpsPlayerTimeUpdater.Interval = 1000;
             this.timer_mpsPlayerTimeUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerTimeUpdate_Tick);
             // 
-            // timer1
-            // 
-            this.timer1.Interval = 500;
-            this.timer1.Tick += new System.EventHandler(this.timer1_Tick);
-            // 
             // timer_signalQualityUpdater
             // 
-            this.timer_signalQualityUpdater.Enabled = true;
             this.timer_signalQualityUpdater.Interval = 50;
             this.timer_signalQualityUpdater.Tick += new System.EventHandler(this.timer_signalQualityUpdater_Tick);
             // 
@@ -1364,9 +1356,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_track2;
         private System.Windows.Forms.PictureBox pictureBox_track1;
         public System.Windows.Forms.Button button1;
-        public System.Windows.Forms.Button button2;
         private System.Windows.Forms.TabPage tabPage1;
-        private System.Windows.Forms.Timer timer1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label_signalQuality;
         public System.Windows.Forms.PictureBox pictureBox_runningIndicator;
@@ -1390,6 +1380,8 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripMenuItem кодировщикToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem мастерЗаписиНаЛентуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem кодироватьВФайлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem отладкаToolStripMenuItem;
     }
 }
 

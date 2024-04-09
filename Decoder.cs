@@ -15,11 +15,9 @@ namespace AudioDataInterface
         public static string[] decodedDataBlock = new string[6]; //Декодированный блок данных
         public static string[] lastDecodedDataBlock = new string[6]; //Последний декодированный блок данных
         public static readonly List<string[]> buff_decodedData = new List<string[]>(); //Буфер декодированных данных
-        public static Thread thread_binaryDecoder = null;
-        public static Thread thread_amplitudeDecoder = null;
+        public static Thread thread_binaryDecoderStereo = null;
         public static Thread thread_amplitudeDecoderL = null;
         public static Thread thread_amplitudeDecoderR = null;
-        public static Thread thread_samplesDecoder = null;
         public static Thread thread_samplesDecoderStereo = null;
         public static short maxAmplitudeL = 0;
         public static short maxAmplitudeR = 0;
@@ -35,17 +33,7 @@ namespace AudioDataInterface
         public static Object amplitudesLLocker = new Object();
         public static Object amplitudesRLocker = new Object();
         public static Object decodedDataLocker = new Object();
-
-        static void SamplesDecoder()
-        {
-            while (true)
-            {
-                while (AudioIO.buff_signalBytes.Count < 96000) Thread.Sleep(10);
-                if (!AudioIO.audio_invertSignal) lock (AudioIO.buff_signalSamples) AudioIO.buff_signalSamples.Add((short)(AudioIO.audio_signalGain * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
-                else lock (AudioIO.buff_signalSamples) AudioIO.buff_signalSamples.Add((short)(-AudioIO.audio_signalGain * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
-                AudioIO.buff_signalBytes.RemoveRange(0, 2);
-            }
-        }
+        public static bool decoderActive = false;
 
         static void SamplesDecoderStereo()
         {
@@ -124,33 +112,6 @@ namespace AudioDataInterface
                     while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 }
                 if (tempList.Count > 0) lock (amplitudesRLocker) buff_signalAmplitudesR.Add(tempList.Max());
-                tempList.Clear();
-            }
-        }
-
-        static void AmplitudeDecoder()
-        {
-            var tempList = new List<short>(); //Временный буфер сэмплов
-            while (true)
-            {
-
-                while (AudioIO.buff_signalSamples.Count == 0) Thread.Sleep(10);
-                while (AudioIO.buff_signalSamples[0] < 0)
-                {
-                    lock (AudioIO.buff_signalSamples) AudioIO.buff_signalSamples.RemoveAt(0);
-                    while (AudioIO.buff_signalSamples.Count == 0) Thread.Sleep(10);
-                }
-                while (AudioIO.buff_signalSamples.Count == 0) Thread.Sleep(10);
-                while (AudioIO.buff_signalSamples[0] >= 0)
-                {
-                    lock (AudioIO.buff_signalSamples)
-                    {
-                        tempList.Add(AudioIO.buff_signalSamples[0]);
-                        AudioIO.buff_signalSamples.RemoveAt(0);
-                    }
-                    while (AudioIO.buff_signalSamples.Count == 0) Thread.Sleep(10);
-                }
-                lock (buff_signalAmplitudes) buff_signalAmplitudes.Add(tempList.Max());
                 tempList.Clear();
             }
         }
@@ -507,14 +468,21 @@ namespace AudioDataInterface
 
         public static void Start()
         {
-            thread_samplesDecoder = new Thread(SamplesDecoderStereo);
-            thread_samplesDecoder.Start();
+            thread_samplesDecoderStereo = new Thread(SamplesDecoderStereo);
+            thread_samplesDecoderStereo.Start();
             thread_amplitudeDecoderL = new Thread(AmplitudeDecoderL);
             thread_amplitudeDecoderL.Start();
             thread_amplitudeDecoderR = new Thread(AmplitudeDecoderR);
             thread_amplitudeDecoderR.Start();
-            thread_binaryDecoder = new Thread(BinaryDecoderStereo);
-            thread_binaryDecoder.Start();
+            thread_binaryDecoderStereo = new Thread(BinaryDecoderStereo);
+            thread_binaryDecoderStereo.Start();
+        }
+        public static void Stop()
+        {
+            if (thread_amplitudeDecoderL != null) thread_amplitudeDecoderL.Abort();
+            if (thread_amplitudeDecoderR != null) thread_amplitudeDecoderR.Abort();
+            if (thread_samplesDecoderStereo != null) thread_samplesDecoderStereo.Abort();
+            if (thread_binaryDecoderStereo != null) thread_binaryDecoderStereo.Abort();
         }
     }
 }

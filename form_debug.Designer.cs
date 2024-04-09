@@ -49,10 +49,16 @@ namespace AudioDataInterface
             "EncodeFileStream",
             "status"}, -1);
             System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
-            "AmplitudeDecoder",
+            "AmplitudeDecoderL",
             "status"}, -1);
             System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
-            "BinaryDecoder",
+            "AmplitudeDecoderR",
+            "status"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            "SamplesDecoderStereo",
+            "status"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
+            "BinaryDecoderStereo",
             "status"}, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(form_debug));
             this.listView_buffers = new System.Windows.Forms.ListView();
@@ -148,13 +154,16 @@ namespace AudioDataInterface
             this.listView_threads.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
             listViewItem6,
             listViewItem7,
-            listViewItem8});
+            listViewItem8,
+            listViewItem9,
+            listViewItem10});
             this.listView_threads.Location = new System.Drawing.Point(3, 16);
             this.listView_threads.Name = "listView_threads";
             this.listView_threads.Size = new System.Drawing.Size(361, 153);
             this.listView_threads.TabIndex = 1;
             this.listView_threads.UseCompatibleStateImageBehavior = false;
             this.listView_threads.View = System.Windows.Forms.View.Details;
+            this.listView_threads.SelectedIndexChanged += new System.EventHandler(this.listView_threads_SelectedIndexChanged);
             // 
             // column_thread
             // 
@@ -184,7 +193,7 @@ namespace AudioDataInterface
             this.button_test.Image = ((System.Drawing.Image)(resources.GetObject("button_test.Image")));
             this.button_test.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.button_test.Name = "button_test";
-            this.button_test.Size = new System.Drawing.Size(73, 22);
+            this.button_test.Size = new System.Drawing.Size(74, 22);
             this.button_test.Text = "Test Feature";
             this.button_test.Click += new System.EventHandler(this.button_test_Click);
             // 
@@ -200,7 +209,7 @@ namespace AudioDataInterface
             this.button_logMonitor.ToolTipText = "button_logMonitor";
             this.button_logMonitor.Click += new System.EventHandler(this.button_logMonitor_Click);
             // 
-            // DebugWindow
+            // form_debug
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -211,7 +220,7 @@ namespace AudioDataInterface
             this.Controls.Add(this.groupBox_buffers);
             this.DoubleBuffered = true;
             this.MinimumSize = new System.Drawing.Size(407, 396);
-            this.Name = "DebugWindow";
+            this.Name = "form_debug";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "DebugWindow";

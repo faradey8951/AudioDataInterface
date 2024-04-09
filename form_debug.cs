@@ -23,9 +23,11 @@ namespace AudioDataInterface
             listView_buffers.Items[2].SubItems[1].Text = LogHandler.list_log.Count().ToString();
             listView_buffers.Items[3].SubItems[1].Text = Decoder.buff_signalAmplitudesL.Count().ToString();
             listView_buffers.Items[4].SubItems[1].Text = Decoder.buff_decodedData.Count().ToString();
-            listView_threads.Items[0].SubItems[1].Text = ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStream);
-            listView_threads.Items[1].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_amplitudeDecoder);
-            listView_threads.Items[2].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_binaryDecoder);
+            listView_threads.Items[0].SubItems[1].Text = ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream);
+            listView_threads.Items[1].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_amplitudeDecoderL);
+            listView_threads.Items[2].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_amplitudeDecoderR);
+            listView_threads.Items[3].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_samplesDecoderStereo);
+            listView_threads.Items[4].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_binaryDecoderStereo);
         }
 
         private void button_test_Click(object sender, EventArgs e)
@@ -52,6 +54,11 @@ namespace AudioDataInterface
         {
             if (form_main.window_logMonitor != null)
                 form_main.window_logMonitor.Close();
+        }
+
+        private void listView_threads_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
