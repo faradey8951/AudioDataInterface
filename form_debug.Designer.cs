@@ -127,7 +127,7 @@ namespace AudioDataInterface
             // timer_controlHandler
             // 
             this.timer_controlHandler.Enabled = true;
-            this.timer_controlHandler.Interval = 50;
+            this.timer_controlHandler.Interval = 250;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_tick);
             // 
             // groupBox_threads

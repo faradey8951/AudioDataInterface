@@ -655,8 +655,7 @@ namespace AudioDataInterface
         }
 
         private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
-        {
-            if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();          
+        { 
             if (mpsPlayer_tapeSkin == false)
             {
                 pictureBox_playPause.Visible = true;
@@ -767,6 +766,8 @@ namespace AudioDataInterface
             }
             mpsPlayer_peakHoldTimeCount++;
             if (mpsPlayer_spectrumMode == "noPeak") mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();
         }
 
         private void timer_mpsPlayerSpectrumUpdater_Tick(object sender, EventArgs e)

@@ -151,7 +151,7 @@ namespace AudioDataInterface
                 Encoder.encoder_inputFilePath = projectPath + "\\" + "header.sector";
                 Encoder.encoder_outputFilePath = projectPath + "\\" + "header.wav";
                 Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
-                Encoder.thread_encodeFileStereoStream.Start();
+                //Encoder.thread_encodeFileStereoStream.Start();
 
             }
         }

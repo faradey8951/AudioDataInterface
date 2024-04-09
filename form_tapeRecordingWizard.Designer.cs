@@ -37,19 +37,20 @@
             this.button_fileSelect = new System.Windows.Forms.Button();
             this.textBox_filePath = new System.Windows.Forms.TextBox();
             this.label_filePath = new System.Windows.Forms.Label();
-            this.groupBox_settings = new System.Windows.Forms.GroupBox();
             this.groupBox_sheet = new System.Windows.Forms.GroupBox();
             this.listView1 = new System.Windows.Forms.ListView();
             this.column_sector = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.column_progress = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button_record = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.timer = new System.Windows.Forms.Timer(this.components);
+            this.button_record = new System.Windows.Forms.Button();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.statusStrip.SuspendLayout();
             this.groupBox_file.SuspendLayout();
             this.groupBox_sheet.SuspendLayout();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -84,7 +85,7 @@
             this.groupBox_file.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox_file.Location = new System.Drawing.Point(0, 0);
             this.groupBox_file.Name = "groupBox_file";
-            this.groupBox_file.Size = new System.Drawing.Size(800, 66);
+            this.groupBox_file.Size = new System.Drawing.Size(798, 66);
             this.groupBox_file.TabIndex = 1;
             this.groupBox_file.TabStop = false;
             this.groupBox_file.Text = "Файл";
@@ -100,6 +101,7 @@
             // 
             // button_fileSelect
             // 
+            this.button_fileSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.button_fileSelect.Location = new System.Drawing.Point(713, 15);
             this.button_fileSelect.Name = "button_fileSelect";
             this.button_fileSelect.Size = new System.Drawing.Size(75, 23);
@@ -110,6 +112,8 @@
             // 
             // textBox_filePath
             // 
+            this.textBox_filePath.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_filePath.Location = new System.Drawing.Point(67, 17);
             this.textBox_filePath.Name = "textBox_filePath";
             this.textBox_filePath.Size = new System.Drawing.Size(630, 20);
@@ -124,23 +128,13 @@
             this.label_filePath.TabIndex = 0;
             this.label_filePath.Text = "Файл";
             // 
-            // groupBox_settings
-            // 
-            this.groupBox_settings.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox_settings.Location = new System.Drawing.Point(0, 329);
-            this.groupBox_settings.Name = "groupBox_settings";
-            this.groupBox_settings.Size = new System.Drawing.Size(800, 68);
-            this.groupBox_settings.TabIndex = 2;
-            this.groupBox_settings.TabStop = false;
-            this.groupBox_settings.Text = "Настройки";
-            // 
             // groupBox_sheet
             // 
             this.groupBox_sheet.Controls.Add(this.listView1);
-            this.groupBox_sheet.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox_sheet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_sheet.Location = new System.Drawing.Point(0, 66);
             this.groupBox_sheet.Name = "groupBox_sheet";
-            this.groupBox_sheet.Size = new System.Drawing.Size(800, 263);
+            this.groupBox_sheet.Size = new System.Drawing.Size(798, 321);
             this.groupBox_sheet.TabIndex = 3;
             this.groupBox_sheet.TabStop = false;
             this.groupBox_sheet.Text = "Представление";
@@ -158,7 +152,7 @@
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(3, 16);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(794, 244);
+            this.listView1.Size = new System.Drawing.Size(792, 302);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -186,16 +180,6 @@
             this.column_progress.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.column_progress.Width = 80;
             // 
-            // button_record
-            // 
-            this.button_record.Location = new System.Drawing.Point(665, 402);
-            this.button_record.Name = "button_record";
-            this.button_record.Size = new System.Drawing.Size(123, 23);
-            this.button_record.TabIndex = 4;
-            this.button_record.Text = "Записать на ленту";
-            this.button_record.UseVisualStyleBackColor = true;
-            this.button_record.Click += new System.EventHandler(this.button_record_Click);
-            // 
             // openFileDialog
             // 
             this.openFileDialog.FileName = "openFileDialog1";
@@ -204,8 +188,32 @@
             // timer
             // 
             this.timer.Enabled = true;
-            this.timer.Interval = 50;
+            this.timer.Interval = 250;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
+            // 
+            // button_record
+            // 
+            this.button_record.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_record.Location = new System.Drawing.Point(665, 398);
+            this.button_record.Name = "button_record";
+            this.button_record.Size = new System.Drawing.Size(123, 23);
+            this.button_record.TabIndex = 4;
+            this.button_record.Text = "Записать на ленту";
+            this.button_record.UseVisualStyleBackColor = true;
+            this.button_record.Click += new System.EventHandler(this.button_record_Click);
+            // 
+            // panel1
+            // 
+            this.panel1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.groupBox_sheet);
+            this.panel1.Controls.Add(this.groupBox_file);
+            this.panel1.Location = new System.Drawing.Point(0, 3);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(800, 389);
+            this.panel1.TabIndex = 4;
             // 
             // form_tapeRecordingWizard
             // 
@@ -214,10 +222,9 @@
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(800, 450);
             this.Controls.Add(this.button_record);
-            this.Controls.Add(this.groupBox_settings);
+            this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip);
-            this.Controls.Add(this.groupBox_sheet);
-            this.Controls.Add(this.groupBox_file);
+            this.MinimumSize = new System.Drawing.Size(816, 489);
             this.Name = "form_tapeRecordingWizard";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -228,6 +235,7 @@
             this.groupBox_file.ResumeLayout(false);
             this.groupBox_file.PerformLayout();
             this.groupBox_sheet.ResumeLayout(false);
+            this.panel1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -241,9 +249,7 @@
         private System.Windows.Forms.Button button_fileSelect;
         private System.Windows.Forms.TextBox textBox_filePath;
         private System.Windows.Forms.Label label_filePath;
-        private System.Windows.Forms.GroupBox groupBox_settings;
         private System.Windows.Forms.GroupBox groupBox_sheet;
-        private System.Windows.Forms.Button button_record;
         private System.Windows.Forms.ListView listView1;
         private System.Windows.Forms.ColumnHeader column_sector;
         private System.Windows.Forms.ColumnHeader column_size;
@@ -253,5 +259,7 @@
         private System.Windows.Forms.ToolStripProgressBar progressBar;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
         private System.Windows.Forms.Timer timer;
+        private System.Windows.Forms.Button button_record;
+        private System.Windows.Forms.Panel panel1;
     }
 }
