@@ -60,7 +60,6 @@ namespace AudioDataInterface
         public static double audio_signalGainL = 4;
         public static double audio_signalGainR = 4;
         public static short audio_maxAmplitude = 0;
-        public static bool audio_autoSignalGain = true;
         //////////////////////////////////////////////////////////////////////////////////////
 
         public static Thread thread_signalAutoGainControl = null;
@@ -143,6 +142,11 @@ namespace AudioDataInterface
             waveLoop.StartRecording();
         }
 
+        public static void MPSAudioOutputCaptureClose()
+        {
+            if (waveLoop != null) waveLoop.Dispose();
+        }
+
         /// <summary>
         /// Инициализация захвата сигнала
         /// </summary>
@@ -156,18 +160,6 @@ namespace AudioDataInterface
             naudio_signalWaveIn.WaveFormat = new NAudio.Wave.WaveFormat(96000, 2);
             naudio_signalWaveIn.DataAvailable += new EventHandler<WaveInEventArgs>(Signal_DataAvailable);
             naudio_signalWaveIn.StartRecording();
-
-            MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
-            //here I see my sound card
-            var mm_dev = enumerator.EnumerateAudioEndPoints(DataFlow.All, DeviceState.Active)[0];
-            //WasapiCapture waveLoop = new WasapiLoopbackCapture();
-            //waveLoop.DataAvailable += new EventHandler<WaveInEventArgs>(MPS_DataAvailable);
-            //waveLoop.StartRecording();
-            //naudio_wasapiLoopbackCapture = new WasapiLoopbackCapture();
-            //naudio_wasapiLoopbackCapture.DataAvailable += new EventHandler<WaveInEventArgs>(MPS_DataAvailable);
-            //naudio_wasapiLoopbackCapture.StartRecording();
-            //}
-            //catch { }
         }
 
         /// <summary>
@@ -175,13 +167,9 @@ namespace AudioDataInterface
         /// </summary>
         public static void SignalCaptureClose()
         {
-            try
-            {
-                if (naudio_signalWaveIn != null)
-                    naudio_signalWaveIn.Dispose();
-                //buff_signalSamples.Clear();
-            }
-            catch { }
+            if (naudio_signalWaveIn != null) { naudio_signalWaveIn.Dispose(); naudio_signalWaveIn = null; }
+                
+            //buff_signalSamples.Clear();
         }
 
         static void Signal_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)

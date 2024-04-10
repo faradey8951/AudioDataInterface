@@ -49,9 +49,12 @@ namespace AudioDataInterface
             openFileDialog.ShowDialog();
             filePath = openFileDialog.FileName;
             textBox_filePath.Text = filePath;
-            fileInfo = new FileInfo(filePath);
-            fileSize = (int)fileInfo.Length / 1024;
-            label_fileSize.Text = fileSize.ToString() + " КБ";
+            if (File.Exists(filePath))
+            {
+                fileInfo = new FileInfo(filePath);
+                fileSize = (int)fileInfo.Length / 1024;
+                label_fileSize.Text = fileSize.ToString() + " КБ";
+            }
         }
 
         public static void TapeRecord()

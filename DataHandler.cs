@@ -16,7 +16,6 @@ namespace AudioDataInterface
         public static MemoryStream msFile;
         public static Mp3FileReader reader = null;
         public static int mp3_buffSize = 0;
-        public static string mp3_status = "";
         public static List<string[]> mp3Buffer = new List<string[]>();
         public static long currentErrorPos = 0;
         bool writeFile = false;
@@ -31,7 +30,7 @@ namespace AudioDataInterface
         {
             ms = new MemoryStream();
             msFile = new MemoryStream();
-            while (true)
+            while (Decoder.decoderActive)
             {
                 mp3Buffer.Clear();
                 while (Decoder.buff_decodedData.Count < i + 128) Thread.Sleep(10);
@@ -104,12 +103,14 @@ namespace AudioDataInterface
                 i = 0;
                 ms.Write(bytes.ToArray(), 0, bytes.Count);
                 ms.Position = pos;
-                //Thread.Sleep(10);
+                Thread.Sleep(10);
             }
         }
 
         public static void StartMp3Listening()
         {
+            if (thread_bufferMp3 != null) { thread_bufferMp3.Abort(); thread_bufferMp3 = null; }
+            if (thread_playMp3 != null) { thread_playMp3.Abort(); thread_playMp3 = null; }
             thread_bufferMp3 = new Thread(BufferMp3);
             thread_bufferMp3.Start();
             thread_playMp3 = new Thread(PlayMp3);
@@ -118,8 +119,8 @@ namespace AudioDataInterface
 
         public static void StopMp3Listening()
         {
-            if (thread_bufferMp3 != null) thread_bufferMp3.Abort();
-            if (thread_playMp3 != null) thread_playMp3.Abort();
+            if (thread_bufferMp3 != null) { thread_bufferMp3.Abort(); thread_bufferMp3 = null; }
+            if (thread_playMp3 != null) { thread_playMp3.Abort(); thread_playMp3 = null; }
         }
 
         //Метод очистки mp3 данных
@@ -135,27 +136,18 @@ namespace AudioDataInterface
             List<string> buff_time = new List<string>(); //Буфер текущего времени воспроизведения
             string currentTime = "0"; //Текущее время воспроизведения
 
-            while (true)
+            while (Decoder.decoderActive)
             {
                 try
                 {
                     //Буферизация данных
-                    while (ms.Length - ms.Position < mp3_buffSize)
-                    {
-                        mp3_status = "buffering";
-                        form_main.mpsPlayer_showTime = false;
-                        //AudioIO.audio_autoSignalGain = true;
-                        Thread.Sleep(10);
-                    }
+                    while (ms.Length - ms.Position < mp3_buffSize) { Thread.Sleep(250); form_main.mpsPlayer_showTime = false; }
                     reader = new Mp3FileReader(ms);
-                    //var device = naudio_deviceEnumerator.GetDevice(naudio_outputDeviceId[sound_playDeviceId]);
                     AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioClientShareMode.Shared, true, 50);
                     AudioIO.naudio_wasapiOut.Init(reader);
                     AudioIO.naudio_wasapiOut.Play();
                     while (AudioIO.naudio_wasapiOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
                     {
-                        mp3_status = "playing";
-                        //AudioIO.audio_autoSignalGain = true;
                         form_main.mpsPlayer_showTime = true;
                         currentTime = reader.CurrentTime.Minutes.ToString() + ":" + reader.CurrentTime.Seconds.ToString() + ":" + reader.CurrentTime.Milliseconds.ToString();
                         //Если воспроизведение прервалось
@@ -172,10 +164,7 @@ namespace AudioDataInterface
                 }
                 catch (Exception ex)
                 {
-                    //ms = new MemoryStream();
-                    //lock (Decoder.buff_decodedData) Decoder.buff_decodedData.Clear();
-                    //while (ms.Length - ms.Position > 256) Thread.Sleep(10);
-                    //ms.Position += 256;
+                    Thread.Sleep(10);
                 }
             }
         }

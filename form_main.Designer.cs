@@ -296,7 +296,7 @@ namespace AudioDataInterface
             // timer_controlHandler
             // 
             this.timer_controlHandler.Enabled = true;
-            this.timer_controlHandler.Interval = 50;
+            this.timer_controlHandler.Interval = 250;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
             // 
             // tabControl_dataControl
@@ -1182,7 +1182,6 @@ namespace AudioDataInterface
             // 
             // timer_mpsPlayerHandler
             // 
-            this.timer_mpsPlayerHandler.Interval = 1000;
             this.timer_mpsPlayerHandler.Tick += new System.EventHandler(this.timer_mpsPlayerHandler_Tick);
             // 
             // timer_mpsPlayerSpectrumHandler

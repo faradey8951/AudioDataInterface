@@ -37,7 +37,7 @@ namespace AudioDataInterface
 
         static void SamplesDecoderStereo()
         {
-            while (true)
+            while (Decoder.decoderActive)
             {
                 while (AudioIO.buff_signalBytes.Count < 12000) Thread.Sleep(10);
                 if (!AudioIO.audio_invertSignal)
@@ -57,7 +57,7 @@ namespace AudioDataInterface
         static void AmplitudeDecoderL()
         {
             var tempList = new List<short>(); //Временный буфер сэмплов
-            while (true)
+            while (Decoder.decoderActive)
             {
                 while (AudioIO.buff_signalSamplesL.Count == 0) Thread.Sleep(10);
                 while (AudioIO.buff_signalSamplesL[0] < 0)
@@ -88,7 +88,7 @@ namespace AudioDataInterface
         static void AmplitudeDecoderR()
         {
             var tempList = new List<short>(); //Временный буфер сэмплов
-            while (true)
+            while (Decoder.decoderActive)
             {
                 while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 while (AudioIO.buff_signalSamplesR[0] < 0)
@@ -137,7 +137,7 @@ namespace AudioDataInterface
             int difference = 0; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
             int channelSwitch = 0;
 
-            while (true)
+            while (Decoder.decoderActive)
             {
                 if (channelSwitch == 0) while (buff_signalAmplitudesL.Count < 80) Thread.Sleep(10);
                 else while (buff_signalAmplitudesR.Count < 80) Thread.Sleep(10);
@@ -464,6 +464,17 @@ namespace AudioDataInterface
                 if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; }
                 if (data[0] != "") decodedDataBlock[4] = data[0];
             }
+        }
+
+        /// <summary>
+        /// Очищает буферы, связанные с декодером
+        /// </summary>
+        public static void ClearBuffers()
+        {
+            AudioIO.buff_signalBytes.Clear();
+            Decoder.buff_signalAmplitudesL.Clear();
+            Decoder.buff_signalAmplitudesR.Clear();
+            DataHandler.ms.Close();
         }
 
         public static void Start()

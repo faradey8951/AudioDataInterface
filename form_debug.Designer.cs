@@ -46,19 +46,28 @@ namespace AudioDataInterface
             "decodedData",
             "0"}, -1);
             System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
+            "signalBytes",
+            "0"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
             "EncodeFileStream",
             "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
             "AmplitudeDecoderL",
             "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
             "AmplitudeDecoderR",
             "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
             "SamplesDecoderStereo",
             "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
+            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem(new string[] {
             "BinaryDecoderStereo",
+            "status"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem(new string[] {
+            "BufferMP3",
+            "status"}, -1);
+            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem(new string[] {
+            "PlayMP3",
             "status"}, -1);
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(form_debug));
             this.listView_buffers = new System.Windows.Forms.ListView();
@@ -93,7 +102,8 @@ namespace AudioDataInterface
             listViewItem2,
             listViewItem3,
             listViewItem4,
-            listViewItem5});
+            listViewItem5,
+            listViewItem6});
             this.listView_buffers.Location = new System.Drawing.Point(3, 16);
             this.listView_buffers.Name = "listView_buffers";
             this.listView_buffers.Size = new System.Drawing.Size(361, 153);
@@ -152,11 +162,13 @@ namespace AudioDataInterface
             this.listView_threads.GridLines = true;
             this.listView_threads.HideSelection = false;
             this.listView_threads.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem6,
             listViewItem7,
             listViewItem8,
             listViewItem9,
-            listViewItem10});
+            listViewItem10,
+            listViewItem11,
+            listViewItem12,
+            listViewItem13});
             this.listView_threads.Location = new System.Drawing.Point(3, 16);
             this.listView_threads.Name = "listView_threads";
             this.listView_threads.Size = new System.Drawing.Size(361, 153);

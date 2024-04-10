@@ -23,11 +23,14 @@ namespace AudioDataInterface
             listView_buffers.Items[2].SubItems[1].Text = LogHandler.list_log.Count().ToString();
             listView_buffers.Items[3].SubItems[1].Text = Decoder.buff_signalAmplitudesL.Count().ToString();
             listView_buffers.Items[4].SubItems[1].Text = Decoder.buff_decodedData.Count().ToString();
+            listView_buffers.Items[5].SubItems[1].Text = AudioIO.buff_signalBytes.Count().ToString();
             listView_threads.Items[0].SubItems[1].Text = ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream);
             listView_threads.Items[1].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_amplitudeDecoderL);
             listView_threads.Items[2].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_amplitudeDecoderR);
             listView_threads.Items[3].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_samplesDecoderStereo);
             listView_threads.Items[4].SubItems[1].Text = ThreadHandler.GetThreadStatus(Decoder.thread_binaryDecoderStereo);
+            listView_threads.Items[5].SubItems[1].Text = ThreadHandler.GetThreadStatus(DataHandler.thread_bufferMp3);
+            listView_threads.Items[6].SubItems[1].Text = ThreadHandler.GetThreadStatus(DataHandler.thread_playMp3);
         }
 
         private void button_test_Click(object sender, EventArgs e)

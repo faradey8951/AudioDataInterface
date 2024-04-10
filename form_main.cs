@@ -105,9 +105,6 @@ namespace AudioDataInterface
             //PropertyInfo propertyInfo = type.GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance);
             //propertyInfo.SetValue(listView, true, null);
             decodedData = new string[10];
-            pictureBox_timeSymbols = new PictureBox[] { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
-            pictureBox_trackNumberSymbols = new PictureBox[] { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
-            window_main.pictureBox_dots.Image = Properties.Resources.DOTS;
         }
 
         /// <summary>
@@ -367,7 +364,7 @@ namespace AudioDataInterface
         private void MainWindow_Load(object sender, EventArgs e)
         {
             Settings.Load();
-
+            MpsPlayerInterfaceInitialize();
             bitmap_waveGraph = new Bitmap(pictureBox_waveGraph.Width, pictureBox_waveGraph.Height);
             graphics_waveGraph = Graphics.FromImage(bitmap_waveGraph); //Инициализация графики
             bitmap_mpsPlayerInterface = new Bitmap(pictureBox_mpsPlayer.Width, pictureBox_mpsPlayer.Height);
@@ -421,14 +418,10 @@ namespace AudioDataInterface
 
         private void timer_controlHandler_Tick(object sender, EventArgs e)
         {
-            label_signalGainL.Text = "Усиление ЛК: " + Math.Round(AudioIO.audio_signalGainL, 2).ToString();
-            label_signalGainR.Text = "Усиление ПК: " + Math.Round(AudioIO.audio_signalGainR, 2).ToString();
             label_fixedErrorCount.Text = "Исправлено: " + Decoder.fixedErrorCount.ToString();
             label_unfixedErrorCount.Text = "Неисправимые: " + Decoder.unfixedErrorCount.ToString();
             label_frameSyncErrorCount.Text = "Кадровая синхр.: " + Decoder.frameSyncErrorCount.ToString();
             label_signalQuality.Text = "Качество сигнала: " + Decoder.signalQuality.ToString() + "%";
-            if (AudioIO.audio_autoSignalGain == true) checkBox_autoGain.Checked = true;
-            else checkBox_autoGain.Checked = false;
 
             if (form_main.mpsPlayer_currentTrackNumber != form_main.mpsPlayer_lastTrackNumber)
             {
@@ -565,10 +558,10 @@ namespace AudioDataInterface
             if (!Decoder.decoderActive)
             {
                 Decoder.decoderActive = true;
-                Decoder.Start();
                 AudioIO.SignalCaptureInit();
-                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
                 DataHandler.StartMp3Listening();
+                Decoder.Start();
+                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };             
                 AudioIO.MPSAudioOutputCaptureInit();
                 timer_mpsPlayerHandler.Enabled = true;
                 timer_mpsPlayerSpectrumHandler.Enabled = true;
@@ -654,8 +647,14 @@ namespace AudioDataInterface
             }
         }
 
-        private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
-        { 
+        /// <summary>
+        /// Инициализация графики интерфейса плеера
+        /// </summary>
+        public void MpsPlayerInterfaceInitialize()
+        {
+            pictureBox_timeSymbols = new PictureBox[] { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
+            pictureBox_trackNumberSymbols = new PictureBox[] { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
+            window_main.pictureBox_dots.Image = Properties.Resources.DOTS;
             if (mpsPlayer_tapeSkin == false)
             {
                 pictureBox_playPause.Visible = true;
@@ -670,6 +669,28 @@ namespace AudioDataInterface
                 pictureBox_disc2.Visible = true;
                 pictureBox_disc3.Visible = true;
                 pictureBox_cassette.Image = null;
+            }
+            else
+            {
+                MpsPlayerTrackCalendarSetAmount(0);
+                pictureBox_playPause.Visible = false;
+                pictureBox_symbol1.Image = Properties.Resources.Tsymbol;
+                pictureBox_symbol2.Image = Properties.Resources.Asymbol;
+                pictureBox_symbol3.Image = Properties.Resources.Psymbol;
+                pictureBox_symbol4.Image = Properties.Resources.Esymbol;
+                pictureBox_symbol5.Image = null;
+                pictureBox_symbol7.Image = Properties.Resources._0symbol;
+                pictureBox_dots.Visible = false;
+                pictureBox_disc1.Visible = false;
+                pictureBox_disc2.Visible = false;
+                pictureBox_disc3.Visible = false;
+            }
+        }
+
+        private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
+        { 
+            if (mpsPlayer_tapeSkin == false)
+            {
                 //Отображение текущего времени воспроизведения
                 if (mpsPlayer_remainingTime == false)
                 {
@@ -689,6 +710,7 @@ namespace AudioDataInterface
                 }
                 if (mpsPlayer_showTime == true)
                 {
+                    window_main.pictureBox_dots.Image = Properties.Resources.DOTS;
                     for (int i = 0; i < mpsPlayer_time.Length; i++) if (mpsPlayer_time[i] != 0 || i > 0) pictureBox_timeSymbols[i].Image = symbolImages[mpsPlayer_time[i]];
                 }
                 else
@@ -717,18 +739,7 @@ namespace AudioDataInterface
             }
             else
             {
-                MpsPlayerTrackCalendarSetAmount(0);
-                pictureBox_playPause.Visible = false;
-                pictureBox_symbol1.Image = Properties.Resources.Tsymbol;
-                pictureBox_symbol2.Image = Properties.Resources.Asymbol;
-                pictureBox_symbol3.Image = Properties.Resources.Psymbol;
-                pictureBox_symbol4.Image = Properties.Resources.Esymbol;
-                pictureBox_symbol5.Image = null;
-                pictureBox_symbol7.Image = Properties.Resources._0symbol;
-                pictureBox_dots.Visible = false;
-                pictureBox_disc1.Visible = false;
-                pictureBox_disc2.Visible = false;
-                pictureBox_disc3.Visible = false;
+
                 if (mpsPlayer_disc1Detected == true) pictureBox_cassette.Image = Properties.Resources.cassette;
                 else pictureBox_cassette.Image = null;
                 mpsPlayer_time = new int[4];
@@ -845,8 +856,7 @@ namespace AudioDataInterface
 
         private void checkBox_autoGain_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBox_autoGain.Checked) AudioIO.audio_autoSignalGain = true;
-            else AudioIO.audio_autoSignalGain = false;
+
         }
 
         private void checkBox_tapeSkin_CheckedChanged(object sender, EventArgs e)
@@ -863,7 +873,7 @@ namespace AudioDataInterface
                 mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
                 if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
             }
-
+            MpsPlayerInterfaceInitialize();
         }
 
         private void groupBox_signalCapture_Enter(object sender, EventArgs e)
@@ -874,7 +884,7 @@ namespace AudioDataInterface
         private void comboBox_playDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
             AudioIO.audio_playDeviceId = comboBox_playDevices.SelectedIndex;
-            AudioIO.MPSAudioOutputCaptureInit();
+            if (Decoder.decoderActive) AudioIO.MPSAudioOutputCaptureInit();
         }
 
         private void button_settings_Click(object sender, EventArgs e)
@@ -894,9 +904,6 @@ namespace AudioDataInterface
             AudioIO.SignalCaptureClose();
             DataHandler.StopMp3Listening();
             MpsPlayerRunningIndicatorStop();
-            mpsPlayer_currentTrackNumber = -1;
-            mpsPlayer_trackCount = 16;
-            mpsPlayer_timeSeconds = 0;
             MpsPlayerTrackCalendarSetAmount(16);
             MpsPlayerTrackCalendarSetCurrentTrack(0);
             timer_mpsPlayerHandler.Enabled = false;
@@ -904,6 +911,7 @@ namespace AudioDataInterface
             timer_mpsPlayerSpectrumUpdater.Enabled = false;
             timer_mpsPlayerTimeUpdater.Enabled = false;
             timer_signalQualityUpdater.Enabled = false;
+            Decoder.ClearBuffers();
         }
 
         private void button2_Click(object sender, EventArgs e)
