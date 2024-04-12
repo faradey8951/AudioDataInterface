@@ -27,7 +27,7 @@ namespace AudioDataInterface
         {
             var md5 = MD5.Create();
             var stream = File.OpenRead(filePath);
-            return Encoding.Default.GetString(md5.ComputeHash(stream));
+            return Convert.ToBase64String(md5.ComputeHash(stream));
         }
 
         /// <summary>

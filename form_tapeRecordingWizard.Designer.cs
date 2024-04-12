@@ -47,6 +47,10 @@
             this.timer = new System.Windows.Forms.Timer(this.components);
             this.button_record = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.label_outputDevice = new System.Windows.Forms.Label();
+            this.button_convert = new System.Windows.Forms.Button();
             this.statusStrip.SuspendLayout();
             this.groupBox_file.SuspendLayout();
             this.groupBox_sheet.SuspendLayout();
@@ -215,12 +219,49 @@
             this.panel1.Size = new System.Drawing.Size(800, 389);
             this.panel1.TabIndex = 4;
             // 
+            // timer_controlHandler
+            // 
+            this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox1.FormattingEnabled = true;
+            this.comboBox1.Location = new System.Drawing.Point(191, 400);
+            this.comboBox1.Name = "comboBox1";
+            this.comboBox1.Size = new System.Drawing.Size(191, 21);
+            this.comboBox1.TabIndex = 5;
+            this.comboBox1.SelectedIndexChanged += new System.EventHandler(this.comboBox1_SelectedIndexChanged);
+            // 
+            // label_outputDevice
+            // 
+            this.label_outputDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.label_outputDevice.AutoSize = true;
+            this.label_outputDevice.Location = new System.Drawing.Point(12, 403);
+            this.label_outputDevice.Name = "label_outputDevice";
+            this.label_outputDevice.Size = new System.Drawing.Size(173, 13);
+            this.label_outputDevice.TabIndex = 6;
+            this.label_outputDevice.Text = "Устройство для записи на ленту";
+            // 
+            // button_convert
+            // 
+            this.button_convert.Location = new System.Drawing.Point(544, 398);
+            this.button_convert.Name = "button_convert";
+            this.button_convert.Size = new System.Drawing.Size(104, 23);
+            this.button_convert.TabIndex = 7;
+            this.button_convert.Text = "Преобразовать";
+            this.button_convert.UseVisualStyleBackColor = true;
+            this.button_convert.Click += new System.EventHandler(this.button_convert_Click);
+            // 
             // form_tapeRecordingWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button_convert);
+            this.Controls.Add(this.label_outputDevice);
+            this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button_record);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip);
@@ -261,5 +302,9 @@
         private System.Windows.Forms.Timer timer;
         private System.Windows.Forms.Button button_record;
         private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.Timer timer_controlHandler;
+        private System.Windows.Forms.ComboBox comboBox1;
+        private System.Windows.Forms.Label label_outputDevice;
+        private System.Windows.Forms.Button button_convert;
     }
 }

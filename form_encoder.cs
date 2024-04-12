@@ -78,33 +78,6 @@ namespace AudioDataInterface
                 if (Encoder.encoder_ADIFShell == false)
                 {
                     folderBrowserDialog.ShowDialog();
-                    /*
-                    if (Path.GetExtension(Encoder.encoder_inputFilePath) == ".jpg")
-                    {
-                        try
-                        {
-                            //Конверсия изображения
-                            var img = new MagickImage(Encoder.encoder_inputFilePath);
-                            img.Format = MagickFormat.Jpg;
-                            img.Strip(); //Убрать мета-данные
-                            if (img.Height > 600 && img.Width > 800) img.Resize(800, 600);
-                            img.Quality = 50;
-                            img.Settings.ColorSpace = ColorSpace.RGB;
-                            img.Settings.Interlace = Interlace.Jpeg;
-                            img.Settings.Compression = CompressionMethod.JPEG2000;
-                            img.Write("temp.jpg");
-                            img.Dispose();
-                            FileInfo fi = new FileInfo("temp.jpg");
-                            Encoder.encoder_inputFilePath = "temp.jpg";
-                            Encoder.encoder_mode = "jpeg";
-                        }
-                        catch (Exception ex)
-                        {
-                            MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-                    }
-                    else Encoder.encoder_mode = "mp3";
-                    */
                     Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
                     Encoder.encoder_mode = "mp3";
                     

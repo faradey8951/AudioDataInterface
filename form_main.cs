@@ -912,6 +912,7 @@ namespace AudioDataInterface
             timer_mpsPlayerTimeUpdater.Enabled = false;
             timer_signalQualityUpdater.Enabled = false;
             Decoder.ClearBuffers();
+            MpsPlayerInterfaceInitialize();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -1000,6 +1001,14 @@ namespace AudioDataInterface
                 window_debug = new form_debug();
             }
             window_debug.Show();
+        }
+
+        private void button2_Click_1(object sender, EventArgs e)
+        {
+            Decoder.decoderActive = true;
+            Decoder.decoderMode = "sector";
+            AudioIO.SignalCaptureInit();
+            Decoder.Start();
         }
     }
 }

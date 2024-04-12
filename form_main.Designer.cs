@@ -99,16 +99,14 @@ namespace AudioDataInterface
             this.label_signalGainR = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
+            this.checkBox_invertSignal = new System.Windows.Forms.CheckBox();
             this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
             this.button1 = new System.Windows.Forms.Button();
             this.button_buffMp3 = new System.Windows.Forms.Button();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
-            this.groupBox_decoderSettings = new System.Windows.Forms.GroupBox();
-            this.checkBox_autoGain = new System.Windows.Forms.CheckBox();
-            this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
-            this.checkBox_invertSignal = new System.Windows.Forms.CheckBox();
             this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
             this.radioButton_verticalBIAS = new System.Windows.Forms.RadioButton();
             this.radioButton_horizontalBIAS = new System.Windows.Forms.RadioButton();
@@ -124,6 +122,7 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
+            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -170,7 +169,6 @@ namespace AudioDataInterface
             this.panel_signalCapture.SuspendLayout();
             this.groupBox1.SuspendLayout();
             this.groupBox_signalCapture.SuspendLayout();
-            this.groupBox_decoderSettings.SuspendLayout();
             this.groupBox_BIASAdjust.SuspendLayout();
             this.groupBox_scaleAdjust.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraph)).BeginInit();
@@ -209,7 +207,7 @@ namespace AudioDataInterface
             // 
             this.кодироватьВФайлToolStripMenuItem.Name = "кодироватьВФайлToolStripMenuItem";
             this.кодироватьВФайлToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.кодироватьВФайлToolStripMenuItem.Text = "Кодировать в файл";
+            this.кодироватьВФайлToolStripMenuItem.Text = "MP3 Энкодер";
             this.кодироватьВФайлToolStripMenuItem.Click += new System.EventHandler(this.кодироватьВФайлToolStripMenuItem_Click);
             // 
             // правкаToolStripMenuItem
@@ -935,6 +933,9 @@ namespace AudioDataInterface
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Controls.Add(this.checkBox_remainingTime);
+            this.groupBox1.Controls.Add(this.checkBox_invertSignal);
             this.groupBox1.Controls.Add(this.checkBox_tapeSkin);
             this.groupBox1.Controls.Add(this.button1);
             this.groupBox1.Controls.Add(this.button_buffMp3);
@@ -944,6 +945,30 @@ namespace AudioDataInterface
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Управление декодером";
+            // 
+            // checkBox_remainingTime
+            // 
+            this.checkBox_remainingTime.AutoSize = true;
+            this.checkBox_remainingTime.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_remainingTime.Location = new System.Drawing.Point(3, 114);
+            this.checkBox_remainingTime.Name = "checkBox_remainingTime";
+            this.checkBox_remainingTime.Size = new System.Drawing.Size(144, 17);
+            this.checkBox_remainingTime.TabIndex = 1;
+            this.checkBox_remainingTime.Text = "Оставшееся время";
+            this.checkBox_remainingTime.UseVisualStyleBackColor = true;
+            this.checkBox_remainingTime.CheckedChanged += new System.EventHandler(this.checkBox_remainingTime_CheckedChanged);
+            // 
+            // checkBox_invertSignal
+            // 
+            this.checkBox_invertSignal.AutoSize = true;
+            this.checkBox_invertSignal.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_invertSignal.Location = new System.Drawing.Point(3, 97);
+            this.checkBox_invertSignal.Name = "checkBox_invertSignal";
+            this.checkBox_invertSignal.Size = new System.Drawing.Size(144, 17);
+            this.checkBox_invertSignal.TabIndex = 0;
+            this.checkBox_invertSignal.Text = "Инвертировать сигнал";
+            this.checkBox_invertSignal.UseVisualStyleBackColor = true;
+            this.checkBox_invertSignal.CheckedChanged += new System.EventHandler(this.checkBox_invertSignal_CheckedChanged);
             // 
             // checkBox_tapeSkin
             // 
@@ -985,7 +1010,6 @@ namespace AudioDataInterface
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_signalCapture.Controls.Add(this.label1);
             this.groupBox_signalCapture.Controls.Add(this.comboBox_playDevices);
-            this.groupBox_signalCapture.Controls.Add(this.groupBox_decoderSettings);
             this.groupBox_signalCapture.Controls.Add(this.groupBox_BIASAdjust);
             this.groupBox_signalCapture.Controls.Add(this.groupBox_scaleAdjust);
             this.groupBox_signalCapture.Controls.Add(this.label_recDevice);
@@ -996,7 +1020,7 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.Size = new System.Drawing.Size(872, 192);
             this.groupBox_signalCapture.TabIndex = 12;
             this.groupBox_signalCapture.TabStop = false;
-            this.groupBox_signalCapture.Text = "Захват сигнала";
+            this.groupBox_signalCapture.Text = "Осциллограф";
             this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
             // 
             // label1
@@ -1019,56 +1043,6 @@ namespace AudioDataInterface
             this.comboBox_playDevices.Size = new System.Drawing.Size(194, 21);
             this.comboBox_playDevices.TabIndex = 16;
             this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
-            // 
-            // groupBox_decoderSettings
-            // 
-            this.groupBox_decoderSettings.Controls.Add(this.checkBox_autoGain);
-            this.groupBox_decoderSettings.Controls.Add(this.checkBox_remainingTime);
-            this.groupBox_decoderSettings.Controls.Add(this.checkBox_invertSignal);
-            this.groupBox_decoderSettings.Location = new System.Drawing.Point(328, 117);
-            this.groupBox_decoderSettings.Name = "groupBox_decoderSettings";
-            this.groupBox_decoderSettings.Size = new System.Drawing.Size(176, 73);
-            this.groupBox_decoderSettings.TabIndex = 15;
-            this.groupBox_decoderSettings.TabStop = false;
-            this.groupBox_decoderSettings.Text = "Декодер";
-            // 
-            // checkBox_autoGain
-            // 
-            this.checkBox_autoGain.AutoSize = true;
-            this.checkBox_autoGain.Checked = true;
-            this.checkBox_autoGain.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_autoGain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_autoGain.Location = new System.Drawing.Point(3, 50);
-            this.checkBox_autoGain.Name = "checkBox_autoGain";
-            this.checkBox_autoGain.Size = new System.Drawing.Size(170, 17);
-            this.checkBox_autoGain.TabIndex = 2;
-            this.checkBox_autoGain.Text = "Автоусиление";
-            this.checkBox_autoGain.UseVisualStyleBackColor = true;
-            this.checkBox_autoGain.CheckedChanged += new System.EventHandler(this.checkBox_autoGain_CheckedChanged);
-            // 
-            // checkBox_remainingTime
-            // 
-            this.checkBox_remainingTime.AutoSize = true;
-            this.checkBox_remainingTime.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_remainingTime.Location = new System.Drawing.Point(3, 33);
-            this.checkBox_remainingTime.Name = "checkBox_remainingTime";
-            this.checkBox_remainingTime.Size = new System.Drawing.Size(170, 17);
-            this.checkBox_remainingTime.TabIndex = 1;
-            this.checkBox_remainingTime.Text = "Оставшееся время";
-            this.checkBox_remainingTime.UseVisualStyleBackColor = true;
-            this.checkBox_remainingTime.CheckedChanged += new System.EventHandler(this.checkBox_remainingTime_CheckedChanged);
-            // 
-            // checkBox_invertSignal
-            // 
-            this.checkBox_invertSignal.AutoSize = true;
-            this.checkBox_invertSignal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_invertSignal.Location = new System.Drawing.Point(3, 16);
-            this.checkBox_invertSignal.Name = "checkBox_invertSignal";
-            this.checkBox_invertSignal.Size = new System.Drawing.Size(170, 17);
-            this.checkBox_invertSignal.TabIndex = 0;
-            this.checkBox_invertSignal.Text = "Инвертировать сигнал";
-            this.checkBox_invertSignal.UseVisualStyleBackColor = true;
-            this.checkBox_invertSignal.CheckedChanged += new System.EventHandler(this.checkBox_invertSignal_CheckedChanged);
             // 
             // groupBox_BIASAdjust
             // 
@@ -1204,6 +1178,17 @@ namespace AudioDataInterface
             this.timer_signalQualityUpdater.Interval = 50;
             this.timer_signalQualityUpdater.Tick += new System.EventHandler(this.timer_signalQualityUpdater_Tick);
             // 
+            // button2
+            // 
+            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button2.Location = new System.Drawing.Point(3, 131);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(144, 32);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "SECTOR";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1274,8 +1259,6 @@ namespace AudioDataInterface
             this.groupBox1.PerformLayout();
             this.groupBox_signalCapture.ResumeLayout(false);
             this.groupBox_signalCapture.PerformLayout();
-            this.groupBox_decoderSettings.ResumeLayout(false);
-            this.groupBox_decoderSettings.PerformLayout();
             this.groupBox_BIASAdjust.ResumeLayout(false);
             this.groupBox_BIASAdjust.PerformLayout();
             this.groupBox_scaleAdjust.ResumeLayout(false);
@@ -1321,14 +1304,12 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_spectrumBorder1;
         private System.Windows.Forms.PictureBox pictureBox_dots;
         private System.Windows.Forms.Timer timer_mpsPlayerTimeUpdater;
-        private System.Windows.Forms.GroupBox groupBox_decoderSettings;
         private System.Windows.Forms.CheckBox checkBox_remainingTime;
         public System.Windows.Forms.CheckBox checkBox_invertSignal;
         private System.Windows.Forms.GroupBox groupBox_info;
         private System.Windows.Forms.Label label_signalGainR;
         private System.Windows.Forms.Label label_signalGainL;
         private System.Windows.Forms.Label label_fixedErrorCount;
-        private System.Windows.Forms.CheckBox checkBox_autoGain;
         private System.Windows.Forms.CheckBox checkBox_tapeSkin;
         private System.Windows.Forms.PictureBox pictureBox_cassette;
         private System.Windows.Forms.Label label1;
@@ -1373,7 +1354,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_symbol3;
         private System.Windows.Forms.PictureBox pictureBox_symbol2;
         private System.Windows.Forms.PictureBox pictureBox_symbol1;
-        private System.Windows.Forms.Timer timer_signalQualityUpdater;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem кодировщикToolStripMenuItem;
@@ -1381,6 +1361,8 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripMenuItem кодироватьВФайлToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem отладкаToolStripMenuItem;
+        public System.Windows.Forms.Timer timer_signalQualityUpdater;
+        public System.Windows.Forms.Button button2;
     }
 }
 

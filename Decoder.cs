@@ -34,6 +34,11 @@ namespace AudioDataInterface
         public static Object amplitudesRLocker = new Object();
         public static Object decodedDataLocker = new Object();
         public static bool decoderActive = false;
+        public static bool sectorGet = false;
+        public static string decoderMode = "";
+        public static List<byte> sector = new List<byte>();
+        public static string sectorType = "";
+        public static bool sectorGot = false;
 
         static void SamplesDecoderStereo()
         {
@@ -72,7 +77,7 @@ namespace AudioDataInterface
                     {
                         tempList.Add(AudioIO.buff_signalSamplesL[0]);
                         AudioIO.buff_signalSamplesL.RemoveAt(0);
-                        if (tempList.Count >= 128)
+                        if (tempList.Count >= 512)
                         {
                             tempList.Clear();
                             break;
@@ -103,7 +108,7 @@ namespace AudioDataInterface
                     {
                         tempList.Add(AudioIO.buff_signalSamplesR[0]);
                         AudioIO.buff_signalSamplesR.RemoveAt(0);
-                        if (tempList.Count >= 128)
+                        if (tempList.Count >= 512)
                         {
                             tempList.Clear();
                             break;
@@ -307,10 +312,7 @@ namespace AudioDataInterface
                                 derivativeChangeCount++;
                             }
                         }
-                        if (derivativeChangeCount < 2)
-                        {
-                            tempBin = null;
-                        }
+                        if (derivativeChangeCount < 2) tempBin = null;
                         else
                         {
                             derivativeDecryptor.Add("-");
@@ -359,18 +361,29 @@ namespace AudioDataInterface
                                     }
                                     else channelSyncSucc = true;
                                 }
+                                if (decoderMode == "sector")
+                                {
+                                    if (subCodeByte1 == 24 && subCodeByte2 == 0 && subCodeByte3 == 0 && subCodeByte4 == 0) { sectorGet = true; sector.Clear(); sectorType = "header"; }
+                                    if (subCodeByte1 == 24 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1 && sector.Count != 0) { sectorGet = false; sectorType = "header"; }
+                                    if (subCodeByte1 == 25 && subCodeByte2 == 0 && subCodeByte3 == 0 && subCodeByte4 == 0) { sectorGet = true; sector.Clear(); sectorType = "hashes"; }
+                                    if (subCodeByte1 == 25 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1 && sector.Count != 0) { sectorGet = false; sectorType = "hashes"; }
+                                    if (subCodeByte1 == 26 && subCodeByte2 == 0 && subCodeByte3 == 0) { sectorGet = true; sector.Clear(); sectorType = ((int)subCodeByte4).ToString(); }
+                                    if (subCodeByte1 == 26 && subCodeByte2 == 1 && subCodeByte3 == 1) { sectorGet = false; sectorType = ((int)subCodeByte4).ToString(); }
+                                }
                             }
+                            else
+                            {
+                                if (sectorGet == true) { sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(0, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(8, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(16, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(24, 8), 2))); }
+                            }                     
+                            
                             if (channelSyncSucc == false)
                             {
-                                //channelSwitch = 1;
                                 frameSyncErrorCount++;
                                 decodedDataBlock = new string[6];
                                 lastDecodedDataBlock = new string[6];
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
-                                //lock (decodedDataLocker) buff_decodedData.Clear();
-                                //DataHandler.ms = new System.IO.MemoryStream();
                             }
                             if (channelSyncSucc == true) lock (decodedDataLocker) buff_decodedData.Add(decodedDataBlock);
                         }
@@ -474,7 +487,7 @@ namespace AudioDataInterface
             AudioIO.buff_signalBytes.Clear();
             Decoder.buff_signalAmplitudesL.Clear();
             Decoder.buff_signalAmplitudesR.Clear();
-            DataHandler.ms.Close();
+            if (DataHandler.ms != null) DataHandler.ms.Close();
         }
 
         public static void Start()

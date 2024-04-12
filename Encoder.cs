@@ -19,10 +19,6 @@ namespace AudioDataInterface
         public static FileStream fs_output = null;
         public static FileStream fs_input = null;
         public static List<short> list_outputFileSamples = new List<short>(); //Коллекция сэмплов для записи выходного файла
-        public static string[] alphabets = { "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ", 
-                                             "абвгдеёжзийклмнопрстуфхцчшщъыьэюяАБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯ",
-                                             "1234567890",
-                                             @"~!@#$%^&*()_+`-=<>,.?/|\"}; //Алфавиты символов
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Энкодер
@@ -44,6 +40,7 @@ namespace AudioDataInterface
         public static int encoder_mpsPlayerSubCodeInterval = 0;
         public static bool encoder_longLeadIn = false;
         public static string encoder_mode = "";
+        public static int encoder_sectorFileIndex = 0;
         public static string encoder_ffmpeg1Cmd = "-vn -ar 11025 -ac 1 -b:a 16k -map 0:a -map_metadata -1";
         public static string encoder_ffmpeg2Cmd = "-vn -ar 11025 -ac 1 -b:a 16k";
         public static string encoder_ffmpeg2EffectCmd = "equalizer=f=5000:width_type=h:width=1000:g=20";
@@ -771,9 +768,13 @@ namespace AudioDataInterface
             CreateOutputStream();
             //Расставляем время воспроизведения по файлу
             int mp3Duration = 0;
-            if (encoder_mode == "mp3") mp3Duration = GetMp3FileDuration();
-            else mp3Duration = GetEncodingAudioDuration();
-            int deltaByte = (int)Math.Round((double)((encoder_mpsPlayerSubCodeInterval * fs_input.Length) / mp3Duration));
+            int deltaByte = 0;
+            if (encoder_mode == "mp3")
+            { 
+                mp3Duration = GetMp3FileDuration();
+                deltaByte = (int)Math.Round((double)((encoder_mpsPlayerSubCodeInterval * fs_input.Length) / mp3Duration));
+            }
+            if (encoder_mode.Contains("sector")) deltaByte = (int)fs_input.Length / 4;
             List<int> targetBytePositions = new List<int>();          
             for (int i = 0; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
             List<int> targetDurations = new List<int>();
@@ -789,8 +790,12 @@ namespace AudioDataInterface
             }
             fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
             GenerateVoid(encoder_silenceSeconds); //Генерация тишины 2 сек.
-            GenerateStereoSync(); //Генерация синхроимпульса       
-            for (int i = 0; i < encoder_leadInSubcodesAmount; i++) GenerateSubCodeBlockStereo(50, 50, 50, 50, 50, 50, 50, 50);
+            GenerateStereoSync(); //Генерация синхроимпульса
+            GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1); //Субкод канальной синхронизации (принудительная синхронизация каналов на начале потока)
+            for (int i = 0; i < 512; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101"); //Сигнал-заглушка для компенсации ошибки синхронизации
+            if (encoder_mode == "sector_header") GenerateSubCodeBlockStereo(24, 0, 0, 0, 24, 0, 0, 0); //Субкод lead-in для сектора заголовка 
+            if (encoder_mode == "sector_hashes") GenerateSubCodeBlockStereo(25, 0, 0, 0, 25, 0, 0, 0); //Субкод lead-in для сектора контрольных сумм
+            if (encoder_mode == "sector_file") GenerateSubCodeBlockStereo(26, 0, 0, (byte)encoder_sectorFileIndex, 26, 0, 0, (byte)encoder_sectorFileIndex); //Субкод lead-in для сектора файла
             //Преобразование данных в бинарный код
             for (int i = 0, k = 0; i < fs_input.Length;)
             {
@@ -844,6 +849,7 @@ namespace AudioDataInterface
                 binaryR += temp;
                 i++;k++;
                 encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
+                if (encoder_mode != "mp3") form_tapeRecordingWizard.sectorTable[encoder_sectorFileIndex - 1][3] = encoder_progress.ToString() + "%";
                 GenerateRAWDataBlockStereo(binaryL, binaryR);
                 binaryL = "";
                 binaryR = "";
@@ -875,7 +881,10 @@ namespace AudioDataInterface
                     }
                 }
             }
-            for (int i = 0; i < encoder_leadInOutSubcodesAmount; i++) GenerateSubCodeBlockStereo(60, 60, 60, 60, 60, 60, 60, 60);
+            if (encoder_mode == "sector_header") GenerateSubCodeBlockStereo(24, 1, 1, 1, 24, 1, 1, 1); //Субкод lead-out для сектора заголовка
+            if (encoder_mode == "sector_hashes") GenerateSubCodeBlockStereo(25, 1, 1, 1, 25, 1, 1, 1); //Субкод lead-out для сектора контрольных сумм
+            if (encoder_mode == "sector_file") GenerateSubCodeBlockStereo(26, 1, 1, (byte)encoder_sectorFileIndex, 26, 1, 1, (byte)encoder_sectorFileIndex); //Субкод lead-out для сектора файла
+            for (int i = 0; i < 512; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101");
             fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
             WriteHeader(fs_output, encoder_sampleRate, 2);
             fs_output.Close();

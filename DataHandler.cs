@@ -141,7 +141,7 @@ namespace AudioDataInterface
                 try
                 {
                     //Буферизация данных
-                    while (ms.Length - ms.Position < mp3_buffSize) { Thread.Sleep(250); form_main.mpsPlayer_showTime = false; }
+                    while (ms.Length - ms.Position < mp3_buffSize) { Thread.Sleep(10); form_main.mpsPlayer_showTime = false; }
                     reader = new Mp3FileReader(ms);
                     AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioClientShareMode.Shared, true, 50);
                     AudioIO.naudio_wasapiOut.Init(reader);

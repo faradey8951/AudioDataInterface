@@ -44,26 +44,16 @@ namespace AudioDataInterface
             this.trackBar_trackNumber = new System.Windows.Forms.TrackBar();
             this.textBox = new System.Windows.Forms.TextBox();
             this.button_select = new System.Windows.Forms.Button();
-            this.trackBar = new System.Windows.Forms.TrackBar();
-            this.label_encodingDensity = new System.Windows.Forms.Label();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.button_convert = new System.Windows.Forms.Button();
             this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
             this.button_clear = new System.Windows.Forms.Button();
-            this.groupBox_mode = new System.Windows.Forms.GroupBox();
-            this.radioButton_stereo = new System.Windows.Forms.RadioButton();
-            this.radioButton_mono = new System.Windows.Forms.RadioButton();
-            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
-            this.button_debug = new System.Windows.Forms.ToolStripButton();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.statusStrip.SuspendLayout();
             this.groupBox_file.SuspendLayout();
             this.groupBox_properties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackNumber)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).BeginInit();
-            this.groupBox_mode.SuspendLayout();
-            this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -72,7 +62,7 @@ namespace AudioDataInterface
             this.label_encoding,
             this.progressBar,
             this.label_percent});
-            this.statusStrip.Location = new System.Drawing.Point(0, 287);
+            this.statusStrip.Location = new System.Drawing.Point(0, 187);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(445, 22);
             this.statusStrip.TabIndex = 0;
@@ -101,7 +91,7 @@ namespace AudioDataInterface
             // button_ok
             // 
             this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_ok.Location = new System.Drawing.Point(358, 261);
+            this.button_ok.Location = new System.Drawing.Point(358, 161);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(75, 23);
             this.button_ok.TabIndex = 1;
@@ -116,9 +106,9 @@ namespace AudioDataInterface
             this.groupBox_file.Controls.Add(this.textBox);
             this.groupBox_file.Controls.Add(this.button_select);
             this.groupBox_file.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox_file.Location = new System.Drawing.Point(0, 25);
+            this.groupBox_file.Location = new System.Drawing.Point(0, 0);
             this.groupBox_file.Name = "groupBox_file";
-            this.groupBox_file.Size = new System.Drawing.Size(445, 284);
+            this.groupBox_file.Size = new System.Drawing.Size(445, 209);
             this.groupBox_file.TabIndex = 12;
             this.groupBox_file.TabStop = false;
             this.groupBox_file.Text = "MPS-SDI";
@@ -211,28 +201,10 @@ namespace AudioDataInterface
             this.button_select.UseVisualStyleBackColor = true;
             this.button_select.Click += new System.EventHandler(this.button_select_Click);
             // 
-            // trackBar
-            // 
-            this.trackBar.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.trackBar.Location = new System.Drawing.Point(6, 230);
-            this.trackBar.Name = "trackBar";
-            this.trackBar.Size = new System.Drawing.Size(266, 45);
-            this.trackBar.TabIndex = 4;
-            // 
-            // label_encodingDensity
-            // 
-            this.label_encodingDensity.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.label_encodingDensity.AutoSize = true;
-            this.label_encodingDensity.Location = new System.Drawing.Point(12, 214);
-            this.label_encodingDensity.Name = "label_encodingDensity";
-            this.label_encodingDensity.Size = new System.Drawing.Size(172, 13);
-            this.label_encodingDensity.TabIndex = 5;
-            this.label_encodingDensity.Text = "Скорость потока данных: 1 KB/s";
-            // 
             // button_convert
             // 
             this.button_convert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_convert.Location = new System.Drawing.Point(253, 261);
+            this.button_convert.Location = new System.Drawing.Point(253, 161);
             this.button_convert.Name = "button_convert";
             this.button_convert.Size = new System.Drawing.Size(99, 23);
             this.button_convert.TabIndex = 6;
@@ -248,7 +220,7 @@ namespace AudioDataInterface
             // button_clear
             // 
             this.button_clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_clear.Location = new System.Drawing.Point(13, 261);
+            this.button_clear.Location = new System.Drawing.Point(13, 161);
             this.button_clear.Name = "button_clear";
             this.button_clear.Size = new System.Drawing.Size(75, 23);
             this.button_clear.TabIndex = 7;
@@ -256,79 +228,19 @@ namespace AudioDataInterface
             this.button_clear.UseVisualStyleBackColor = true;
             this.button_clear.Click += new System.EventHandler(this.button_clear_Click);
             // 
-            // groupBox_mode
-            // 
-            this.groupBox_mode.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_mode.Controls.Add(this.radioButton_stereo);
-            this.groupBox_mode.Controls.Add(this.radioButton_mono);
-            this.groupBox_mode.Location = new System.Drawing.Point(278, 190);
-            this.groupBox_mode.Name = "groupBox_mode";
-            this.groupBox_mode.Size = new System.Drawing.Size(155, 65);
-            this.groupBox_mode.TabIndex = 10;
-            this.groupBox_mode.TabStop = false;
-            this.groupBox_mode.Text = "Режим";
-            // 
-            // radioButton_stereo
-            // 
-            this.radioButton_stereo.AutoSize = true;
-            this.radioButton_stereo.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radioButton_stereo.Location = new System.Drawing.Point(3, 33);
-            this.radioButton_stereo.Name = "radioButton_stereo";
-            this.radioButton_stereo.Size = new System.Drawing.Size(149, 17);
-            this.radioButton_stereo.TabIndex = 1;
-            this.radioButton_stereo.Text = "MPS-ADI16";
-            this.radioButton_stereo.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_mono
-            // 
-            this.radioButton_mono.AutoSize = true;
-            this.radioButton_mono.Checked = true;
-            this.radioButton_mono.Dock = System.Windows.Forms.DockStyle.Top;
-            this.radioButton_mono.Location = new System.Drawing.Point(3, 16);
-            this.radioButton_mono.Name = "radioButton_mono";
-            this.radioButton_mono.Size = new System.Drawing.Size(149, 17);
-            this.radioButton_mono.TabIndex = 0;
-            this.radioButton_mono.TabStop = true;
-            this.radioButton_mono.Text = "MPS-ADI8";
-            this.radioButton_mono.UseVisualStyleBackColor = true;
-            // 
-            // toolStrip1
-            // 
-            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.button_debug});
-            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(445, 25);
-            this.toolStrip1.TabIndex = 11;
-            this.toolStrip1.Text = "toolStrip1";
-            // 
-            // button_debug
-            // 
-            this.button_debug.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.button_debug.Image = global::AudioDataInterface.Properties.Resources.debug;
-            this.button_debug.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.button_debug.Name = "button_debug";
-            this.button_debug.Size = new System.Drawing.Size(72, 22);
-            this.button_debug.Text = "Отладка";
-            this.button_debug.Click += new System.EventHandler(this.button_debug_Click);
-            // 
             // form_encoder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(445, 309);
-            this.Controls.Add(this.groupBox_mode);
+            this.ClientSize = new System.Drawing.Size(445, 209);
             this.Controls.Add(this.button_clear);
             this.Controls.Add(this.button_convert);
-            this.Controls.Add(this.label_encodingDensity);
-            this.Controls.Add(this.trackBar);
             this.Controls.Add(this.button_ok);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBox_file);
-            this.Controls.Add(this.toolStrip1);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(461, 508);
+            this.MaximumSize = new System.Drawing.Size(461, 248);
             this.Name = "form_encoder";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -343,11 +255,6 @@ namespace AudioDataInterface
             this.groupBox_properties.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackNumber)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar)).EndInit();
-            this.groupBox_mode.ResumeLayout(false);
-            this.groupBox_mode.PerformLayout();
-            this.toolStrip1.ResumeLayout(false);
-            this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -361,8 +268,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripStatusLabel label_percent;
         private System.Windows.Forms.Button button_ok;
         private System.Windows.Forms.GroupBox groupBox_file;
-        private System.Windows.Forms.TrackBar trackBar;
-        private System.Windows.Forms.Label label_encodingDensity;
         private System.Windows.Forms.Button button_select;
         private System.Windows.Forms.TextBox textBox;
         private System.Windows.Forms.OpenFileDialog openFileDialog;
@@ -370,16 +275,11 @@ namespace AudioDataInterface
         private System.Windows.Forms.Button button_convert;
         private System.Windows.Forms.Timer timer_controlHandler;
         private System.Windows.Forms.Button button_clear;
-        private System.Windows.Forms.GroupBox groupBox_mode;
-        private System.Windows.Forms.ToolStrip toolStrip1;
-        private System.Windows.Forms.ToolStripButton button_debug;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.TrackBar trackBar_trackCount;
         private System.Windows.Forms.Label label_trackNumber;
         private System.Windows.Forms.Label label_trackCount;
         private System.Windows.Forms.TrackBar trackBar_trackNumber;
-        private System.Windows.Forms.RadioButton radioButton_stereo;
-        private System.Windows.Forms.RadioButton radioButton_mono;
         private System.Windows.Forms.CheckBox checkBox_longLeadIn;
     }
 }

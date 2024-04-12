@@ -23,6 +23,7 @@ namespace AudioDataInterface
         static AudioFileReader naudio_audioFileReader = null;                                   //Читалка аудио файлов для встроенного плеера
         public static MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
         public static MMDeviceCollection mm_dev = null;
+        public static WasapiOut naudio_playDeviceWasapiOut = null;
 
         public static WasapiCapture waveLoop = null;
         //WaveFormat fmt = waveLoop.WaveFormat;
@@ -54,6 +55,8 @@ namespace AudioDataInterface
         //////////////////////////////////////////////////////////////////////////////////////
         public static int audio_recDeviceId = 0;                                                //ID текущего устройства записи
         public static int audio_playDeviceId = 0;                                               //ID текущего устройства воспроизведения
+        public static int audio_tapePlayDeviceId = 0;
+        public static bool audio_tapePlayStopped = true;
         public static int audio_signalHeight = 500;                                               //Высота сигнала
         public static bool audio_invertSignal = true;                                          //Инверсия сигнала
         public static double audio_signalGain = 7;
@@ -120,6 +123,27 @@ namespace AudioDataInterface
                 buff_graphSamples.Clear();
             }
             catch { }
+        }
+
+        public static void PlayWavFile(string file)
+        {
+            if (naudio_playDeviceWasapiOut != null) naudio_playDeviceWasapiOut.Stop();
+            naudio_audioFileReader = new AudioFileReader(file);
+            var device = enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[AudioIO.audio_tapePlayDeviceId];       
+            naudio_playDeviceWasapiOut = new WasapiOut(device, AudioClientShareMode.Shared, true, 50);
+            naudio_playDeviceWasapiOut.PlaybackStopped += OnPlaybackStopped;
+            naudio_playDeviceWasapiOut.Init(naudio_audioFileReader);
+            audio_tapePlayStopped = false;
+            naudio_playDeviceWasapiOut.Play();
+        }
+
+        private static void OnPlaybackStopped(object sender, NAudio.Wave.StoppedEventArgs args)
+        {
+            naudio_playDeviceWasapiOut.Dispose();
+            naudio_playDeviceWasapiOut = null;
+            naudio_audioFileReader.Dispose();
+            naudio_audioFileReader = null;
+            audio_tapePlayStopped = true;
         }
 
         static void Graph_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
