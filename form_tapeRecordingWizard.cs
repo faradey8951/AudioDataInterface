@@ -178,7 +178,7 @@ namespace AudioDataInterface
                 sectorTable[sectorTable.Count - 2][2] = "Запись сектора...";
                 sectorTable[sectorTable.Count - 2][3] = "0%";
                 AudioIO.PlayWavFile(projectPath + "\\" + "header.wav");
-                while (timer < 5) //Таймаут ожидания lead-in 10 сек
+                while (timer < 5) //Таймаут ожидания lead-in
                 {
                     if (Decoder.sectorType == "header") { sectorTable[sectorTable.Count - 2][2] = "Lead-in обнаружен..."; sectorTable[sectorTable.Count - 2][3] = "100%"; break; }
                     Thread.Sleep(1000);
@@ -189,7 +189,7 @@ namespace AudioDataInterface
                 {
                     timer = 0;
                     while (AudioIO.audio_tapePlayStopped == false) Thread.Sleep(50); //Ожидание завершения отправки сигнала
-                    while (timer < 5) //Таймаут ожидания lead-out 10 сек
+                    while (timer < 5) //Таймаут ожидания lead-out
                     {
                         if (Decoder.sectorGet == false) { sectorTable[sectorTable.Count - 2][2] = "Lead-out обнаружен..."; sectorTable[sectorTable.Count - 2][3] = "100%"; break; }
                         Thread.Sleep(1000);
@@ -201,9 +201,18 @@ namespace AudioDataInterface
                 {
                     sectorTable[sectorTable.Count - 2][2] = "Проверка контр.сумм...";
                     sectorTable[sectorTable.Count - 2][3] = "0%";
-                    string header = Encoding.UTF8.GetString(Decoder.sector.ToArray());
-                    string[] headerSub = TextHandler.GetStringValues(header);
-                    sectorRecordSuccess = true;
+                    string sector = Encoding.UTF8.GetString(Decoder.sector.ToArray());
+                    //MessageBox.Show(sector);
+                    string[] sectorSub = TextHandler.GetStringValues(sector);
+                    if (sectorSub.Length == 4)
+                    {
+                        string header = sectorSub[0] + ";" + sectorSub[1] + ";" + sectorSub[2] + ";";
+                        string headerHash = BinaryHandler.GetHash(header);
+                        if (sectorSub[3] == headerHash) sectorRecordSuccess = true;
+                        else errorOccurred = true;
+                        sectorRecordSuccess = true;
+                    }
+                    else errorOccurred = true;
                 }
             }
             for (int i = 0; i < sectorTable.Count; i++)

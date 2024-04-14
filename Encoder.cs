@@ -791,8 +791,8 @@ namespace AudioDataInterface
             fs_output.Seek(44, SeekOrigin.Begin); //Пропуск первых 44 байт потока, предназначенных для записи оглавления
             GenerateVoid(encoder_silenceSeconds); //Генерация тишины 2 сек.
             GenerateStereoSync(); //Генерация синхроимпульса
-            GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1); //Субкод канальной синхронизации (принудительная синхронизация каналов на начале потока)
-            for (int i = 0; i < 512; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101"); //Сигнал-заглушка для компенсации ошибки синхронизации
+            for (int i = 0; i < 16; i++) GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1); //Субкод канальной синхронизации (принудительная синхронизация каналов на начале потока)
+            for (int i = 0; i < 64; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101"); //Сигнал-заглушка для компенсации ошибки синхронизации
             if (encoder_mode == "sector_header") GenerateSubCodeBlockStereo(24, 0, 0, 0, 24, 0, 0, 0); //Субкод lead-in для сектора заголовка 
             if (encoder_mode == "sector_hashes") GenerateSubCodeBlockStereo(25, 0, 0, 0, 25, 0, 0, 0); //Субкод lead-in для сектора контрольных сумм
             if (encoder_mode == "sector_file") GenerateSubCodeBlockStereo(26, 0, 0, (byte)encoder_sectorFileIndex, 26, 0, 0, (byte)encoder_sectorFileIndex); //Субкод lead-in для сектора файла
@@ -884,7 +884,7 @@ namespace AudioDataInterface
             if (encoder_mode == "sector_header") GenerateSubCodeBlockStereo(24, 1, 1, 1, 24, 1, 1, 1); //Субкод lead-out для сектора заголовка
             if (encoder_mode == "sector_hashes") GenerateSubCodeBlockStereo(25, 1, 1, 1, 25, 1, 1, 1); //Субкод lead-out для сектора контрольных сумм
             if (encoder_mode == "sector_file") GenerateSubCodeBlockStereo(26, 1, 1, (byte)encoder_sectorFileIndex, 26, 1, 1, (byte)encoder_sectorFileIndex); //Субкод lead-out для сектора файла
-            for (int i = 0; i < 512; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101");
+            for (int i = 0; i < 64; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101");
             fs_output.Seek(0, SeekOrigin.Begin); //Переход на 0 положение потока записи, для записи оглавления wave файла
             WriteHeader(fs_output, encoder_sampleRate, 2);
             fs_output.Close();
