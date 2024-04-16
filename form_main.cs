@@ -1010,5 +1010,13 @@ namespace AudioDataInterface
             AudioIO.SignalCaptureInit();
             Decoder.Start();
         }
+
+        private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string[] temp = BinaryHandler.HammingEncode("00000000000000000000000000000000");
+            string tempString = "";
+            foreach (string s in temp) tempString += s;
+            MessageBox.Show(tempString);
+        }
     }
 }

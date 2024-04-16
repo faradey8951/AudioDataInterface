@@ -19,7 +19,7 @@ namespace AudioDataInterface
         static string filePath = "";
         static string projectPath = "Tape Record Wizard";
         static int fileSize = 0;
-        public static int fileSectorsCount = 128; //Количество секторов для файла
+        public static int fileSectorsCount = 32; //Количество секторов для файла
         static FileInfo fileInfo;
         public static Thread thread_prepareSectors = new Thread(PrepareSectors);
         public static Thread thread_encodeSectors = new Thread(EncodeSectors);
@@ -30,6 +30,7 @@ namespace AudioDataInterface
         public static List<string[]> sectorTable;
         public static bool sectorTableReady = false;
         public static bool fileConverted = false;
+        public static bool errorOccurred = false;
         public form_tapeRecordingWizard()
         {
             InitializeComponent();
@@ -81,6 +82,7 @@ namespace AudioDataInterface
             {
                 fs_output = new FileStream(projectPath + "\\" + (i + 1).ToString() + ".sector", FileMode.Create);
                 for (int k = 0; k < fileSectorSize && fs_input.Position < fs_input.Length; k++) fs_output.WriteByte((byte)fs_input.ReadByte());
+                while ((fs_output.Length / 8.0) - Math.Truncate(fs_output.Length / 8.0) != 0) fs_output.WriteByte((byte)0);
                 fs_output.Close();
                 fs_output.Dispose();
                 status = "Разбиение на секторы...";
@@ -96,32 +98,31 @@ namespace AudioDataInterface
             status = "Формирование заголовка...";
             progress = 0;
             string header = Path.GetFileName(filePath) + ";" + fileSize.ToString() + ";" + fileSectorsCount + ";"; //Заголовок потока
-            string headerHash = BinaryHandler.GetHash(header);
+            string headerHash = BinaryHandler.GetStringHash(header);
             header += headerHash;
             byte[] headerBytes = Encoding.UTF8.GetBytes(header);
-            while ((headerBytes.Length / 4.0) - Math.Truncate(headerBytes.Length / 4.0) != 0)
+            while ((headerBytes.Length / 8.0) - Math.Truncate(headerBytes.Length / 8.0) != 0)
             {
                 Array.Resize(ref headerBytes, headerBytes.Length + 1);
                 headerBytes[headerBytes.Length - 1] = 0;
             }
-            MessageBox.Show(Encoding.UTF8.GetString(headerBytes));
             fs_output = new FileStream(projectPath + "\\" + "header.sector", FileMode.Create);
             foreach (byte b in headerBytes) fs_output.WriteByte((byte)b);
             fs_output.Close();
             fs_output.Dispose();
             progress = 100;
             sectorTable.Add(new string[] { "Заголовок", new FileInfo(projectPath + "\\" + "header.sector").Length.ToString(), "Подготовка", "100%", projectPath + "\\" + "header.sector" });
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
 
             //Расчет контрольных сумм секторов
             status = "Расчет контрольных сумм секторов...";
             progress = 0;
             string sectorHashes = "";
             for (int i = 0; i < fileSectorsCount; i++) { sectorHashes += BinaryHandler.GetFileHash(projectPath + "\\" + (i + 1).ToString() + ".sector") + ";"; progress = ProgressHandler.GetPercent(fileSectorsCount, i + 1); }
-            string sectorHashesHash = BinaryHandler.GetHash(sectorHashes);
+            string sectorHashesHash = BinaryHandler.GetStringHash(sectorHashes);
             sectorHashes += sectorHashesHash;
             byte[] sectorHashesBytes = Encoding.UTF8.GetBytes(sectorHashes);
-            while ((sectorHashesBytes.Length / 4.0) - Math.Truncate(sectorHashesBytes.Length / 4.0) != 0)
+            while ((sectorHashesBytes.Length / 8.0) - Math.Truncate(sectorHashesBytes.Length / 8.0) != 0)
             {
                 Array.Resize(ref sectorHashesBytes, sectorHashesBytes.Length + 1);
                 sectorHashesBytes[sectorHashesBytes.Length - 1] = 0;
@@ -132,10 +133,10 @@ namespace AudioDataInterface
             fs_output.Dispose();
             progress = 100;
             sectorTable.Add(new string[] { "Контр.суммы", new FileInfo(projectPath + "\\" + "sectorHashes.sector").Length.ToString(), "Подготовка", "100%", projectPath + "\\" + "sectorHashes.sector" });
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
 
             sectorTableReady = true;
-            Thread.Sleep(2000);
+            Thread.Sleep(500);
             thread_encodeSectors.Start();
             //Создание представления
         }
@@ -165,7 +166,8 @@ namespace AudioDataInterface
         {
             int timer = 0;
             bool sectorRecordSuccess = false;
-            bool errorOccurred = false;
+            errorOccurred = false;
+            List<string> decodedHashes = new List<string>();
             status = "Запись секторов на ленту...";
             progress = 0;
             for (int i = 0; i < sectorTable.Count; i++) sectorTable[i][3] = "-";
@@ -207,19 +209,98 @@ namespace AudioDataInterface
                     if (sectorSub.Length == 4)
                     {
                         string header = sectorSub[0] + ";" + sectorSub[1] + ";" + sectorSub[2] + ";";
-                        string headerHash = BinaryHandler.GetHash(header);
-                        if (sectorSub[3] == headerHash) sectorRecordSuccess = true;
+                        string headerHash = BinaryHandler.GetStringHash(header);
+                        if (sectorSub[3].Contains(headerHash)) { sectorRecordSuccess = true; sectorTable[sectorTable.Count - 2][2] = "Записан"; sectorTable[sectorTable.Count - 2][3] = "100%"; }
                         else errorOccurred = true;
-                        sectorRecordSuccess = true;
                     }
                     else errorOccurred = true;
                 }
             }
-            for (int i = 0; i < sectorTable.Count; i++)
+            sectorRecordSuccess = false;
+            while (sectorRecordSuccess != true) //Запись сектора-контр.сумм
             {
-                sectorTable[i][2] = "Запись lead-in...";
-                sectorTable[i][3] = "0%";
-                break;
+                errorOccurred = false;
+                sectorRecordSuccess = false;
+                timer = 0;
+                sectorTable[sectorTable.Count - 1][2] = "Запись сектора...";
+                sectorTable[sectorTable.Count - 1][3] = "0%";
+                AudioIO.PlayWavFile(projectPath + "\\" + "sectorHashes.wav");
+                while (timer < 5) //Таймаут ожидания lead-in
+                {
+                    if (Decoder.sectorType == "hashes") { sectorTable[sectorTable.Count - 1][2] = "Lead-in обнаружен..."; sectorTable[sectorTable.Count - 1][3] = "100%"; break; }
+                    Thread.Sleep(1000);
+                    timer++;
+                    if (timer == 5) { errorOccurred = true; }
+                }
+                if (errorOccurred == false)
+                {
+                    timer = 0;
+                    while (AudioIO.audio_tapePlayStopped == false) Thread.Sleep(50); //Ожидание завершения отправки сигнала
+                    while (timer < 5) //Таймаут ожидания lead-out
+                    {
+                        if (Decoder.sectorGet == false) { sectorTable[sectorTable.Count - 1][2] = "Lead-out обнаружен..."; sectorTable[sectorTable.Count - 1][3] = "100%"; break; }
+                        Thread.Sleep(1000);
+                        timer++;
+                        if (timer == 5) errorOccurred = true;
+                    }
+                }
+                if (errorOccurred == false)
+                {
+                    sectorTable[sectorTable.Count - 1][2] = "Проверка контр.сумм...";
+                    sectorTable[sectorTable.Count - 1][3] = "0%";
+                    string sector = Encoding.UTF8.GetString(Decoder.sector.ToArray());
+                    //MessageBox.Show(sector);
+                    string[] sectorSub = TextHandler.GetStringValues(sector);
+                    if (sectorSub.Length == 33)
+                    {
+                        string hashes = "";
+                        for (int i = 0; i < sectorSub.Length - 1; i++) { hashes += sectorSub[i] + ";"; decodedHashes.Add(sectorSub[i]); }
+                        string headerHash = BinaryHandler.GetStringHash(hashes);
+                        if (sectorSub[32].Contains(headerHash)) { sectorRecordSuccess = true; sectorTable[sectorTable.Count - 1][2] = "Записан"; sectorTable[sectorTable.Count - 1][3] = "100%"; }
+                        else errorOccurred = true;
+                    }
+                    else errorOccurred = true;
+                }
+            }
+            for (int i = 0; i < sectorTable.Count - 2; i++) //Запись секторов-файла
+            {
+                sectorRecordSuccess = false;
+                while (sectorRecordSuccess != true)
+                {
+                    Decoder.sectorGet = false;
+                    errorOccurred = false;
+                    sectorRecordSuccess = false;
+                    timer = 0;
+                    sectorTable[i][2] = "Ожидание lead-in...";
+                    sectorTable[i][3] = "...";
+                    AudioIO.PlayWavFile(projectPath + "\\" + (i + 1).ToString() + ".wav");
+                    while (timer < 5 && errorOccurred == false) //Таймаут ожидания lead-in
+                    {
+                        if (Decoder.sectorType == (i + 1).ToString()) { sectorTable[i][2] = "Ожидание lead-out..."; sectorTable[i][3] = "..."; break; }
+                        Thread.Sleep(1000);
+                        timer++;
+                        if (timer == 5) { errorOccurred = true; }
+                    }
+                    while (AudioIO.audio_tapePlayStopped == false && errorOccurred == false) Thread.Sleep(50); //Ожидание завершения отправки сигнала
+                    timer = 0;
+                    while (timer < 5 && errorOccurred == false) //Таймаут ожидания lead-out
+                    {
+                        if (Decoder.sectorGet == false) { sectorTable[i][2] = "Проверка контр.сумм"; sectorTable[i][3] = "..."; break; }
+                        Thread.Sleep(1000);
+                        timer++;
+                        if (timer == 5) errorOccurred = true;
+                    }
+                    if (errorOccurred == false)
+                    {
+                        if (errorOccurred) break;
+                        sectorTable[i][2] = "Проверка контр.сумм...";
+                        sectorTable[i][3] = "0%";
+                        byte[] sector = Decoder.sector.ToArray();
+                        string sectorHash = BinaryHandler.GetBinaryHash(sector);
+                        if (decodedHashes[i].Contains(sectorHash)) { sectorRecordSuccess = true; sectorTable[i][2] = "Успешно записан"; sectorTable[i][3] = "100%"; }
+                        else errorOccurred = true;
+                    }
+                }
             }
         }
 

@@ -99,6 +99,7 @@ namespace AudioDataInterface
             this.label_signalGainR = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
             this.checkBox_invertSignal = new System.Windows.Forms.CheckBox();
             this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
@@ -122,7 +123,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
-            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -250,8 +250,9 @@ namespace AudioDataInterface
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.оПрограммеToolStripMenuItem.Text = "О программе";
+            this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
             // 
             // statusStrip
             // 
@@ -946,6 +947,17 @@ namespace AudioDataInterface
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Управление декодером";
             // 
+            // button2
+            // 
+            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.button2.Location = new System.Drawing.Point(3, 131);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(144, 32);
+            this.button2.TabIndex = 18;
+            this.button2.Text = "SECTOR";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            // 
             // checkBox_remainingTime
             // 
             this.checkBox_remainingTime.AutoSize = true;
@@ -1177,17 +1189,6 @@ namespace AudioDataInterface
             // 
             this.timer_signalQualityUpdater.Interval = 50;
             this.timer_signalQualityUpdater.Tick += new System.EventHandler(this.timer_signalQualityUpdater_Tick);
-            // 
-            // button2
-            // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button2.Location = new System.Drawing.Point(3, 131);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(144, 32);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "SECTOR";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
             // 
             // form_main
             // 

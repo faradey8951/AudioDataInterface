@@ -312,7 +312,7 @@ namespace AudioDataInterface
                                 derivativeChangeCount++;
                             }
                         }
-                        if (derivativeChangeCount < 2) tempBin = null;
+                        if (derivativeChangeCount < 2) { tempBin = "000000000000000000000000000000000000001"; }
                         else
                         {
                             derivativeDecryptor.Add("-");
@@ -338,7 +338,7 @@ namespace AudioDataInterface
                             bool channelSyncSucc = true;
                             if (decodedDataBlock[3][38] == '0') //Детектируем наличие субкода
                             {
-                                string subCode = decodedDataBlock[4]; //Получаем двоичный субкод                                        
+                                string subCode = decodedDataBlock[4]; //Получаем двоичный субкод
                                 byte subCodeByte1 = Convert.ToByte(Convert.ToInt16(subCode.Substring(0, 8), 2));
                                 byte subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
                                 byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
@@ -384,6 +384,7 @@ namespace AudioDataInterface
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
+                                if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true;
                             }
                             if (channelSyncSucc == true) lock (decodedDataLocker) buff_decodedData.Add(decodedDataBlock);
                         }
@@ -474,7 +475,7 @@ namespace AudioDataInterface
                 bin = bin.Remove(bin.Length - 1);
                 data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
                 if (data[1] == "fixed") { fixedErrorCount++; overallErrorCount++; }
-                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; }
+                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true; }
                 if (data[0] != "") decodedDataBlock[4] = data[0];
             }
         }

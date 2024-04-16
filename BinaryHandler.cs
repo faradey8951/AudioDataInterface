@@ -15,7 +15,7 @@ namespace AudioDataInterface
         /// </summary>
         /// <param name="input"></param>
         /// <returns></returns>
-        public static string GetHash(string input)
+        public static string GetStringHash(string input)
         {
             var md5 = MD5.Create();
             var hash = md5.ComputeHash(Encoding.UTF8.GetBytes(input));
@@ -28,6 +28,14 @@ namespace AudioDataInterface
             var md5 = MD5.Create();
             var stream = File.OpenRead(filePath);
             return Convert.ToBase64String(md5.ComputeHash(stream));
+        }
+
+        public static string GetBinaryHash(byte[] input)
+        {
+            var md5 = MD5.Create();
+            var hash = md5.ComputeHash(input);
+
+            return Convert.ToBase64String(hash);
         }
 
         /// <summary>
