@@ -51,6 +51,7 @@
             this.comboBox1 = new System.Windows.Forms.ComboBox();
             this.label_outputDevice = new System.Windows.Forms.Label();
             this.button_convert = new System.Windows.Forms.Button();
+            this.column_warnings = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.statusStrip.SuspendLayout();
             this.groupBox_file.SuspendLayout();
             this.groupBox_sheet.SuspendLayout();
@@ -62,9 +63,9 @@
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.label_status,
             this.progressBar});
-            this.statusStrip.Location = new System.Drawing.Point(0, 428);
+            this.statusStrip.Location = new System.Drawing.Point(0, 518);
             this.statusStrip.Name = "statusStrip";
-            this.statusStrip.Size = new System.Drawing.Size(800, 22);
+            this.statusStrip.Size = new System.Drawing.Size(853, 22);
             this.statusStrip.TabIndex = 0;
             this.statusStrip.Text = "statusStrip1";
             // 
@@ -89,7 +90,7 @@
             this.groupBox_file.Dock = System.Windows.Forms.DockStyle.Top;
             this.groupBox_file.Location = new System.Drawing.Point(0, 0);
             this.groupBox_file.Name = "groupBox_file";
-            this.groupBox_file.Size = new System.Drawing.Size(798, 66);
+            this.groupBox_file.Size = new System.Drawing.Size(851, 66);
             this.groupBox_file.TabIndex = 1;
             this.groupBox_file.TabStop = false;
             this.groupBox_file.Text = "Файл";
@@ -106,7 +107,7 @@
             // button_fileSelect
             // 
             this.button_fileSelect.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_fileSelect.Location = new System.Drawing.Point(713, 15);
+            this.button_fileSelect.Location = new System.Drawing.Point(766, 15);
             this.button_fileSelect.Name = "button_fileSelect";
             this.button_fileSelect.Size = new System.Drawing.Size(75, 23);
             this.button_fileSelect.TabIndex = 2;
@@ -120,7 +121,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.textBox_filePath.Location = new System.Drawing.Point(67, 17);
             this.textBox_filePath.Name = "textBox_filePath";
-            this.textBox_filePath.Size = new System.Drawing.Size(630, 20);
+            this.textBox_filePath.Size = new System.Drawing.Size(683, 20);
             this.textBox_filePath.TabIndex = 1;
             // 
             // label_filePath
@@ -138,7 +139,7 @@
             this.groupBox_sheet.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_sheet.Location = new System.Drawing.Point(0, 66);
             this.groupBox_sheet.Name = "groupBox_sheet";
-            this.groupBox_sheet.Size = new System.Drawing.Size(798, 321);
+            this.groupBox_sheet.Size = new System.Drawing.Size(851, 411);
             this.groupBox_sheet.TabIndex = 3;
             this.groupBox_sheet.TabStop = false;
             this.groupBox_sheet.Text = "Представление";
@@ -150,13 +151,14 @@
             this.column_sector,
             this.column_size,
             this.column_status,
-            this.column_progress});
+            this.column_progress,
+            this.column_warnings});
             this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.listView1.GridLines = true;
             this.listView1.HideSelection = false;
             this.listView1.Location = new System.Drawing.Point(3, 16);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(792, 302);
+            this.listView1.Size = new System.Drawing.Size(845, 392);
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
             this.listView1.View = System.Windows.Forms.View.Details;
@@ -192,12 +194,13 @@
             // timer
             // 
             this.timer.Enabled = true;
+            this.timer.Interval = 200;
             this.timer.Tick += new System.EventHandler(this.timer_Tick);
             // 
             // button_record
             // 
             this.button_record.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_record.Location = new System.Drawing.Point(665, 398);
+            this.button_record.Location = new System.Drawing.Point(718, 488);
             this.button_record.Name = "button_record";
             this.button_record.Size = new System.Drawing.Size(123, 23);
             this.button_record.TabIndex = 4;
@@ -215,7 +218,7 @@
             this.panel1.Controls.Add(this.groupBox_file);
             this.panel1.Location = new System.Drawing.Point(0, 3);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(800, 389);
+            this.panel1.Size = new System.Drawing.Size(853, 479);
             this.panel1.TabIndex = 4;
             // 
             // timer_controlHandler
@@ -225,8 +228,9 @@
             // comboBox1
             // 
             this.comboBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.comboBox1.BackColor = System.Drawing.SystemColors.Control;
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(191, 400);
+            this.comboBox1.Location = new System.Drawing.Point(191, 490);
             this.comboBox1.Name = "comboBox1";
             this.comboBox1.Size = new System.Drawing.Size(191, 21);
             this.comboBox1.TabIndex = 5;
@@ -236,7 +240,7 @@
             // 
             this.label_outputDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
             this.label_outputDevice.AutoSize = true;
-            this.label_outputDevice.Location = new System.Drawing.Point(12, 403);
+            this.label_outputDevice.Location = new System.Drawing.Point(12, 493);
             this.label_outputDevice.Name = "label_outputDevice";
             this.label_outputDevice.Size = new System.Drawing.Size(173, 13);
             this.label_outputDevice.TabIndex = 6;
@@ -244,7 +248,8 @@
             // 
             // button_convert
             // 
-            this.button_convert.Location = new System.Drawing.Point(544, 398);
+            this.button_convert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_convert.Location = new System.Drawing.Point(597, 488);
             this.button_convert.Name = "button_convert";
             this.button_convert.Size = new System.Drawing.Size(104, 23);
             this.button_convert.TabIndex = 7;
@@ -252,19 +257,26 @@
             this.button_convert.UseVisualStyleBackColor = true;
             this.button_convert.Click += new System.EventHandler(this.button_convert_Click);
             // 
+            // column_warnings
+            // 
+            this.column_warnings.Text = "Предупреждения";
+            this.column_warnings.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.column_warnings.Width = 200;
+            // 
             // form_tapeRecordingWizard
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.White;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(853, 540);
             this.Controls.Add(this.button_convert);
             this.Controls.Add(this.label_outputDevice);
             this.Controls.Add(this.comboBox1);
             this.Controls.Add(this.button_record);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.statusStrip);
-            this.MinimumSize = new System.Drawing.Size(816, 489);
+            this.DoubleBuffered = true;
+            this.MinimumSize = new System.Drawing.Size(869, 579);
             this.Name = "form_tapeRecordingWizard";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -305,5 +317,6 @@
         private System.Windows.Forms.ComboBox comboBox1;
         private System.Windows.Forms.Label label_outputDevice;
         private System.Windows.Forms.Button button_convert;
+        private System.Windows.Forms.ColumnHeader column_warnings;
     }
 }

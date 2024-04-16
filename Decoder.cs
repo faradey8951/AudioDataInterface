@@ -384,7 +384,7 @@ namespace AudioDataInterface
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
-                                if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true;
+                                if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) { form_tapeRecordingWizard.errorOccurred = true; form_tapeRecordingWizard.errorReason = "channel sync error"; }
                             }
                             if (channelSyncSucc == true) lock (decodedDataLocker) buff_decodedData.Add(decodedDataBlock);
                         }
@@ -475,7 +475,7 @@ namespace AudioDataInterface
                 bin = bin.Remove(bin.Length - 1);
                 data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
                 if (data[1] == "fixed") { fixedErrorCount++; overallErrorCount++; }
-                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true; }
+                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true; form_tapeRecordingWizard.errorReason = "uncorrectable error"; }
                 if (data[0] != "") decodedDataBlock[4] = data[0];
             }
         }
@@ -500,7 +500,7 @@ namespace AudioDataInterface
             thread_amplitudeDecoderR = new Thread(AmplitudeDecoderR);
             thread_amplitudeDecoderR.Start();
             thread_binaryDecoderStereo = new Thread(BinaryDecoderStereo);
-            thread_binaryDecoderStereo.Start();
+            thread_binaryDecoderStereo.Start();     
         }
         public static void Stop()
         {

@@ -123,6 +123,8 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
+            this.декодированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.мастерВосстановленияДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -179,6 +181,7 @@ namespace AudioDataInterface
             this.menuStrip.BackColor = System.Drawing.SystemColors.Control;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.кодировщикToolStripMenuItem,
+            this.декодированиеToolStripMenuItem,
             this.правкаToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
@@ -193,8 +196,8 @@ namespace AudioDataInterface
             this.мастерЗаписиНаЛентуToolStripMenuItem,
             this.кодироватьВФайлToolStripMenuItem});
             this.кодировщикToolStripMenuItem.Name = "кодировщикToolStripMenuItem";
-            this.кодировщикToolStripMenuItem.Size = new System.Drawing.Size(90, 20);
-            this.кодировщикToolStripMenuItem.Text = "Кодировщик";
+            this.кодировщикToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
+            this.кодировщикToolStripMenuItem.Text = "Кодирование";
             // 
             // мастерЗаписиНаЛентуToolStripMenuItem
             // 
@@ -207,7 +210,7 @@ namespace AudioDataInterface
             // 
             this.кодироватьВФайлToolStripMenuItem.Name = "кодироватьВФайлToolStripMenuItem";
             this.кодироватьВФайлToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.кодироватьВФайлToolStripMenuItem.Text = "MP3 Энкодер";
+            this.кодироватьВФайлToolStripMenuItem.Text = "MP3 кодировщик";
             this.кодироватьВФайлToolStripMenuItem.Click += new System.EventHandler(this.кодироватьВФайлToolStripMenuItem_Click);
             // 
             // правкаToolStripMenuItem
@@ -223,19 +226,19 @@ namespace AudioDataInterface
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
             // 
             // отладкаToolStripMenuItem
             // 
             this.отладкаToolStripMenuItem.Name = "отладкаToolStripMenuItem";
-            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.отладкаToolStripMenuItem.Text = "Отладка";
             this.отладкаToolStripMenuItem.Click += new System.EventHandler(this.отладкаToolStripMenuItem_Click);
             // 
@@ -1190,6 +1193,21 @@ namespace AudioDataInterface
             this.timer_signalQualityUpdater.Interval = 50;
             this.timer_signalQualityUpdater.Tick += new System.EventHandler(this.timer_signalQualityUpdater_Tick);
             // 
+            // декодированиеToolStripMenuItem
+            // 
+            this.декодированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.мастерВосстановленияДанныхToolStripMenuItem});
+            this.декодированиеToolStripMenuItem.Name = "декодированиеToolStripMenuItem";
+            this.декодированиеToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
+            this.декодированиеToolStripMenuItem.Text = "Декодирование";
+            // 
+            // мастерВосстановленияДанныхToolStripMenuItem
+            // 
+            this.мастерВосстановленияДанныхToolStripMenuItem.Name = "мастерВосстановленияДанныхToolStripMenuItem";
+            this.мастерВосстановленияДанныхToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
+            this.мастерВосстановленияДанныхToolStripMenuItem.Text = "Мастер восстановления данных с ленты";
+            this.мастерВосстановленияДанныхToolStripMenuItem.Click += new System.EventHandler(this.мастерВосстановленияДанныхToolStripMenuItem_Click);
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1364,6 +1382,8 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripMenuItem отладкаToolStripMenuItem;
         public System.Windows.Forms.Timer timer_signalQualityUpdater;
         public System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ToolStripMenuItem декодированиеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem мастерВосстановленияДанныхToolStripMenuItem;
     }
 }
 

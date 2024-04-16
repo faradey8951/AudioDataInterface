@@ -91,6 +91,12 @@
     <Compile Include="form_tapeRecordingWizard.Designer.cs">
       <DependentUpon>form_tapeRecordingWizard.cs</DependentUpon>
     </Compile>
+    <Compile Include="form_tapeRecoverWizard.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="form_tapeRecoverWizard.Designer.cs">
+      <DependentUpon>form_tapeRecoverWizard.cs</DependentUpon>
+    </Compile>
     <Compile Include="LogHandler.cs" />
     <Compile Include="form_debug.cs">
       <SubType>Form</SubType>
@@ -145,6 +151,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form_tapeRecordingWizard.resx">
       <DependentUpon>form_tapeRecordingWizard.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="form_tapeRecoverWizard.resx">
+      <DependentUpon>form_tapeRecoverWizard.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

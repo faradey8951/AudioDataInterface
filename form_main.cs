@@ -28,6 +28,7 @@ namespace AudioDataInterface
         public static form_debug window_debug = new form_debug();
         public static form_encoder window_encoder = new form_encoder();
         public static form_tapeRecordingWizard window_tapeRecordingWizard = new form_tapeRecordingWizard();
+        public static form_tapeRecoverWizard window_tapeRecoverWizard = new form_tapeRecoverWizard();
         public static form_logMonitor window_logMonitor = new form_logMonitor();
         public static form_settings window_settings = new form_settings();
         //////////////////////////////////////////////////////////////////////////////////////
@@ -1013,10 +1014,17 @@ namespace AudioDataInterface
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            string[] temp = BinaryHandler.HammingEncode("00000000000000000000000000000000");
-            string tempString = "";
-            foreach (string s in temp) tempString += s;
-            MessageBox.Show(tempString);
+
+        }
+
+        private void мастерВосстановленияДанныхToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_tapeRecoverWizard != null)
+            {
+                window_tapeRecoverWizard.Dispose();
+                window_tapeRecoverWizard = new form_tapeRecoverWizard();
+            }
+            window_tapeRecoverWizard.ShowDialog();
         }
     }
 }
