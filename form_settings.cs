@@ -111,6 +111,9 @@ namespace AudioDataInterface
             textBox_Ffmpeg2Cmd.Text = Encoder.encoder_ffmpeg2Cmd;
             textBox_Ffmpeg2EffectCmd.Text = Encoder.encoder_ffmpeg2EffectCmd;
             form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
+            List<string[]> skins = mpsPlayerSkinHandler.GetSkins();
+            if (skins != null) foreach (string[] skin in skins) comboBox_skins.Items.Add(skin[1]);
+            comboBox_skins.Text = form_main.class_mpsPlayerSkinHandler.currentSkinName;
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -129,12 +132,16 @@ namespace AudioDataInterface
             Encoder.encoder_ffmpeg2Cmd = textBox_Ffmpeg2Cmd.Text;
             Encoder.encoder_ffmpeg2EffectCmd = textBox_Ffmpeg2EffectCmd.Text;
 
+            var skins = mpsPlayerSkinHandler.GetSkins();
+            foreach (string[] skin in skins) if (skin.Contains(comboBox_skins.Text)) form_main.class_mpsPlayerSkinHandler.currentSkinName = skin[0];
             form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
             form_main.mpsPlayer_liveSpectrum = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             form_main.mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             form_main.window_main.DrawMPSPlayerInterface();
+            form_main.class_mpsPlayerSkinHandler.Load();
+            form_main.window_main.MpsPlayerInterfaceInitialize();
 
-            Settings.Save();
+            Settings.Save();            
         }
 
         private void radioButton_peakHoldMode_CheckedChanged(object sender, EventArgs e)
@@ -156,6 +163,11 @@ namespace AudioDataInterface
         {
             Settings.Default();
             form_settings_Load(this, EventArgs.Empty);
+        }
+
+        private void comboBox_skins_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
         }
     }
 }

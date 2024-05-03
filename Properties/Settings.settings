@@ -62,5 +62,8 @@
     <Setting Name="encoderFfmpeg2EffectCmd" Type="System.String" Scope="User">
       <Value Profile="(Default)">equalizer=f=6000:width_type=h:width=1000:g=50</Value>
     </Setting>
+    <Setting Name="mpsSkin" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
   </Settings>
 </SettingsFile>

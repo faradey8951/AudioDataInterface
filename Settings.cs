@@ -36,6 +36,7 @@ namespace AudioDataInterface
             Properties.Settings.Default.encoderFfmpeg1Cmd = Encoder.encoder_ffmpeg1Cmd;
             Properties.Settings.Default.encoderFfmpeg2Cmd = Encoder.encoder_ffmpeg2Cmd;
             Properties.Settings.Default.encoderFfmpeg2EffectCmd = Encoder.encoder_ffmpeg2EffectCmd;
+            Properties.Settings.Default.mpsSkin = form_main.class_mpsPlayerSkinHandler.currentSkinName;
             Properties.Settings.Default.Save();
         }
 
@@ -68,7 +69,8 @@ namespace AudioDataInterface
                 Encoder.encoder_ffmpeg2Cmd = Properties.Settings.Default.encoderFfmpeg2Cmd;
                 Encoder.encoder_ffmpeg2EffectCmd = Properties.Settings.Default.encoderFfmpeg2EffectCmd;
 
-                form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;            
+                form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
+                form_main.class_mpsPlayerSkinHandler.currentSkinName = Properties.Settings.Default.mpsSkin;
             }
             catch (Exception ex)
             {

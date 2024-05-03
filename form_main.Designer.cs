@@ -35,6 +35,8 @@ namespace AudioDataInterface
             this.кодировщикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.мастерЗаписиНаЛентуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.кодироватьВФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.декодированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.мастерВосстановленияДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
@@ -65,7 +67,7 @@ namespace AudioDataInterface
             this.pictureBox_symbol3 = new System.Windows.Forms.PictureBox();
             this.pictureBox_symbol2 = new System.Windows.Forms.PictureBox();
             this.pictureBox_symbol1 = new System.Windows.Forms.PictureBox();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_spectrumBorder2 = new System.Windows.Forms.PictureBox();
             this.pictureBox_spectrumBorder1 = new System.Windows.Forms.PictureBox();
             this.pictureBox_track12 = new System.Windows.Forms.PictureBox();
             this.pictureBox_track16 = new System.Windows.Forms.PictureBox();
@@ -99,7 +101,8 @@ namespace AudioDataInterface
             this.label_signalGainR = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
+            this.trackBar_spectrumGain = new System.Windows.Forms.TrackBar();
+            this.label2 = new System.Windows.Forms.Label();
             this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
             this.checkBox_invertSignal = new System.Windows.Forms.CheckBox();
             this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
@@ -123,8 +126,7 @@ namespace AudioDataInterface
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
-            this.декодированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.мастерВосстановленияДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -145,7 +147,7 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_symbol3)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_symbol2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_symbol1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_spectrumBorder2)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_spectrumBorder1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track12)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track16)).BeginInit();
@@ -170,6 +172,7 @@ namespace AudioDataInterface
             this.groupBox_info.SuspendLayout();
             this.panel_signalCapture.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumGain)).BeginInit();
             this.groupBox_signalCapture.SuspendLayout();
             this.groupBox_BIASAdjust.SuspendLayout();
             this.groupBox_scaleAdjust.SuspendLayout();
@@ -213,6 +216,21 @@ namespace AudioDataInterface
             this.кодироватьВФайлToolStripMenuItem.Text = "MP3 кодировщик";
             this.кодироватьВФайлToolStripMenuItem.Click += new System.EventHandler(this.кодироватьВФайлToolStripMenuItem_Click);
             // 
+            // декодированиеToolStripMenuItem
+            // 
+            this.декодированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.мастерВосстановленияДанныхToolStripMenuItem});
+            this.декодированиеToolStripMenuItem.Name = "декодированиеToolStripMenuItem";
+            this.декодированиеToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
+            this.декодированиеToolStripMenuItem.Text = "Декодирование";
+            // 
+            // мастерВосстановленияДанныхToolStripMenuItem
+            // 
+            this.мастерВосстановленияДанныхToolStripMenuItem.Name = "мастерВосстановленияДанныхToolStripMenuItem";
+            this.мастерВосстановленияДанныхToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
+            this.мастерВосстановленияДанныхToolStripMenuItem.Text = "Мастер восстановления данных с ленты";
+            this.мастерВосстановленияДанныхToolStripMenuItem.Click += new System.EventHandler(this.мастерВосстановленияДанныхToolStripMenuItem_Click);
+            // 
             // правкаToolStripMenuItem
             // 
             this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -226,19 +244,19 @@ namespace AudioDataInterface
             // настройкиToolStripMenuItem
             // 
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(177, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
             // 
             // отладкаToolStripMenuItem
             // 
             this.отладкаToolStripMenuItem.Name = "отладкаToolStripMenuItem";
-            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.отладкаToolStripMenuItem.Text = "Отладка";
             this.отладкаToolStripMenuItem.Click += new System.EventHandler(this.отладкаToolStripMenuItem_Click);
             // 
@@ -253,7 +271,7 @@ namespace AudioDataInterface
             // оПрограммеToolStripMenuItem
             // 
             this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(149, 22);
             this.оПрограммеToolStripMenuItem.Text = "О программе";
             this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
             // 
@@ -332,7 +350,7 @@ namespace AudioDataInterface
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_symbol3);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_symbol2);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_symbol1);
-            this.tabPage_graphicalView.Controls.Add(this.pictureBox2);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_spectrumBorder2);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_spectrumBorder1);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_track12);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_track16);
@@ -550,17 +568,17 @@ namespace AudioDataInterface
             this.pictureBox_symbol1.TabIndex = 20;
             this.pictureBox_symbol1.TabStop = false;
             // 
-            // pictureBox2
+            // pictureBox_spectrumBorder2
             // 
-            this.pictureBox2.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.pictureBox2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox2.Image = global::AudioDataInterface.Properties.Resources.border;
-            this.pictureBox2.Location = new System.Drawing.Point(580, 241);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(12, 110);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 19;
-            this.pictureBox2.TabStop = false;
+            this.pictureBox_spectrumBorder2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_spectrumBorder2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_spectrumBorder2.Image = global::AudioDataInterface.Properties.Resources.border;
+            this.pictureBox_spectrumBorder2.Location = new System.Drawing.Point(580, 241);
+            this.pictureBox_spectrumBorder2.Name = "pictureBox_spectrumBorder2";
+            this.pictureBox_spectrumBorder2.Size = new System.Drawing.Size(12, 110);
+            this.pictureBox_spectrumBorder2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_spectrumBorder2.TabIndex = 19;
+            this.pictureBox_spectrumBorder2.TabStop = false;
             // 
             // pictureBox_spectrumBorder1
             // 
@@ -937,7 +955,8 @@ namespace AudioDataInterface
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.button2);
+            this.groupBox1.Controls.Add(this.trackBar_spectrumGain);
+            this.groupBox1.Controls.Add(this.label2);
             this.groupBox1.Controls.Add(this.checkBox_remainingTime);
             this.groupBox1.Controls.Add(this.checkBox_invertSignal);
             this.groupBox1.Controls.Add(this.checkBox_tapeSkin);
@@ -950,16 +969,27 @@ namespace AudioDataInterface
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Управление декодером";
             // 
-            // button2
+            // trackBar_spectrumGain
             // 
-            this.button2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button2.Location = new System.Drawing.Point(3, 131);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(144, 32);
-            this.button2.TabIndex = 18;
-            this.button2.Text = "SECTOR";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_1);
+            this.trackBar_spectrumGain.Dock = System.Windows.Forms.DockStyle.Top;
+            this.trackBar_spectrumGain.Location = new System.Drawing.Point(3, 144);
+            this.trackBar_spectrumGain.Maximum = 20;
+            this.trackBar_spectrumGain.Minimum = 1;
+            this.trackBar_spectrumGain.Name = "trackBar_spectrumGain";
+            this.trackBar_spectrumGain.Size = new System.Drawing.Size(144, 45);
+            this.trackBar_spectrumGain.TabIndex = 19;
+            this.trackBar_spectrumGain.Value = 1;
+            this.trackBar_spectrumGain.Scroll += new System.EventHandler(this.trackBar_spectrumGain_Scroll);
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Location = new System.Drawing.Point(3, 131);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(144, 13);
+            this.label2.TabIndex = 18;
+            this.label2.Text = "Уровень спектра:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // checkBox_remainingTime
             // 
@@ -1193,20 +1223,10 @@ namespace AudioDataInterface
             this.timer_signalQualityUpdater.Interval = 50;
             this.timer_signalQualityUpdater.Tick += new System.EventHandler(this.timer_signalQualityUpdater_Tick);
             // 
-            // декодированиеToolStripMenuItem
+            // timer_mpsPlayerRunningIndicatorHandler
             // 
-            this.декодированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.мастерВосстановленияДанныхToolStripMenuItem});
-            this.декодированиеToolStripMenuItem.Name = "декодированиеToolStripMenuItem";
-            this.декодированиеToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
-            this.декодированиеToolStripMenuItem.Text = "Декодирование";
-            // 
-            // мастерВосстановленияДанныхToolStripMenuItem
-            // 
-            this.мастерВосстановленияДанныхToolStripMenuItem.Name = "мастерВосстановленияДанныхToolStripMenuItem";
-            this.мастерВосстановленияДанныхToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
-            this.мастерВосстановленияДанныхToolStripMenuItem.Text = "Мастер восстановления данных с ленты";
-            this.мастерВосстановленияДанныхToolStripMenuItem.Click += new System.EventHandler(this.мастерВосстановленияДанныхToolStripMenuItem_Click);
+            this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
+            this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
             // 
             // form_main
             // 
@@ -1249,7 +1269,7 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_symbol3)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_symbol2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_symbol1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_spectrumBorder2)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_spectrumBorder1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track12)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track16)).EndInit();
@@ -1276,6 +1296,7 @@ namespace AudioDataInterface
             this.panel_signalCapture.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumGain)).EndInit();
             this.groupBox_signalCapture.ResumeLayout(false);
             this.groupBox_signalCapture.PerformLayout();
             this.groupBox_BIASAdjust.ResumeLayout(false);
@@ -1319,9 +1340,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.PictureBox pictureBox_mpsPlayer;
         private System.Windows.Forms.Timer timer_mpsPlayerHandler;
         private System.Windows.Forms.Timer timer_mpsPlayerSpectrumUpdater;
-        private System.Windows.Forms.PictureBox pictureBox2;
-        private System.Windows.Forms.PictureBox pictureBox_spectrumBorder1;
-        private System.Windows.Forms.PictureBox pictureBox_dots;
         private System.Windows.Forms.Timer timer_mpsPlayerTimeUpdater;
         private System.Windows.Forms.CheckBox checkBox_remainingTime;
         public System.Windows.Forms.CheckBox checkBox_invertSignal;
@@ -1330,7 +1348,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label_signalGainL;
         private System.Windows.Forms.Label label_fixedErrorCount;
         private System.Windows.Forms.CheckBox checkBox_tapeSkin;
-        private System.Windows.Forms.PictureBox pictureBox_cassette;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox_playDevices;
         private System.Windows.Forms.Label label_frameSyncErrorCount;
@@ -1338,41 +1355,11 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label_border1;
         public System.Windows.Forms.Timer timer_mpsPlayerSpectrumHandler;
-        private System.Windows.Forms.PictureBox pictureBox_track12;
-        private System.Windows.Forms.PictureBox pictureBox_track16;
-        private System.Windows.Forms.PictureBox pictureBox_track15;
-        private System.Windows.Forms.PictureBox pictureBox_track14;
-        private System.Windows.Forms.PictureBox pictureBox_track13;
-        private System.Windows.Forms.PictureBox pictureBox_track11;
-        private System.Windows.Forms.PictureBox pictureBox_track10;
-        private System.Windows.Forms.PictureBox pictureBox_track9;
-        private System.Windows.Forms.PictureBox pictureBox_track8;
-        private System.Windows.Forms.PictureBox pictureBox_track7;
-        private System.Windows.Forms.PictureBox pictureBox_track6;
-        private System.Windows.Forms.PictureBox pictureBox_track5;
-        private System.Windows.Forms.PictureBox pictureBox_track4;
-        private System.Windows.Forms.PictureBox pictureBox_track3;
-        private System.Windows.Forms.PictureBox pictureBox_track2;
-        private System.Windows.Forms.PictureBox pictureBox_track1;
         public System.Windows.Forms.Button button1;
         private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label_signalQuality;
         public System.Windows.Forms.PictureBox pictureBox_runningIndicator;
-        private System.Windows.Forms.PictureBox pictureBox_disc3;
-        private System.Windows.Forms.PictureBox pictureBox_disc2;
-        private System.Windows.Forms.PictureBox pictureBox_disc1;
-        private System.Windows.Forms.PictureBox pictureBox_playPause;
-        private System.Windows.Forms.PictureBox pictureBox_symbol10;
-        private System.Windows.Forms.PictureBox pictureBox_symbol9;
-        private System.Windows.Forms.PictureBox pictureBox_symbol8;
-        private System.Windows.Forms.PictureBox pictureBox_symbol7;
-        private System.Windows.Forms.PictureBox pictureBox_symbol6;
-        private System.Windows.Forms.PictureBox pictureBox_symbol5;
-        private System.Windows.Forms.PictureBox pictureBox_symbol4;
-        private System.Windows.Forms.PictureBox pictureBox_symbol3;
-        private System.Windows.Forms.PictureBox pictureBox_symbol2;
-        private System.Windows.Forms.PictureBox pictureBox_symbol1;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem кодировщикToolStripMenuItem;
@@ -1381,9 +1368,45 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem отладкаToolStripMenuItem;
         public System.Windows.Forms.Timer timer_signalQualityUpdater;
-        public System.Windows.Forms.Button button2;
         private System.Windows.Forms.ToolStripMenuItem декодированиеToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem мастерВосстановленияДанныхToolStripMenuItem;
+        private System.Windows.Forms.TrackBar trackBar_spectrumGain;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Timer timer_mpsPlayerRunningIndicatorHandler;
+        public System.Windows.Forms.PictureBox pictureBox_spectrumBorder2;
+        public System.Windows.Forms.PictureBox pictureBox_spectrumBorder1;
+        public System.Windows.Forms.PictureBox pictureBox_dots;
+        public System.Windows.Forms.PictureBox pictureBox_cassette;
+        public System.Windows.Forms.PictureBox pictureBox_track12;
+        public System.Windows.Forms.PictureBox pictureBox_track16;
+        public System.Windows.Forms.PictureBox pictureBox_track15;
+        public System.Windows.Forms.PictureBox pictureBox_track14;
+        public System.Windows.Forms.PictureBox pictureBox_track13;
+        public System.Windows.Forms.PictureBox pictureBox_track11;
+        public System.Windows.Forms.PictureBox pictureBox_track10;
+        public System.Windows.Forms.PictureBox pictureBox_track9;
+        public System.Windows.Forms.PictureBox pictureBox_track8;
+        public System.Windows.Forms.PictureBox pictureBox_track7;
+        public System.Windows.Forms.PictureBox pictureBox_track6;
+        public System.Windows.Forms.PictureBox pictureBox_track5;
+        public System.Windows.Forms.PictureBox pictureBox_track4;
+        public System.Windows.Forms.PictureBox pictureBox_track3;
+        public System.Windows.Forms.PictureBox pictureBox_track2;
+        public System.Windows.Forms.PictureBox pictureBox_track1;
+        public System.Windows.Forms.PictureBox pictureBox_disc3;
+        public System.Windows.Forms.PictureBox pictureBox_disc2;
+        public System.Windows.Forms.PictureBox pictureBox_disc1;
+        public System.Windows.Forms.PictureBox pictureBox_playPause;
+        public System.Windows.Forms.PictureBox pictureBox_symbol10;
+        public System.Windows.Forms.PictureBox pictureBox_symbol9;
+        public System.Windows.Forms.PictureBox pictureBox_symbol8;
+        public System.Windows.Forms.PictureBox pictureBox_symbol7;
+        public System.Windows.Forms.PictureBox pictureBox_symbol6;
+        public System.Windows.Forms.PictureBox pictureBox_symbol5;
+        public System.Windows.Forms.PictureBox pictureBox_symbol4;
+        public System.Windows.Forms.PictureBox pictureBox_symbol3;
+        public System.Windows.Forms.PictureBox pictureBox_symbol2;
+        public System.Windows.Forms.PictureBox pictureBox_symbol1;
     }
 }
 

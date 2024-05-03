@@ -39,6 +39,12 @@
             this.label_signalHeight = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.textBox_Ffmpeg2EffectCmd = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
+            this.textBox_Ffmpeg2Cmd = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_Ffmpeg1Cmd = new System.Windows.Forms.TextBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.label_mpsPlayerSubcodeIntervalValue = new System.Windows.Forms.Label();
             this.trackBar_mpsPlayerSubcodeInterval = new System.Windows.Forms.TrackBar();
             this.label_mpsPlayerSubcodeInterval = new System.Windows.Forms.Label();
@@ -55,6 +61,8 @@
             this.trackBar_encodingSampleRate = new System.Windows.Forms.TrackBar();
             this.label_encodingDensity = new System.Windows.Forms.Label();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.comboBox_skins = new System.Windows.Forms.ComboBox();
+            this.label_mpsPlayerSkin = new System.Windows.Forms.Label();
             this.label_spectrumVescosityValue = new System.Windows.Forms.Label();
             this.trackBar_spectrumVescosity = new System.Windows.Forms.TrackBar();
             this.label_spectrumVescosity = new System.Windows.Forms.Label();
@@ -65,15 +73,11 @@
             this.label_fftSizeValue = new System.Windows.Forms.Label();
             this.trackBar_fftSize = new System.Windows.Forms.TrackBar();
             this.label_fftSize = new System.Windows.Forms.Label();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.groupBox = new System.Windows.Forms.GroupBox();
             this.button2 = new System.Windows.Forms.Button();
             this.button_save = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.textBox_Ffmpeg1Cmd = new System.Windows.Forms.TextBox();
-            this.textBox_Ffmpeg2Cmd = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox_Ffmpeg2EffectCmd = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_mp3BuffSize)).BeginInit();
@@ -104,11 +108,13 @@
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Controls.Add(this.tabPage4);
+            this.tabControl.Controls.Add(this.tabPage5);
+            this.tabControl.Controls.Add(this.tabPage6);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(590, 312);
+            this.tabControl.Size = new System.Drawing.Size(590, 315);
             this.tabControl.TabIndex = 1;
             // 
             // tabPage1
@@ -122,7 +128,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(582, 286);
+            this.tabPage1.Size = new System.Drawing.Size(582, 289);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Аудио I/O";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -200,7 +206,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(582, 286);
+            this.tabPage2.Size = new System.Drawing.Size(582, 289);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Декодер";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -232,10 +238,67 @@
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(582, 286);
+            this.tabPage3.Size = new System.Drawing.Size(582, 289);
             this.tabPage3.TabIndex = 2;
             this.tabPage3.Text = "Энкодер";
             this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // textBox_Ffmpeg2EffectCmd
+            // 
+            this.textBox_Ffmpeg2EffectCmd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox_Ffmpeg2EffectCmd.Location = new System.Drawing.Point(3, 501);
+            this.textBox_Ffmpeg2EffectCmd.Multiline = true;
+            this.textBox_Ffmpeg2EffectCmd.Name = "textBox_Ffmpeg2EffectCmd";
+            this.textBox_Ffmpeg2EffectCmd.Size = new System.Drawing.Size(559, 52);
+            this.textBox_Ffmpeg2EffectCmd.TabIndex = 23;
+            // 
+            // label3
+            // 
+            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label3.Location = new System.Drawing.Point(3, 488);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(559, 13);
+            this.label3.TabIndex = 22;
+            this.label3.Text = "Команда FFMPEG аудио фильтра 2 проход";
+            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBox_Ffmpeg2Cmd
+            // 
+            this.textBox_Ffmpeg2Cmd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox_Ffmpeg2Cmd.Location = new System.Drawing.Point(3, 436);
+            this.textBox_Ffmpeg2Cmd.Multiline = true;
+            this.textBox_Ffmpeg2Cmd.Name = "textBox_Ffmpeg2Cmd";
+            this.textBox_Ffmpeg2Cmd.Size = new System.Drawing.Size(559, 52);
+            this.textBox_Ffmpeg2Cmd.TabIndex = 21;
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Location = new System.Drawing.Point(3, 423);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(559, 13);
+            this.label2.TabIndex = 20;
+            this.label2.Text = "Команда FFMPEG кодера 2 проход";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // textBox_Ffmpeg1Cmd
+            // 
+            this.textBox_Ffmpeg1Cmd.Dock = System.Windows.Forms.DockStyle.Top;
+            this.textBox_Ffmpeg1Cmd.Location = new System.Drawing.Point(3, 371);
+            this.textBox_Ffmpeg1Cmd.Multiline = true;
+            this.textBox_Ffmpeg1Cmd.Name = "textBox_Ffmpeg1Cmd";
+            this.textBox_Ffmpeg1Cmd.Size = new System.Drawing.Size(559, 52);
+            this.textBox_Ffmpeg1Cmd.TabIndex = 19;
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(3, 358);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(559, 13);
+            this.label1.TabIndex = 18;
+            this.label1.Text = "Команда FFMPEG кодера 1 проход";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label_mpsPlayerSubcodeIntervalValue
             // 
@@ -406,6 +469,8 @@
             // 
             // tabPage4
             // 
+            this.tabPage4.Controls.Add(this.comboBox_skins);
+            this.tabPage4.Controls.Add(this.label_mpsPlayerSkin);
             this.tabPage4.Controls.Add(this.label_spectrumVescosityValue);
             this.tabPage4.Controls.Add(this.trackBar_spectrumVescosity);
             this.tabPage4.Controls.Add(this.label_spectrumVescosity);
@@ -419,10 +484,31 @@
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(582, 286);
+            this.tabPage4.Size = new System.Drawing.Size(582, 289);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "Интерфейс";
             this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // comboBox_skins
+            // 
+            this.comboBox_skins.Dock = System.Windows.Forms.DockStyle.Top;
+            this.comboBox_skins.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_skins.FormattingEnabled = true;
+            this.comboBox_skins.Location = new System.Drawing.Point(3, 222);
+            this.comboBox_skins.Name = "comboBox_skins";
+            this.comboBox_skins.Size = new System.Drawing.Size(576, 21);
+            this.comboBox_skins.TabIndex = 20;
+            this.comboBox_skins.SelectedIndexChanged += new System.EventHandler(this.comboBox_skins_SelectedIndexChanged);
+            // 
+            // label_mpsPlayerSkin
+            // 
+            this.label_mpsPlayerSkin.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_mpsPlayerSkin.Location = new System.Drawing.Point(3, 209);
+            this.label_mpsPlayerSkin.Name = "label_mpsPlayerSkin";
+            this.label_mpsPlayerSkin.Size = new System.Drawing.Size(576, 13);
+            this.label_mpsPlayerSkin.TabIndex = 19;
+            this.label_mpsPlayerSkin.Text = "Скин MPS плеера";
+            this.label_mpsPlayerSkin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // label_spectrumVescosityValue
             // 
@@ -544,14 +630,34 @@
             this.label_fftSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             this.label_fftSize.Click += new System.EventHandler(this.label2_Click);
             // 
+            // tabPage5
+            // 
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(582, 289);
+            this.tabPage5.TabIndex = 4;
+            this.tabPage5.Text = "Запись данных на ленту";
+            this.tabPage5.UseVisualStyleBackColor = true;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(582, 289);
+            this.tabPage6.TabIndex = 5;
+            this.tabPage6.Text = "Восстановление данных с ленты";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
             // groupBox
             // 
             this.groupBox.Controls.Add(this.button2);
             this.groupBox.Controls.Add(this.button_save);
             this.groupBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupBox.Location = new System.Drawing.Point(0, 312);
+            this.groupBox.Location = new System.Drawing.Point(0, 315);
             this.groupBox.Name = "groupBox";
-            this.groupBox.Size = new System.Drawing.Size(590, 48);
+            this.groupBox.Size = new System.Drawing.Size(590, 45);
             this.groupBox.TabIndex = 2;
             this.groupBox.TabStop = false;
             // 
@@ -561,7 +667,7 @@
             this.button2.Dock = System.Windows.Forms.DockStyle.Left;
             this.button2.Location = new System.Drawing.Point(3, 16);
             this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(90, 29);
+            this.button2.Size = new System.Drawing.Size(90, 26);
             this.button2.TabIndex = 1;
             this.button2.Text = "По-умолчанию";
             this.button2.UseVisualStyleBackColor = true;
@@ -573,68 +679,11 @@
             this.button_save.Dock = System.Windows.Forms.DockStyle.Right;
             this.button_save.Location = new System.Drawing.Point(512, 16);
             this.button_save.Name = "button_save";
-            this.button_save.Size = new System.Drawing.Size(75, 29);
+            this.button_save.Size = new System.Drawing.Size(75, 26);
             this.button_save.TabIndex = 0;
             this.button_save.Text = "Сохранить";
             this.button_save.UseVisualStyleBackColor = true;
             this.button_save.Click += new System.EventHandler(this.button1_Click);
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(3, 358);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(559, 13);
-            this.label1.TabIndex = 18;
-            this.label1.Text = "Команда FFMPEG кодера 1 проход";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBox_Ffmpeg1Cmd
-            // 
-            this.textBox_Ffmpeg1Cmd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox_Ffmpeg1Cmd.Location = new System.Drawing.Point(3, 371);
-            this.textBox_Ffmpeg1Cmd.Multiline = true;
-            this.textBox_Ffmpeg1Cmd.Name = "textBox_Ffmpeg1Cmd";
-            this.textBox_Ffmpeg1Cmd.Size = new System.Drawing.Size(559, 52);
-            this.textBox_Ffmpeg1Cmd.TabIndex = 19;
-            // 
-            // textBox_Ffmpeg2Cmd
-            // 
-            this.textBox_Ffmpeg2Cmd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox_Ffmpeg2Cmd.Location = new System.Drawing.Point(3, 436);
-            this.textBox_Ffmpeg2Cmd.Multiline = true;
-            this.textBox_Ffmpeg2Cmd.Name = "textBox_Ffmpeg2Cmd";
-            this.textBox_Ffmpeg2Cmd.Size = new System.Drawing.Size(559, 52);
-            this.textBox_Ffmpeg2Cmd.TabIndex = 21;
-            // 
-            // label2
-            // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.Location = new System.Drawing.Point(3, 423);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(559, 13);
-            this.label2.TabIndex = 20;
-            this.label2.Text = "Команда FFMPEG кодера 2 проход";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // textBox_Ffmpeg2EffectCmd
-            // 
-            this.textBox_Ffmpeg2EffectCmd.Dock = System.Windows.Forms.DockStyle.Top;
-            this.textBox_Ffmpeg2EffectCmd.Location = new System.Drawing.Point(3, 501);
-            this.textBox_Ffmpeg2EffectCmd.Multiline = true;
-            this.textBox_Ffmpeg2EffectCmd.Name = "textBox_Ffmpeg2EffectCmd";
-            this.textBox_Ffmpeg2EffectCmd.Size = new System.Drawing.Size(559, 52);
-            this.textBox_Ffmpeg2EffectCmd.TabIndex = 23;
-            // 
-            // label3
-            // 
-            this.label3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label3.Location = new System.Drawing.Point(3, 488);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(559, 13);
-            this.label3.TabIndex = 22;
-            this.label3.Text = "Команда FFMPEG аудио фильтра 2 проход";
-            this.label3.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // form_settings
             // 
@@ -722,5 +771,9 @@
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox textBox_Ffmpeg2EffectCmd;
         private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.ComboBox comboBox_skins;
+        private System.Windows.Forms.Label label_mpsPlayerSkin;
     }
 }

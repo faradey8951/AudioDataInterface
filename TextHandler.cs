@@ -12,7 +12,7 @@ namespace AudioDataInterface
         /// </summary>
         /// <param name="line"></param>
         /// <returns></returns>
-        public string GetLineValue(string line)
+        public static string GetLineValue(string line)
         {
             int index = line.IndexOf("=");
             string temp = line;

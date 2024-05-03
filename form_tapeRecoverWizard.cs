@@ -54,11 +54,13 @@ namespace AudioDataInterface
             bool hashesLeadOutDetected = false;
             int currentSectorIndex = 0;
             int fileSectorSize = 0;
+            FileStream fs_output = null;
+            List<int> sectorList = new List<int>();
+            for (int i = 0; i < 32; i++) sectorList.Add(i + 1);
             while (fileRecovered != true)
             {
                 while (sectorRecoverSuccess != true) //Получение сектора-заголовка
-                {
-                    FileStream fs_output = null;
+                {                 
                     status = "Ожидание заголовка...";
                     sectorRecoverSuccess = false;
                     headerLeadInDetected = false;
@@ -110,7 +112,6 @@ namespace AudioDataInterface
                 sectorRecoverSuccess = false;
                 while (sectorRecoverSuccess != true) //Получение сектора-контр.сумм
                 {
-                    FileStream fs_output = null;
                     status = "Ожидание сектора-контр.сумм...";
                     sectorRecoverSuccess = false;
                     headerLeadInDetected = false;
@@ -156,14 +157,13 @@ namespace AudioDataInterface
                 sectorRecoverSuccess = false;
                 while (sectorRecoverSuccess != true) //Получение сектора файла
                 {
-                    FileStream fs_output = null;
                     status = "Ожидание сектора-файла...";
                     sectorRecoverSuccess = false;
                     currentSectorIndex = 0;
                     fileSectorSize = 0;
                     while (hashesLeadInDetected == false)
                     {
-                        if (Decoder.sectorType == "hashes") hashesLeadInDetected = true;
+                        if (sectorList.Contains(Convert.ToInt16(Decoder.sectorType))) hashesLeadInDetected = true;
                         Thread.Sleep(100);
                     }
                     while (hashesLeadOutDetected == false && errorOccurred == false)

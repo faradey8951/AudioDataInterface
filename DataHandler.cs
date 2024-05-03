@@ -21,6 +21,7 @@ namespace AudioDataInterface
         bool writeFile = false;
         public static Thread thread_bufferMp3;
         public static Thread thread_playMp3;
+        public static bool testEx = false;
 
         FileStream fs = null;
 
@@ -33,7 +34,7 @@ namespace AudioDataInterface
             while (Decoder.decoderActive)
             {
                 mp3Buffer.Clear();
-                while (Decoder.buff_decodedData.Count < i + 128) Thread.Sleep(10);
+                while (Decoder.buff_decodedData.Count < i + 128 || ms.Length - ms.Position >= mp3_buffSize) Thread.Sleep(10);
                 int pos = (int)ms.Position;
                 ms.Position = ms.Length;
                 List<byte> bytes = new List<byte>();
@@ -158,6 +159,7 @@ namespace AudioDataInterface
                         }
                         if (buff_time.Count > 5) buff_time.Clear();
                         buff_time.Add(currentTime);
+                        if (testEx) { reader.Close(); testEx = false; throw new Exception("TEST exception"); }
                         Thread.Sleep(10);
                     }
                     form_main.mpsPlayer_showTime = true;
