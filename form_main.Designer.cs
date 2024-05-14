@@ -41,6 +41,7 @@ namespace AudioDataInterface
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.отладкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.журналToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
@@ -91,6 +92,11 @@ namespace AudioDataInterface
             this.panel_base = new System.Windows.Forms.Panel();
             this.panel_dataControl = new System.Windows.Forms.Panel();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
+            this.label_trackCount = new System.Windows.Forms.Label();
+            this.label_trackNumber = new System.Windows.Forms.Label();
+            this.progressBar_audioBuffer = new System.Windows.Forms.ProgressBar();
+            this.label_audioBufferSize = new System.Windows.Forms.Label();
+            this.label_decodedPacketSize = new System.Windows.Forms.Label();
             this.label_signalQuality = new System.Windows.Forms.Label();
             this.label_frameSyncErrorCount = new System.Windows.Forms.Label();
             this.label_unfixedErrorCount = new System.Windows.Forms.Label();
@@ -236,7 +242,8 @@ namespace AudioDataInterface
             this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.настройкиToolStripMenuItem,
             this.toolStripSeparator1,
-            this.отладкаToolStripMenuItem});
+            this.отладкаToolStripMenuItem,
+            this.журналToolStripMenuItem});
             this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
             this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.правкаToolStripMenuItem.Text = "Правка";
@@ -259,6 +266,13 @@ namespace AudioDataInterface
             this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.отладкаToolStripMenuItem.Text = "Отладка";
             this.отладкаToolStripMenuItem.Click += new System.EventHandler(this.отладкаToolStripMenuItem_Click);
+            // 
+            // журналToolStripMenuItem
+            // 
+            this.журналToolStripMenuItem.Name = "журналToolStripMenuItem";
+            this.журналToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.журналToolStripMenuItem.Text = "Журнал";
+            this.журналToolStripMenuItem.Click += new System.EventHandler(this.журналToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -316,7 +330,6 @@ namespace AudioDataInterface
             // timer_controlHandler
             // 
             this.timer_controlHandler.Enabled = true;
-            this.timer_controlHandler.Interval = 250;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
             // 
             // tabControl_dataControl
@@ -846,6 +859,11 @@ namespace AudioDataInterface
             // 
             this.groupBox_info.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox_info.Controls.Add(this.label_trackCount);
+            this.groupBox_info.Controls.Add(this.label_trackNumber);
+            this.groupBox_info.Controls.Add(this.progressBar_audioBuffer);
+            this.groupBox_info.Controls.Add(this.label_audioBufferSize);
+            this.groupBox_info.Controls.Add(this.label_decodedPacketSize);
             this.groupBox_info.Controls.Add(this.label_signalQuality);
             this.groupBox_info.Controls.Add(this.label_frameSyncErrorCount);
             this.groupBox_info.Controls.Add(this.label_unfixedErrorCount);
@@ -860,6 +878,55 @@ namespace AudioDataInterface
             this.groupBox_info.TabIndex = 5;
             this.groupBox_info.TabStop = false;
             this.groupBox_info.Text = "Информация";
+            // 
+            // label_trackCount
+            // 
+            this.label_trackCount.AutoSize = true;
+            this.label_trackCount.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_trackCount.Location = new System.Drawing.Point(3, 174);
+            this.label_trackCount.Name = "label_trackCount";
+            this.label_trackCount.Size = new System.Drawing.Size(90, 13);
+            this.label_trackCount.TabIndex = 13;
+            this.label_trackCount.Text = "Всего дорожек: ";
+            // 
+            // label_trackNumber
+            // 
+            this.label_trackNumber.AutoSize = true;
+            this.label_trackNumber.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_trackNumber.Location = new System.Drawing.Point(3, 161);
+            this.label_trackNumber.Name = "label_trackNumber";
+            this.label_trackNumber.Size = new System.Drawing.Size(60, 13);
+            this.label_trackNumber.TabIndex = 12;
+            this.label_trackNumber.Text = "Дорожка: ";
+            // 
+            // progressBar_audioBuffer
+            // 
+            this.progressBar_audioBuffer.Dock = System.Windows.Forms.DockStyle.Top;
+            this.progressBar_audioBuffer.Location = new System.Drawing.Point(3, 146);
+            this.progressBar_audioBuffer.Maximum = 96000;
+            this.progressBar_audioBuffer.Name = "progressBar_audioBuffer";
+            this.progressBar_audioBuffer.Size = new System.Drawing.Size(190, 15);
+            this.progressBar_audioBuffer.TabIndex = 11;
+            // 
+            // label_audioBufferSize
+            // 
+            this.label_audioBufferSize.AutoSize = true;
+            this.label_audioBufferSize.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_audioBufferSize.Location = new System.Drawing.Point(3, 133);
+            this.label_audioBufferSize.Name = "label_audioBufferSize";
+            this.label_audioBufferSize.Size = new System.Drawing.Size(77, 13);
+            this.label_audioBufferSize.TabIndex = 10;
+            this.label_audioBufferSize.Text = "Буфер аудио: ";
+            // 
+            // label_decodedPacketSize
+            // 
+            this.label_decodedPacketSize.AutoSize = true;
+            this.label_decodedPacketSize.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_decodedPacketSize.Location = new System.Drawing.Point(3, 120);
+            this.label_decodedPacketSize.Name = "label_decodedPacketSize";
+            this.label_decodedPacketSize.Size = new System.Drawing.Size(90, 13);
+            this.label_decodedPacketSize.TabIndex = 9;
+            this.label_decodedPacketSize.Text = "Размер пакета: ";
             // 
             // label_signalQuality
             // 
@@ -1407,6 +1474,12 @@ namespace AudioDataInterface
         public System.Windows.Forms.PictureBox pictureBox_symbol3;
         public System.Windows.Forms.PictureBox pictureBox_symbol2;
         public System.Windows.Forms.PictureBox pictureBox_symbol1;
+        private System.Windows.Forms.ToolStripMenuItem журналToolStripMenuItem;
+        private System.Windows.Forms.Label label_decodedPacketSize;
+        private System.Windows.Forms.Label label_audioBufferSize;
+        private System.Windows.Forms.ProgressBar progressBar_audioBuffer;
+        private System.Windows.Forms.Label label_trackCount;
+        private System.Windows.Forms.Label label_trackNumber;
     }
 }
 

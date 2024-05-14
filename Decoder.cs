@@ -39,6 +39,9 @@ namespace AudioDataInterface
         public static List<byte> sector = new List<byte>();
         public static string sectorType = "";
         public static bool sectorGot = false;
+        public static int decodedBlocksCounter = 0;
+        public static int decodedBlocksCountFirst = 0;
+        public static int decodedBlocksCountSecond = 0;
 
         static void SamplesDecoderStereo()
         {
@@ -332,6 +335,7 @@ namespace AudioDataInterface
 
                         decodedDataBlock[2] = String.Join(":", dataBlockBuff);
                         BinaryDecode(tempBin);
+                        decodedBlocksCounter++;
                         if (decodedDataBlock[3] != null && decodedDataBlock[4] != null)
                         {
                             //Контроль канальной синхронизации
@@ -343,7 +347,7 @@ namespace AudioDataInterface
                                 byte subCodeByte2 = Convert.ToByte(Convert.ToInt16(subCode.Substring(8, 8), 2));
                                 byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
                                 byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
-                                if (subCodeByte1 == 123)
+                                if (subCodeByte1 == 123) //Субкод канальной синхронизации
                                 {
                                     if (subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Определяем субкод контроля канальной синхронизации правого канала
                                     {
@@ -360,6 +364,13 @@ namespace AudioDataInterface
                                         }
                                     }
                                     else channelSyncSucc = true;
+                                }
+                                if (subCodeByte1 == 100) //Субкод таймкода. Отслеживание выпадений в MP3 потоке
+                                {
+                                    if (decodedBlocksCountFirst != 0 && decodedBlocksCountSecond != 0) { decodedBlocksCountFirst = decodedBlocksCountSecond; }
+                                    if (decodedBlocksCountFirst == 0) decodedBlocksCountFirst = decodedBlocksCounter;
+                                    else decodedBlocksCountSecond = decodedBlocksCounter;
+                                    decodedBlocksCounter = 0;
                                 }
                                 if (decoderMode == "sector")
                                 {

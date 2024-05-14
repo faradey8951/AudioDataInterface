@@ -82,11 +82,11 @@ namespace AudioDataInterface
             }
         }
 
-        public static int GetMp3FileDuration()
+        public static int GetAudioFileDuration(string path)
         {
-            Mp3FileReader reader = new Mp3FileReader(encoder_inputFilePath);
-            int minutes = reader.TotalTime.Minutes;
-            return reader.TotalTime.Seconds + (minutes * 60);
+            AudioFileReader audioFileReader = new AudioFileReader(path);
+            int minutes = audioFileReader.TotalTime.Minutes;
+            return audioFileReader.TotalTime.Seconds + (minutes * 60);
         }
 
         public static int GetEncodingAudioDuration()
@@ -767,18 +767,19 @@ namespace AudioDataInterface
             CreateInputStream();
             CreateOutputStream();
             //Расставляем время воспроизведения по файлу
-            int mp3Duration = 0;
+            int audioDuration = 0;
             int deltaByte = 0;
             if (encoder_mode == "mp3")
-            { 
-                mp3Duration = GetMp3FileDuration();
-                deltaByte = (int)Math.Round((double)((encoder_mpsPlayerSubCodeInterval * fs_input.Length) / mp3Duration));
+            {
+                audioDuration = GetAudioFileDuration("");
+                deltaByte = (int)Math.Round((double)((encoder_mpsPlayerSubCodeInterval * fs_input.Length) / audioDuration));
             }
+            if (encoder_mode == "opus") { deltaByte = 2000; audioDuration = GetAudioFileDuration("input.wav"); }
             if (encoder_mode.Contains("sector")) deltaByte = (int)fs_input.Length / 4;
             List<int> targetBytePositions = new List<int>();          
             for (int i = 0; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
             List<int> targetDurations = new List<int>();
-            for (int i = 0; i < targetBytePositions.Count; i++) targetDurations.Add((int)Math.Round((double)((targetBytePositions[i] * (double)mp3Duration) / fs_input.Length)));
+            for (int i = 0; i < targetBytePositions.Count; i++) targetDurations.Add((int)Math.Round((double)((targetBytePositions[i] * (double)audioDuration) / fs_input.Length)));
             if (encoder_forceStop == true)
             {
                 LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding aborted");
@@ -849,7 +850,7 @@ namespace AudioDataInterface
                 binaryR += temp;
                 i++;k++;
                 encoder_progress = ProgressHandler.GetPercent(fs_input.Length + 1, fs_input.Position);
-                if (encoder_mode != "mp3") form_tapeRecordingWizard.sectorTable[encoder_sectorFileIndex - 1][3] = encoder_progress.ToString() + "%";
+                if (encoder_mode != "mp3" && encoder_mode != "opus") form_tapeRecordingWizard.sectorTable[encoder_sectorFileIndex - 1][3] = encoder_progress.ToString() + "%";
                 GenerateRAWDataBlockStereo(binaryL, binaryR);
                 binaryL = "";
                 binaryR = "";
@@ -858,10 +859,10 @@ namespace AudioDataInterface
                 {
                     if (fs_input.Position >= targetBytePositions[0])
                     {
-                        if (encoder_mode == "mp3")
+                        if (encoder_mode == "mp3" || encoder_mode == "opus")
                         {
                             string part1 = Convert.ToString(targetDurations[0], 2);
-                            string part2 = Convert.ToString(mp3Duration, 2);
+                            string part2 = Convert.ToString(audioDuration, 2);
                             part1 = part1.PadLeft(12, '0');
                             part2 = part2.PadLeft(12, '0');
                             string sum = part1 + part2;

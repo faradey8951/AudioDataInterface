@@ -429,6 +429,20 @@ namespace AudioDataInterface
             label_unfixedErrorCount.Text = "Неисправимые: " + Decoder.unfixedErrorCount.ToString();
             label_frameSyncErrorCount.Text = "Кадровая синхр.: " + Decoder.frameSyncErrorCount.ToString();
             label_signalQuality.Text = "Качество сигнала: " + Decoder.signalQuality.ToString() + "%";
+            label_decodedPacketSize.Text = "Размер пакета: " + DataHandler.packetSize.ToString() + " байт";
+            label_audioBufferSize.Text = "Аудио буфер: ";
+            label_trackNumber.Text = "Дорожка: " + mpsPlayer_currentTrackNumber.ToString();
+            label_trackCount.Text = "Всего дорожек: " + mpsPlayer_trackCount.ToString();
+            try
+            {
+                if (DataHandler.ms != null)
+                {
+                    int audioBufferSamples = (int)(0.5 * ((int)DataHandler.ms.Length - (int)DataHandler.ms.Position));
+                    label_audioBufferSize.Text += ((double)audioBufferSamples / 48000).ToString() + " сек";
+                    if (audioBufferSamples <= 96000) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = 96000;
+                }
+            }
+            catch (Exception ex) { LogHandler.WriteError("timer_controlHandler_Tick", ex.Message); }
 
             if (form_main.mpsPlayer_currentTrackNumber != form_main.mpsPlayer_lastTrackNumber)
             {
@@ -1036,7 +1050,7 @@ namespace AudioDataInterface
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            DataHandler.testEx = true;
+
         }
 
         private void мастерВосстановленияДанныхToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1110,6 +1124,16 @@ namespace AudioDataInterface
                 mpsPlayer_runningIndicatorAnimationFrameIndex++;
                 if (mpsPlayer_runningIndicatorAnimationFrameIndex == 13) mpsPlayer_runningIndicatorAnimationFrameIndex = 0;
             }
+        }
+
+        private void журналToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (form_main.window_logMonitor != null)
+            {
+                form_main.window_logMonitor.Close();
+                form_main.window_logMonitor = new form_logMonitor();
+            }
+            form_main.window_logMonitor.Show();
         }
     }
 }

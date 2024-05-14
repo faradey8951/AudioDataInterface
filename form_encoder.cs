@@ -10,6 +10,12 @@ using System.Text;
 using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
+using OpusDotNet;
+//using Concentus;
+//using Concentus.Celt;
+//using Concentus.Common.CPlusPlus;
+//using Concentus.Enums;
+//using Concentus.Structs;
 
 
 namespace AudioDataInterface
@@ -73,52 +79,83 @@ namespace AudioDataInterface
 
         private void button_convert_Click(object sender, EventArgs e)
         {
-            try
+            //try
             {
                 if (Encoder.encoder_ADIFShell == false)
                 {
                     folderBrowserDialog.ShowDialog();
                     Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
-                    Encoder.encoder_mode = "mp3";
-                    
-                    if (File.Exists("output.mp3")) File.Delete("output.mp3");
-                    if (File.Exists("output2.mp3")) File.Delete("output2.mp3");
-                    string secondCmd = "ffmpeg -i output.mp3 " + Encoder.encoder_ffmpeg2Cmd + " -af " + @"""" + Encoder.encoder_ffmpeg2EffectCmd + @"""" + " output2.mp3";
-                    string firstCmd = "/C ffmpeg -i " + @"""" + Encoder.encoder_inputFilePath + @"""" + " " + Encoder.encoder_ffmpeg1Cmd + " output.mp3";
+                    Encoder.encoder_mode = "opus";
+                    if (File.Exists("input.wav")) File.Delete("input.wav");
+                    if (File.Exists("outputOpusEncoded.wav")) File.Delete("outputOpusEncoded.wav");
+                    string firstCmd = "/C ffmpeg -i " + @"""" + Encoder.encoder_inputFilePath + @"""" + " " + "-acodec pcm_s16le -ar 48000 -ac 1 input.wav";
                     Process p = new Process();
                     p.StartInfo.UseShellExecute = false;
                     p.StartInfo.FileName = "cmd.exe";
-                    if (Encoder.encoder_ffmpeg2EffectCmd != "" && Encoder.encoder_ffmpeg2Cmd != "") p.StartInfo.Arguments = firstCmd + " && " + secondCmd; else p.StartInfo.Arguments = firstCmd;
+                    p.StartInfo.Arguments = firstCmd;
                     p.StartInfo.CreateNoWindow = false;
                     p.Start();
                     p.WaitForExit();
-                    if (File.Exists("output2.mp3"))
+                    if (File.Exists("input.wav"))
                     {
-                        Encoder.encoder_inputFilePath = "output2.mp3";
+                        FileStream fs = new FileStream("input.wav", FileMode.Open);
+                        List<byte> inputPCMBytes = new List<byte>();
+                        List<short> inputPCMShorts = new List<short>();
+                        List<byte> outputOpusBytes = new List<byte>();
+                        DataHandler.ms = new MemoryStream();
+                        OpusEncoder encoder = new OpusEncoder(OpusDotNet.Application.Audio, 48000, 1);
+                        OpusDecoder decoder = new OpusDecoder(48000, 1);  
+                        //OpusEncoder encoder = new OpusEncoder(48000, 1, OpusApplication.OPUS_APPLICATION_AUDIO);
+                        //OpusDecoder decoder = new OpusDecoder(48000, 1);
+                        for (int i = 0; i < fs.Length; i += 1)
+                        {
+                            //inputPCMShorts.Add(BitConverter.ToInt16(new byte[2] { (byte)fs.ReadByte(), (byte)fs.ReadByte() }, 0));
+                            inputPCMBytes.Add((byte)fs.ReadByte());
+                            if (inputPCMBytes.Count == 40 * (48000 / 1000) * 2)
+                            {                           
+                                encoder.MaxBandwidth = Bandwidth.FullBand;
+                                encoder.Bitrate = 16000;
+                                encoder.VBR = false;
+                                byte[] opusBytes = new byte[80];
+                                encoder.Encode(inputPCMBytes.ToArray(), inputPCMBytes.Count, opusBytes, opusBytes.Length);
+                                byte[] outputSamples = new byte[40 * (48000 / 1000) * 2];
+                                decoder.Decode(opusBytes, opusBytes.Length, outputSamples, outputSamples.Length);                               
+                                outputOpusBytes.AddRange(opusBytes);
+                                inputPCMBytes.Clear();
+                                //encoder.Bitrate = 16000;
+                                //encoder.UseVBR = false;
+                                //encoder.Application = OpusApplication.OPUS_APPLICATION_AUDIO;
+                                //encoder.Bandwidth = OpusBandwidth.OPUS_BANDWIDTH_FULLBAND;
+                                //encoder.SignalType = OpusSignal.OPUS_SIGNAL_AUTO;
+                                //encoder.ExpertFrameDuration = OpusFramesize.OPUS_FRAMESIZE_40_MS;
+                                //encoder.EnableAnalysis = true;
+                                //byte[] opusBytes = new byte[80];
+                                //encoder.Encode(inputPCMShorts.ToArray(), inputPCMShorts.Count, opusBytes, opusBytes.Length);
+                                //short[] outputSamples = new short[40 * (48000 / 1000) * 1];
+                                //List<byte> outputBytes = new List<byte>();
+                                //decoder.Decode(opusBytes, outputSamples, outputSamples.Length, false);
+                                //for (int k = 0; k < outputSamples.Length; k++) outputBytes.AddRange(BitConverter.GetBytes(outputSamples[k]));
+                                //DataHandler.ms.Write(outputBytes.ToArray(), 0, outputBytes.Count);
+                                //outputOpusBytes.AddRange(opusBytes);
+                                //inputPCMShorts.Clear();
+                            }
+                        }
+                        fs.Close();
+                        fs = new FileStream("outputOpusEncoded.wav", FileMode.Create);
+                        fs.Write(outputOpusBytes.ToArray(), 0, outputOpusBytes.Count);
+                        fs.Close();
+                        Encoder.encoder_inputFilePath = "outputOpusEncoded.wav";
                         if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
                         if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
                         Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
                         Encoder.thread_encodeFileStereoStream.Start();
                     }
-                    else
-                    {
-                        if (File.Exists("output.mp3"))
-                        {
-                            Encoder.encoder_inputFilePath = "output.mp3";
-                            if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
-                            if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
-                            Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
-                            Encoder.thread_encodeFileStereoStream.Start();
-                        }
-                        else MessageBox.Show("Не удалось выполнить преобразование указанного файла. Проверьте исходный файл и команды FFMPEG!", "FFMPEG ERROR");
-                    }
-                    
                 }
                 else { }
             }
-            catch (Exception ex)
+            //catch (Exception ex)
             {
-                LogHandler.WriteError("EncoderWindow.cs->button_convert_Click", ex.Message);
+                //LogHandler.WriteError("EncoderWindow.cs->button_convert_Click", ex.Message);
             }
         }
 
