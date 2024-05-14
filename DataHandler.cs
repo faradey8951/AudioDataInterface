@@ -108,7 +108,8 @@ namespace AudioDataInterface
                                                     double[] framePCMShorts2 = new double[framePCMBytes2.Length / 2];
                                                     for (int k = 0, l = 0; k < framePCMShorts1.Length; k++, l += 2) framePCMShorts1[k] = (double)BitConverter.ToInt16(new byte[] { framePCMBytes1[l], framePCMBytes1[l + 1] }, 0);
                                                     for (int k = 0, l = 0; k < framePCMShorts2.Length; k++, l += 2) framePCMShorts2[k] = (double)BitConverter.ToInt16(new byte[] { framePCMBytes2[l], framePCMBytes2[l + 1] }, 0);
-                                                    short[] calculatedPCMShorts = new short[1920 * dropoutFramesCount]; //Буфер интерполированных сэмплов
+                                                    //short[] calculatedPCMShorts = new short[2048 * dropoutFramesCount]; //Буфер интерполированных сэмплов
+                                                    List<short> calculatedPCMShorts = new List<short>();
                                                     List<byte> calculatedPCMBytes = new List<byte>();
                                                     double[] paddedAudio1 = FftSharp.Pad.ZeroPad(framePCMShorts1);
                                                     double[] paddedAudio2 = FftSharp.Pad.ZeroPad(framePCMShorts2);
@@ -118,23 +119,47 @@ namespace AudioDataInterface
                                                     double[] fftMag2 = FftSharp.FFT.Magnitude(complex2, false);
                                                     double[] fftPhase1 = FftSharp.FFT.Phase(complex1);
                                                     double[] fftPhase2 = FftSharp.FFT.Phase(complex2);
-                                                    double[] fftMagDropout = new double[1920 * dropoutFramesCount];
-                                                    double[][] fftPhaseDropout = new double[dropoutFramesCount][];
-                                                    for (int k = 65; k < 1985; k++)
+                                                    double[] fftMagDropout = new double[2048 * dropoutFramesCount];
+                                                    double[] fftPhaseDropout = new double[2048 * dropoutFramesCount];
+                                                    int x1 = 1;
+                                                    int x2 = dropoutFramesCount + 2;
+                                                    //Интерполяция магнитуд
+                                                    for (int z = 0, h = 0; z < fftPhase1.Length; z++)
                                                     {
-                                                        int x1 = 64;
-                                                        int x2 = 64;
-                                                        double y1 = fftMag1[64];
-                                                        double y2 = fftMag2[64];
-                                                        int xi = k;
+                                                        h = z;
+                                                        double y1 = fftMag1[z];
+                                                        double y2 = fftMag2[z];
+                                                        for (int x = x1 + 1; x < x2; x++, h += 2048)
+                                                        {
+                                                            int xi = x;
+                                                            fftMagDropout[h] = y1 + (((xi - x1) * (y2 - y1)) / (x2 - x1));
+                                                        }
                                                     }
-                                                    List<System.Numerics.Complex> test = new List<System.Numerics.Complex>();                                              
-                                                    for (int t = 0; t < fftMag1.Length; t++) test.Add(System.Numerics.Complex.FromPolarCoordinates(fftMag1[t] * 1024.0, fftPhase1[t]));
+                                                    //Интерполяция фаз
+                                                    for (int z = 0, h = 0; z < fftPhase1.Length; z++)
+                                                    {
+                                                        h = z;
+                                                        double y1 = fftPhase1[z];
+                                                        double y2 = fftPhase2[z];
+                                                        for (int x = x1 + 1; x < x2; x++, h += 2048)
+                                                        {
+                                                            int xi = x;
+                                                            fftPhaseDropout[h] = y1 + (((xi - x1) * (y2 - y1)) / (x2 - x1));
+                                                        }
+                                                    }
+                                                    List<System.Numerics.Complex> test = new List<System.Numerics.Complex>();
+                                                    for (int t = 0; t < fftMagDropout.Length; t++) test.Add(System.Numerics.Complex.FromPolarCoordinates(fftMagDropout[t] * 1.0, fftPhaseDropout[t] * 1.0));
                                                     System.Numerics.Complex[] testIFFT = test.ToArray();
-                                                    FftSharp.FFT.Inverse(testIFFT);
-                                                                                              
-                                                    //foreach (short s in calculatedPCMShorts) calculatedPCMBytes.AddRange(BitConverter.GetBytes(s));
-                                                    //outputPCMBytes.AddRange(calculatedPCMBytes);
+                                                    List<System.Numerics.Complex[]> testIFFTFramed = new List<System.Numerics.Complex[]>();
+                                                    for (int k = 0; k < testIFFT.Length; k += 2048)
+                                                    {
+                                                        testIFFTFramed.Add(new System.Numerics.Complex[2048]);
+                                                        for (int t = k, l = 0; t < k + 2048; t++, l++) testIFFTFramed[testIFFTFramed.Count - 1][l] = testIFFT[t];
+                                                    }
+                                                    for (int t = 0; t < testIFFTFramed.Count; t++) FftSharp.FFT.Inverse(testIFFTFramed[t]);
+                                                    foreach (System.Numerics.Complex[] c in testIFFTFramed) for (int t = 65; t < 65 + 1920; t++) calculatedPCMShorts.Add((short)Convert.ToInt16(c[t].Real * 512));
+                                                    foreach (short s in calculatedPCMShorts) calculatedPCMBytes.AddRange(BitConverter.GetBytes(s));
+                                                    outputPCMBytes.AddRange(calculatedPCMBytes);
                                                     dropout = false;
                                                 }
                                                 dropoutFramesCount = 0;
