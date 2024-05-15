@@ -103,8 +103,6 @@ namespace AudioDataInterface
             this.label_fixedErrorCount = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
             this.label_border1 = new System.Windows.Forms.Label();
-            this.label_signalGainL = new System.Windows.Forms.Label();
-            this.label_signalGainR = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.trackBar_spectrumGain = new System.Windows.Forms.TrackBar();
@@ -133,6 +131,12 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
+            this.label4 = new System.Windows.Forms.Label();
+            this.label_subcodeSync = new System.Windows.Forms.Label();
+            this.label_subcodeTimecode = new System.Windows.Forms.Label();
+            this.label_subcodeTOC = new System.Windows.Forms.Label();
+            this.label_interpolation = new System.Windows.Forms.Label();
+            this.label_mute = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -859,6 +863,12 @@ namespace AudioDataInterface
             // 
             this.groupBox_info.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox_info.Controls.Add(this.label_mute);
+            this.groupBox_info.Controls.Add(this.label_interpolation);
+            this.groupBox_info.Controls.Add(this.label_subcodeTOC);
+            this.groupBox_info.Controls.Add(this.label_subcodeTimecode);
+            this.groupBox_info.Controls.Add(this.label_subcodeSync);
+            this.groupBox_info.Controls.Add(this.label4);
             this.groupBox_info.Controls.Add(this.label_trackCount);
             this.groupBox_info.Controls.Add(this.label_trackNumber);
             this.groupBox_info.Controls.Add(this.progressBar_audioBuffer);
@@ -870,8 +880,6 @@ namespace AudioDataInterface
             this.groupBox_info.Controls.Add(this.label_fixedErrorCount);
             this.groupBox_info.Controls.Add(this.label3);
             this.groupBox_info.Controls.Add(this.label_border1);
-            this.groupBox_info.Controls.Add(this.label_signalGainL);
-            this.groupBox_info.Controls.Add(this.label_signalGainR);
             this.groupBox_info.Location = new System.Drawing.Point(824, 24);
             this.groupBox_info.Name = "groupBox_info";
             this.groupBox_info.Size = new System.Drawing.Size(196, 369);
@@ -883,7 +891,7 @@ namespace AudioDataInterface
             // 
             this.label_trackCount.AutoSize = true;
             this.label_trackCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_trackCount.Location = new System.Drawing.Point(3, 174);
+            this.label_trackCount.Location = new System.Drawing.Point(3, 148);
             this.label_trackCount.Name = "label_trackCount";
             this.label_trackCount.Size = new System.Drawing.Size(90, 13);
             this.label_trackCount.TabIndex = 13;
@@ -893,7 +901,7 @@ namespace AudioDataInterface
             // 
             this.label_trackNumber.AutoSize = true;
             this.label_trackNumber.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_trackNumber.Location = new System.Drawing.Point(3, 161);
+            this.label_trackNumber.Location = new System.Drawing.Point(3, 135);
             this.label_trackNumber.Name = "label_trackNumber";
             this.label_trackNumber.Size = new System.Drawing.Size(60, 13);
             this.label_trackNumber.TabIndex = 12;
@@ -902,7 +910,7 @@ namespace AudioDataInterface
             // progressBar_audioBuffer
             // 
             this.progressBar_audioBuffer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.progressBar_audioBuffer.Location = new System.Drawing.Point(3, 146);
+            this.progressBar_audioBuffer.Location = new System.Drawing.Point(3, 120);
             this.progressBar_audioBuffer.Maximum = 96000;
             this.progressBar_audioBuffer.Name = "progressBar_audioBuffer";
             this.progressBar_audioBuffer.Size = new System.Drawing.Size(190, 15);
@@ -912,7 +920,7 @@ namespace AudioDataInterface
             // 
             this.label_audioBufferSize.AutoSize = true;
             this.label_audioBufferSize.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_audioBufferSize.Location = new System.Drawing.Point(3, 133);
+            this.label_audioBufferSize.Location = new System.Drawing.Point(3, 107);
             this.label_audioBufferSize.Name = "label_audioBufferSize";
             this.label_audioBufferSize.Size = new System.Drawing.Size(77, 13);
             this.label_audioBufferSize.TabIndex = 10;
@@ -922,7 +930,7 @@ namespace AudioDataInterface
             // 
             this.label_decodedPacketSize.AutoSize = true;
             this.label_decodedPacketSize.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_decodedPacketSize.Location = new System.Drawing.Point(3, 120);
+            this.label_decodedPacketSize.Location = new System.Drawing.Point(3, 94);
             this.label_decodedPacketSize.Name = "label_decodedPacketSize";
             this.label_decodedPacketSize.Size = new System.Drawing.Size(90, 13);
             this.label_decodedPacketSize.TabIndex = 9;
@@ -932,7 +940,7 @@ namespace AudioDataInterface
             // 
             this.label_signalQuality.AutoSize = true;
             this.label_signalQuality.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_signalQuality.Location = new System.Drawing.Point(3, 107);
+            this.label_signalQuality.Location = new System.Drawing.Point(3, 81);
             this.label_signalQuality.Name = "label_signalQuality";
             this.label_signalQuality.Size = new System.Drawing.Size(101, 13);
             this.label_signalQuality.TabIndex = 8;
@@ -942,7 +950,7 @@ namespace AudioDataInterface
             // 
             this.label_frameSyncErrorCount.AutoSize = true;
             this.label_frameSyncErrorCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_frameSyncErrorCount.Location = new System.Drawing.Point(3, 94);
+            this.label_frameSyncErrorCount.Location = new System.Drawing.Point(3, 68);
             this.label_frameSyncErrorCount.Name = "label_frameSyncErrorCount";
             this.label_frameSyncErrorCount.Size = new System.Drawing.Size(94, 13);
             this.label_frameSyncErrorCount.TabIndex = 4;
@@ -952,7 +960,7 @@ namespace AudioDataInterface
             // 
             this.label_unfixedErrorCount.AutoSize = true;
             this.label_unfixedErrorCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_unfixedErrorCount.Location = new System.Drawing.Point(3, 81);
+            this.label_unfixedErrorCount.Location = new System.Drawing.Point(3, 55);
             this.label_unfixedErrorCount.Name = "label_unfixedErrorCount";
             this.label_unfixedErrorCount.Size = new System.Drawing.Size(88, 13);
             this.label_unfixedErrorCount.TabIndex = 3;
@@ -962,7 +970,7 @@ namespace AudioDataInterface
             // 
             this.label_fixedErrorCount.AutoSize = true;
             this.label_fixedErrorCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_fixedErrorCount.Location = new System.Drawing.Point(3, 68);
+            this.label_fixedErrorCount.Location = new System.Drawing.Point(3, 42);
             this.label_fixedErrorCount.Name = "label_fixedErrorCount";
             this.label_fixedErrorCount.Size = new System.Drawing.Size(72, 13);
             this.label_fixedErrorCount.TabIndex = 2;
@@ -971,7 +979,7 @@ namespace AudioDataInterface
             // label3
             // 
             this.label3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label3.Location = new System.Drawing.Point(3, 55);
+            this.label3.Location = new System.Drawing.Point(3, 29);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(190, 13);
             this.label3.TabIndex = 6;
@@ -981,32 +989,12 @@ namespace AudioDataInterface
             // label_border1
             // 
             this.label_border1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_border1.Location = new System.Drawing.Point(3, 42);
+            this.label_border1.Location = new System.Drawing.Point(3, 16);
             this.label_border1.Name = "label_border1";
             this.label_border1.Size = new System.Drawing.Size(190, 13);
             this.label_border1.TabIndex = 7;
             this.label_border1.Text = "____________________________";
             this.label_border1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_signalGainL
-            // 
-            this.label_signalGainL.AutoSize = true;
-            this.label_signalGainL.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_signalGainL.Location = new System.Drawing.Point(3, 29);
-            this.label_signalGainL.Name = "label_signalGainL";
-            this.label_signalGainL.Size = new System.Drawing.Size(151, 13);
-            this.label_signalGainL.TabIndex = 0;
-            this.label_signalGainL.Text = "Коэффициент усиления ЛК: ";
-            // 
-            // label_signalGainR
-            // 
-            this.label_signalGainR.AutoSize = true;
-            this.label_signalGainR.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_signalGainR.Location = new System.Drawing.Point(3, 16);
-            this.label_signalGainR.Name = "label_signalGainR";
-            this.label_signalGainR.Size = new System.Drawing.Size(151, 13);
-            this.label_signalGainR.TabIndex = 1;
-            this.label_signalGainR.Text = "Коэффициент усиления ПК: ";
             // 
             // panel_signalCapture
             // 
@@ -1295,6 +1283,66 @@ namespace AudioDataInterface
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
             // 
+            // label4
+            // 
+            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label4.Location = new System.Drawing.Point(3, 161);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(190, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Аудиопроцессор:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_subcodeSync
+            // 
+            this.label_subcodeSync.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_subcodeSync.Location = new System.Drawing.Point(3, 174);
+            this.label_subcodeSync.Name = "label_subcodeSync";
+            this.label_subcodeSync.Size = new System.Drawing.Size(190, 13);
+            this.label_subcodeSync.TabIndex = 15;
+            this.label_subcodeSync.Text = "Channel Sync";
+            this.label_subcodeSync.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_subcodeTimecode
+            // 
+            this.label_subcodeTimecode.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 187);
+            this.label_subcodeTimecode.Name = "label_subcodeTimecode";
+            this.label_subcodeTimecode.Size = new System.Drawing.Size(190, 13);
+            this.label_subcodeTimecode.TabIndex = 16;
+            this.label_subcodeTimecode.Text = "Timecode";
+            this.label_subcodeTimecode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_subcodeTOC
+            // 
+            this.label_subcodeTOC.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 200);
+            this.label_subcodeTOC.Name = "label_subcodeTOC";
+            this.label_subcodeTOC.Size = new System.Drawing.Size(190, 13);
+            this.label_subcodeTOC.TabIndex = 17;
+            this.label_subcodeTOC.Text = "TOC";
+            this.label_subcodeTOC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_interpolation
+            // 
+            this.label_interpolation.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_interpolation.Location = new System.Drawing.Point(3, 213);
+            this.label_interpolation.Name = "label_interpolation";
+            this.label_interpolation.Size = new System.Drawing.Size(190, 13);
+            this.label_interpolation.TabIndex = 18;
+            this.label_interpolation.Text = "Audio Interpolation";
+            this.label_interpolation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_mute
+            // 
+            this.label_mute.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_mute.Location = new System.Drawing.Point(3, 226);
+            this.label_mute.Name = "label_mute";
+            this.label_mute.Size = new System.Drawing.Size(190, 13);
+            this.label_mute.TabIndex = 19;
+            this.label_mute.Text = "Audio Mute";
+            this.label_mute.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1411,8 +1459,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.CheckBox checkBox_remainingTime;
         public System.Windows.Forms.CheckBox checkBox_invertSignal;
         private System.Windows.Forms.GroupBox groupBox_info;
-        private System.Windows.Forms.Label label_signalGainR;
-        private System.Windows.Forms.Label label_signalGainL;
         private System.Windows.Forms.Label label_fixedErrorCount;
         private System.Windows.Forms.CheckBox checkBox_tapeSkin;
         private System.Windows.Forms.Label label1;
@@ -1480,6 +1526,12 @@ namespace AudioDataInterface
         private System.Windows.Forms.ProgressBar progressBar_audioBuffer;
         private System.Windows.Forms.Label label_trackCount;
         private System.Windows.Forms.Label label_trackNumber;
+        private System.Windows.Forms.Label label_subcodeSync;
+        private System.Windows.Forms.Label label4;
+        private System.Windows.Forms.Label label_subcodeTOC;
+        private System.Windows.Forms.Label label_subcodeTimecode;
+        private System.Windows.Forms.Label label_mute;
+        private System.Windows.Forms.Label label_interpolation;
     }
 }
 

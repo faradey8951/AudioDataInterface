@@ -43,6 +43,16 @@ namespace AudioDataInterface
         static Bitmap bitmap_waveGraph = null;
         static Graphics graphics_mpsPlayerInterface = null;
         static Bitmap bitmap_mpsPlayerInterface = null;
+        static Graphics graphics_subcodeSyncIndicator = null;
+        static Graphics graphics_subcodeTimecodeIndicator = null;
+        static Graphics graphics_subcodeTOCIndicator = null;
+        static Graphics graphics_audioInterpolationIndicator = null;
+        static Graphics graphics_audioMutingIndicator = null;
+        static Bitmap bitmap_subcodeSyncIndicator = null;
+        static Bitmap bitmap_subcodeTimecodeIndicator = null;
+        static Bitmap bitmap_subcodeTOCIndicator = null;
+        static Bitmap bitmap_audioInterpolationIndicator = null;
+        static Bitmap bitmap_audioMutingIndicator = null;
 
         Image[] symbolImages;
         PictureBox[] pictureBox_timeSymbols;
@@ -367,6 +377,20 @@ namespace AudioDataInterface
             pictureBox_runningIndicator.Invalidate();
         }
 
+        public void DrawAudioProcessorStatus()
+        {
+            graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
+            graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
+            graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
+            graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
+            graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
+            label_subcodeSync.Image = bitmap_subcodeSyncIndicator;
+            label_subcodeTimecode.Image = bitmap_subcodeTimecodeIndicator;
+            label_subcodeTOC.Image = bitmap_subcodeTOCIndicator;
+            label_interpolation.Image = bitmap_audioInterpolationIndicator;
+            label_mute.Image = bitmap_audioMutingIndicator;
+        }
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
             Settings.Load();
@@ -376,6 +400,21 @@ namespace AudioDataInterface
             graphics_waveGraph = Graphics.FromImage(bitmap_waveGraph); //Инициализация графики
             bitmap_mpsPlayerInterface = new Bitmap(pictureBox_mpsPlayer.Width, pictureBox_mpsPlayer.Height);
             graphics_mpsPlayerInterface = Graphics.FromImage(bitmap_mpsPlayerInterface);
+
+            bitmap_subcodeSyncIndicator = new Bitmap(label_subcodeSync.Width, label_subcodeSync.Height);
+            bitmap_subcodeTimecodeIndicator = new Bitmap(label_subcodeTimecode.Width, label_subcodeTimecode.Height);
+            bitmap_subcodeTOCIndicator = new Bitmap(label_subcodeTOC.Width, label_subcodeTOC.Height);
+            bitmap_audioInterpolationIndicator = new Bitmap(label_interpolation.Width, label_interpolation.Height);
+            bitmap_audioMutingIndicator = new Bitmap(label_mute.Width, label_mute.Height);
+
+            graphics_subcodeSyncIndicator = Graphics.FromImage(bitmap_subcodeSyncIndicator);
+            graphics_subcodeTimecodeIndicator = Graphics.FromImage(bitmap_subcodeTimecodeIndicator);
+            graphics_subcodeTOCIndicator = Graphics.FromImage(bitmap_subcodeTOCIndicator);
+            graphics_audioInterpolationIndicator = Graphics.FromImage(bitmap_audioInterpolationIndicator);
+            graphics_audioMutingIndicator = Graphics.FromImage(bitmap_audioMutingIndicator);
+
+            DrawAudioProcessorStatus();
+
             try
             {
                 comboBox_recDevices.Items.AddRange(AudioIO.GetRecDevices());
@@ -442,7 +481,7 @@ namespace AudioDataInterface
                     if (audioBufferSamples <= 96000) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = 96000;
                 }
             }
-            catch (Exception ex) { LogHandler.WriteError("timer_controlHandler_Tick", ex.Message); }
+            catch { }
 
             if (form_main.mpsPlayer_currentTrackNumber != form_main.mpsPlayer_lastTrackNumber)
             {

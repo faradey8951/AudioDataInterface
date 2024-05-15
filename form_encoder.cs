@@ -107,37 +107,35 @@ namespace AudioDataInterface
                         OpusDecoder decoder = new OpusDecoder(48000, 1);  
                         //OpusEncoder encoder = new OpusEncoder(48000, 1, OpusApplication.OPUS_APPLICATION_AUDIO);
                         //OpusDecoder decoder = new OpusDecoder(48000, 1);
-                        for (int i = 0; i < fs.Length; i += 1)
+                        for (int i = 0; i < fs.Length; i++)
                         {
                             //inputPCMShorts.Add(BitConverter.ToInt16(new byte[2] { (byte)fs.ReadByte(), (byte)fs.ReadByte() }, 0));
                             inputPCMBytes.Add((byte)fs.ReadByte());
                             if (inputPCMBytes.Count == 40 * (48000 / 1000) * 2)
-                            {                           
+                            {     
+                                
                                 encoder.MaxBandwidth = Bandwidth.FullBand;
                                 encoder.Bitrate = 16000;
                                 encoder.VBR = false;
+                                encoder.Complexity = 10;
                                 byte[] opusBytes = new byte[80];
-                                encoder.Encode(inputPCMBytes.ToArray(), inputPCMBytes.Count, opusBytes, opusBytes.Length);
-                                byte[] outputSamples = new byte[40 * (48000 / 1000) * 2];
-                                decoder.Decode(opusBytes, opusBytes.Length, outputSamples, outputSamples.Length);                               
+                                encoder.Encode(inputPCMBytes.ToArray(), inputPCMBytes.Count, opusBytes, opusBytes.Length);                           
                                 outputOpusBytes.AddRange(opusBytes);
                                 inputPCMBytes.Clear();
-                                //encoder.Bitrate = 16000;
-                                //encoder.UseVBR = false;
-                                //encoder.Application = OpusApplication.OPUS_APPLICATION_AUDIO;
-                                //encoder.Bandwidth = OpusBandwidth.OPUS_BANDWIDTH_FULLBAND;
-                                //encoder.SignalType = OpusSignal.OPUS_SIGNAL_AUTO;
-                                //encoder.ExpertFrameDuration = OpusFramesize.OPUS_FRAMESIZE_40_MS;
-                                //encoder.EnableAnalysis = true;
-                                //byte[] opusBytes = new byte[80];
-                                //encoder.Encode(inputPCMShorts.ToArray(), inputPCMShorts.Count, opusBytes, opusBytes.Length);
-                                //short[] outputSamples = new short[40 * (48000 / 1000) * 1];
-                                //List<byte> outputBytes = new List<byte>();
-                                //decoder.Decode(opusBytes, outputSamples, outputSamples.Length, false);
-                                //for (int k = 0; k < outputSamples.Length; k++) outputBytes.AddRange(BitConverter.GetBytes(outputSamples[k]));
-                                //DataHandler.ms.Write(outputBytes.ToArray(), 0, outputBytes.Count);
-                                //outputOpusBytes.AddRange(opusBytes);
-                                //inputPCMShorts.Clear();
+                                
+                                /*
+                                encoder.Bitrate = 16000;
+                                encoder.UseVBR = false;
+                                encoder.Bandwidth = OpusBandwidth.OPUS_BANDWIDTH_FULLBAND;
+                                encoder.SignalType = OpusSignal.OPUS_SIGNAL_MUSIC;
+                                encoder.ExpertFrameDuration = OpusFramesize.OPUS_FRAMESIZE_20_MS;
+                                encoder.Complexity = 10;
+                                encoder.EnableAnalysis = true;
+                                byte[] opusBytes = new byte[40];
+                                encoder.Encode(inputPCMShorts.ToArray(), inputPCMShorts.Count, opusBytes, opusBytes.Length);
+                                outputOpusBytes.AddRange(opusBytes);
+                                inputPCMShorts.Clear();
+                                */
                             }
                         }
                         fs.Close();

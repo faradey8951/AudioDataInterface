@@ -15,18 +15,18 @@ namespace AudioDataInterface
 
         public static void WriteError(string source, string message)
         {
-            list_log.Add("-[ERROR] in ( " + source + " ): " + message + "\r\n");
+            list_log.Add("[E] " + source + " >:" + message + "\r\n");
             //В случае прослушивания журнала
             if (logListening == true)
-                form_logMonitor.buff_log.Add("-[ERROR] in ( " + source + " ): " + message + "\r\n");
+                form_logMonitor.buff_log.Add("[E] " + source + " >:" + message + "\r\n");
         }
 
         public static void WriteStatus(string source, string message)
         {
-            list_log.Add("-[STATUS] in ( " + source + " ): " + message + "\r\n");
+            list_log.Add("[S] " + source + " >:" + message + "\r\n");
             //В случае прослушивания журнала
             if (logListening == true)
-                form_logMonitor.buff_log.Add("-[STATUS] in ( " + source + " ): " + message + "\r\n");
+                form_logMonitor.buff_log.Add("[S] " + source + " >:" + message + "\r\n");
         }
 
     }
