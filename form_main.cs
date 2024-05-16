@@ -53,6 +53,12 @@ namespace AudioDataInterface
         static Bitmap bitmap_subcodeTOCIndicator = null;
         static Bitmap bitmap_audioInterpolationIndicator = null;
         static Bitmap bitmap_audioMutingIndicator = null;
+        static int subcodeSyncIndicatorCount = 0;
+        static int subcodeSyncErrorIndicatorCount = 0;
+        static int subcodeTimecodeIndicatorCount = 0;
+        static int subcodeTOCIndicatorCount = 0;
+        static int audioInterpolationIndicatorCount = 0;
+        static int audioMutingIndicatorCount = 0;
 
         Image[] symbolImages;
         PictureBox[] pictureBox_timeSymbols;
@@ -374,16 +380,28 @@ namespace AudioDataInterface
 
         private void OnFrameChanged(object sender, EventArgs e)
         {
-            pictureBox_runningIndicator.Invalidate();
+
         }
 
         public void DrawAudioProcessorStatus()
         {
-            graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
-            graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
-            graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
-            graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
-            graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10);
+            if (subcodeSyncIndicatorCount >= 4) { DataHandler.subcodeSync = false; subcodeSyncIndicatorCount = 0; }
+            if (subcodeSyncErrorIndicatorCount >= 4) { DataHandler.subcodeSyncError = false; subcodeSyncErrorIndicatorCount = 0; }
+            if (subcodeTimecodeIndicatorCount >= 4) { DataHandler.subcodeTimecode = false; subcodeTimecodeIndicatorCount = 0; }
+            if (subcodeTOCIndicatorCount >= 4) { DataHandler.subcodeTOC = false; subcodeTOCIndicatorCount = 0; }
+            if (audioInterpolationIndicatorCount >= 4) { DataHandler.interpolation = false; audioInterpolationIndicatorCount = 0; }
+            if (audioMutingIndicatorCount >= 4) { DataHandler.mute = false; audioMutingIndicatorCount = 0; }
+            label_subcodeSync.Image = null;
+            label_subcodeTimecode.Image = null;
+            label_subcodeTOC.Image = null;
+            label_interpolation.Image = null;
+            label_mute.Image = null;
+            if (DataHandler.subcodeSync == false) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Green), 0, 0, 10, 10); subcodeSyncIndicatorCount++; }
+            if (DataHandler.subcodeSyncError == true) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Red), 0, 0, 10, 10); subcodeSyncErrorIndicatorCount++;
+            if (DataHandler.subcodeTimecode == false) graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Green), 0, 0, 10, 10); subcodeTimecodeIndicatorCount++; }
+            if (DataHandler.subcodeTOC == false) graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Green), 0, 0, 10, 10); subcodeTOCIndicatorCount++; }
+            if (DataHandler.interpolation == false) graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Red), 0, 0, 10, 10); audioInterpolationIndicatorCount++; }
+            if (DataHandler.mute == false) graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Red), 0, 0, 10, 10); audioMutingIndicatorCount++; }
             label_subcodeSync.Image = bitmap_subcodeSyncIndicator;
             label_subcodeTimecode.Image = bitmap_subcodeTimecodeIndicator;
             label_subcodeTOC.Image = bitmap_subcodeTOCIndicator;
@@ -464,6 +482,7 @@ namespace AudioDataInterface
 
         private void timer_controlHandler_Tick(object sender, EventArgs e)
         {
+            DrawAudioProcessorStatus();
             label_fixedErrorCount.Text = "Исправлено: " + Decoder.fixedErrorCount.ToString();
             label_unfixedErrorCount.Text = "Неисправимые: " + Decoder.unfixedErrorCount.ToString();
             label_frameSyncErrorCount.Text = "Кадровая синхр.: " + Decoder.frameSyncErrorCount.ToString();
@@ -915,6 +934,7 @@ namespace AudioDataInterface
         private void timer_mpsPlayerTimeUpdate_Tick(object sender, EventArgs e)
         {
             if (mpsPlayer_mode == "play") mpsPlayer_timeSeconds++;
+
         }
 
         private void checkBox_invertSignal_CheckedChanged(object sender, EventArgs e)
@@ -993,7 +1013,6 @@ namespace AudioDataInterface
 
         private void button2_Click(object sender, EventArgs e)
         {
-            ImageAnimator.Animate(pictureBox_runningIndicator.BackgroundImage, OnFrameChanged);
             Decoder.buff_decodedData.Clear();
             Decoder.buff_signalAmplitudesL.Clear();
             Decoder.buff_signalAmplitudesR.Clear();

@@ -389,6 +389,7 @@ namespace AudioDataInterface
                             
                             if (channelSyncSucc == false)
                             {
+                                DataHandler.subcodeSyncError = true;
                                 frameSyncErrorCount++;
                                 decodedDataBlock = new string[6];
                                 lastDecodedDataBlock = new string[6];

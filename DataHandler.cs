@@ -29,6 +29,12 @@ namespace AudioDataInterface
         public static List<string[]> mp3Buffer = new List<string[]>();
         public static Thread thread_bufferMp3;
         public static Thread thread_playMp3;
+        public static bool subcodeSync = false;
+        public static bool subcodeSyncError = false;
+        public static bool subcodeTimecode = false;
+        public static bool subcodeTOC = false;
+        public static bool interpolation = false;
+        public static bool mute = false;
 
         FileStream fs = null;
 
@@ -73,6 +79,9 @@ namespace AudioDataInterface
                             byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
                             if (subCodeByte1 == 100) //Таймкод
                             {
+                                //subcodeSync = false;
+                                subcodeTimecode = true;
+                                //subcodeTOC = false;
                                 string sum = Convert.ToString(subCodeByte2, 2).PadLeft(8, '0') + Convert.ToString(subCodeByte3, 2).PadLeft(8, '0') + Convert.ToString(subCodeByte4, 2).PadLeft(8, '0');
                                 string part1 = sum.Substring(0, 12);
                                 string part2 = sum.Substring(12, 12);
@@ -83,12 +92,14 @@ namespace AudioDataInterface
                             }
                             if (subCodeByte1 == 200) //TOC
                             {
+                                subcodeTOC = true;
                                 form_main.mpsPlayer_currentTrackNumber = subCodeByte2;
                                 form_main.mpsPlayer_trackCount = subCodeByte3;
                             }
                             if (subCodeByte1 == 123 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Субкод канальной синхронизации правого канала
                             {
                                 packetSize = packet.Count;
+                                subcodeSync = true;
                                 if (packet.Count >= 80) //Триггер размера пакета для обработки фреймов
                                 {
                                     List<byte> opusFrame = new List<byte>(); //Буфер байт OPUS фрейма
@@ -104,6 +115,7 @@ namespace AudioDataInterface
                                                 //Интерполяция выпавших фреймов
                                                 if (dropoutFramesCount > 0 && dropoutFramesCount <= 10)
                                                 {
+                                                    interpolation = true;
                                                     framePCMBytes.CopyTo(framePCMBytes2, 0);
                                                     double[] framePCMShorts1 = new double[framePCMBytes1.Length / 2];
                                                     double[] framePCMShorts2 = new double[framePCMBytes2.Length / 2];
@@ -167,6 +179,8 @@ namespace AudioDataInterface
                                                 //Добавить тишину, если выпало больше порога фреймов
                                                 if (dropoutFramesCount > 10)
                                                 {
+                                                    interpolation = false;
+                                                    mute = true;
                                                     for (int t = 0; t < 1920 * dropoutFramesCount; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
                                                     //dropout = false;
                                                     LogHandler.WriteStatus("DataHandler() -> AudioBuffer()", "Заглушено " + dropoutFramesCount.ToString() + " фрейма(ов) - (" + (dropoutFramesCount * 1920).ToString() + " сэмплов)");
