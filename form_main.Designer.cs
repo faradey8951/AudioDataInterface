@@ -92,6 +92,12 @@ namespace AudioDataInterface
             this.panel_base = new System.Windows.Forms.Panel();
             this.panel_dataControl = new System.Windows.Forms.Panel();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
+            this.label_mute = new System.Windows.Forms.Label();
+            this.label_interpolation = new System.Windows.Forms.Label();
+            this.label_subcodeTOC = new System.Windows.Forms.Label();
+            this.label_subcodeTimecode = new System.Windows.Forms.Label();
+            this.label_subcodeSync = new System.Windows.Forms.Label();
+            this.label4 = new System.Windows.Forms.Label();
             this.label_trackCount = new System.Windows.Forms.Label();
             this.label_trackNumber = new System.Windows.Forms.Label();
             this.progressBar_audioBuffer = new System.Windows.Forms.ProgressBar();
@@ -131,12 +137,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
-            this.label4 = new System.Windows.Forms.Label();
-            this.label_subcodeSync = new System.Windows.Forms.Label();
-            this.label_subcodeTimecode = new System.Windows.Forms.Label();
-            this.label_subcodeTOC = new System.Windows.Forms.Label();
-            this.label_interpolation = new System.Windows.Forms.Label();
-            this.label_mute = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -887,6 +887,66 @@ namespace AudioDataInterface
             this.groupBox_info.TabStop = false;
             this.groupBox_info.Text = "Информация";
             // 
+            // label_mute
+            // 
+            this.label_mute.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_mute.Location = new System.Drawing.Point(3, 226);
+            this.label_mute.Name = "label_mute";
+            this.label_mute.Size = new System.Drawing.Size(190, 13);
+            this.label_mute.TabIndex = 19;
+            this.label_mute.Text = "Audio Mute";
+            this.label_mute.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_interpolation
+            // 
+            this.label_interpolation.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_interpolation.Location = new System.Drawing.Point(3, 213);
+            this.label_interpolation.Name = "label_interpolation";
+            this.label_interpolation.Size = new System.Drawing.Size(190, 13);
+            this.label_interpolation.TabIndex = 18;
+            this.label_interpolation.Text = "Audio Interpolation";
+            this.label_interpolation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_subcodeTOC
+            // 
+            this.label_subcodeTOC.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 200);
+            this.label_subcodeTOC.Name = "label_subcodeTOC";
+            this.label_subcodeTOC.Size = new System.Drawing.Size(190, 13);
+            this.label_subcodeTOC.TabIndex = 17;
+            this.label_subcodeTOC.Text = "TOC";
+            this.label_subcodeTOC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_subcodeTimecode
+            // 
+            this.label_subcodeTimecode.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 187);
+            this.label_subcodeTimecode.Name = "label_subcodeTimecode";
+            this.label_subcodeTimecode.Size = new System.Drawing.Size(190, 13);
+            this.label_subcodeTimecode.TabIndex = 16;
+            this.label_subcodeTimecode.Text = "Timecode";
+            this.label_subcodeTimecode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label_subcodeSync
+            // 
+            this.label_subcodeSync.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_subcodeSync.Location = new System.Drawing.Point(3, 174);
+            this.label_subcodeSync.Name = "label_subcodeSync";
+            this.label_subcodeSync.Size = new System.Drawing.Size(190, 13);
+            this.label_subcodeSync.TabIndex = 15;
+            this.label_subcodeSync.Text = "Channel Sync";
+            this.label_subcodeSync.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // label4
+            // 
+            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label4.Location = new System.Drawing.Point(3, 161);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(190, 13);
+            this.label4.TabIndex = 14;
+            this.label4.Text = "Аудиопроцессор:";
+            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // label_trackCount
             // 
             this.label_trackCount.AutoSize = true;
@@ -1282,66 +1342,6 @@ namespace AudioDataInterface
             // 
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
-            // 
-            // label4
-            // 
-            this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Location = new System.Drawing.Point(3, 161);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(190, 13);
-            this.label4.TabIndex = 14;
-            this.label4.Text = "Аудиопроцессор:";
-            this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_subcodeSync
-            // 
-            this.label_subcodeSync.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeSync.Location = new System.Drawing.Point(3, 174);
-            this.label_subcodeSync.Name = "label_subcodeSync";
-            this.label_subcodeSync.Size = new System.Drawing.Size(190, 13);
-            this.label_subcodeSync.TabIndex = 15;
-            this.label_subcodeSync.Text = "Channel Sync";
-            this.label_subcodeSync.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_subcodeTimecode
-            // 
-            this.label_subcodeTimecode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 187);
-            this.label_subcodeTimecode.Name = "label_subcodeTimecode";
-            this.label_subcodeTimecode.Size = new System.Drawing.Size(190, 13);
-            this.label_subcodeTimecode.TabIndex = 16;
-            this.label_subcodeTimecode.Text = "Timecode";
-            this.label_subcodeTimecode.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_subcodeTOC
-            // 
-            this.label_subcodeTOC.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 200);
-            this.label_subcodeTOC.Name = "label_subcodeTOC";
-            this.label_subcodeTOC.Size = new System.Drawing.Size(190, 13);
-            this.label_subcodeTOC.TabIndex = 17;
-            this.label_subcodeTOC.Text = "TOC";
-            this.label_subcodeTOC.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_interpolation
-            // 
-            this.label_interpolation.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_interpolation.Location = new System.Drawing.Point(3, 213);
-            this.label_interpolation.Name = "label_interpolation";
-            this.label_interpolation.Size = new System.Drawing.Size(190, 13);
-            this.label_interpolation.TabIndex = 18;
-            this.label_interpolation.Text = "Audio Interpolation";
-            this.label_interpolation.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_mute
-            // 
-            this.label_mute.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_mute.Location = new System.Drawing.Point(3, 226);
-            this.label_mute.Name = "label_mute";
-            this.label_mute.Size = new System.Drawing.Size(190, 13);
-            this.label_mute.TabIndex = 19;
-            this.label_mute.Text = "Audio Mute";
-            this.label_mute.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // form_main
             // 

@@ -88,7 +88,7 @@ namespace AudioDataInterface
                     }
                     while (AudioIO.buff_signalSamplesL.Count == 0) Thread.Sleep(10);
                 }
-                if (tempList.Count > 0) lock (amplitudesLLocker) buff_signalAmplitudesL.Add(tempList.Max());
+                if (tempList.Count > 0 && tempList.Count > 1) lock (amplitudesLLocker) buff_signalAmplitudesL.Add(tempList.Max());
                 tempList.Clear();
             }
         }
@@ -119,7 +119,7 @@ namespace AudioDataInterface
                     }
                     while (AudioIO.buff_signalSamplesR.Count == 0) Thread.Sleep(10);
                 }
-                if (tempList.Count > 0) lock (amplitudesRLocker) buff_signalAmplitudesR.Add(tempList.Max());
+                if (tempList.Count > 0 && tempList.Count > 1) lock (amplitudesRLocker) buff_signalAmplitudesR.Add(tempList.Max());
                 tempList.Clear();
             }
         }
@@ -127,8 +127,8 @@ namespace AudioDataInterface
         static void BinaryDecoderStereo()
         {
             //Установить приоритет процесса на максимум
-            System.Diagnostics.Process thisProc = System.Diagnostics.Process.GetCurrentProcess();
-            thisProc.PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
+            //System.Diagnostics.Process thisProc = System.Diagnostics.Process.GetCurrentProcess();
+            //thisProc.PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
             string tempBin = ""; //Временное бинарное слово
             var amplitudeBuff = new List<short>(); //Буфер амплитуд
             var amplitudeBuffCopy = new List<short>(); //Копия буфера амплитуд
@@ -150,8 +150,8 @@ namespace AudioDataInterface
                 if (channelSwitch == 0) while (buff_signalAmplitudesL.Count < 80) Thread.Sleep(10);
                 else while (buff_signalAmplitudesR.Count < 80) Thread.Sleep(10);
 
-                decodedDataBlock = new string[6];
-                lastDecodedDataBlock = new string[6];
+                decodedDataBlock = new string[7];
+                lastDecodedDataBlock = new string[7];
                 tempBin = "";
                 amplitudeBuff.Clear();
                 amplitudeBuffCopy.Clear();
@@ -385,14 +385,16 @@ namespace AudioDataInterface
                             else
                             {
                                 if (sectorGet == true) { sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(0, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(8, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(16, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(24, 8), 2))); }
-                            }                     
-                            
+                            }
+                            if (buff_signalAmplitudesL.Count > buff_signalAmplitudesR.Count) if (buff_signalAmplitudesL.Count / buff_signalAmplitudesR.Count >= 4) channelSyncSucc = false;
+                            if (buff_signalAmplitudesR.Count > buff_signalAmplitudesL.Count) if (buff_signalAmplitudesR.Count / buff_signalAmplitudesL.Count >= 4) channelSyncSucc = false;
                             if (channelSyncSucc == false)
                             {
                                 DataHandler.subcodeSyncError = true;
+                                LogHandler.WriteStatus("Decoder/BinaryDecoderStereo", "Channel frame sync error");
                                 frameSyncErrorCount++;
-                                decodedDataBlock = new string[6];
-                                lastDecodedDataBlock = new string[6];
+                                decodedDataBlock = new string[7];
+                                lastDecodedDataBlock = new string[7];
                                 form_main.mpsPlayer_disc1Detected = false;
                                 lock (amplitudesLLocker) Decoder.buff_signalAmplitudesL.Clear();
                                 lock (amplitudesRLocker) Decoder.buff_signalAmplitudesR.Clear();
@@ -487,8 +489,11 @@ namespace AudioDataInterface
                 bin = bin.Remove(bin.Length - 1);
                 data = BinaryHandler.HammingDecode(bin); //Декодируем блок данных по Хэммингу
                 if (data[1] == "fixed") { fixedErrorCount++; overallErrorCount++; }
-                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true; form_tapeRecordingWizard.errorReason = "uncorrectable error"; }
+                if (data[1] == "error") { unfixedErrorCount++; overallErrorCount++; data[0] = ""; if (Decoder.decoderMode == "sector" && Decoder.sectorGet == true) form_tapeRecordingWizard.errorOccurred = true; form_tapeRecordingWizard.errorReason = "uncorrectable error"; if (form_main.mpsPlayer_disc1Detected) LogHandler.WriteStatus("Decoder/BinaryDecode", "Uncorrectable error at " + bin); }
                 if (data[0] != "") decodedDataBlock[4] = data[0];
+                signalQuality = (int)(100 - (100.0 * overallErrorCount / overallBlockCount));
+                decodedDataBlock[6] = signalQuality.ToString();
+                if (overallBlockCount == 125) {overallBlockCount = 0; overallErrorCount = 0; }               
             }
         }
 

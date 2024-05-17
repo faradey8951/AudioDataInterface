@@ -39,10 +39,11 @@ namespace AudioDataInterface
         //Графика
         //Префикс: "graphics_; bitmap_"
         //////////////////////////////////////////////////////////////////////////////////////
-        static Graphics graphics_waveGraph = null;
-        static Bitmap bitmap_waveGraph = null;
-        static Graphics graphics_mpsPlayerInterface = null;
-        static Bitmap bitmap_mpsPlayerInterface = null;
+        static Graphics graphics_waveGraph = null; //Графика осциллографа
+        static Bitmap bitmap_waveGraph = null; //Графика осциллографа
+        static Graphics graphics_mpsPlayerInterface = null; //Графика mps плеера
+        static Bitmap bitmap_mpsPlayerInterface = null; //Графика mps плеера
+        //Индикаторы состояния аудиопроцессора
         static Graphics graphics_subcodeSyncIndicator = null;
         static Graphics graphics_subcodeTimecodeIndicator = null;
         static Graphics graphics_subcodeTOCIndicator = null;
@@ -53,6 +54,7 @@ namespace AudioDataInterface
         static Bitmap bitmap_subcodeTOCIndicator = null;
         static Bitmap bitmap_audioInterpolationIndicator = null;
         static Bitmap bitmap_audioMutingIndicator = null;
+        //Счетчики задержки отображения индикаторов состояния аудиопроцессора
         static int subcodeSyncIndicatorCount = 0;
         static int subcodeSyncErrorIndicatorCount = 0;
         static int subcodeTimecodeIndicatorCount = 0;
@@ -60,8 +62,8 @@ namespace AudioDataInterface
         static int audioInterpolationIndicatorCount = 0;
         static int audioMutingIndicatorCount = 0;
 
-        Image[] symbolImages;
-        PictureBox[] pictureBox_timeSymbols;
+        Image[] symbolImages; //Изображения отображаемых символов mps плеера
+        PictureBox[] pictureBox_timeSymbols; 
         PictureBox[] pictureBox_trackNumberSymbols;
         //////////////////////////////////////////////////////////////////////////////////////
 
@@ -90,27 +92,25 @@ namespace AudioDataInterface
         public static int mpsPlayer_peakHoldTimeDelay = 20; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 40
         int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
         public static bool mpsPlayer_showTime = true; //Указывает необходимость показа времени воспроизведения
-        public static bool mpsPlayer_disc1Detected = false;
-        public static bool mpsPlayer_disc2Detected = false;
+        public static bool mpsPlayer_disc1Detected = false; //Показывает индикацию обнаружения сигнала
         public static int[] mpsPlayer_time = { 0, 0, 0, 0 }; //Массив таймера воспроизведения
         public static int mpsPlayer_timeSeconds = 0; //Текущее время воспроизведения, выраженное в секундах
         public static int mpsPlayer_timeDurationSeconds = 0; //Длительность дорожки в секундах
         public static int mpsPlayer_currentTrackNumber = -1; //Номер текущего проигрываемой дорожки
         public static int mpsPlayer_lastTrackNumber = -1; //Номер последней проигрываемой дорожки
         public static int mpsPlayer_trackCount = 16; //Количество дорожен
-        public static string mpsPlayer_mode = ""; //Статус работы плеера
+        public static string mpsPlayer_mode = ""; //Режим работы плеера
         public double[] mpsPlayer_RAWspectrum = null; //Массив необработанных мгновенных уровней спектра
         public static bool mpsPlayer_remainingTime = false; //Включает режим отображения оставшегося времени воспроизведения дорожки
-        public static bool mpsPlayer_tapeSkin = false;
-        public static int mpsPlayer_fftSize = 0;
-        public static string mpsPlayer_spectrumMode = "";
-        public static int mpsPlayer_spectrumVescosity = 0;
-        public static int mpsPlayer_mp3Bitrate = 0;
-        public static int mpsPlayer_runningIndicatorAnimationFrameIndex = 0;
-        public static double mpsPlayerWidth = 810;
-        public static double mpsPlayerHeight = 335;
-        public static double spectrumBarWidth = 0.65;
-        public static double spectrumBarHeight = 0.35;
+        public static bool mpsPlayer_tapeSkin = false; //Переключает суб-скин на режим проигрывания ленты
+        public static int mpsPlayer_fftSize = 0; //Размер буфера сэмплов FFT для отрисовки спектра
+        public static string mpsPlayer_spectrumMode = ""; //Режим отображения спектра
+        public static int mpsPlayer_spectrumVescosity = 0; //Вязкость спектра
+        public static int mpsPlayer_runningIndicatorAnimationFrameIndex = 0; //Текущий индекс кадра анимации бегущего индикатора
+        public static double mpsPlayerWidth = 810; //Ширина mps плеера
+        public static double mpsPlayerHeight = 335; //Высота mps плеера
+        public static double spectrumBarWidth = 0.65; //Ширина области спектра относительно ширины mps плеера
+        public static double spectrumBarHeight = 0.35; //Высота области спектра относительно высоты mps плеера
         public static int spectrumBarY0P;
         public static int spectrumBarX0P;
         public static int spectrumBarWidthP;
@@ -124,22 +124,11 @@ namespace AudioDataInterface
         public static double spectrumBarSegmentDeltaCount;
         //////////////////////////////////////////////////////////////////////////////////////
 
-        byte[] buffer_fftBytes = new byte[512];
-        public RawSourceWaveStream rs = null;
-
-        double[] bandIntensity = new double[16] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
-        string[] decodedData = null;
-
         public form_main()
         {
             InitializeComponent();
             window_main = this; //Передача статического доступа классу
             scope_verticalBIAS = pictureBox_waveGraph.Height / 2;
-            //Type type = listView.GetType();
-            //PropertyInfo propertyInfo = type.GetProperty("DoubleBuffered", BindingFlags.NonPublic | BindingFlags.Instance);
-            //propertyInfo.SetValue(listView, true, null);
-            decodedData = new string[10];
         }
 
         /// <summary>
@@ -383,6 +372,9 @@ namespace AudioDataInterface
 
         }
 
+        /// <summary>
+        /// Отрисовка статуса аудиопроцессора в виде индикаторов
+        /// </summary>
         public void DrawAudioProcessorStatus()
         {
             if (subcodeSyncIndicatorCount >= 4) { DataHandler.subcodeSync = false; subcodeSyncIndicatorCount = 0; }
@@ -1035,12 +1027,6 @@ namespace AudioDataInterface
 
         private void timer_signalQualityUpdater_Tick(object sender, EventArgs e)
         {
-            double currentOverallErrorCount = Decoder.overallErrorCount;
-            double currentOverallBlockCount = Decoder.overallBlockCount;
-            if (currentOverallBlockCount > 0) Decoder.signalQuality = (int)(100 - (100.0 * currentOverallErrorCount / currentOverallBlockCount));
-            if (Decoder.signalQuality < 0) this.Name = "";
-            Decoder.overallErrorCount = 0;
-            Decoder.overallBlockCount = 0;
             if (Decoder.signalQuality >= 80)
             {
                 if (form_main.mpsPlayer_mode != "play") { MpsPlayerRunningIndicatorPlay(); Decoder.fixedErrorCount = 0; Decoder.frameSyncErrorCount = 0; Decoder.unfixedErrorCount = 0; }

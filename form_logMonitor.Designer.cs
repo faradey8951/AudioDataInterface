@@ -44,11 +44,12 @@ namespace AudioDataInterface
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.richTextBox.BackColor = System.Drawing.Color.Black;
+            this.richTextBox.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.richTextBox.ForeColor = System.Drawing.Color.Lime;
             this.richTextBox.Location = new System.Drawing.Point(0, 28);
             this.richTextBox.Name = "richTextBox";
             this.richTextBox.ReadOnly = true;
-            this.richTextBox.Size = new System.Drawing.Size(473, 279);
+            this.richTextBox.Size = new System.Drawing.Size(733, 279);
             this.richTextBox.TabIndex = 0;
             this.richTextBox.Text = "";
             // 
@@ -58,7 +59,7 @@ namespace AudioDataInterface
             this.toolStripButton1});
             this.toolStrip.Location = new System.Drawing.Point(0, 0);
             this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(473, 25);
+            this.toolStrip.Size = new System.Drawing.Size(733, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "toolStrip1";
             // 
@@ -68,7 +69,7 @@ namespace AudioDataInterface
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(100, 22);
+            this.toolStripButton1.Size = new System.Drawing.Size(99, 22);
             this.toolStripButton1.Text = "Сохранить как...";
             this.toolStripButton1.ToolTipText = "button_save";
             // 
@@ -78,19 +79,21 @@ namespace AudioDataInterface
             this.timer_controlHandler.Interval = 1000;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
             // 
-            // LogMonitorWindow
+            // form_logMonitor
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(473, 305);
+            this.ClientSize = new System.Drawing.Size(733, 305);
             this.Controls.Add(this.toolStrip);
             this.Controls.Add(this.richTextBox);
-            this.MinimumSize = new System.Drawing.Size(489, 344);
-            this.Name = "LogMonitorWindow";
+            this.MinimumSize = new System.Drawing.Size(749, 344);
+            this.Name = "form_logMonitor";
             this.ShowIcon = false;
+            this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "LogMonitorWindow";
+            this.TopMost = true;
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogMonitorWindow_FormClosing);
             this.Load += new System.EventHandler(this.LogMonitorWindow_Load);
             this.toolStrip.ResumeLayout(false);

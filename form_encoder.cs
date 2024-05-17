@@ -11,11 +11,6 @@ using System.Threading;
 using System.Windows.Forms;
 using System.Diagnostics;
 using OpusDotNet;
-//using Concentus;
-//using Concentus.Celt;
-//using Concentus.Common.CPlusPlus;
-//using Concentus.Enums;
-//using Concentus.Structs;
 
 
 namespace AudioDataInterface
@@ -24,6 +19,8 @@ namespace AudioDataInterface
     {
         public static int trackNumber = 1;
         public static int trackCount = 1;
+        static string status = "";
+        static Thread thread_convertWaveToOPUS = new Thread(ConvertWaveToOPUS);
         public form_encoder()
         {
             InitializeComponent();
@@ -32,7 +29,7 @@ namespace AudioDataInterface
         private void timer_controlHandler_Tick(object sender, EventArgs e)
         {
             //Доступность и видимость контролов
-            if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream) == "Running")
+            if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream) == "Running" || ThreadHandler.GetThreadStatus(thread_convertWaveToOPUS) == "Running")
             {
                 button_clear.Enabled = false;
                 button_convert.Enabled = false;
@@ -55,6 +52,7 @@ namespace AudioDataInterface
             //Обновление прогресс бара
             progressBar.Value = Encoder.encoder_progress;
             label_percent.Text = Encoder.encoder_progress.ToString() + "%";
+            label_encoding.Text = status;
         }
 
         private void button_select_Click(object sender, EventArgs e)
@@ -75,6 +73,44 @@ namespace AudioDataInterface
         private void button_clear_Click(object sender, EventArgs e)
         {
             textBox.Text = "";          
+        }
+
+        static void ConvertWaveToOPUS()
+        {
+            status = "Конвертация WAVE -> OPUS...";
+            FileStream fs = new FileStream("input.wav", FileMode.Open);
+            List<byte> inputPCMBytes = new List<byte>();
+            List<short> inputPCMShorts = new List<short>();
+            List<byte> outputOpusBytes = new List<byte>();
+            DataHandler.ms = new MemoryStream();
+            OpusEncoder encoder = new OpusEncoder(OpusDotNet.Application.Audio, 48000, 1);
+            OpusDecoder decoder = new OpusDecoder(48000, 1);
+            for (int i = 0; i < fs.Length; i++)
+            {
+                inputPCMBytes.Add((byte)fs.ReadByte());
+                if (inputPCMBytes.Count == 40 * (48000 / 1000) * 2)
+                {
+
+                    encoder.MaxBandwidth = Bandwidth.FullBand;
+                    encoder.Bitrate = 16000;
+                    encoder.VBR = false;
+                    encoder.Complexity = 10;
+                    byte[] opusBytes = new byte[80];
+                    encoder.Encode(inputPCMBytes.ToArray(), inputPCMBytes.Count, opusBytes, opusBytes.Length);
+                    outputOpusBytes.AddRange(opusBytes);
+                    inputPCMBytes.Clear();
+                }
+                Encoder.encoder_progress = ProgressHandler.GetPercent(fs.Length, i);
+            }
+            fs.Close();
+            fs = new FileStream("outputOpusEncoded.wav", FileMode.Create);
+            fs.Write(outputOpusBytes.ToArray(), 0, outputOpusBytes.Count);
+            fs.Close();
+            Encoder.encoder_inputFilePath = "outputOpusEncoded.wav";
+            if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
+            status = "Конвертация OPUS -> ADI-OPUS16...";
+            Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
+            Encoder.thread_encodeFileStereoStream.Start();
         }
 
         private void button_convert_Click(object sender, EventArgs e)
@@ -98,55 +134,8 @@ namespace AudioDataInterface
                     p.WaitForExit();
                     if (File.Exists("input.wav"))
                     {
-                        FileStream fs = new FileStream("input.wav", FileMode.Open);
-                        List<byte> inputPCMBytes = new List<byte>();
-                        List<short> inputPCMShorts = new List<short>();
-                        List<byte> outputOpusBytes = new List<byte>();
-                        DataHandler.ms = new MemoryStream();
-                        OpusEncoder encoder = new OpusEncoder(OpusDotNet.Application.Audio, 48000, 1);
-                        OpusDecoder decoder = new OpusDecoder(48000, 1);  
-                        //OpusEncoder encoder = new OpusEncoder(48000, 1, OpusApplication.OPUS_APPLICATION_AUDIO);
-                        //OpusDecoder decoder = new OpusDecoder(48000, 1);
-                        for (int i = 0; i < fs.Length; i++)
-                        {
-                            //inputPCMShorts.Add(BitConverter.ToInt16(new byte[2] { (byte)fs.ReadByte(), (byte)fs.ReadByte() }, 0));
-                            inputPCMBytes.Add((byte)fs.ReadByte());
-                            if (inputPCMBytes.Count == 40 * (48000 / 1000) * 2)
-                            {     
-                                
-                                encoder.MaxBandwidth = Bandwidth.FullBand;
-                                encoder.Bitrate = 16000;
-                                encoder.VBR = false;
-                                encoder.Complexity = 10;
-                                byte[] opusBytes = new byte[80];
-                                encoder.Encode(inputPCMBytes.ToArray(), inputPCMBytes.Count, opusBytes, opusBytes.Length);                           
-                                outputOpusBytes.AddRange(opusBytes);
-                                inputPCMBytes.Clear();
-                                
-                                /*
-                                encoder.Bitrate = 16000;
-                                encoder.UseVBR = false;
-                                encoder.Bandwidth = OpusBandwidth.OPUS_BANDWIDTH_FULLBAND;
-                                encoder.SignalType = OpusSignal.OPUS_SIGNAL_MUSIC;
-                                encoder.ExpertFrameDuration = OpusFramesize.OPUS_FRAMESIZE_20_MS;
-                                encoder.Complexity = 10;
-                                encoder.EnableAnalysis = true;
-                                byte[] opusBytes = new byte[40];
-                                encoder.Encode(inputPCMShorts.ToArray(), inputPCMShorts.Count, opusBytes, opusBytes.Length);
-                                outputOpusBytes.AddRange(opusBytes);
-                                inputPCMShorts.Clear();
-                                */
-                            }
-                        }
-                        fs.Close();
-                        fs = new FileStream("outputOpusEncoded.wav", FileMode.Create);
-                        fs.Write(outputOpusBytes.ToArray(), 0, outputOpusBytes.Count);
-                        fs.Close();
-                        Encoder.encoder_inputFilePath = "outputOpusEncoded.wav";
-                        if (Encoder.encoder_outputFilePath == "" || Encoder.encoder_outputFilePath == null) Encoder.encoder_outputFilePath = "output.wav";
-                        if (Encoder.encoder_longLeadIn == false) Encoder.encoder_leadInSubcodesAmount = Encoder.encoder_leadInOutSubcodesAmount; else Encoder.encoder_leadInSubcodesAmount = 2000;
-                        Encoder.thread_encodeFileStereoStream = new Thread(Encoder.EncodeFileStereoStream);
-                        Encoder.thread_encodeFileStereoStream.Start();
+                        if (thread_convertWaveToOPUS != null) thread_convertWaveToOPUS = new Thread(ConvertWaveToOPUS);
+                        thread_convertWaveToOPUS.Start();
                     }
                 }
                 else { }
