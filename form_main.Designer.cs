@@ -971,7 +971,7 @@ namespace AudioDataInterface
             // 
             this.progressBar_audioBuffer.Dock = System.Windows.Forms.DockStyle.Top;
             this.progressBar_audioBuffer.Location = new System.Drawing.Point(3, 120);
-            this.progressBar_audioBuffer.Maximum = 96000;
+            this.progressBar_audioBuffer.Maximum = 48000;
             this.progressBar_audioBuffer.Name = "progressBar_audioBuffer";
             this.progressBar_audioBuffer.Size = new System.Drawing.Size(190, 15);
             this.progressBar_audioBuffer.TabIndex = 11;

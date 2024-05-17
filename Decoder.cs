@@ -365,13 +365,6 @@ namespace AudioDataInterface
                                     }
                                     else channelSyncSucc = true;
                                 }
-                                if (subCodeByte1 == 100) //Субкод таймкода. Отслеживание выпадений в MP3 потоке
-                                {
-                                    if (decodedBlocksCountFirst != 0 && decodedBlocksCountSecond != 0) { decodedBlocksCountFirst = decodedBlocksCountSecond; }
-                                    if (decodedBlocksCountFirst == 0) decodedBlocksCountFirst = decodedBlocksCounter;
-                                    else decodedBlocksCountSecond = decodedBlocksCounter;
-                                    decodedBlocksCounter = 0;
-                                }
                                 if (decoderMode == "sector")
                                 {
                                     if (subCodeByte1 == 24 && subCodeByte2 == 0 && subCodeByte3 == 0 && subCodeByte4 == 0) { sectorGet = true; sector.Clear(); sectorType = "header"; }
@@ -386,8 +379,11 @@ namespace AudioDataInterface
                             {
                                 if (sectorGet == true) { sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(0, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(8, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(16, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(24, 8), 2))); }
                             }
-                            if (buff_signalAmplitudesL.Count > buff_signalAmplitudesR.Count) if (buff_signalAmplitudesL.Count / buff_signalAmplitudesR.Count >= 4) channelSyncSucc = false;
-                            if (buff_signalAmplitudesR.Count > buff_signalAmplitudesL.Count) if (buff_signalAmplitudesR.Count / buff_signalAmplitudesL.Count >= 4) channelSyncSucc = false;
+                            if (buff_signalAmplitudesL.Count > 0 && buff_signalAmplitudesR.Count > 0)
+                            {
+                                if (buff_signalAmplitudesL.Count > buff_signalAmplitudesR.Count) if (buff_signalAmplitudesL.Count / buff_signalAmplitudesR.Count >= 4) channelSyncSucc = false;
+                                if (buff_signalAmplitudesR.Count > buff_signalAmplitudesL.Count) if (buff_signalAmplitudesR.Count / buff_signalAmplitudesL.Count >= 4) channelSyncSucc = false;
+                            }
                             if (channelSyncSucc == false)
                             {
                                 DataHandler.subcodeSyncError = true;

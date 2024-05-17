@@ -53,11 +53,11 @@ namespace AudioDataInterface
             while (Decoder.decoderActive)
             {
                 mp3Buffer.Clear();
-                while (Decoder.buff_decodedData.Count < i + 128 || ms.Length - ms.Position > 192000) Thread.Sleep(10); //Ожидание наполнения данных + задержка буферизации для синхронизации таймкода               
+                while (Decoder.buff_decodedData.Count < i + 128 || ms.Length - ms.Position > 96000) Thread.Sleep(10); //Ожидание наполнения данных + задержка буферизации для синхронизации таймкода               
                 lock (Decoder.decodedDataLocker)
                 {
-                    string[] decodedBlock = null;
-                    for (; i < 128; i++) { decodedBlock = Decoder.buff_decodedData[(int)i]; if (Convert.ToInt16(decodedBlock[6]) >= 80) mp3Buffer.Add(decodedBlock); }
+                    string[] decodedBlock = null;                   
+                    for (; i < 128; i++) { decodedBlock = Decoder.buff_decodedData[(int)i]; if (Convert.ToInt16(decodedBlock[6]) >= 80 && decodedBlock[4] != "01010101010101010101010101010101") mp3Buffer.Add(decodedBlock); }
                     Decoder.buff_decodedData.RemoveRange(0, (int)i);
                 }
                 for (int p = 0; p < mp3Buffer.Count; p++)
@@ -172,7 +172,7 @@ namespace AudioDataInterface
                                                 foreach (System.Numerics.Complex[] c in testIFFTFramed) for (int t = 65; t < 65 + 1920; t++) { double resultShort = c[t].Real * 512; if (resultShort <= 32767 && resultShort >= -32767) calculatedPCMShorts.Add((short)resultShort); else calculatedPCMShorts.Add(0); }
                                                 foreach (short s in calculatedPCMShorts) calculatedPCMBytes.AddRange(BitConverter.GetBytes(s));
                                                 outputPCMBytes.AddRange(calculatedPCMBytes);
-                                                //dropout = false;
+                                                dropout = false;
                                                 LogHandler.WriteStatus("DataHandler/AudioBuffer", "Audio interpolation " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 1920).ToString() + " samples)");
                                             }
                                             //Добавить тишину, если выпало больше порога фреймов
@@ -181,7 +181,7 @@ namespace AudioDataInterface
                                                 interpolation = false;
                                                 mute = true;
                                                 for (int t = 0; t < 1920 * dropoutFramesCount; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
-                                                //dropout = false;
+                                                dropout = false;
                                                 LogHandler.WriteStatus("DataHandler/AudioBuffer", "Mute " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 1920).ToString() + " samples)");
                                             }
                                             dropoutFramesCount = 0;
@@ -262,7 +262,7 @@ namespace AudioDataInterface
                 try
                 {
                     //Буферизация данных
-                    while (ms.Length - ms.Position < 192000 && AudioIO.naudio_wasapiOut.PlaybackState != NAudio.Wave.PlaybackState.Playing) { Thread.Sleep(10); form_main.mpsPlayer_showTime = false; }
+                    while (ms.Length - ms.Position < 96000 && AudioIO.naudio_wasapiOut.PlaybackState != NAudio.Wave.PlaybackState.Playing) { Thread.Sleep(10); form_main.mpsPlayer_showTime = false; }
                     rawSourceWaveStream = new RawSourceWaveStream(ms, new WaveFormat(48000, 16, 1));
                     AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioClientShareMode.Shared, true, 50);
                     AudioIO.naudio_wasapiOut.Init(rawSourceWaveStream);

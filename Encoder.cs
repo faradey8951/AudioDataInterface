@@ -777,7 +777,7 @@ namespace AudioDataInterface
             if (encoder_mode == "opus") { deltaByte = 2000; audioDuration = GetAudioFileDuration("input.wav"); }
             if (encoder_mode.Contains("sector")) deltaByte = (int)fs_input.Length / 4;
             List<int> targetBytePositions = new List<int>();          
-            for (int i = 0; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
+            for (int i = deltaByte; i < fs_input.Length; i += deltaByte) targetBytePositions.Add(i);
             List<int> targetDurations = new List<int>();
             for (int i = 0; i < targetBytePositions.Count; i++) targetDurations.Add((int)Math.Round((double)((targetBytePositions[i] * (double)audioDuration) / fs_input.Length)));
             if (encoder_forceStop == true)
@@ -794,6 +794,7 @@ namespace AudioDataInterface
             GenerateStereoSync(); //Генерация синхроимпульса
             for (int i = 0; i < 8; i++) GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1); //Субкод канальной синхронизации (принудительная синхронизация каналов на начале потока)
             for (int i = 0; i < 32; i++) GenerateRAWDataBlockStereo("01010101010101010101010101010101", "01010101010101010101010101010101"); //Сигнал-заглушка для компенсации ошибки синхронизации
+            GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1);
             if (encoder_mode == "sector_header") GenerateSubCodeBlockStereo(24, 0, 0, 0, 24, 0, 0, 0); //Субкод lead-in для сектора заголовка 
             if (encoder_mode == "sector_hashes") GenerateSubCodeBlockStereo(25, 0, 0, 0, 25, 0, 0, 0); //Субкод lead-in для сектора контрольных сумм
             if (encoder_mode == "sector_file") GenerateSubCodeBlockStereo(26, 0, 0, (byte)encoder_sectorFileIndex, 26, 0, 0, (byte)encoder_sectorFileIndex); //Субкод lead-in для сектора файла

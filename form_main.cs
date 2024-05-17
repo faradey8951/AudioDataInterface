@@ -489,7 +489,7 @@ namespace AudioDataInterface
                 {
                     int audioBufferSamples = (int)(0.5 * ((int)DataHandler.ms.Length - (int)DataHandler.ms.Position));
                     label_audioBufferSize.Text += ((double)audioBufferSamples / 48000).ToString() + " сек";
-                    if (audioBufferSamples <= 96000) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = 96000;
+                    if (audioBufferSamples <= 48000) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = 48000;
                 }
             }
             catch { }
