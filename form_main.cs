@@ -388,12 +388,12 @@ namespace AudioDataInterface
             label_subcodeTOC.Image = null;
             label_interpolation.Image = null;
             label_mute.Image = null;
-            if (DataHandler.subcodeSync == false) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Green), 0, 0, 10, 10); subcodeSyncIndicatorCount++; }
-            if (DataHandler.subcodeSyncError == true) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Red), 0, 0, 10, 10); subcodeSyncErrorIndicatorCount++;
-            if (DataHandler.subcodeTimecode == false) graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Green), 0, 0, 10, 10); subcodeTimecodeIndicatorCount++; }
-            if (DataHandler.subcodeTOC == false) graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Green), 0, 0, 10, 10); subcodeTOCIndicatorCount++; }
-            if (DataHandler.interpolation == false) graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Red), 0, 0, 10, 10); audioInterpolationIndicatorCount++; }
-            if (DataHandler.mute == false) graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Gray), 0, 0, 10, 10); else { graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Red), 0, 0, 10, 10); audioMutingIndicatorCount++; }
+            if (DataHandler.subcodeSync == false) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Green), 4, 0, 11, 11); subcodeSyncIndicatorCount++; }
+            if (DataHandler.subcodeSyncError == true) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); subcodeSyncErrorIndicatorCount++;
+            if (DataHandler.subcodeTimecode == false) graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Green), 4, 0, 11, 11); subcodeTimecodeIndicatorCount++; }
+            if (DataHandler.subcodeTOC == false) graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Green), 4, 0, 11, 11); subcodeTOCIndicatorCount++; }
+            if (DataHandler.interpolation == false) graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); audioInterpolationIndicatorCount++; }
+            if (DataHandler.mute == false) graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); audioMutingIndicatorCount++; }
             label_subcodeSync.Image = bitmap_subcodeSyncIndicator;
             label_subcodeTimecode.Image = bitmap_subcodeTimecodeIndicator;
             label_subcodeTOC.Image = bitmap_subcodeTOCIndicator;
