@@ -97,6 +97,7 @@ namespace AudioDataInterface
             this.label_subcodeTOC = new System.Windows.Forms.Label();
             this.label_subcodeTimecode = new System.Windows.Forms.Label();
             this.label_subcodeSync = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label_trackCount = new System.Windows.Forms.Label();
             this.label_trackNumber = new System.Windows.Forms.Label();
@@ -137,7 +138,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
-            this.label5 = new System.Windows.Forms.Label();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -939,6 +939,16 @@ namespace AudioDataInterface
             this.label_subcodeSync.Text = "      Channel Sync";
             this.label_subcodeSync.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
+            // label5
+            // 
+            this.label5.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label5.Location = new System.Drawing.Point(3, 174);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(190, 13);
+            this.label5.TabIndex = 20;
+            this.label5.Text = "____________________________";
+            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1322,12 +1332,12 @@ namespace AudioDataInterface
             // 
             // timer_mpsPlayerSpectrumHandler
             // 
-            this.timer_mpsPlayerSpectrumHandler.Interval = 25;
+            this.timer_mpsPlayerSpectrumHandler.Interval = 20;
             this.timer_mpsPlayerSpectrumHandler.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumHandler_Tick);
             // 
             // timer_mpsPlayerSpectrumUpdater
             // 
-            this.timer_mpsPlayerSpectrumUpdater.Interval = 25;
+            this.timer_mpsPlayerSpectrumUpdater.Interval = 15;
             this.timer_mpsPlayerSpectrumUpdater.Tick += new System.EventHandler(this.timer_mpsPlayerSpectrumUpdater_Tick);
             // 
             // timer_mpsPlayerTimeUpdater
@@ -1344,16 +1354,6 @@ namespace AudioDataInterface
             // 
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
-            // 
-            // label5
-            // 
-            this.label5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label5.Location = new System.Drawing.Point(3, 174);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(190, 13);
-            this.label5.TabIndex = 20;
-            this.label5.Text = "____________________________";
-            this.label5.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // form_main
             // 
@@ -1466,7 +1466,6 @@ namespace AudioDataInterface
         public System.Windows.Forms.Button button_buffMp3;
         private System.Windows.Forms.PictureBox pictureBox_mpsPlayer;
         private System.Windows.Forms.Timer timer_mpsPlayerHandler;
-        private System.Windows.Forms.Timer timer_mpsPlayerSpectrumUpdater;
         private System.Windows.Forms.Timer timer_mpsPlayerTimeUpdater;
         private System.Windows.Forms.CheckBox checkBox_remainingTime;
         public System.Windows.Forms.CheckBox checkBox_invertSignal;
@@ -1545,6 +1544,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label_mute;
         private System.Windows.Forms.Label label_interpolation;
         private System.Windows.Forms.Label label5;
+        public System.Windows.Forms.Timer timer_mpsPlayerSpectrumUpdater;
     }
 }
 

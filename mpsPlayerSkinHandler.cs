@@ -171,6 +171,15 @@ namespace AudioDataInterface
             for (int i = 0; i < tape.Length; i++) if (File.Exists(dir + "\\" + tape[i])) { image_tape[i] = Image.FromFile(dir + "\\" + tape[i]); } else image_tape[i] = Properties.Resources.icon_remove;
             for (int i = 0; i < trackCalendar.Length; i++) if (File.Exists(dir + "\\" + trackCalendar[i])) { image_trackCalendar[i] = Image.FromFile(dir + "\\" + trackCalendar[i]); } else image_trackCalendar[i] = Properties.Resources.icon_remove;
             for (int i = 0; i < misc.Length; i++) if (File.Exists(dir + "\\" + misc[i])) { image_misc[i] = Image.FromFile(dir + "\\" + misc[i]); } else image_misc[i] = Properties.Resources.icon_remove;
+            if (File.Exists(dir + "\\window.txt"))
+            {
+                FileStream fs = new FileStream(dir + "\\window.txt", FileMode.Open);
+                StreamReader sr = new StreamReader(fs);
+                form_main.window_main.MinimumSize = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.Size = form_main.window_main.MinimumSize;
+                sr.Close();
+                fs.Close();
+            }
             if (File.Exists(dir + "\\layout.txt"))
             {
                 FileStream fs = new FileStream(dir + "\\layout.txt", FileMode.Open);
@@ -271,7 +280,8 @@ namespace AudioDataInterface
                 form_main.spectrumBarSegmentWidthCount = Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine()));
                 form_main.spectrumBarSegmentHeightCount = Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine()));
                 form_main.spectrumBarSegmentDeltaCount = Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine()));
-                form_main.mpsPlayer_spectrumVescosity = Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine()));
+                form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine()));
+                form_main.window_main.timer_mpsPlayerSpectrumUpdater.Interval = form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval;
                 form_main.mpsPlayer_spectrumMode = TextHandler.GetLineValue(sr.ReadLine());
                 form_main.mpsPlayer_peakHoldTimeDelay = Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine()));
                 sr.Close();

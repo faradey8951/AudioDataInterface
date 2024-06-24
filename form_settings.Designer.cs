@@ -63,9 +63,6 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.comboBox_skins = new System.Windows.Forms.ComboBox();
             this.label_mpsPlayerSkin = new System.Windows.Forms.Label();
-            this.label_spectrumVescosityValue = new System.Windows.Forms.Label();
-            this.trackBar_spectrumVescosity = new System.Windows.Forms.TrackBar();
-            this.label_spectrumVescosity = new System.Windows.Forms.Label();
             this.radioButton_offMode = new System.Windows.Forms.RadioButton();
             this.radioButton_noPeakMode = new System.Windows.Forms.RadioButton();
             this.radioButton_peakHoldMode = new System.Windows.Forms.RadioButton();
@@ -89,7 +86,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_signalGain)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_encodingSampleRate)).BeginInit();
             this.tabPage4.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumVescosity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_fftSize)).BeginInit();
             this.groupBox.SuspendLayout();
             this.SuspendLayout();
@@ -471,9 +467,6 @@
             // 
             this.tabPage4.Controls.Add(this.comboBox_skins);
             this.tabPage4.Controls.Add(this.label_mpsPlayerSkin);
-            this.tabPage4.Controls.Add(this.label_spectrumVescosityValue);
-            this.tabPage4.Controls.Add(this.trackBar_spectrumVescosity);
-            this.tabPage4.Controls.Add(this.label_spectrumVescosity);
             this.tabPage4.Controls.Add(this.radioButton_offMode);
             this.tabPage4.Controls.Add(this.radioButton_noPeakMode);
             this.tabPage4.Controls.Add(this.radioButton_peakHoldMode);
@@ -494,7 +487,7 @@
             this.comboBox_skins.Dock = System.Windows.Forms.DockStyle.Top;
             this.comboBox_skins.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.comboBox_skins.FormattingEnabled = true;
-            this.comboBox_skins.Location = new System.Drawing.Point(3, 222);
+            this.comboBox_skins.Location = new System.Drawing.Point(3, 151);
             this.comboBox_skins.Name = "comboBox_skins";
             this.comboBox_skins.Size = new System.Drawing.Size(576, 21);
             this.comboBox_skins.TabIndex = 20;
@@ -503,46 +496,12 @@
             // label_mpsPlayerSkin
             // 
             this.label_mpsPlayerSkin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_mpsPlayerSkin.Location = new System.Drawing.Point(3, 209);
+            this.label_mpsPlayerSkin.Location = new System.Drawing.Point(3, 138);
             this.label_mpsPlayerSkin.Name = "label_mpsPlayerSkin";
             this.label_mpsPlayerSkin.Size = new System.Drawing.Size(576, 13);
             this.label_mpsPlayerSkin.TabIndex = 19;
             this.label_mpsPlayerSkin.Text = "Скин MPS плеера";
             this.label_mpsPlayerSkin.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label_spectrumVescosityValue
-            // 
-            this.label_spectrumVescosityValue.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_spectrumVescosityValue.Location = new System.Drawing.Point(3, 196);
-            this.label_spectrumVescosityValue.Name = "label_spectrumVescosityValue";
-            this.label_spectrumVescosityValue.Size = new System.Drawing.Size(576, 13);
-            this.label_spectrumVescosityValue.TabIndex = 18;
-            this.label_spectrumVescosityValue.Text = "0";
-            this.label_spectrumVescosityValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // trackBar_spectrumVescosity
-            // 
-            this.trackBar_spectrumVescosity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar_spectrumVescosity.Location = new System.Drawing.Point(3, 151);
-            this.trackBar_spectrumVescosity.Maximum = 100;
-            this.trackBar_spectrumVescosity.Minimum = 10;
-            this.trackBar_spectrumVescosity.Name = "trackBar_spectrumVescosity";
-            this.trackBar_spectrumVescosity.Size = new System.Drawing.Size(576, 45);
-            this.trackBar_spectrumVescosity.TabIndex = 17;
-            this.trackBar_spectrumVescosity.TickFrequency = 5;
-            this.trackBar_spectrumVescosity.TickStyle = System.Windows.Forms.TickStyle.Both;
-            this.trackBar_spectrumVescosity.Value = 10;
-            this.trackBar_spectrumVescosity.Scroll += new System.EventHandler(this.trackBar_spectrumVescosity_Scroll);
-            // 
-            // label_spectrumVescosity
-            // 
-            this.label_spectrumVescosity.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_spectrumVescosity.Location = new System.Drawing.Point(3, 138);
-            this.label_spectrumVescosity.Name = "label_spectrumVescosity";
-            this.label_spectrumVescosity.Size = new System.Drawing.Size(576, 13);
-            this.label_spectrumVescosity.TabIndex = 16;
-            this.label_spectrumVescosity.Text = "Вязкость спектра, (ms)";
-            this.label_spectrumVescosity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // radioButton_offMode
             // 
@@ -714,7 +673,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_encodingSampleRate)).EndInit();
             this.tabPage4.ResumeLayout(false);
             this.tabPage4.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumVescosity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_fftSize)).EndInit();
             this.groupBox.ResumeLayout(false);
             this.groupBox.PerformLayout();
@@ -759,9 +717,6 @@
         private System.Windows.Forms.Label label_fftSizeValue;
         private System.Windows.Forms.TrackBar trackBar_fftSize;
         private System.Windows.Forms.Label label_fftSize;
-        private System.Windows.Forms.Label label_spectrumVescosityValue;
-        private System.Windows.Forms.TrackBar trackBar_spectrumVescosity;
-        private System.Windows.Forms.Label label_spectrumVescosity;
         private System.Windows.Forms.RadioButton radioButton_offMode;
         private System.Windows.Forms.RadioButton radioButton_noPeakMode;
         private System.Windows.Forms.Button button2;

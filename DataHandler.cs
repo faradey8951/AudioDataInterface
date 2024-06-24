@@ -35,6 +35,7 @@ namespace AudioDataInterface
         public static bool subcodeTOC = false;
         public static bool interpolation = false;
         public static bool mute = false;
+        public static bool packetLoss = false;
 
         FileStream fs = null;
 
@@ -47,11 +48,12 @@ namespace AudioDataInterface
             List<byte> outputPCMBytes = new List<byte>(); //Выходной буфер байт декодированного PCM аудиопотока
             bool dropout = false; //Наличие выпадения фрейма
             int dropoutFramesCount = 0; //Количество выпавших фреймов
-            byte[] framePCMBytes1 = new byte[40 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма до выпадения
-            byte[] framePCMBytes2 = new byte[40 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма после выпадения
-            OpusDecoder decoder = new OpusDecoder(48000, 1); //Декодер OPUS фреймов
+            byte[] framePCMBytes1 = new byte[20 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма до выпадения
+            byte[] framePCMBytes2 = new byte[20 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма после выпадения
+            OpusDecoder decoder = new OpusDecoder(20, 48000, 1); //Декодер OPUS фреймов
             while (Decoder.decoderActive)
             {
+                packetLoss = false;
                 mp3Buffer.Clear();
                 while (Decoder.buff_decodedData.Count < i + 128 || ms.Length - ms.Position > 96000) Thread.Sleep(10); //Ожидание наполнения данных + задержка буферизации для синхронизации таймкода               
                 lock (Decoder.decodedDataLocker)
@@ -98,23 +100,24 @@ namespace AudioDataInterface
                         if (subCodeByte1 == 123 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Субкод канальной синхронизации правого канала
                         {
                             packetSize = packet.Count;
-                            if (packetSize != 2000) LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes");
+                            if (packetSize != 2000) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; }
                             subcodeSync = true;
-                            if (packet.Count >= 80) //Триггер размера пакета для обработки фреймов
+                            if (packetSize >= 40) //Триггер размера пакета для обработки фреймов
                             {
                                 List<byte> opusFrame = new List<byte>(); //Буфер байт OPUS фрейма
-                                byte[] framePCMBytes = new byte[40 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма
+                                byte[] framePCMBytes = new byte[20 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма
                                 for (int i = 0; i < packet.Count; i++)
                                 {
                                     opusFrame.Add(packet[i]);
-                                    if (opusFrame.Count == 80) //Размер фрейма в байтах
+                                    if (opusFrame.Count == 40) //Размер фрейма в байтах
                                     {
                                         if (dropout == true) { dropoutFramesCount++; }
                                         else //Триггер конца выпадения
                                         {
                                             //Интерполяция выпавших фреймов
-                                            if (dropoutFramesCount > 0 && dropoutFramesCount <= 10)
+                                            if (false)
                                             {
+                                                /*
                                                 interpolation = true;
                                                 framePCMBytes.CopyTo(framePCMBytes2, 0);
                                                 double[] framePCMShorts1 = new double[framePCMBytes1.Length / 2];
@@ -131,8 +134,8 @@ namespace AudioDataInterface
                                                 double[] fftMag2 = FftSharp.FFT.Magnitude(complex2, false);
                                                 double[] fftPhase1 = FftSharp.FFT.Phase(complex1);
                                                 double[] fftPhase2 = FftSharp.FFT.Phase(complex2);
-                                                double[] fftMagDropout = new double[2048 * dropoutFramesCount];
-                                                double[] fftPhaseDropout = new double[2048 * dropoutFramesCount];
+                                                double[] fftMagDropout = new double[1024 * dropoutFramesCount];
+                                                double[] fftPhaseDropout = new double[1024 * dropoutFramesCount];
                                                 int x1 = 1;
                                                 int x2 = dropoutFramesCount + 2;
                                                 //Интерполяция магнитуд
@@ -141,7 +144,7 @@ namespace AudioDataInterface
                                                     h = z;
                                                     double y1 = fftMag1[z];
                                                     double y2 = fftMag2[z];
-                                                    for (int x = x1 + 1; x < x2; x++, h += 2048)
+                                                    for (int x = x1 + 1; x < x2; x++, h += 1024)
                                                     {
                                                         int xi = x;
                                                         fftMagDropout[h] = y1 + (((xi - x1) * (y2 - y1)) / (x2 - x1));
@@ -153,7 +156,7 @@ namespace AudioDataInterface
                                                     h = z;
                                                     double y1 = fftPhase1[z];
                                                     double y2 = fftPhase2[z];
-                                                    for (int x = x1 + 1; x < x2; x++, h += 2048)
+                                                    for (int x = x1 + 1; x < x2; x++, h += 1024)
                                                     {
                                                         int xi = x;
                                                         fftPhaseDropout[h] = y1 + (((xi - x1) * (y2 - y1)) / (x2 - x1));
@@ -163,24 +166,25 @@ namespace AudioDataInterface
                                                 for (int t = 0; t < fftMagDropout.Length; t++) test.Add(System.Numerics.Complex.FromPolarCoordinates(fftMagDropout[t] * 1.0, fftPhaseDropout[t] * 1.0));
                                                 System.Numerics.Complex[] testIFFT = test.ToArray();
                                                 List<System.Numerics.Complex[]> testIFFTFramed = new List<System.Numerics.Complex[]>();
-                                                for (int k = 0; k < testIFFT.Length; k += 2048)
+                                                for (int k = 0; k < testIFFT.Length; k += 1024)
                                                 {
-                                                    testIFFTFramed.Add(new System.Numerics.Complex[2048]);
-                                                    for (int t = k, l = 0; t < k + 2048; t++, l++) testIFFTFramed[testIFFTFramed.Count - 1][l] = testIFFT[t];
+                                                    testIFFTFramed.Add(new System.Numerics.Complex[1024]);
+                                                    for (int t = k, l = 0; t < k + 1024; t++, l++) testIFFTFramed[testIFFTFramed.Count - 1][l] = testIFFT[t];
                                                 }
                                                 for (int t = 0; t < testIFFTFramed.Count; t++) FftSharp.FFT.Inverse(testIFFTFramed[t]);
-                                                foreach (System.Numerics.Complex[] c in testIFFTFramed) for (int t = 65; t < 65 + 1920; t++) { double resultShort = c[t].Real * 512; if (resultShort <= 32767 && resultShort >= -32767) calculatedPCMShorts.Add((short)resultShort); else calculatedPCMShorts.Add(0); }
+                                                foreach (System.Numerics.Complex[] c in testIFFTFramed) for (int t = 32; t < 32 + 960; t++) { double resultShort = c[t].Real * 512; if (resultShort <= 32767 && resultShort >= -32767) calculatedPCMShorts.Add((short)resultShort); else calculatedPCMShorts.Add(0); }
                                                 foreach (short s in calculatedPCMShorts) calculatedPCMBytes.AddRange(BitConverter.GetBytes(s));
                                                 outputPCMBytes.AddRange(calculatedPCMBytes);
                                                 dropout = false;
-                                                LogHandler.WriteStatus("DataHandler/AudioBuffer", "Audio interpolation " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 1920).ToString() + " samples)");
+                                                LogHandler.WriteStatus("DataHandler/AudioBuffer", "Audio interpolation " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
+                                                */
                                             }
                                             //Добавить тишину, если выпало больше порога фреймов
-                                            if (dropoutFramesCount > 10)
+                                            if (dropoutFramesCount > 0)
                                             {
                                                 interpolation = false;
                                                 mute = true;
-                                                for (int t = 0; t < 1920 * dropoutFramesCount; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
+                                                for (int t = 0; t < 960 * dropoutFramesCount; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
                                                 dropout = false;
                                                 LogHandler.WriteStatus("DataHandler/AudioBuffer", "Mute " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 1920).ToString() + " samples)");
                                             }
@@ -197,6 +201,7 @@ namespace AudioDataInterface
                                         {
                                             dropout = true;
                                             opusFrame.Clear();
+                                            Thread.Sleep(10);
                                         }
                                     }
                                 }

@@ -88,14 +88,15 @@ namespace AudioDataInterface
             for (int i = 0; i < fs.Length; i++)
             {
                 inputPCMBytes.Add((byte)fs.ReadByte());
-                if (inputPCMBytes.Count == 40 * (48000 / 1000) * 2)
+                if (inputPCMBytes.Count == 20 * (48000 / 1000) * 2)
                 {
 
                     encoder.MaxBandwidth = Bandwidth.FullBand;
                     encoder.Bitrate = 16000;
+                    encoder.DTX = true;
                     encoder.VBR = false;
                     encoder.Complexity = 10;
-                    byte[] opusBytes = new byte[80];
+                    byte[] opusBytes = new byte[40];
                     encoder.Encode(inputPCMBytes.ToArray(), inputPCMBytes.Count, opusBytes, opusBytes.Length);
                     outputOpusBytes.AddRange(opusBytes);
                     inputPCMBytes.Clear();

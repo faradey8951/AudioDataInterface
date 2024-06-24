@@ -80,7 +80,7 @@ namespace AudioDataInterface
 
         private void trackBar_spectrumVescosity_Scroll(object sender, EventArgs e)
         {
-            label_spectrumVescosityValue.Text = trackBar_spectrumVescosity.Value.ToString();
+            
         }
 
         private void form_settings_Load(object sender, EventArgs e)
@@ -101,7 +101,6 @@ namespace AudioDataInterface
             trackBar_mpsPlayerSubcodeInterval_Scroll(this, EventArgs.Empty);
             trackBar_fftSize.Value = form_main.mpsPlayer_fftSize;
             trackBar_fftSize_Scroll(this, EventArgs.Empty);
-            trackBar_spectrumVescosity.Value = form_main.mpsPlayer_spectrumVescosity;
             trackBar_spectrumVescosity_Scroll(this, EventArgs.Empty);
             spectrumMode = form_main.mpsPlayer_spectrumMode;
             if (spectrumMode == "peakHold") radioButton_peakHoldMode.Checked = true;
@@ -110,7 +109,6 @@ namespace AudioDataInterface
             textBox_Ffmpeg1Cmd.Text = Encoder.encoder_ffmpeg1Cmd;
             textBox_Ffmpeg2Cmd.Text = Encoder.encoder_ffmpeg2Cmd;
             textBox_Ffmpeg2EffectCmd.Text = Encoder.encoder_ffmpeg2EffectCmd;
-            form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
             List<string[]> skins = mpsPlayerSkinHandler.GetSkins();
             if (skins != null) foreach (string[] skin in skins) comboBox_skins.Items.Add(skin[1]);
             comboBox_skins.Text = form_main.class_mpsPlayerSkinHandler.currentSkinName;
@@ -127,14 +125,12 @@ namespace AudioDataInterface
             Encoder.encoder_mpsPlayerSubCodeInterval = trackBar_mpsPlayerSubcodeInterval.Value;
             form_main.mpsPlayer_fftSize = trackBar_fftSize.Value;
             form_main.mpsPlayer_spectrumMode = spectrumMode;
-            form_main.mpsPlayer_spectrumVescosity = trackBar_spectrumVescosity.Value;
             Encoder.encoder_ffmpeg1Cmd = textBox_Ffmpeg1Cmd.Text;
             Encoder.encoder_ffmpeg2Cmd = textBox_Ffmpeg2Cmd.Text;
             Encoder.encoder_ffmpeg2EffectCmd = textBox_Ffmpeg2EffectCmd.Text;
 
             var skins = mpsPlayerSkinHandler.GetSkins();
             foreach (string[] skin in skins) if (skin.Contains(comboBox_skins.Text)) form_main.class_mpsPlayerSkinHandler.currentSkinName = skin[0];
-            form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval = form_main.mpsPlayer_spectrumVescosity;
             form_main.mpsPlayer_liveSpectrum = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             form_main.mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             form_main.window_main.DrawMPSPlayerInterface();

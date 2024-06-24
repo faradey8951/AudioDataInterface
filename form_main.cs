@@ -89,8 +89,8 @@ namespace AudioDataInterface
         public static int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 , 5}; //Массив пиков спектра [0-9]
         public static int mps_Player_spectrumGain = 1; //Усиление уровня спектра
         int[] mpsPlayer_spectrumFreq = { 68, 170, 420, 1000, 2400, 5900, 14400}; //Массив опорных частот, для которых строится спектр [Гц]
-        public static int mpsPlayer_peakHoldTimeDelay = 20; //Задержка пиков спектра на дисплее, выраженная в количестве пропущенных кадров отрисовки дисплея из расчета FPS = 40
-        int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных кадров отрисовки дисплея
+        public static int mpsPlayer_peakHoldTimeDelay = 0; //Задержка итераций отрисовки пиков спектра
+        int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных итераций отрисовки пиков
         public static bool mpsPlayer_showTime = true; //Указывает необходимость показа времени воспроизведения
         public static bool mpsPlayer_disc1Detected = false; //Показывает индикацию обнаружения сигнала
         public static int[] mpsPlayer_time = { 0, 0, 0, 0 }; //Массив таймера воспроизведения
@@ -105,12 +105,11 @@ namespace AudioDataInterface
         public static bool mpsPlayer_tapeSkin = false; //Переключает суб-скин на режим проигрывания ленты
         public static int mpsPlayer_fftSize = 0; //Размер буфера сэмплов FFT для отрисовки спектра
         public static string mpsPlayer_spectrumMode = ""; //Режим отображения спектра
-        public static int mpsPlayer_spectrumVescosity = 0; //Вязкость спектра
         public static int mpsPlayer_runningIndicatorAnimationFrameIndex = 0; //Текущий индекс кадра анимации бегущего индикатора
-        public static double mpsPlayerWidth = 810; //Ширина mps плеера
-        public static double mpsPlayerHeight = 335; //Высота mps плеера
-        public static double spectrumBarWidth = 0.65; //Ширина области спектра относительно ширины mps плеера
-        public static double spectrumBarHeight = 0.35; //Высота области спектра относительно высоты mps плеера
+        public static double mpsPlayerWidth = 0; //Ширина mps плеера
+        public static double mpsPlayerHeight = 0; //Высота mps плеера
+        public static double spectrumBarWidth = 0; //Ширина области спектра относительно ширины mps плеера
+        public static double spectrumBarHeight = 0; //Высота области спектра относительно высоты mps плеера
         public static int spectrumBarY0P;
         public static int spectrumBarX0P;
         public static int spectrumBarWidthP;
@@ -654,14 +653,14 @@ namespace AudioDataInterface
         {
             timer_mpsPlayerRunningIndicatorHandler.Interval = 85;
             timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
-            window_main.pictureBox_playPause.Image = Properties.Resources.play;
+            window_main.pictureBox_playPause.Image = class_mpsPlayerSkinHandler.image_CD[9];
         }
 
         public void MpsPlayerRunningIndicatorSeek()
         {
             if (mpsPlayer_tapeSkin == false)
             {
-                timer_mpsPlayerRunningIndicatorHandler.Interval = 43;
+                timer_mpsPlayerRunningIndicatorHandler.Interval = 45;
                 timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
             }
             else { timer_mpsPlayerRunningIndicatorHandler.Enabled = false; pictureBox_runningIndicator.Image = Properties.Resources.Running_Indicator; }
@@ -756,6 +755,7 @@ namespace AudioDataInterface
                 pictureBox_disc2.Visible = true;
                 pictureBox_disc3.Visible = true;
                 pictureBox_cassette.Image = null;
+                pictureBox_disc1.Image = class_mpsPlayerSkinHandler.image_CD[2];
             }
             else
             {
@@ -848,24 +848,20 @@ namespace AudioDataInterface
 
         private void timer_mpsPlayerSpectrumHandler_Tick(object sender, EventArgs e)
         {
-            if (mpsPlayer_peakHoldTimeCount == mpsPlayer_peakHoldTimeDelay)
+            if (mpsPlayer_peakHoldTimeCount >= mpsPlayer_peakHoldTimeDelay)
             {
                 mpsPlayer_peakHoldTimeCount = 0;
-                mpsPlayer_spectrumPeakHold = new int[]{ 0,0,0,0,0,0,0,0,0,0,0,0,0};
+                mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
             }
             for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
             {
                 if (mpsPlayer_instantSpectrum[i] > mpsPlayer_liveSpectrum[i] && mpsPlayer_liveSpectrum[i] < 9) mpsPlayer_liveSpectrum[i]++;
                 else if (mpsPlayer_liveSpectrum[i] > 0) mpsPlayer_liveSpectrum[i]--;
             }
-            for (int i = 0; i < mpsPlayer_liveSpectrum.Length; i++)
-            {
-                if (mpsPlayer_spectrumPeakHold[i] < mpsPlayer_liveSpectrum[i]) mpsPlayer_spectrumPeakHold[i] = mpsPlayer_liveSpectrum[i];
-            }
-            mpsPlayer_peakHoldTimeCount++;
+            for (int i = 0; i < mpsPlayer_liveSpectrum.Length; i++) if (mpsPlayer_spectrumPeakHold[i] < mpsPlayer_liveSpectrum[i]) mpsPlayer_spectrumPeakHold[i] = mpsPlayer_liveSpectrum[i];
             if (mpsPlayer_spectrumMode == "noPeak") mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-
             if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();
+            mpsPlayer_peakHoldTimeCount++;
         }
 
         private void timer_mpsPlayerSpectrumUpdater_Tick(object sender, EventArgs e)
