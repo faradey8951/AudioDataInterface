@@ -6,6 +6,7 @@ using NAudio;
 using NAudio.Wave;
 using System.Threading;
 using NAudio.CoreAudioApi;
+using NAudio.Dsp;
 
 namespace AudioDataInterface
 {
@@ -24,9 +25,14 @@ namespace AudioDataInterface
         public static MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
         public static MMDeviceCollection mm_dev = null;
         public static WasapiOut naudio_playDeviceWasapiOut = null;
-
         public static WasapiCapture waveLoop = null;
         //WaveFormat fmt = waveLoop.WaveFormat;
+        public static BiQuadFilter graphLowPassFilter = null;
+        public static BiQuadFilter graphHighPassFilter = null;
+        public static BiQuadFilter graphCarrierFreqEQFilter = null;
+        public static BiQuadFilter signalLowPassFilter = null;
+        public static BiQuadFilter signalHighPassFilter = null;
+        public static BiQuadFilter signalCarrierFreqEQFilter = null;
 
         //////////////////////////////////////////////////////////////////////////////////////
 
@@ -57,7 +63,7 @@ namespace AudioDataInterface
         public static int audio_playDeviceId = 0;                                               //ID текущего устройства воспроизведения
         public static int audio_tapePlayDeviceId = 0;
         public static bool audio_tapePlayStopped = true;
-        public static int audio_signalHeight = 500;                                               //Высота сигнала
+        public static int audio_signalHeight = 0;                                               //Высота сигнала
         public static bool audio_invertSignal = true;                                          //Инверсия сигнала
         public static double audio_signalGain = 7;
         public static double audio_signalGainL = 4;
@@ -104,9 +110,15 @@ namespace AudioDataInterface
                     naudio_graphWaveIn.Dispose();
                 naudio_graphWaveIn = new WaveIn();
                 naudio_graphWaveIn.DeviceNumber = audio_recDeviceId;
-                naudio_graphWaveIn.WaveFormat = new NAudio.Wave.WaveFormat(96000, 1);
+                naudio_graphWaveIn.WaveFormat = new NAudio.Wave.WaveFormat(96000, 16, 2);
                 naudio_graphWaveIn.DataAvailable += new EventHandler<WaveInEventArgs>(Graph_DataAvailable);
                 naudio_graphWaveIn.StartRecording();
+                graphLowPassFilter = BiQuadFilter.PeakingEQ(96000, 20000, 80, -60);
+                graphHighPassFilter = BiQuadFilter.HighPassFilter(96000, 400, 1);
+                graphCarrierFreqEQFilter = BiQuadFilter.PeakingEQ(96000, 10000, 60, 10);
+                signalLowPassFilter = BiQuadFilter.PeakingEQ(96000, 20000, 80, -60);
+                signalHighPassFilter = BiQuadFilter.HighPassFilter(96000, 400, 1);
+                signalCarrierFreqEQFilter = BiQuadFilter.PeakingEQ(96000, 10000, 60, 10);
             }
             catch { }
         }
@@ -148,12 +160,18 @@ namespace AudioDataInterface
 
         static void Graph_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
+            short sample = 0;
             for (int i = 0; i < e.Buffer.Length / 2; i += 2)
             {
-                if (!audio_invertSignal)
-                    buff_graphSamples.Add((short)(audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)audio_signalHeight));
-                else
-                    buff_graphSamples.Add((short)(-audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)audio_signalHeight));
+                if (!audio_invertSignal) sample = (short)(audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)audio_signalHeight);
+                else sample = (short)(-audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)audio_signalHeight);
+                float originalSampleFloat = Convert.ToInt32(sample);
+                float filteredSampleFloat = graphHighPassFilter.Transform(originalSampleFloat);
+                filteredSampleFloat = graphLowPassFilter.Transform(filteredSampleFloat);
+                filteredSampleFloat = graphCarrierFreqEQFilter.Transform(filteredSampleFloat);
+                short filteredSampleShort = (short)filteredSampleFloat;
+                buff_graphSamples.Add(filteredSampleShort);
+                //buff_graphSamples.Add(sample);
             }
             form_main.window_main.DrawWaveGraphFrame();
         }

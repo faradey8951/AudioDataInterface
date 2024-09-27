@@ -53,7 +53,6 @@ namespace AudioDataInterface
             OpusDecoder decoder = new OpusDecoder(20, 48000, 1); //Декодер OPUS фреймов
             while (Decoder.decoderActive)
             {
-                packetLoss = false;
                 mp3Buffer.Clear();
                 while (Decoder.buff_decodedData.Count < i + 128 || ms.Length - ms.Position > 96000) Thread.Sleep(10); //Ожидание наполнения данных + задержка буферизации для синхронизации таймкода               
                 lock (Decoder.decodedDataLocker)
@@ -100,7 +99,7 @@ namespace AudioDataInterface
                         if (subCodeByte1 == 123 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Субкод канальной синхронизации правого канала
                         {
                             packetSize = packet.Count;
-                            if (packetSize != 2000) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; }
+                            if (packetSize != 2000) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; /*for (int t = 0; t < packetSize * 24; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));*/ }
                             subcodeSync = true;
                             if (packetSize >= 40) //Триггер размера пакета для обработки фреймов
                             {
@@ -114,10 +113,10 @@ namespace AudioDataInterface
                                         if (dropout == true) { dropoutFramesCount++; }
                                         else //Триггер конца выпадения
                                         {
+                                            /*
                                             //Интерполяция выпавших фреймов
-                                            if (false)
-                                            {
-                                                /*
+                                            if (dropoutFramesCount > 0 && dropoutFramesCount <= 2)
+                                            {                                              
                                                 interpolation = true;
                                                 framePCMBytes.CopyTo(framePCMBytes2, 0);
                                                 double[] framePCMShorts1 = new double[framePCMBytes1.Length / 2];
@@ -176,18 +175,19 @@ namespace AudioDataInterface
                                                 foreach (short s in calculatedPCMShorts) calculatedPCMBytes.AddRange(BitConverter.GetBytes(s));
                                                 outputPCMBytes.AddRange(calculatedPCMBytes);
                                                 dropout = false;
-                                                LogHandler.WriteStatus("DataHandler/AudioBuffer", "Audio interpolation " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
-                                                */
+                                                LogHandler.WriteStatus("DataHandler/AudioBuffer", "Interpolation " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");                                               
                                             }
                                             //Добавить тишину, если выпало больше порога фреймов
-                                            if (dropoutFramesCount > 0)
+                                            if (dropoutFramesCount > 2)
                                             {
                                                 interpolation = false;
                                                 mute = true;
                                                 for (int t = 0; t < 960 * dropoutFramesCount; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
                                                 dropout = false;
-                                                LogHandler.WriteStatus("DataHandler/AudioBuffer", "Mute " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 1920).ToString() + " samples)");
+                                                LogHandler.WriteStatus("DataHandler/AudioBuffer", "Mute " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
                                             }
+                                            */
+                                            if (dropoutFramesCount > 0) LogHandler.WriteStatus("DataHandler/AudioBuffer", "Corrupted " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
                                             dropoutFramesCount = 0;
                                         }
                                         try

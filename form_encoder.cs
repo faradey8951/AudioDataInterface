@@ -90,7 +90,6 @@ namespace AudioDataInterface
                 inputPCMBytes.Add((byte)fs.ReadByte());
                 if (inputPCMBytes.Count == 20 * (48000 / 1000) * 2)
                 {
-
                     encoder.MaxBandwidth = Bandwidth.FullBand;
                     encoder.Bitrate = 16000;
                     encoder.DTX = true;

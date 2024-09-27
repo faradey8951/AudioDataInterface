@@ -39,8 +39,10 @@ namespace AudioDataInterface
         //Графика
         //Префикс: "graphics_; bitmap_"
         //////////////////////////////////////////////////////////////////////////////////////
-        static Graphics graphics_waveGraph = null; //Графика осциллографа
-        static Bitmap bitmap_waveGraph = null; //Графика осциллографа
+        static Graphics graphics_waveGraphL = null; //Графика осциллографа
+        static Graphics graphics_waveGraphR = null;
+        static Bitmap bitmap_waveGraphL = null; //Графика осциллографа
+        static Bitmap bitmap_waveGraphR = null;
         static Graphics graphics_mpsPlayerInterface = null; //Графика mps плеера
         static Bitmap bitmap_mpsPlayerInterface = null; //Графика mps плеера
         //Индикаторы состояния аудиопроцессора
@@ -49,11 +51,13 @@ namespace AudioDataInterface
         static Graphics graphics_subcodeTOCIndicator = null;
         static Graphics graphics_audioInterpolationIndicator = null;
         static Graphics graphics_audioMutingIndicator = null;
+        static Graphics graphics_packetLossIndicator = null;
         static Bitmap bitmap_subcodeSyncIndicator = null;
         static Bitmap bitmap_subcodeTimecodeIndicator = null;
         static Bitmap bitmap_subcodeTOCIndicator = null;
         static Bitmap bitmap_audioInterpolationIndicator = null;
         static Bitmap bitmap_audioMutingIndicator = null;
+        static Bitmap bitmap_packetLossIndicator = null;
         //Счетчики задержки отображения индикаторов состояния аудиопроцессора
         static int subcodeSyncIndicatorCount = 0;
         static int subcodeSyncErrorIndicatorCount = 0;
@@ -61,6 +65,7 @@ namespace AudioDataInterface
         static int subcodeTOCIndicatorCount = 0;
         static int audioInterpolationIndicatorCount = 0;
         static int audioMutingIndicatorCount = 0;
+        static int packetLossIndicatorCount  = 0;
 
         Image[] symbolImages; //Изображения отображаемых символов mps плеера
         PictureBox[] pictureBox_timeSymbols; 
@@ -127,7 +132,7 @@ namespace AudioDataInterface
         {
             InitializeComponent();
             window_main = this; //Передача статического доступа классу
-            scope_verticalBIAS = pictureBox_waveGraph.Height / 2;
+            scope_verticalBIAS = pictureBox_waveGraphL.Height / 2;
         }
 
         /// <summary>
@@ -138,22 +143,38 @@ namespace AudioDataInterface
             if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_graphSamples.Count > 0)
             {
 
-                graphics_waveGraph.Clear(Color.FromArgb(34, 31, 31));
-                int pointsCount = (pictureBox_waveGraph.Width / scope_horizontalScale) + 8;
+                graphics_waveGraphL.Clear(Color.FromArgb(34, 31, 31));
+                graphics_waveGraphR.Clear(Color.FromArgb(34, 31, 31));
+                int pointsCount = (pictureBox_waveGraphL.Width / scope_horizontalScale) + 8;
                 PointF[] points = new PointF[pointsCount]; //Массив точек кадра сигналограммы
-                                                           //graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251,176,64)), 0, (pictureBox_waveGraph.Height / 2) + 1, pictureBox_waveGraph.Width, (pictureBox_waveGraph.Height / 2) + 1);
-                for (int i = 0; i < pictureBox_waveGraph.Width; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraph.Height);
-                for (int i = 0; i < pictureBox_waveGraph.Width; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraph.Height);
-                for (int i = 0; i < pictureBox_waveGraph.Height; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraph.Width, i);
-                for (int i = 0; i < pictureBox_waveGraph.Height; i += 23) graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraph.Width, i + 1);
-                graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraph.Height / 2) - 1, pictureBox_waveGraph.Width, (pictureBox_waveGraph.Height / 2) - 1);
-                graphics_waveGraph.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraph.Height / 2, pictureBox_waveGraph.Width, pictureBox_waveGraph.Height / 2);
-                for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += scope_additionalHorizontalScale, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraph.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS);
-                graphics_waveGraph.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
+                //Отрисовка координатной сетки левого канала
+                for (int i = 0; i < pictureBox_waveGraphL.Width; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraphL.Height);
+                for (int i = 0; i < pictureBox_waveGraphL.Width; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraphL.Height);
+                for (int i = 0; i < pictureBox_waveGraphL.Height; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraphL.Width, i);
+                for (int i = 0; i < pictureBox_waveGraphL.Height; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraphL.Width, i + 1);
+                graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraphL.Height / 2) - 1, pictureBox_waveGraphL.Width, (pictureBox_waveGraphL.Height / 2) - 1);
+                graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraphL.Height / 2, pictureBox_waveGraphL.Width, pictureBox_waveGraphL.Height / 2);
+                //Отрисовка координатной сетки правого канала
+                for (int i = 0; i < pictureBox_waveGraphR.Width; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraphR.Height);
+                for (int i = 0; i < pictureBox_waveGraphR.Width; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraphR.Height);
+                for (int i = 0; i < pictureBox_waveGraphR.Height; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraphR.Width, i);
+                for (int i = 0; i < pictureBox_waveGraphR.Height; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraphR.Width, i + 1);
+                graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraphR.Height / 2) - 1, pictureBox_waveGraphR.Width, (pictureBox_waveGraphR.Height / 2) - 1);
+                graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraphR.Height / 2, pictureBox_waveGraphR.Width, pictureBox_waveGraphR.Height / 2);
+                //Отрисовка осциллограммы
+                for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += 2, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraphL.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS);
+                graphics_waveGraphL.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
                 points = new PointF[pointsCount];
-                for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += scope_additionalHorizontalScale, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraph.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS - 1);
-                graphics_waveGraph.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
-                pictureBox_waveGraph.Image = bitmap_waveGraph;
+                for (int i = 0, k = scope_horizontalBIAS + 1, x = 0; i < pointsCount; i += 1, k += 2, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraphR.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS);
+                graphics_waveGraphR.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
+                points = new PointF[pointsCount];
+                for (int i = 0, k = scope_horizontalBIAS, x = 0; i < pointsCount; i += 1, k += 2, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraphL.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS - 1);
+                graphics_waveGraphL.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
+                points = new PointF[pointsCount];
+                for (int i = 0, k = scope_horizontalBIAS + 1, x = 0; i < pointsCount; i += 1, k += 2, x += scope_horizontalScale) points[i] = new PointF(x, (((pictureBox_waveGraphR.Height / 2) * -AudioIO.buff_graphSamples[k]) / scope_verticalScale) + scope_verticalBIAS - 1);
+                graphics_waveGraphR.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
+                pictureBox_waveGraphL.Image = bitmap_waveGraphL;
+                pictureBox_waveGraphR.Image = bitmap_waveGraphR;
                 AudioIO.buff_graphSamples.RemoveRange(0, AudioIO.buff_graphSamples.Count);
             }
         }
@@ -382,22 +403,26 @@ namespace AudioDataInterface
             if (subcodeTOCIndicatorCount >= 4) { DataHandler.subcodeTOC = false; subcodeTOCIndicatorCount = 0; }
             if (audioInterpolationIndicatorCount >= 4) { DataHandler.interpolation = false; audioInterpolationIndicatorCount = 0; }
             if (audioMutingIndicatorCount >= 4) { DataHandler.mute = false; audioMutingIndicatorCount = 0; }
+            if (packetLossIndicatorCount >= 4) { DataHandler.packetLoss = false; packetLossIndicatorCount = 0; }
             label_subcodeSync.Image = null;
             label_subcodeTimecode.Image = null;
             label_subcodeTOC.Image = null;
             label_interpolation.Image = null;
             label_mute.Image = null;
+            label_packetLoss.Image = null;
             if (DataHandler.subcodeSync == false) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Green), 4, 0, 11, 11); subcodeSyncIndicatorCount++; }
             if (DataHandler.subcodeSyncError == true) graphics_subcodeSyncIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); subcodeSyncErrorIndicatorCount++;
             if (DataHandler.subcodeTimecode == false) graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_subcodeTimecodeIndicator.FillEllipse(new SolidBrush(Color.Green), 4, 0, 11, 11); subcodeTimecodeIndicatorCount++; }
             if (DataHandler.subcodeTOC == false) graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_subcodeTOCIndicator.FillEllipse(new SolidBrush(Color.Green), 4, 0, 11, 11); subcodeTOCIndicatorCount++; }
             if (DataHandler.interpolation == false) graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_audioInterpolationIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); audioInterpolationIndicatorCount++; }
             if (DataHandler.mute == false) graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_audioMutingIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); audioMutingIndicatorCount++; }
+            if (DataHandler.packetLoss == false) graphics_packetLossIndicator.FillEllipse(new SolidBrush(Color.Gray), 4, 0, 11, 11); else { graphics_packetLossIndicator.FillEllipse(new SolidBrush(Color.Red), 4, 0, 11, 11); packetLossIndicatorCount++; }
             label_subcodeSync.Image = bitmap_subcodeSyncIndicator;
             label_subcodeTimecode.Image = bitmap_subcodeTimecodeIndicator;
             label_subcodeTOC.Image = bitmap_subcodeTOCIndicator;
             label_interpolation.Image = bitmap_audioInterpolationIndicator;
             label_mute.Image = bitmap_audioMutingIndicator;
+            label_packetLoss.Image = bitmap_packetLossIndicator;
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -405,8 +430,10 @@ namespace AudioDataInterface
             Settings.Load();
             class_mpsPlayerSkinHandler.Load();           
             MpsPlayerInterfaceInitialize();
-            bitmap_waveGraph = new Bitmap(pictureBox_waveGraph.Width, pictureBox_waveGraph.Height);
-            graphics_waveGraph = Graphics.FromImage(bitmap_waveGraph); //Инициализация графики
+            bitmap_waveGraphL = new Bitmap(pictureBox_waveGraphL.Width, pictureBox_waveGraphL.Height);
+            bitmap_waveGraphR = new Bitmap(pictureBox_waveGraphR.Width, pictureBox_waveGraphR.Height);
+            graphics_waveGraphL = Graphics.FromImage(bitmap_waveGraphL); //Инициализация графики
+            graphics_waveGraphR = Graphics.FromImage(bitmap_waveGraphR); //Инициализация графики
             bitmap_mpsPlayerInterface = new Bitmap(pictureBox_mpsPlayer.Width, pictureBox_mpsPlayer.Height);
             graphics_mpsPlayerInterface = Graphics.FromImage(bitmap_mpsPlayerInterface);
 
@@ -415,12 +442,14 @@ namespace AudioDataInterface
             bitmap_subcodeTOCIndicator = new Bitmap(label_subcodeTOC.Width, label_subcodeTOC.Height);
             bitmap_audioInterpolationIndicator = new Bitmap(label_interpolation.Width, label_interpolation.Height);
             bitmap_audioMutingIndicator = new Bitmap(label_mute.Width, label_mute.Height);
+            bitmap_packetLossIndicator = new Bitmap(label_packetLoss.Width, label_packetLoss.Height);
 
             graphics_subcodeSyncIndicator = Graphics.FromImage(bitmap_subcodeSyncIndicator);
             graphics_subcodeTimecodeIndicator = Graphics.FromImage(bitmap_subcodeTimecodeIndicator);
             graphics_subcodeTOCIndicator = Graphics.FromImage(bitmap_subcodeTOCIndicator);
             graphics_audioInterpolationIndicator = Graphics.FromImage(bitmap_audioInterpolationIndicator);
             graphics_audioMutingIndicator = Graphics.FromImage(bitmap_audioMutingIndicator);
+            graphics_packetLossIndicator = Graphics.FromImage(bitmap_packetLossIndicator);
 
             DrawAudioProcessorStatus();
 
@@ -569,8 +598,10 @@ namespace AudioDataInterface
         {
             if (this.WindowState != FormWindowState.Minimized)
             {
-                bitmap_waveGraph = new Bitmap(pictureBox_waveGraph.Width, pictureBox_waveGraph.Height);
-                graphics_waveGraph = Graphics.FromImage(bitmap_waveGraph); //Инициализация графики
+                bitmap_waveGraphL = new Bitmap(pictureBox_waveGraphL.Width, pictureBox_waveGraphL.Height);
+                bitmap_waveGraphR = new Bitmap(pictureBox_waveGraphR.Width, pictureBox_waveGraphR.Height);
+                graphics_waveGraphL = Graphics.FromImage(bitmap_waveGraphL); //Инициализация графики
+                graphics_waveGraphR = Graphics.FromImage(bitmap_waveGraphR); //Инициализация графики
                 bitmap_mpsPlayerInterface = new Bitmap(pictureBox_mpsPlayer.Width, pictureBox_mpsPlayer.Height);
                 graphics_mpsPlayerInterface = Graphics.FromImage(bitmap_mpsPlayerInterface);
             }
@@ -594,12 +625,12 @@ namespace AudioDataInterface
 
         private void pictureBox_waveGraph_MouseEnter(object sender, EventArgs e)
         {
-            pictureBox_waveGraph.MouseWheel += new MouseEventHandler(pictureBox_waveGraph_MouseWheel);
+            pictureBox_waveGraphL.MouseWheel += new MouseEventHandler(pictureBox_waveGraph_MouseWheel);
         }
 
         private void pictureBox_waveGraph_MouseLeave(object sender, EventArgs e)
         {
-            pictureBox_waveGraph.MouseWheel -= new MouseEventHandler(pictureBox_waveGraph_MouseWheel);
+            pictureBox_waveGraphL.MouseWheel -= new MouseEventHandler(pictureBox_waveGraph_MouseWheel);
         }
 
         private void pictureBox_waveGraph_MouseDown(object sender, MouseEventArgs e)
@@ -620,7 +651,7 @@ namespace AudioDataInterface
 
         private void pictureBox_waveGraph_MouseClick(object sender, MouseEventArgs e)
         {
-            if (e.Button == MouseButtons.Middle) { scope_horizontalBIAS = 0; scope_horizontalScale = 1; scope_verticalScale = 32767; scope_verticalBIAS = pictureBox_waveGraph.Height / 2; scope_additionalHorizontalScale = 1; }
+            if (e.Button == MouseButtons.Middle) { scope_horizontalBIAS = 0; scope_horizontalScale = 1; scope_verticalScale = 32767; scope_verticalBIAS = pictureBox_waveGraphL.Height / 2; scope_additionalHorizontalScale = 1; }
         }
 
         private void button_buffMp3_Click(object sender, EventArgs e)

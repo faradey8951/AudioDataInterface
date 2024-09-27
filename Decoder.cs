@@ -1,9 +1,12 @@
-﻿using System;
+﻿using FftSharp;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Windows.Forms;
+using NAudio;
+using NAudio.Dsp;
 
 namespace AudioDataInterface
 {
@@ -45,19 +48,36 @@ namespace AudioDataInterface
 
         static void SamplesDecoderStereo()
         {
+            short sampleL = 0;
+            float originalSampleFloat = 0;
+            float filteredSampleFloat = 0;
+            int filteredSampleShort = 0;
+            short sampleR = 0;
             while (Decoder.decoderActive)
             {
                 while (AudioIO.buff_signalBytes.Count < 12000) Thread.Sleep(10);
                 if (!AudioIO.audio_invertSignal)
                 {
-                    lock (samplesLLocker) AudioIO.buff_signalSamplesL.Add((short)(AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
-                    lock (samplesRLocker) AudioIO.buff_signalSamplesR.Add((short)(AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight));
+                    lock (samplesLLocker) sampleL = (short)(AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight);
+                    lock (samplesRLocker) sampleR = (short)(AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight);
                 }
                 else
                 {
-                    lock (samplesLLocker) AudioIO.buff_signalSamplesL.Add((short)(-AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight));
-                    lock (samplesRLocker) AudioIO.buff_signalSamplesR.Add((short)(-AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight));
+                    lock (samplesLLocker) sampleL = (short)(-AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[0], AudioIO.buff_signalBytes[1] }, 0) + (short)AudioIO.audio_signalHeight);
+                    lock (samplesRLocker) sampleR = (short)(-AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight);
                 }
+                originalSampleFloat = Convert.ToInt32(sampleL);
+                filteredSampleFloat = AudioIO.signalHighPassFilter.Transform(originalSampleFloat);
+                filteredSampleFloat = AudioIO.signalLowPassFilter.Transform(filteredSampleFloat);
+                filteredSampleFloat = AudioIO.signalCarrierFreqEQFilter.Transform(filteredSampleFloat);
+                filteredSampleShort = (Int16)filteredSampleFloat;
+                AudioIO.buff_signalSamplesL.Add((short)filteredSampleShort);
+                originalSampleFloat = Convert.ToInt32(sampleR);
+                filteredSampleFloat = AudioIO.signalHighPassFilter.Transform(originalSampleFloat);
+                filteredSampleFloat = AudioIO.signalLowPassFilter.Transform(filteredSampleFloat);
+                filteredSampleFloat = AudioIO.signalCarrierFreqEQFilter.Transform(filteredSampleFloat);
+                filteredSampleShort = (Int16)filteredSampleFloat;
+                AudioIO.buff_signalSamplesR.Add((short)filteredSampleShort);
                 lock (bytesLocker) AudioIO.buff_signalBytes.RemoveRange(0, 4);
             }
         }
@@ -319,7 +339,7 @@ namespace AudioDataInterface
                                 derivativeChangeCount++;
                             }
                         }
-                        if (derivativeChangeCount < 2) { tempBin = "000000000000000000000000000000000000001"; }
+                        if (derivativeChangeCount < 2) { tempBin = "000000000000000000000000000000000000001"; /*LogHandler.WriteStatus("Decoder/BinaryDecoderStereo", "Signal derivative analysis fail");*/ }
                         else
                         {
                             derivativeDecryptor.Add("-");
@@ -343,6 +363,7 @@ namespace AudioDataInterface
                         {
                             //Контроль канальной синхронизации
                             bool channelSyncSucc = true;
+                            bool noSignal = false;
                             if (decodedDataBlock[3][38] == '0') //Детектируем наличие субкода
                             {
                                 string subCode = decodedDataBlock[4]; //Получаем двоичный субкод
@@ -382,11 +403,11 @@ namespace AudioDataInterface
                             {
                                 if (sectorGet == true) { sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(0, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(8, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(16, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(24, 8), 2))); }
                             }
-                            if (syncPulsePowerSpanL < 8000 && syncPulsePowerSpanR < 8000) channelSyncSucc = false;
+                            if (syncPulsePowerSpanL < 8000 && syncPulsePowerSpanR < 8000) { channelSyncSucc = false; noSignal = true; }
                             if (channelSyncSucc == false)
                             {
                                 DataHandler.subcodeSyncError = true;
-                                LogHandler.WriteStatus("Decoder/BinaryDecoderStereo", "Channel frame sync error");
+                                if (!noSignal) LogHandler.WriteStatus("Decoder/BinaryDecoderStereo", "Channel frame sync error");
                                 frameSyncErrorCount++;
                                 decodedDataBlock = new string[7];
                                 lastDecodedDataBlock = new string[7];
