@@ -92,7 +92,7 @@ namespace AudioDataInterface
                 {
                     encoder.MaxBandwidth = Bandwidth.FullBand;
                     encoder.Bitrate = 16000;
-                    encoder.DTX = true;
+                    encoder.DTX = false;
                     encoder.VBR = false;
                     encoder.Complexity = 10;
                     byte[] opusBytes = new byte[40];
@@ -115,10 +115,11 @@ namespace AudioDataInterface
 
         private void button_convert_Click(object sender, EventArgs e)
         {
-            //try
             {
                 if (Encoder.encoder_ADIFShell == false)
                 {
+                    //Кодирование файла в аудио OPUS
+                    
                     folderBrowserDialog.ShowDialog();
                     Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
                     Encoder.encoder_mode = "opus";
@@ -137,12 +138,9 @@ namespace AudioDataInterface
                         if (thread_convertWaveToOPUS != null) thread_convertWaveToOPUS = new Thread(ConvertWaveToOPUS);
                         thread_convertWaveToOPUS.Start();
                     }
+                    
                 }
                 else { }
-            }
-            //catch (Exception ex)
-            {
-                //LogHandler.WriteError("EncoderWindow.cs->button_convert_Click", ex.Message);
             }
         }
 

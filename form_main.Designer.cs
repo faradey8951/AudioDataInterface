@@ -92,6 +92,7 @@ namespace AudioDataInterface
             this.panel_base = new System.Windows.Forms.Panel();
             this.panel_dataControl = new System.Windows.Forms.Panel();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
+            this.label_packetLoss = new System.Windows.Forms.Label();
             this.label_mute = new System.Windows.Forms.Label();
             this.label_interpolation = new System.Windows.Forms.Label();
             this.label_subcodeTOC = new System.Windows.Forms.Label();
@@ -120,6 +121,7 @@ namespace AudioDataInterface
             this.button1 = new System.Windows.Forms.Button();
             this.button_buffMp3 = new System.Windows.Forms.Button();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
+            this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
             this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
@@ -138,8 +140,7 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
-            this.label_packetLoss = new System.Windows.Forms.Label();
-            this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -187,10 +188,10 @@ namespace AudioDataInterface
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumGain)).BeginInit();
             this.groupBox_signalCapture.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).BeginInit();
             this.groupBox_BIASAdjust.SuspendLayout();
             this.groupBox_scaleAdjust.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -893,6 +894,16 @@ namespace AudioDataInterface
             this.groupBox_info.TabStop = false;
             this.groupBox_info.Text = "Информация";
             // 
+            // label_packetLoss
+            // 
+            this.label_packetLoss.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_packetLoss.Location = new System.Drawing.Point(3, 252);
+            this.label_packetLoss.Name = "label_packetLoss";
+            this.label_packetLoss.Size = new System.Drawing.Size(190, 13);
+            this.label_packetLoss.TabIndex = 21;
+            this.label_packetLoss.Text = "      Packet Loss";
+            this.label_packetLoss.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // label_mute
             // 
             this.label_mute.Dock = System.Windows.Forms.DockStyle.Top;
@@ -1184,6 +1195,7 @@ namespace AudioDataInterface
             // 
             this.groupBox_signalCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox_signalCapture.Controls.Add(this.button2);
             this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphR);
             this.groupBox_signalCapture.Controls.Add(this.label1);
             this.groupBox_signalCapture.Controls.Add(this.comboBox_playDevices);
@@ -1199,6 +1211,18 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.TabStop = false;
             this.groupBox_signalCapture.Text = "Осциллограф";
             this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
+            // 
+            // pictureBox_waveGraphR
+            // 
+            this.pictureBox_waveGraphR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox_waveGraphR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_waveGraphR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_waveGraphR.Location = new System.Drawing.Point(8, 64);
+            this.pictureBox_waveGraphR.Name = "pictureBox_waveGraphR";
+            this.pictureBox_waveGraphR.Size = new System.Drawing.Size(856, 48);
+            this.pictureBox_waveGraphR.TabIndex = 18;
+            this.pictureBox_waveGraphR.TabStop = false;
             // 
             // label1
             // 
@@ -1360,27 +1384,15 @@ namespace AudioDataInterface
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
             // 
-            // label_packetLoss
+            // button2
             // 
-            this.label_packetLoss.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_packetLoss.Location = new System.Drawing.Point(3, 252);
-            this.label_packetLoss.Name = "label_packetLoss";
-            this.label_packetLoss.Size = new System.Drawing.Size(190, 13);
-            this.label_packetLoss.TabIndex = 21;
-            this.label_packetLoss.Text = "      Packet Loss";
-            this.label_packetLoss.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // pictureBox_waveGraphR
-            // 
-            this.pictureBox_waveGraphR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox_waveGraphR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_waveGraphR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox_waveGraphR.Location = new System.Drawing.Point(8, 64);
-            this.pictureBox_waveGraphR.Name = "pictureBox_waveGraphR";
-            this.pictureBox_waveGraphR.Size = new System.Drawing.Size(856, 48);
-            this.pictureBox_waveGraphR.TabIndex = 18;
-            this.pictureBox_waveGraphR.TabStop = false;
+            this.button2.Location = new System.Drawing.Point(357, 137);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 19;
+            this.button2.Text = "TEST";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_2);
             // 
             // form_main
             // 
@@ -1453,12 +1465,12 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumGain)).EndInit();
             this.groupBox_signalCapture.ResumeLayout(false);
             this.groupBox_signalCapture.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).EndInit();
             this.groupBox_BIASAdjust.ResumeLayout(false);
             this.groupBox_BIASAdjust.PerformLayout();
             this.groupBox_scaleAdjust.ResumeLayout(false);
             this.groupBox_scaleAdjust.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1575,6 +1587,7 @@ namespace AudioDataInterface
         public System.Windows.Forms.Timer timer_mpsPlayerSpectrumUpdater;
         private System.Windows.Forms.Label label_packetLoss;
         private System.Windows.Forms.PictureBox pictureBox_waveGraphR;
+        private System.Windows.Forms.Button button2;
     }
 }
 

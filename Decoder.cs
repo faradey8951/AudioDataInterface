@@ -67,15 +67,15 @@ namespace AudioDataInterface
                     lock (samplesRLocker) sampleR = (short)(-AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { AudioIO.buff_signalBytes[2], AudioIO.buff_signalBytes[3] }, 0) + (short)AudioIO.audio_signalHeight);
                 }
                 originalSampleFloat = Convert.ToInt32(sampleL);
-                filteredSampleFloat = AudioIO.signalHighPassFilter.Transform(originalSampleFloat);
-                filteredSampleFloat = AudioIO.signalLowPassFilter.Transform(filteredSampleFloat);
-                filteredSampleFloat = AudioIO.signalCarrierFreqEQFilter.Transform(filteredSampleFloat);
+                filteredSampleFloat = AudioIO.signalHighPassFilterL.Transform(originalSampleFloat);
+                filteredSampleFloat = AudioIO.signalLowPassFilterL.Transform(filteredSampleFloat);
+                //filteredSampleFloat = AudioIO.signalCarrierFreqEQFilterL.Transform(filteredSampleFloat);
                 filteredSampleShort = (Int16)filteredSampleFloat;
                 AudioIO.buff_signalSamplesL.Add((short)filteredSampleShort);
                 originalSampleFloat = Convert.ToInt32(sampleR);
-                filteredSampleFloat = AudioIO.signalHighPassFilter.Transform(originalSampleFloat);
-                filteredSampleFloat = AudioIO.signalLowPassFilter.Transform(filteredSampleFloat);
-                filteredSampleFloat = AudioIO.signalCarrierFreqEQFilter.Transform(filteredSampleFloat);
+                filteredSampleFloat = AudioIO.signalHighPassFilterR.Transform(originalSampleFloat);
+                filteredSampleFloat = AudioIO.signalLowPassFilterR.Transform(filteredSampleFloat);
+                //filteredSampleFloat = AudioIO.signalCarrierFreqEQFilterR.Transform(filteredSampleFloat);
                 filteredSampleShort = (Int16)filteredSampleFloat;
                 AudioIO.buff_signalSamplesR.Add((short)filteredSampleShort);
                 lock (bytesLocker) AudioIO.buff_signalBytes.RemoveRange(0, 4);
@@ -403,7 +403,7 @@ namespace AudioDataInterface
                             {
                                 if (sectorGet == true) { sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(0, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(8, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(16, 8), 2))); sector.Add(Convert.ToByte(Convert.ToInt16(decodedDataBlock[4].Substring(24, 8), 2))); }
                             }
-                            if (syncPulsePowerSpanL < 8000 && syncPulsePowerSpanR < 8000) { channelSyncSucc = false; noSignal = true; }
+                            //if (syncPulsePowerSpanL < 8000 && syncPulsePowerSpanR < 8000) { channelSyncSucc = false; noSignal = true; }
                             if (channelSyncSucc == false)
                             {
                                 DataHandler.subcodeSyncError = true;

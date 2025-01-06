@@ -27,12 +27,18 @@ namespace AudioDataInterface
         public static WasapiOut naudio_playDeviceWasapiOut = null;
         public static WasapiCapture waveLoop = null;
         //WaveFormat fmt = waveLoop.WaveFormat;
-        public static BiQuadFilter graphLowPassFilter = null;
-        public static BiQuadFilter graphHighPassFilter = null;
-        public static BiQuadFilter graphCarrierFreqEQFilter = null;
-        public static BiQuadFilter signalLowPassFilter = null;
-        public static BiQuadFilter signalHighPassFilter = null;
-        public static BiQuadFilter signalCarrierFreqEQFilter = null;
+        public static BiQuadFilter graphLowPassFilterL = null;
+        public static BiQuadFilter graphHighPassFilterL = null;
+        public static BiQuadFilter graphCarrierFreqEQFilterL = null;
+        public static BiQuadFilter graphLowPassFilterR = null;
+        public static BiQuadFilter graphHighPassFilterR = null;
+        public static BiQuadFilter graphCarrierFreqEQFilterR = null;
+        public static BiQuadFilter signalLowPassFilterL = null;
+        public static BiQuadFilter signalHighPassFilterL = null;
+        public static BiQuadFilter signalCarrierFreqEQFilterL = null;
+        public static BiQuadFilter signalLowPassFilterR = null;
+        public static BiQuadFilter signalHighPassFilterR = null;
+        public static BiQuadFilter signalCarrierFreqEQFilterR = null;
 
         //////////////////////////////////////////////////////////////////////////////////////
 
@@ -106,19 +112,24 @@ namespace AudioDataInterface
         {
             try
             {
-                if (naudio_graphWaveIn != null)
-                    naudio_graphWaveIn.Dispose();
+                if (naudio_graphWaveIn != null) naudio_graphWaveIn.Dispose();
                 naudio_graphWaveIn = new WaveIn();
                 naudio_graphWaveIn.DeviceNumber = audio_recDeviceId;
                 naudio_graphWaveIn.WaveFormat = new NAudio.Wave.WaveFormat(96000, 16, 2);
                 naudio_graphWaveIn.DataAvailable += new EventHandler<WaveInEventArgs>(Graph_DataAvailable);
                 naudio_graphWaveIn.StartRecording();
-                graphLowPassFilter = BiQuadFilter.PeakingEQ(96000, 20000, 80, -60);
-                graphHighPassFilter = BiQuadFilter.HighPassFilter(96000, 400, 1);
-                graphCarrierFreqEQFilter = BiQuadFilter.PeakingEQ(96000, 10000, 60, 10);
-                signalLowPassFilter = BiQuadFilter.PeakingEQ(96000, 20000, 80, -60);
-                signalHighPassFilter = BiQuadFilter.HighPassFilter(96000, 400, 1);
-                signalCarrierFreqEQFilter = BiQuadFilter.PeakingEQ(96000, 10000, 60, 10);
+                graphLowPassFilterL = BiQuadFilter.PeakingEQ(96000, 20000, 20, -40);
+                graphHighPassFilterL = BiQuadFilter.HighPassFilter(96000, 400, 1);
+                //graphCarrierFreqEQFilterL = BiQuadFilter.PeakingEQ(96000, 10000, 1, 0);
+                graphLowPassFilterR = BiQuadFilter.PeakingEQ(96000, 20000, 20, -40);
+                graphHighPassFilterR = BiQuadFilter.HighPassFilter(96000, 400, 1);
+                //graphCarrierFreqEQFilterR = BiQuadFilter.PeakingEQ(96000, 10000, 1, 0);
+                signalLowPassFilterL = BiQuadFilter.PeakingEQ(96000, 20000, 20, -40);
+                signalHighPassFilterL = BiQuadFilter.HighPassFilter(96000, 400, 1);
+                //signalCarrierFreqEQFilterL = BiQuadFilter.PeakingEQ(96000, 10000, 1, 0);
+                signalLowPassFilterR = BiQuadFilter.PeakingEQ(96000, 20000, 20, -40);
+                signalHighPassFilterR = BiQuadFilter.HighPassFilter(96000, 400, 1);
+                //signalCarrierFreqEQFilterR = BiQuadFilter.PeakingEQ(96000, 10000, 1, 0);
             }
             catch { }
         }
@@ -161,17 +172,31 @@ namespace AudioDataInterface
         static void Graph_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
             short sample = 0;
+            float originalSampleFloat = 0;
+            float filteredSampleFloat = 0;
+            short filteredSampleShort = 0;
+            bool leftSwitch = true;
             for (int i = 0; i < e.Buffer.Length / 2; i += 2)
             {
                 if (!audio_invertSignal) sample = (short)(audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)audio_signalHeight);
                 else sample = (short)(-audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)audio_signalHeight);
-                float originalSampleFloat = Convert.ToInt32(sample);
-                float filteredSampleFloat = graphHighPassFilter.Transform(originalSampleFloat);
-                filteredSampleFloat = graphLowPassFilter.Transform(filteredSampleFloat);
-                filteredSampleFloat = graphCarrierFreqEQFilter.Transform(filteredSampleFloat);
-                short filteredSampleShort = (short)filteredSampleFloat;
+                originalSampleFloat = Convert.ToInt32(sample);
+                if (leftSwitch)
+                {
+                    filteredSampleFloat = graphHighPassFilterL.Transform(originalSampleFloat);
+                    filteredSampleFloat = graphLowPassFilterL.Transform(filteredSampleFloat);
+                    //filteredSampleFloat = graphCarrierFreqEQFilterL.Transform(filteredSampleFloat);
+                }
+                else
+                {
+                    filteredSampleFloat = graphHighPassFilterR.Transform(originalSampleFloat);
+                    filteredSampleFloat = graphLowPassFilterR.Transform(filteredSampleFloat);
+                    //filteredSampleFloat = graphCarrierFreqEQFilterR.Transform(filteredSampleFloat);
+                }
+                filteredSampleShort = (short)filteredSampleFloat;
                 buff_graphSamples.Add(filteredSampleShort);
                 //buff_graphSamples.Add(sample);
+                if (leftSwitch == true) leftSwitch = false; else leftSwitch = true;
             }
             form_main.window_main.DrawWaveGraphFrame();
         }

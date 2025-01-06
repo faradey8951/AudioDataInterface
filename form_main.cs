@@ -3,6 +3,7 @@ using NAudio;
 using NAudio.CoreAudioApi;
 using NAudio.Dsp;
 using NAudio.Wave;
+using OpusDotNet;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -148,17 +149,17 @@ namespace AudioDataInterface
                 int pointsCount = (pictureBox_waveGraphL.Width / scope_horizontalScale) + 8;
                 PointF[] points = new PointF[pointsCount]; //Массив точек кадра сигналограммы
                 //Отрисовка координатной сетки левого канала
-                for (int i = 0; i < pictureBox_waveGraphL.Width; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraphL.Height);
-                for (int i = 0; i < pictureBox_waveGraphL.Width; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraphL.Height);
-                for (int i = 0; i < pictureBox_waveGraphL.Height; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraphL.Width, i);
-                for (int i = 0; i < pictureBox_waveGraphL.Height; i += 23) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraphL.Width, i + 1);
+                for (int i = 0; i < pictureBox_waveGraphL.Width; i += 12) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraphL.Height);
+                for (int i = 0; i < pictureBox_waveGraphL.Width; i += 12) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraphL.Height);
+                for (int i = 0; i < pictureBox_waveGraphL.Height; i += 12) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraphL.Width, i);
+                for (int i = 0; i < pictureBox_waveGraphL.Height; i += 12) graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraphL.Width, i + 1);
                 graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraphL.Height / 2) - 1, pictureBox_waveGraphL.Width, (pictureBox_waveGraphL.Height / 2) - 1);
                 graphics_waveGraphL.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraphL.Height / 2, pictureBox_waveGraphL.Width, pictureBox_waveGraphL.Height / 2);
                 //Отрисовка координатной сетки правого канала
-                for (int i = 0; i < pictureBox_waveGraphR.Width; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraphR.Height);
-                for (int i = 0; i < pictureBox_waveGraphR.Width; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraphR.Height);
-                for (int i = 0; i < pictureBox_waveGraphR.Height; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraphR.Width, i);
-                for (int i = 0; i < pictureBox_waveGraphR.Height; i += 23) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraphR.Width, i + 1);
+                for (int i = 0; i < pictureBox_waveGraphR.Width; i += 12) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i, 0, i, pictureBox_waveGraphR.Height);
+                for (int i = 0; i < pictureBox_waveGraphR.Width; i += 12) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), i + 1, 0, i + 1, pictureBox_waveGraphR.Height);
+                for (int i = 0; i < pictureBox_waveGraphR.Height; i += 12) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i, pictureBox_waveGraphR.Width, i);
+                for (int i = 0; i < pictureBox_waveGraphR.Height; i += 12) graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(132, 96, 46)), 0, i + 1, pictureBox_waveGraphR.Width, i + 1);
                 graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, (pictureBox_waveGraphR.Height / 2) - 1, pictureBox_waveGraphR.Width, (pictureBox_waveGraphR.Height / 2) - 1);
                 graphics_waveGraphR.DrawLine(new Pen(Color.FromArgb(251, 176, 64)), 0, pictureBox_waveGraphR.Height / 2, pictureBox_waveGraphR.Width, pictureBox_waveGraphR.Height / 2);
                 //Отрисовка осциллограммы
@@ -671,6 +672,8 @@ namespace AudioDataInterface
                 timer_signalQualityUpdater.Enabled = true;
                 mpsPlayer_currentTrackNumber = 1;
                 mpsPlayer_trackCount = 16;
+                DataHandler.fs_decodedAudio = new FileStream("DecodedAudio.wav", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                DataHandler.fs_decodedAudio.Seek(44, SeekOrigin.Begin);
             }
         }
 
@@ -1028,6 +1031,10 @@ namespace AudioDataInterface
             timer_signalQualityUpdater.Enabled = false;
             Decoder.ClearBuffers();
             MpsPlayerInterfaceInitialize();
+            DataHandler.fs_decodedAudio.Seek(0, SeekOrigin.Begin);
+            Encoder.WriteHeader(DataHandler.fs_decodedAudio, 48000, 1);
+            DataHandler.fs_decodedAudio.Close();
+            DataHandler.fs_decodedAudio.Dispose();
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -1205,6 +1212,52 @@ namespace AudioDataInterface
                 form_main.window_logMonitor = new form_logMonitor();
             }
             form_main.window_logMonitor.Show();
+        }
+
+        private void button2_Click_2(object sender, EventArgs e)
+        {
+            OpusEncoder encoder = new OpusEncoder(OpusDotNet.Application.Audio, 48000, 1);
+            OpusDecoder decoder = new OpusDecoder(20, 48000, 1);
+            encoder.MaxBandwidth = Bandwidth.FullBand;
+            encoder.Bitrate = 128000;
+            encoder.DTX = false;
+            encoder.VBR = false;
+            encoder.Complexity = 10;
+            byte[] opusBytes = new byte[320];
+            Bitmap bitmap_frame = new Bitmap("TEST\\45.png");
+            Color pixelColor;
+            List<short> RFrame0Shorts = new List<short>();
+            List<short> RFrame1Shorts = new List<short>();
+            List<short> GFrame0Shorts = new List<short>();
+            List<short> GFrame1Shorts = new List<short>();
+            List<short> BFrame0Shorts = new List<short>();
+            List<short> BFrame1Shorts = new List<short>();
+            for (int x = 0, y = 0; y < 20; x++)
+            {
+                pixelColor = bitmap_frame.GetPixel(x, y);
+                RFrame0Shorts.Add((Int16)pixelColor.R);
+                GFrame0Shorts.Add((Int16)pixelColor.G);
+                BFrame0Shorts.Add((short)((16300 * (Int16)pixelColor.B) / 255));
+                if (x == 47) { x = -1; y++; }
+            }
+            for (int x = 0, y = 20; y < 40; x++)
+            {
+                pixelColor = bitmap_frame.GetPixel(x, y);
+                RFrame1Shorts.Add((Int16)pixelColor.R);
+                GFrame1Shorts.Add((Int16)pixelColor.G);
+                BFrame1Shorts.Add((Int16)pixelColor.B);
+                if (x == 47) { x = -1; y++; }
+            }
+            List<byte> BFrame0Bytes = new List<byte>();
+            for (int i = 0; i < BFrame0Shorts.Count; i++) BFrame0Bytes.AddRange(BitConverter.GetBytes(BFrame0Shorts[i]));
+            encoder.Encode(BFrame0Bytes.ToArray(), BFrame0Bytes.Count, opusBytes, opusBytes.Length);
+            encoder.Encode(BFrame0Bytes.ToArray(), BFrame0Bytes.Count, opusBytes, opusBytes.Length);
+            encoder.Encode(BFrame0Bytes.ToArray(), BFrame0Bytes.Count, opusBytes, opusBytes.Length);
+            byte[] decodedBytes = new byte[1920];
+            List<short> decodedShorts = new List<short>();
+            decoder.Decode(opusBytes, opusBytes.Length, decodedBytes, decodedBytes.Length);
+            for (int i = 0; i < decodedBytes.Length; i+=2) { decodedShorts.Add(BitConverter.ToInt16(new byte[2] { decodedBytes[i], decodedBytes[i + 1] }, 0)); }
+            MessageBox.Show("e");
         }
     }
 }
