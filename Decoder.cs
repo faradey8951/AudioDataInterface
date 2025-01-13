@@ -12,6 +12,13 @@ namespace AudioDataInterface
 {
     public class Decoder
     {
+        public static bool debugEnabled = false;
+        public static double[] debug_derivative = null;
+        public static double[] debug_fixedDerivative = null;
+        public static double[] debug_sortedFirstDerivative = null;
+        public static double[] debug_sortedSecondDerivative = null;
+        public static bool debug_clipper = false;
+
         public static readonly List<short> buff_signalAmplitudes = new List<short>();
         public static readonly List<short> buff_signalAmplitudesL = new List<short>();
         public static readonly List<short> buff_signalAmplitudesR = new List<short>();
@@ -270,6 +277,7 @@ namespace AudioDataInterface
                             if (derivativeValue < 0) derivativeDirection.Add("-");
                             else derivativeDirection.Add("+");
                         }
+                        /*
                         //Линеаризация данных с помощью линейного полинома (A = k*i + b) методом наименьших квадратов
                         double[] I = new double[derivative.Length];
                         double[] iSquare = new double[derivative.Length];
@@ -313,6 +321,15 @@ namespace AudioDataInterface
                             double linearizedAmplitude = (double)frwLnrDerivative[p - 1] - (mid[mid.Length - 1] - mid[p - 1]);
                             rvsLnrDerivative.Add(Convert.ToInt32(linearizedAmplitude));
                         }
+                        */
+                        rvsLnrDerivative.Clear();
+                        rvsLnrDerivative.AddRange(derivative);
+                        if (debug_clipper)
+                        {
+                            double highClip = 0.8 * rvsLnrDerivative.Max();
+                            double lowClip = ((rvsLnrDerivative.Max() - rvsLnrDerivative.Min()) / 2) / 4;
+                            for (int i = 0; i < rvsLnrDerivative.Count; i++) { if (rvsLnrDerivative[i] > highClip) rvsLnrDerivative[i] = highClip; if (rvsLnrDerivative[i] < lowClip) rvsLnrDerivative[i] = lowClip; }
+                        }
                         sortedLnrDerivative.AddRange(rvsLnrDerivative);
                         sortedLnrDerivative.Sort();
                         sortedLnrDerivative.Reverse();
@@ -324,6 +341,10 @@ namespace AudioDataInterface
                             if (rvsLnrDerivative[i] >= sortedLnrDerivativeJumpValue) derivativeBinaryValue.Add("1");
                             else derivativeBinaryValue.Add("0");
                         }
+                        debug_derivative = derivative;
+                        debug_fixedDerivative = rvsLnrDerivative.ToArray();
+                        debug_sortedFirstDerivative = sortedLnrDerivative.ToArray();
+                        debug_sortedSecondDerivative = sortedLnrSecondDerivative.ToArray();
                         int derivativeChangeCount = 0;
                         for (int i = 0; i < derivative.Length; i++)
                         {

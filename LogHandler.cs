@@ -18,7 +18,7 @@ namespace AudioDataInterface
             list_log.Add(DateTime.Now + " [" + source + "] " + message + "\r\n");
             //В случае прослушивания журнала
             if (logListening == true)
-                form_logMonitor.buff_log.Add(DateTime.Now + " [" + source + "] " + message + "\r\n");
+                form_debug.buff_log.Add(DateTime.Now + " [" + source + "] " + message + "\r\n");
         }
 
         public static void WriteStatus(string source, string message)
@@ -26,7 +26,7 @@ namespace AudioDataInterface
             list_log.Add(DateTime.Now + " [" + source + "] " + message + "\r\n");
             //В случае прослушивания журнала
             if (logListening == true)
-                form_logMonitor.buff_log.Add(DateTime.Now + " [" + source + "] " + message + "\r\n");
+                form_debug.buff_log.Add(DateTime.Now + " [" + source + "] " + message + "\r\n");
         }
 
     }

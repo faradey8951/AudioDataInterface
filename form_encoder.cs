@@ -156,12 +156,7 @@ namespace AudioDataInterface
 
         private void button_debug_Click(object sender, EventArgs e)
         {
-            if (form_main.window_debug != null)
-            {
-                form_main.window_debug.Dispose();
-                form_main.window_debug = new form_debug();
-            }
-            form_main.window_debug.Show();
+
         }
 
         private void button_ok_Click(object sender, EventArgs e)
@@ -172,8 +167,7 @@ namespace AudioDataInterface
 
         private void EncoderWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (form_main.window_debug != null)
-                form_main.window_debug.Close();
+
         }
 
         private void EncoderWindow_Load(object sender, EventArgs e)

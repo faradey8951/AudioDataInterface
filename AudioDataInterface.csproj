@@ -165,12 +165,6 @@
     <Compile Include="FileHandler.cs" />
     <Compile Include="BinaryHandler.cs" />
     <Compile Include="LangHandler.cs" />
-    <Compile Include="form_logMonitor.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="form_logMonitor.Designer.cs">
-      <DependentUpon>form_logMonitor.cs</DependentUpon>
-    </Compile>
     <Compile Include="form_main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -190,9 +184,6 @@
     </EmbeddedResource>
     <EmbeddedResource Include="form_encoder.resx">
       <DependentUpon>form_encoder.cs</DependentUpon>
-    </EmbeddedResource>
-    <EmbeddedResource Include="form_logMonitor.resx">
-      <DependentUpon>form_logMonitor.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="form_main.resx">
       <DependentUpon>form_main.cs</DependentUpon>

@@ -23,6 +23,7 @@ namespace AudioDataInterface
     {
         public static MemoryStream ms;
         public static List<byte> packet = new List<byte>(); //Буфер пакета фреймов OPUS
+        public static List<byte[]> lastPacketPCMBytes = new List<byte[]>(); //Буфер байт аудиопотока последнего декодированного пакета фреймов OPUS
         public static int packetSize = 0; //Размер полученного пакета фреймов
         public static RawSourceWaveStream rawSourceWaveStream = null;
         public static int mp3_buffSize = 0;
@@ -101,9 +102,9 @@ namespace AudioDataInterface
                         if (subCodeByte1 == 123 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Субкод канальной синхронизации правого канала
                         {
                             packetSize = packet.Count;
-                            if (packetSize != 2000 && packetSize > 0) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; for (int t = 0; t < 48000; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0)); mute = true; }
+                            if (packetSize != 2000 && packetSize > 0) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; mute = true; /*for (int t = 0; t < 24000; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));*/ }
                             subcodeSync = true;
-                            if (packetSize == 2000) //Триггер размера пакета для обработки фреймов
+                            if (packetSize >= 40) //Триггер размера пакета для обработки фреймов
                             {
                                 List<byte> opusFrame = new List<byte>(); //Буфер байт OPUS фрейма
                                 byte[] framePCMBytes = new byte[20 * (48000 / 1000) * 2]; //Буфер байт PCM аудиопотока фрейма
@@ -198,12 +199,15 @@ namespace AudioDataInterface
                                         {
                                             decoder.Decode(opusFrame.ToArray(), opusFrame.Count, framePCMBytes, framePCMBytes.Length);
                                             if (dropout == false) { outputPCMBytes.AddRange(framePCMBytes); framePCMBytes.CopyTo(framePCMBytes1, 0); }
+                                            if (lastPacketPCMBytes.Count >= 50) lastPacketPCMBytes.RemoveAt(lastPacketPCMBytes.Count - 1);
+                                            lastPacketPCMBytes.Add(framePCMBytes.ToArray());
                                             opusFrame.Clear();
                                             dropout = false;
                                         }
                                         catch (Exception ex)
                                         {
                                             dropout = true;
+                                            for (int t = 0; t < 480; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
                                             opusFrame.Clear();
                                             Thread.Sleep(10);
                                         }
@@ -272,7 +276,7 @@ namespace AudioDataInterface
                 try
                 {
                     //Буферизация данных
-                    while (ms.Length - ms.Position < 96000 && AudioIO.naudio_wasapiOut.PlaybackState != NAudio.Wave.PlaybackState.Playing) { Thread.Sleep(10); form_main.mpsPlayer_showTime = false; }
+                    while (ms.Length - ms.Position < 48000 && AudioIO.naudio_wasapiOut.PlaybackState != NAudio.Wave.PlaybackState.Playing) { Thread.Sleep(10); form_main.mpsPlayer_showTime = false; }
                     rawSourceWaveStream = new RawSourceWaveStream(ms, new WaveFormat(48000, 16, 1));
                     AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioClientShareMode.Shared, true, 50);
                     AudioIO.naudio_wasapiOut.Init(rawSourceWaveStream);

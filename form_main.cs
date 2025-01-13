@@ -27,12 +27,11 @@ namespace AudioDataInterface
         public static AudioIO class_audioIO = new AudioIO();
         public static DataHandler class_dataHandler = new DataHandler();
         public static mpsPlayerSkinHandler class_mpsPlayerSkinHandler = new mpsPlayerSkinHandler();
-        public static form_debug window_debug = new form_debug();
         public static form_encoder window_encoder = new form_encoder();
         public static form_tapeRecordingWizard window_tapeRecordingWizard = new form_tapeRecordingWizard();
         public static form_tapeRecoverWizard window_tapeRecoverWizard = new form_tapeRecoverWizard();
-        public static form_logMonitor window_logMonitor = new form_logMonitor();
         public static form_settings window_settings = new form_settings();
+        public static form_debug window_debug = new form_debug();
         //////////////////////////////////////////////////////////////////////////////////////
 
         public static form_main window_main;
@@ -472,20 +471,13 @@ namespace AudioDataInterface
 
         private void button_capture_Click(object sender, EventArgs e)
         {
-            if (window_debug != null)
-            {
-                window_debug.Dispose();
-                window_debug = new form_debug();
-            }
-            window_debug.Show();
+
         }
 
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             AudioIO.GraphCaptureClose();
             AudioIO.SignalCaptureClose();
-            if (window_debug != null)
-                window_debug.Close();
             Settings.Save();
             //Close();
             Environment.Exit(0);
@@ -518,7 +510,7 @@ namespace AudioDataInterface
                 {
                     int audioBufferSamples = (int)(0.5 * ((int)DataHandler.ms.Length - (int)DataHandler.ms.Position));
                     label_audioBufferSize.Text += ((double)audioBufferSamples / 48000).ToString() + " сек";
-                    if (audioBufferSamples <= 48000) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = 48000;
+                    if (audioBufferSamples <= progressBar_audioBuffer.Maximum) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = progressBar_audioBuffer.Maximum;
                 }
             }
             catch { }
@@ -1110,12 +1102,7 @@ namespace AudioDataInterface
 
         private void отладкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (window_debug != null)
-            {
-                window_debug.Dispose();
-                window_debug = new form_debug();
-            }
-            window_debug.Show();
+
         }
 
         private void button2_Click_1(object sender, EventArgs e)
@@ -1206,12 +1193,12 @@ namespace AudioDataInterface
 
         private void журналToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (form_main.window_logMonitor != null)
+            if (form_main.window_debug != null)
             {
-                form_main.window_logMonitor.Close();
-                form_main.window_logMonitor = new form_logMonitor();
+                form_main.window_debug.Close();
+                form_main.window_debug = new form_debug();
             }
-            form_main.window_logMonitor.Show();
+            form_main.window_debug.Show();
         }
 
         private void button2_Click_2(object sender, EventArgs e)

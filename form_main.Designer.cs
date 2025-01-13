@@ -121,6 +121,7 @@ namespace AudioDataInterface
             this.button1 = new System.Windows.Forms.Button();
             this.button_buffMp3 = new System.Windows.Forms.Button();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
+            this.button2 = new System.Windows.Forms.Button();
             this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
@@ -140,7 +141,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
-            this.button2 = new System.Windows.Forms.Button();
             this.menuStrip.SuspendLayout();
             this.contextMenuStrip.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
@@ -1212,6 +1212,16 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.Text = "Осциллограф";
             this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
             // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(357, 137);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(75, 23);
+            this.button2.TabIndex = 19;
+            this.button2.Text = "TEST";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click_2);
+            // 
             // pictureBox_waveGraphR
             // 
             this.pictureBox_waveGraphR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1383,16 +1393,6 @@ namespace AudioDataInterface
             // 
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(357, 137);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 19;
-            this.button2.Text = "TEST";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_2);
             // 
             // form_main
             // 

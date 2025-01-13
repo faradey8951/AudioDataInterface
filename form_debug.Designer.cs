@@ -30,235 +30,309 @@ namespace AudioDataInterface
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem(new string[] {
-            "graphSamples",
-            "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem(new string[] {
-            "signalSamples",
-            "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem(new string[] {
-            "log",
-            "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem(new string[] {
-            "signalAmplitudes",
-            "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem(new string[] {
-            "decodedData",
-            "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem(new string[] {
-            "signalBytes",
-            "0"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem7 = new System.Windows.Forms.ListViewItem(new string[] {
-            "EncodeFileStream",
-            "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem8 = new System.Windows.Forms.ListViewItem(new string[] {
-            "AmplitudeDecoderL",
-            "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem9 = new System.Windows.Forms.ListViewItem(new string[] {
-            "AmplitudeDecoderR",
-            "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem10 = new System.Windows.Forms.ListViewItem(new string[] {
-            "SamplesDecoderStereo",
-            "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem11 = new System.Windows.Forms.ListViewItem(new string[] {
-            "BinaryDecoderStereo",
-            "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem12 = new System.Windows.Forms.ListViewItem(new string[] {
-            "BufferMP3",
-            "status"}, -1);
-            System.Windows.Forms.ListViewItem listViewItem13 = new System.Windows.Forms.ListViewItem(new string[] {
-            "PlayMP3",
-            "status"}, -1);
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(form_debug));
-            this.listView_buffers = new System.Windows.Forms.ListView();
-            this.column_buffer = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.column_size = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.groupBox_buffers = new System.Windows.Forms.GroupBox();
+            this.richTextBox = new System.Windows.Forms.RichTextBox();
             this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
-            this.groupBox_threads = new System.Windows.Forms.GroupBox();
-            this.listView_threads = new System.Windows.Forms.ListView();
-            this.column_thread = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.column_status = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.button_test = new System.Windows.Forms.ToolStripButton();
-            this.button_logMonitor = new System.Windows.Forms.ToolStripButton();
-            this.groupBox_buffers.SuspendLayout();
-            this.groupBox_threads.SuspendLayout();
-            this.toolStrip.SuspendLayout();
+            this.tabControl = new System.Windows.Forms.TabControl();
+            this.tabPage_log = new System.Windows.Forms.TabPage();
+            this.tabPage_decoderDebug = new System.Windows.Forms.TabPage();
+            this.splitContainer = new System.Windows.Forms.SplitContainer();
+            this.pictureBox_signal = new System.Windows.Forms.PictureBox();
+            this.pictureBox_sortedDerivative = new System.Windows.Forms.PictureBox();
+            this.timer_drawGraph = new System.Windows.Forms.Timer(this.components);
+            this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.pictureBox_decodingQuality = new System.Windows.Forms.PictureBox();
+            this.panel1 = new System.Windows.Forms.Panel();
+            this.radioButton_fast = new System.Windows.Forms.RadioButton();
+            this.radioButton_slow = new System.Windows.Forms.RadioButton();
+            this.checkBox_pause = new System.Windows.Forms.CheckBox();
+            this.checkBox_clipping = new System.Windows.Forms.CheckBox();
+            this.tabControl.SuspendLayout();
+            this.tabPage_log.SuspendLayout();
+            this.tabPage_decoderDebug.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).BeginInit();
+            this.splitContainer.Panel1.SuspendLayout();
+            this.splitContainer.Panel2.SuspendLayout();
+            this.splitContainer.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_signal)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_sortedDerivative)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
+            this.splitContainer1.Panel1.SuspendLayout();
+            this.splitContainer1.Panel2.SuspendLayout();
+            this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_decodingQuality)).BeginInit();
+            this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
-            // listView_buffers
+            // richTextBox
             // 
-            this.listView_buffers.BackColor = System.Drawing.SystemColors.Window;
-            this.listView_buffers.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.column_buffer,
-            this.column_size});
-            this.listView_buffers.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_buffers.GridLines = true;
-            this.listView_buffers.HideSelection = false;
-            listViewItem1.StateImageIndex = 0;
-            this.listView_buffers.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3,
-            listViewItem4,
-            listViewItem5,
-            listViewItem6});
-            this.listView_buffers.Location = new System.Drawing.Point(3, 16);
-            this.listView_buffers.Name = "listView_buffers";
-            this.listView_buffers.Size = new System.Drawing.Size(361, 153);
-            this.listView_buffers.TabIndex = 1;
-            this.listView_buffers.UseCompatibleStateImageBehavior = false;
-            this.listView_buffers.View = System.Windows.Forms.View.Details;
-            // 
-            // column_buffer
-            // 
-            this.column_buffer.Text = "Буфер";
-            this.column_buffer.Width = 150;
-            // 
-            // column_size
-            // 
-            this.column_size.Text = "Размер";
-            this.column_size.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_size.Width = 75;
-            // 
-            // groupBox_buffers
-            // 
-            this.groupBox_buffers.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_buffers.Controls.Add(this.listView_buffers);
-            this.groupBox_buffers.Location = new System.Drawing.Point(12, 35);
-            this.groupBox_buffers.Name = "groupBox_buffers";
-            this.groupBox_buffers.Size = new System.Drawing.Size(367, 172);
-            this.groupBox_buffers.TabIndex = 2;
-            this.groupBox_buffers.TabStop = false;
-            this.groupBox_buffers.Text = "Буферы";
+            this.richTextBox.BackColor = System.Drawing.Color.Black;
+            this.richTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.richTextBox.Font = new System.Drawing.Font("Roboto", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.richTextBox.ForeColor = System.Drawing.Color.Lime;
+            this.richTextBox.Location = new System.Drawing.Point(3, 3);
+            this.richTextBox.Name = "richTextBox";
+            this.richTextBox.ReadOnly = true;
+            this.richTextBox.Size = new System.Drawing.Size(719, 397);
+            this.richTextBox.TabIndex = 0;
+            this.richTextBox.Text = "";
             // 
             // timer_controlHandler
             // 
             this.timer_controlHandler.Enabled = true;
-            this.timer_controlHandler.Interval = 250;
-            this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_tick);
+            this.timer_controlHandler.Interval = 1000;
+            this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
             // 
-            // groupBox_threads
+            // tabControl
             // 
-            this.groupBox_threads.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_threads.Controls.Add(this.listView_threads);
-            this.groupBox_threads.Location = new System.Drawing.Point(12, 213);
-            this.groupBox_threads.Name = "groupBox_threads";
-            this.groupBox_threads.Size = new System.Drawing.Size(367, 172);
-            this.groupBox_threads.TabIndex = 3;
-            this.groupBox_threads.TabStop = false;
-            this.groupBox_threads.Text = "Процессы";
+            this.tabControl.Controls.Add(this.tabPage_decoderDebug);
+            this.tabControl.Controls.Add(this.tabPage_log);
+            this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl.Location = new System.Drawing.Point(0, 0);
+            this.tabControl.Name = "tabControl";
+            this.tabControl.SelectedIndex = 0;
+            this.tabControl.Size = new System.Drawing.Size(733, 429);
+            this.tabControl.TabIndex = 1;
             // 
-            // listView_threads
+            // tabPage_log
             // 
-            this.listView_threads.BackColor = System.Drawing.SystemColors.Window;
-            this.listView_threads.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.column_thread,
-            this.column_status});
-            this.listView_threads.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView_threads.GridLines = true;
-            this.listView_threads.HideSelection = false;
-            this.listView_threads.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem7,
-            listViewItem8,
-            listViewItem9,
-            listViewItem10,
-            listViewItem11,
-            listViewItem12,
-            listViewItem13});
-            this.listView_threads.Location = new System.Drawing.Point(3, 16);
-            this.listView_threads.Name = "listView_threads";
-            this.listView_threads.Size = new System.Drawing.Size(361, 153);
-            this.listView_threads.TabIndex = 1;
-            this.listView_threads.UseCompatibleStateImageBehavior = false;
-            this.listView_threads.View = System.Windows.Forms.View.Details;
-            this.listView_threads.SelectedIndexChanged += new System.EventHandler(this.listView_threads_SelectedIndexChanged);
+            this.tabPage_log.Controls.Add(this.richTextBox);
+            this.tabPage_log.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_log.Name = "tabPage_log";
+            this.tabPage_log.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_log.Size = new System.Drawing.Size(725, 403);
+            this.tabPage_log.TabIndex = 0;
+            this.tabPage_log.Text = "Журнал";
             // 
-            // column_thread
+            // tabPage_decoderDebug
             // 
-            this.column_thread.Text = "Процесс";
-            this.column_thread.Width = 150;
+            this.tabPage_decoderDebug.Controls.Add(this.splitContainer1);
+            this.tabPage_decoderDebug.Location = new System.Drawing.Point(4, 22);
+            this.tabPage_decoderDebug.Name = "tabPage_decoderDebug";
+            this.tabPage_decoderDebug.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage_decoderDebug.Size = new System.Drawing.Size(725, 403);
+            this.tabPage_decoderDebug.TabIndex = 1;
+            this.tabPage_decoderDebug.Text = "Отладка декодера";
+            this.tabPage_decoderDebug.UseVisualStyleBackColor = true;
             // 
-            // column_status
+            // splitContainer
             // 
-            this.column_status.Text = "Статус";
-            this.column_status.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.column_status.Width = 75;
+            this.splitContainer.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer.Name = "splitContainer";
+            this.splitContainer.Orientation = System.Windows.Forms.Orientation.Horizontal;
             // 
-            // toolStrip
+            // splitContainer.Panel1
             // 
-            this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.button_test,
-            this.button_logMonitor});
-            this.toolStrip.Location = new System.Drawing.Point(0, 0);
-            this.toolStrip.Name = "toolStrip";
-            this.toolStrip.Size = new System.Drawing.Size(391, 25);
-            this.toolStrip.TabIndex = 4;
-            this.toolStrip.Text = "toolStrip1";
+            this.splitContainer.Panel1.Controls.Add(this.pictureBox_signal);
             // 
-            // button_test
+            // splitContainer.Panel2
             // 
-            this.button_test.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.button_test.Image = ((System.Drawing.Image)(resources.GetObject("button_test.Image")));
-            this.button_test.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.button_test.Name = "button_test";
-            this.button_test.Size = new System.Drawing.Size(74, 22);
-            this.button_test.Text = "Test Feature";
-            this.button_test.Click += new System.EventHandler(this.button_test_Click);
+            this.splitContainer.Panel2.Controls.Add(this.pictureBox_sortedDerivative);
+            this.splitContainer.Size = new System.Drawing.Size(611, 266);
+            this.splitContainer.SplitterDistance = 136;
+            this.splitContainer.TabIndex = 0;
             // 
-            // button_logMonitor
+            // pictureBox_signal
             // 
-            this.button_logMonitor.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.button_logMonitor.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.button_logMonitor.Image = ((System.Drawing.Image)(resources.GetObject("button_logMonitor.Image")));
-            this.button_logMonitor.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.button_logMonitor.Name = "button_logMonitor";
-            this.button_logMonitor.Size = new System.Drawing.Size(77, 22);
-            this.button_logMonitor.Text = "Log monitor";
-            this.button_logMonitor.ToolTipText = "button_logMonitor";
-            this.button_logMonitor.Click += new System.EventHandler(this.button_logMonitor_Click);
+            this.pictureBox_signal.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_signal.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox_signal.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox_signal.Name = "pictureBox_signal";
+            this.pictureBox_signal.Size = new System.Drawing.Size(611, 136);
+            this.pictureBox_signal.TabIndex = 0;
+            this.pictureBox_signal.TabStop = false;
+            this.pictureBox_signal.SizeChanged += new System.EventHandler(this.pictureBox_signal_SizeChanged);
+            // 
+            // pictureBox_sortedDerivative
+            // 
+            this.pictureBox_sortedDerivative.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_sortedDerivative.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox_sortedDerivative.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox_sortedDerivative.Name = "pictureBox_sortedDerivative";
+            this.pictureBox_sortedDerivative.Size = new System.Drawing.Size(611, 126);
+            this.pictureBox_sortedDerivative.TabIndex = 0;
+            this.pictureBox_sortedDerivative.TabStop = false;
+            this.pictureBox_sortedDerivative.SizeChanged += new System.EventHandler(this.pictureBox_sortedDerivative_SizeChanged);
+            // 
+            // timer_drawGraph
+            // 
+            this.timer_drawGraph.Interval = 50;
+            this.timer_drawGraph.Tick += new System.EventHandler(this.timer_drawGraph_Tick);
+            // 
+            // splitContainer1
+            // 
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer1.Name = "splitContainer1";
+            // 
+            // splitContainer1.Panel1
+            // 
+            this.splitContainer1.Panel1.Controls.Add(this.splitContainer2);
+            // 
+            // splitContainer1.Panel2
+            // 
+            this.splitContainer1.Panel2.Controls.Add(this.panel1);
+            this.splitContainer1.Size = new System.Drawing.Size(719, 397);
+            this.splitContainer1.SplitterDistance = 611;
+            this.splitContainer1.TabIndex = 1;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.splitContainer);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.pictureBox_decodingQuality);
+            this.splitContainer2.Size = new System.Drawing.Size(611, 397);
+            this.splitContainer2.SplitterDistance = 266;
+            this.splitContainer2.TabIndex = 0;
+            // 
+            // pictureBox_decodingQuality
+            // 
+            this.pictureBox_decodingQuality.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_decodingQuality.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox_decodingQuality.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox_decodingQuality.Name = "pictureBox_decodingQuality";
+            this.pictureBox_decodingQuality.Size = new System.Drawing.Size(611, 127);
+            this.pictureBox_decodingQuality.TabIndex = 0;
+            this.pictureBox_decodingQuality.TabStop = false;
+            this.pictureBox_decodingQuality.SizeChanged += new System.EventHandler(this.pictureBox_decodingQuality_SizeChanged);
+            // 
+            // panel1
+            // 
+            this.panel1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel1.Controls.Add(this.checkBox_clipping);
+            this.panel1.Controls.Add(this.checkBox_pause);
+            this.panel1.Controls.Add(this.radioButton_slow);
+            this.panel1.Controls.Add(this.radioButton_fast);
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 0);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(104, 397);
+            this.panel1.TabIndex = 0;
+            // 
+            // radioButton_fast
+            // 
+            this.radioButton_fast.AutoSize = true;
+            this.radioButton_fast.Checked = true;
+            this.radioButton_fast.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radioButton_fast.Location = new System.Drawing.Point(0, 0);
+            this.radioButton_fast.Name = "radioButton_fast";
+            this.radioButton_fast.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.radioButton_fast.Size = new System.Drawing.Size(102, 17);
+            this.radioButton_fast.TabIndex = 0;
+            this.radioButton_fast.TabStop = true;
+            this.radioButton_fast.Text = "Быстро";
+            this.radioButton_fast.UseVisualStyleBackColor = true;
+            this.radioButton_fast.CheckedChanged += new System.EventHandler(this.radioButton_fast_CheckedChanged);
+            // 
+            // radioButton_slow
+            // 
+            this.radioButton_slow.AutoSize = true;
+            this.radioButton_slow.Dock = System.Windows.Forms.DockStyle.Top;
+            this.radioButton_slow.Location = new System.Drawing.Point(0, 17);
+            this.radioButton_slow.Name = "radioButton_slow";
+            this.radioButton_slow.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.radioButton_slow.Size = new System.Drawing.Size(102, 17);
+            this.radioButton_slow.TabIndex = 1;
+            this.radioButton_slow.Text = "Медленно";
+            this.radioButton_slow.UseVisualStyleBackColor = true;
+            this.radioButton_slow.CheckedChanged += new System.EventHandler(this.radioButton2_CheckedChanged);
+            // 
+            // checkBox_pause
+            // 
+            this.checkBox_pause.AutoSize = true;
+            this.checkBox_pause.Dock = System.Windows.Forms.DockStyle.Top;
+            this.checkBox_pause.Location = new System.Drawing.Point(0, 34);
+            this.checkBox_pause.Name = "checkBox_pause";
+            this.checkBox_pause.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.checkBox_pause.Size = new System.Drawing.Size(102, 17);
+            this.checkBox_pause.TabIndex = 2;
+            this.checkBox_pause.Text = "Пауза";
+            this.checkBox_pause.UseVisualStyleBackColor = true;
+            this.checkBox_pause.CheckedChanged += new System.EventHandler(this.checkBox_pause_CheckedChanged);
+            // 
+            // checkBox_clipping
+            // 
+            this.checkBox_clipping.AutoSize = true;
+            this.checkBox_clipping.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.checkBox_clipping.Location = new System.Drawing.Point(0, 378);
+            this.checkBox_clipping.Name = "checkBox_clipping";
+            this.checkBox_clipping.Padding = new System.Windows.Forms.Padding(3, 0, 0, 0);
+            this.checkBox_clipping.Size = new System.Drawing.Size(102, 17);
+            this.checkBox_clipping.TabIndex = 3;
+            this.checkBox_clipping.Text = "Клиппер";
+            this.checkBox_clipping.UseVisualStyleBackColor = true;
+            this.checkBox_clipping.CheckedChanged += new System.EventHandler(this.checkBox_clipping_CheckedChanged);
             // 
             // form_debug
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(391, 408);
-            this.Controls.Add(this.toolStrip);
-            this.Controls.Add(this.groupBox_threads);
-            this.Controls.Add(this.groupBox_buffers);
-            this.DoubleBuffered = true;
-            this.MinimumSize = new System.Drawing.Size(407, 396);
+            this.ClientSize = new System.Drawing.Size(733, 429);
+            this.Controls.Add(this.tabControl);
+            this.MinimumSize = new System.Drawing.Size(749, 344);
             this.Name = "form_debug";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "DebugWindow";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.DebugWindow_FormClosing);
-            this.Load += new System.EventHandler(this.DebugWindow_Load);
-            this.groupBox_buffers.ResumeLayout(false);
-            this.groupBox_threads.ResumeLayout(false);
-            this.toolStrip.ResumeLayout(false);
-            this.toolStrip.PerformLayout();
+            this.Text = "LogMonitorWindow";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.LogMonitorWindow_FormClosing);
+            this.Load += new System.EventHandler(this.LogMonitorWindow_Load);
+            this.tabControl.ResumeLayout(false);
+            this.tabPage_log.ResumeLayout(false);
+            this.tabPage_decoderDebug.ResumeLayout(false);
+            this.splitContainer.Panel1.ResumeLayout(false);
+            this.splitContainer.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer)).EndInit();
+            this.splitContainer.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_signal)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_sortedDerivative)).EndInit();
+            this.splitContainer1.Panel1.ResumeLayout(false);
+            this.splitContainer1.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
+            this.splitContainer1.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_decodingQuality)).EndInit();
+            this.panel1.ResumeLayout(false);
+            this.panel1.PerformLayout();
             this.ResumeLayout(false);
-            this.PerformLayout();
 
         }
 
         #endregion
-        private System.Windows.Forms.ListView listView_buffers;
-        private System.Windows.Forms.ColumnHeader column_buffer;
-        private System.Windows.Forms.ColumnHeader column_size;
-        private System.Windows.Forms.GroupBox groupBox_buffers;
+
+        private System.Windows.Forms.RichTextBox richTextBox;
         private System.Windows.Forms.Timer timer_controlHandler;
-        private System.Windows.Forms.GroupBox groupBox_threads;
-        private System.Windows.Forms.ListView listView_threads;
-        private System.Windows.Forms.ColumnHeader column_thread;
-        private System.Windows.Forms.ColumnHeader column_status;
-        private System.Windows.Forms.ToolStrip toolStrip;
-        private System.Windows.Forms.ToolStripButton button_test;
-        private System.Windows.Forms.ToolStripButton button_logMonitor;
+        private System.Windows.Forms.TabControl tabControl;
+        private System.Windows.Forms.TabPage tabPage_log;
+        private System.Windows.Forms.TabPage tabPage_decoderDebug;
+        private System.Windows.Forms.SplitContainer splitContainer;
+        private System.Windows.Forms.PictureBox pictureBox_signal;
+        private System.Windows.Forms.PictureBox pictureBox_sortedDerivative;
+        private System.Windows.Forms.Timer timer_drawGraph;
+        private System.Windows.Forms.SplitContainer splitContainer1;
+        private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.PictureBox pictureBox_decodingQuality;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.RadioButton radioButton_slow;
+        private System.Windows.Forms.RadioButton radioButton_fast;
+        private System.Windows.Forms.CheckBox checkBox_pause;
+        private System.Windows.Forms.CheckBox checkBox_clipping;
     }
 }
