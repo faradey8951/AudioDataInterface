@@ -169,18 +169,6 @@ namespace AudioDataInterface.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("128")]
-        public int encoderLeadInOutSubcodesAmount {
-            get {
-                return ((int)(this["encoderLeadInOutSubcodesAmount"]));
-            }
-            set {
-                this["encoderLeadInOutSubcodesAmount"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int encoderMpsPlayerSubcodeInterval {
             get {
@@ -200,66 +188,6 @@ namespace AudioDataInterface.Properties {
             }
             set {
                 this["mpsFftSize"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("peakHold")]
-        public string mpsSpectrumMode {
-            get {
-                return ((string)(this["mpsSpectrumMode"]));
-            }
-            set {
-                this["mpsSpectrumMode"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("25")]
-        public int mpsSpectrumVescosity {
-            get {
-                return ((int)(this["mpsSpectrumVescosity"]));
-            }
-            set {
-                this["mpsSpectrumVescosity"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-vn -ar 44100 -ac 1 -b:a 64k -map 0:a -map_metadata -1")]
-        public string encoderFfmpeg1Cmd {
-            get {
-                return ((string)(this["encoderFfmpeg1Cmd"]));
-            }
-            set {
-                this["encoderFfmpeg1Cmd"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("-vn -ar 11025 -ac 1 -b:a 16k")]
-        public string encoderFfmpeg2Cmd {
-            get {
-                return ((string)(this["encoderFfmpeg2Cmd"]));
-            }
-            set {
-                this["encoderFfmpeg2Cmd"] = value;
-            }
-        }
-        
-        [global::System.Configuration.UserScopedSettingAttribute()]
-        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("equalizer=f=6000:width_type=h:width=1000:g=50")]
-        public string encoderFfmpeg2EffectCmd {
-            get {
-                return ((string)(this["encoderFfmpeg2EffectCmd"]));
-            }
-            set {
-                this["encoderFfmpeg2EffectCmd"] = value;
             }
         }
         

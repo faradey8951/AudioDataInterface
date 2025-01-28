@@ -55,7 +55,7 @@ namespace AudioDataInterface
 
         private void trackBar_leadInOutSubcodesAmount_Scroll(object sender, EventArgs e)
         {
-            label_leadInOutSubcodesAmountValue.Text = trackBar_leadInOutSubcodesAmount.Value.ToString();
+            
         }
 
         private void trackBar_mpsPlayerSubcodeInterval_Scroll(object sender, EventArgs e)
@@ -95,7 +95,6 @@ namespace AudioDataInterface
             trackBar_signalGain_Scroll(this, EventArgs.Empty);
             trackBar_silenceSeconds.Value = Encoder.encoder_silenceSeconds;
             trackBar_silenceSeconds_Scroll(this, EventArgs.Empty);
-            trackBar_leadInOutSubcodesAmount.Value = Encoder.encoder_leadInOutSubcodesAmount;
             trackBar_leadInOutSubcodesAmount_Scroll(this, EventArgs.Empty);
             trackBar_mpsPlayerSubcodeInterval.Value = Encoder.encoder_mpsPlayerSubCodeInterval;
             trackBar_mpsPlayerSubcodeInterval_Scroll(this, EventArgs.Empty);
@@ -103,12 +102,6 @@ namespace AudioDataInterface
             trackBar_fftSize_Scroll(this, EventArgs.Empty);
             trackBar_spectrumVescosity_Scroll(this, EventArgs.Empty);
             spectrumMode = form_main.mpsPlayer_spectrumMode;
-            if (spectrumMode == "peakHold") radioButton_peakHoldMode.Checked = true;
-            if (spectrumMode == "noPeak") radioButton_noPeakMode.Checked = true;
-            if (spectrumMode == "off") radioButton_offMode.Checked = true;
-            textBox_Ffmpeg1Cmd.Text = Encoder.encoder_ffmpeg1Cmd;
-            textBox_Ffmpeg2Cmd.Text = Encoder.encoder_ffmpeg2Cmd;
-            textBox_Ffmpeg2EffectCmd.Text = Encoder.encoder_ffmpeg2EffectCmd;
             List<string[]> skins = mpsPlayerSkinHandler.GetSkins();
             if (skins != null) foreach (string[] skin in skins) comboBox_skins.Items.Add(skin[1]);
             comboBox_skins.Text = form_main.class_mpsPlayerSkinHandler.currentSkinName;
@@ -121,13 +114,9 @@ namespace AudioDataInterface
             Encoder.encoder_sampleRate = trackBar_encodingSampleRate.Value;
             Encoder.encoder_signalGain = trackBar_signalGain.Value;
             Encoder.encoder_silenceSeconds = trackBar_silenceSeconds.Value;
-            Encoder.encoder_leadInOutSubcodesAmount = trackBar_leadInOutSubcodesAmount.Value;
             Encoder.encoder_mpsPlayerSubCodeInterval = trackBar_mpsPlayerSubcodeInterval.Value;
             form_main.mpsPlayer_fftSize = trackBar_fftSize.Value;
             form_main.mpsPlayer_spectrumMode = spectrumMode;
-            Encoder.encoder_ffmpeg1Cmd = textBox_Ffmpeg1Cmd.Text;
-            Encoder.encoder_ffmpeg2Cmd = textBox_Ffmpeg2Cmd.Text;
-            Encoder.encoder_ffmpeg2EffectCmd = textBox_Ffmpeg2EffectCmd.Text;
 
             var skins = mpsPlayerSkinHandler.GetSkins();
             foreach (string[] skin in skins) if (skin.Contains(comboBox_skins.Text)) form_main.class_mpsPlayerSkinHandler.currentSkinName = skin[0];
@@ -138,21 +127,6 @@ namespace AudioDataInterface
             form_main.window_main.MpsPlayerInterfaceInitialize();
 
             Settings.Save();            
-        }
-
-        private void radioButton_peakHoldMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton_peakHoldMode.Checked) spectrumMode = "peakHold";
-        }
-
-        private void radioButton_noPeakMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton_noPeakMode.Checked) spectrumMode = "noPeak";
-        }
-
-        private void radioButton_offMode_CheckedChanged(object sender, EventArgs e)
-        {
-            if (radioButton_offMode.Checked) spectrumMode = "off";
         }
 
         private void button2_Click(object sender, EventArgs e)

@@ -102,7 +102,7 @@ namespace AudioDataInterface
                         if (subCodeByte1 == 123 && subCodeByte2 == 1 && subCodeByte3 == 1 && subCodeByte4 == 1) //Субкод канальной синхронизации правого канала
                         {
                             packetSize = packet.Count;
-                            if (packetSize != 2000 && packetSize > 0) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; mute = true; /*for (int t = 0; t < 24000; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));*/ }
+                            if (packetSize != 2000 && packetSize > 0) { LogHandler.WriteStatus("DataHandler/AudioBuffer", "Got packet size of " + packetSize.ToString() + " bytes instead of 2000 bytes"); packetLoss = true; /*for (int t = 0; t < 24000; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));*/ }
                             subcodeSync = true;
                             if (packetSize >= 40) //Триггер размера пакета для обработки фреймов
                             {
@@ -116,7 +116,7 @@ namespace AudioDataInterface
                                         if (dropout == true) { dropoutFramesCount++; }
                                         else //Триггер конца выпадения
                                         {
-                                            if (dropoutFramesCount > 0) LogHandler.WriteStatus("DataHandler/AudioBuffer", "Corrupted " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
+                                            //if (dropoutFramesCount > 0) LogHandler.WriteStatus("DataHandler/AudioBuffer", "Corrupted " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
                                             /*
                                             //Интерполяция выпавших фреймов
                                             if (dropoutFramesCount > 0 && dropoutFramesCount <= 8)
@@ -208,6 +208,7 @@ namespace AudioDataInterface
                                         {
                                             dropout = true;
                                             for (int t = 0; t < 480; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
+                                            mute = true;
                                             opusFrame.Clear();
                                             Thread.Sleep(10);
                                         }

@@ -35,15 +35,11 @@ namespace AudioDataInterface
         public static double minSampleDeltaCoefficient = 0.4;
         public static double maxSampleDeltaCoefficient = 0.9;
         public static int encoder_silenceSeconds = 0;
-        public static int encoder_leadInOutSubcodesAmount = 0;
         public static int encoder_leadInSubcodesAmount = 0;
         public static int encoder_mpsPlayerSubCodeInterval = 0;
         public static bool encoder_longLeadIn = false;
         public static string encoder_mode = "";
         public static int encoder_sectorFileIndex = 0;
-        public static string encoder_ffmpeg1Cmd = "-vn -ar 11025 -ac 1 -b:a 16k -map 0:a -map_metadata -1";
-        public static string encoder_ffmpeg2Cmd = "-vn -ar 11025 -ac 1 -b:a 16k";
-        public static string encoder_ffmpeg2EffectCmd = "equalizer=f=5000:width_type=h:width=1000:g=20";
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Потоки

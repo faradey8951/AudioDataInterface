@@ -31,7 +31,6 @@ namespace AudioDataInterface
             //Доступность и видимость контролов
             if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream) == "Running" || ThreadHandler.GetThreadStatus(thread_convertWaveToOPUS) == "Running")
             {
-                button_clear.Enabled = false;
                 button_convert.Enabled = false;
                 button_select.Enabled = false;
                 label_encoding.Visible = true;
@@ -40,7 +39,6 @@ namespace AudioDataInterface
             }
             else
             {
-                button_clear.Enabled = true;
                 button_select.Enabled = true;
                 label_encoding.Visible = false;
                 progressBar.Visible = false;
@@ -144,21 +142,6 @@ namespace AudioDataInterface
             }
         }
 
-        private void radioButton_text_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void radioButton1_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void button_debug_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void button_ok_Click(object sender, EventArgs e)
         {
             if (ThreadHandler.GetThreadStatus(Encoder.thread_encodeFileStereoStream) == "Running")
@@ -183,11 +166,6 @@ namespace AudioDataInterface
         private void trackBar_trackCount_Scroll(object sender, EventArgs e)
         {
             trackCount = trackBar_trackCount.Value;
-        }
-
-        private void checkBox_longLeadIn_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox_longLeadIn.Checked) Encoder.encoder_longLeadIn = true; else Encoder.encoder_longLeadIn = false;
         }
     }
 }

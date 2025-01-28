@@ -165,12 +165,12 @@ namespace AudioDataInterface
             image_tape = new Image[] { tape_cassette };
             image_trackCalendar = new Image[] { trackCalendar_1, trackCalendar_2, trackCalendar_3, trackCalendar_4, trackCalendar_5, trackCalendar_6, trackCalendar_7, trackCalendar_8, trackCalendar_9, trackCalendar_10, trackCalendar_11, trackCalendar_12, trackCalendar_13, trackCalendar_14, trackCalendar_15, trackCalendar_16 };
             image_misc = new Image[] { spectrum_border };
-            for (int i = 0; i < CD.Length; i++) if (File.Exists(dir + "\\" + CD[i])) { image_CD[i] = Image.FromFile(dir + "\\" + CD[i]); } else image_CD[i] = Properties.Resources.icon_remove;
-            for (int i = 0; i < runningIndicator.Length; i++) if (File.Exists(dir + "\\" + runningIndicator[i])) { image_runningIndicator[i] = Image.FromFile(dir + "\\" + runningIndicator[i]); } else image_runningIndicator[i] = Properties.Resources.icon_remove;
-            for (int i = 0; i < symbols.Length; i++) if (File.Exists(dir + "\\" + symbols[i])) { image_symbols[i] = Image.FromFile(dir + "\\" + symbols[i]); } else image_symbols[i] = Properties.Resources.icon_remove;
-            for (int i = 0; i < tape.Length; i++) if (File.Exists(dir + "\\" + tape[i])) { image_tape[i] = Image.FromFile(dir + "\\" + tape[i]); } else image_tape[i] = Properties.Resources.icon_remove;
-            for (int i = 0; i < trackCalendar.Length; i++) if (File.Exists(dir + "\\" + trackCalendar[i])) { image_trackCalendar[i] = Image.FromFile(dir + "\\" + trackCalendar[i]); } else image_trackCalendar[i] = Properties.Resources.icon_remove;
-            for (int i = 0; i < misc.Length; i++) if (File.Exists(dir + "\\" + misc[i])) { image_misc[i] = Image.FromFile(dir + "\\" + misc[i]); } else image_misc[i] = Properties.Resources.icon_remove;
+            for (int i = 0; i < CD.Length; i++) if (File.Exists(dir + "\\" + CD[i])) { image_CD[i] = Image.FromFile(dir + "\\" + CD[i]); } else image_CD[i] = Properties.Resources.delete;
+            for (int i = 0; i < runningIndicator.Length; i++) if (File.Exists(dir + "\\" + runningIndicator[i])) { image_runningIndicator[i] = Image.FromFile(dir + "\\" + runningIndicator[i]); } else image_runningIndicator[i] = Properties.Resources.delete;
+            for (int i = 0; i < symbols.Length; i++) if (File.Exists(dir + "\\" + symbols[i])) { image_symbols[i] = Image.FromFile(dir + "\\" + symbols[i]); } else image_symbols[i] = Properties.Resources.delete;
+            for (int i = 0; i < tape.Length; i++) if (File.Exists(dir + "\\" + tape[i])) { image_tape[i] = Image.FromFile(dir + "\\" + tape[i]); } else image_tape[i] = Properties.Resources.delete;
+            for (int i = 0; i < trackCalendar.Length; i++) if (File.Exists(dir + "\\" + trackCalendar[i])) { image_trackCalendar[i] = Image.FromFile(dir + "\\" + trackCalendar[i]); } else image_trackCalendar[i] = Properties.Resources.delete;
+            for (int i = 0; i < misc.Length; i++) if (File.Exists(dir + "\\" + misc[i])) { image_misc[i] = Image.FromFile(dir + "\\" + misc[i]); } else image_misc[i] = Properties.Resources.delete;
             if (File.Exists(dir + "\\window.txt"))
             {
                 FileStream fs = new FileStream(dir + "\\window.txt", FileMode.Open);

@@ -17,7 +17,7 @@ namespace AudioDataInterface
         public static double[] debug_fixedDerivative = null;
         public static double[] debug_sortedFirstDerivative = null;
         public static double[] debug_sortedSecondDerivative = null;
-        public static bool debug_clipper = false;
+        public static bool debug_clipper = true;
 
         public static readonly List<short> buff_signalAmplitudes = new List<short>();
         public static readonly List<short> buff_signalAmplitudesL = new List<short>();

@@ -113,6 +113,8 @@ namespace AudioDataInterface
         public static int mpsPlayer_runningIndicatorAnimationFrameIndex = 0; //Текущий индекс кадра анимации бегущего индикатора
         public static double mpsPlayerWidth = 0; //Ширина mps плеера
         public static double mpsPlayerHeight = 0; //Высота mps плеера
+        public static bool mpsPlayer_skinEdit = false;
+
         public static double spectrumBarWidth = 0; //Ширина области спектра относительно ширины mps плеера
         public static double spectrumBarHeight = 0; //Высота области спектра относительно высоты mps плеера
         public static int spectrumBarY0P;
@@ -387,11 +389,6 @@ namespace AudioDataInterface
             pictureBox_mpsPlayer.Image = bitmap_mpsPlayerInterface;
         }
 
-        private void OnFrameChanged(object sender, EventArgs e)
-        {
-
-        }
-
         /// <summary>
         /// Отрисовка статуса аудиопроцессора в виде индикаторов
         /// </summary>
@@ -469,11 +466,6 @@ namespace AudioDataInterface
             MpsPlayerRunningIndicatorStop();         
         }
 
-        private void button_capture_Click(object sender, EventArgs e)
-        {
-
-        }
-
         private void MainWindow_FormClosing(object sender, FormClosingEventArgs e)
         {
             AudioIO.GraphCaptureClose();
@@ -481,16 +473,6 @@ namespace AudioDataInterface
             Settings.Save();
             //Close();
             Environment.Exit(0);
-        }
-
-        private void button_encoder_Click(object sender, EventArgs e)
-        {
-            if (window_encoder != null)
-            {
-                window_encoder.Dispose();
-                window_encoder = new form_encoder();
-            }
-            window_encoder.ShowDialog();
         }
 
         private void timer_controlHandler_Tick(object sender, EventArgs e)
@@ -559,11 +541,6 @@ namespace AudioDataInterface
             await Task.Run(() => ListViewUpdate());
         }
         */
-
-        private void toolStripLabel_Click(object sender, EventArgs e)
-        {
-            //TaskListViewUpdate();
-        }
 
         private void pictureBox_Click(object sender, EventArgs e)
         {
@@ -669,12 +646,6 @@ namespace AudioDataInterface
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            //window_debug.Show();
-
-        }
-
         public void MpsPlayerRunningIndicatorPlay()
         {
             timer_mpsPlayerRunningIndicatorHandler.Interval = 85;
@@ -689,7 +660,7 @@ namespace AudioDataInterface
                 timer_mpsPlayerRunningIndicatorHandler.Interval = 45;
                 timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
             }
-            else { timer_mpsPlayerRunningIndicatorHandler.Enabled = false; pictureBox_runningIndicator.Image = Properties.Resources.Running_Indicator; }
+            else { timer_mpsPlayerRunningIndicatorHandler.Enabled = false; pictureBox_runningIndicator.Image = class_mpsPlayerSkinHandler.runningIndicator_stop; }
         }
 
         public void MpsPlayerRunningIndicatorStop()
@@ -782,6 +753,8 @@ namespace AudioDataInterface
                 pictureBox_disc3.Visible = true;
                 pictureBox_cassette.Image = null;
                 pictureBox_disc1.Image = class_mpsPlayerSkinHandler.image_CD[2];
+                pictureBox_disc2.Image = class_mpsPlayerSkinHandler.image_CD[4];
+                pictureBox_disc3.Image = class_mpsPlayerSkinHandler.image_CD[7];
             }
             else
             {
@@ -951,41 +924,6 @@ namespace AudioDataInterface
 
         }
 
-        private void checkBox_invertSignal_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox_invertSignal.Checked) AudioIO.audio_invertSignal = true;
-            else AudioIO.audio_invertSignal = false;
-        }
-
-        private void checkBox_remainingTime_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox_remainingTime.Checked) mpsPlayer_remainingTime = true;
-            else mpsPlayer_remainingTime = false;
-            if (form_main.mpsPlayer_mode == "play" && mpsPlayer_tapeSkin == true) MpsPlayerRunningIndicatorPlay();
-        }
-
-        private void checkBox_autoGain_CheckedChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        private void checkBox_tapeSkin_CheckedChanged(object sender, EventArgs e)
-        {
-            if (checkBox_tapeSkin.Checked)
-            {
-                mpsPlayer_tapeSkin = true;
-                if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
-                else MpsPlayerRunningIndicatorStop();
-            }
-            else
-            {
-                mpsPlayer_tapeSkin = false;
-                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
-                if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
-            }
-            MpsPlayerInterfaceInitialize();
-        }
-
         private void groupBox_signalCapture_Enter(object sender, EventArgs e)
         {
 
@@ -995,16 +933,6 @@ namespace AudioDataInterface
         {
             AudioIO.audio_playDeviceId = comboBox_playDevices.SelectedIndex;
             if (Decoder.decoderActive) AudioIO.MPSAudioOutputCaptureInit();
-        }
-
-        private void button_settings_Click(object sender, EventArgs e)
-        {
-            if (window_settings != null)
-            {
-                window_settings.Dispose();
-                window_settings = new form_settings();
-            }
-            window_settings.ShowDialog();
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -1027,28 +955,6 @@ namespace AudioDataInterface
             Encoder.WriteHeader(DataHandler.fs_decodedAudio, 48000, 1);
             DataHandler.fs_decodedAudio.Close();
             DataHandler.fs_decodedAudio.Dispose();
-        }
-
-        private void button2_Click(object sender, EventArgs e)
-        {
-            Decoder.buff_decodedData.Clear();
-            Decoder.buff_signalAmplitudesL.Clear();
-            Decoder.buff_signalAmplitudesR.Clear();
-            DataHandler.ms = null;
-            DataHandler.ms = new MemoryStream();
-        }
-
-        private void timer1_Tick(object sender, EventArgs e)
-        {
-            try
-            {
-                tabPage1.BackgroundImage = Image.FromStream(DataHandler.ms);
-                this.Text = "ok";
-            }
-            catch (Exception ex)
-            {
-                this.Text = ex.Message;
-            }
         }
 
         private void timer_signalQualityUpdater_Tick(object sender, EventArgs e)
@@ -1080,52 +986,20 @@ namespace AudioDataInterface
             window_settings.ShowDialog();
         }
 
-        private void кодироватьВФайлToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (window_encoder != null)
-            {
-                window_encoder.Dispose();
-                window_encoder = new form_encoder();
-            }
-            window_encoder.ShowDialog();
-        }
-
-        private void мастерЗаписиНаЛентуToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (window_tapeRecordingWizard != null)
-            {
-                window_tapeRecordingWizard.Dispose();
-                window_tapeRecordingWizard = new form_tapeRecordingWizard();
-            }
-            window_tapeRecordingWizard.ShowDialog();
-        }
-
         private void отладкаToolStripMenuItem_Click(object sender, EventArgs e)
         {
-
+            if (form_main.window_debug != null)
+            {
+                form_main.window_debug.Close();
+                form_main.window_debug = new form_debug();
+            }
+            form_main.window_debug.Show();
         }
 
-        private void button2_Click_1(object sender, EventArgs e)
-        {
-            Decoder.decoderActive = true;
-            Decoder.decoderMode = "sector";
-            AudioIO.SignalCaptureInit();
-            Decoder.Start();
-        }
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
 
-        }
-
-        private void мастерВосстановленияДанныхToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (window_tapeRecoverWizard != null)
-            {
-                window_tapeRecoverWizard.Dispose();
-                window_tapeRecoverWizard = new form_tapeRecoverWizard();
-            }
-            window_tapeRecoverWizard.ShowDialog();
         }
 
         private void trackBar_spectrumGain_Scroll(object sender, EventArgs e)
@@ -1191,60 +1065,231 @@ namespace AudioDataInterface
             }
         }
 
-        private void журналToolStripMenuItem_Click(object sender, EventArgs e)
+        private void редактироватьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (form_main.window_debug != null)
-            {
-                form_main.window_debug.Close();
-                form_main.window_debug = new form_debug();
-            }
-            form_main.window_debug.Show();
+            if (!редактироватьToolStripMenuItem1.Checked) редактироватьToolStripMenuItem1.Checked = true;
+            else редактироватьToolStripMenuItem1.Checked = false;
         }
 
-        private void button2_Click_2(object sender, EventArgs e)
+        private void кодироватьВWAVToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            OpusEncoder encoder = new OpusEncoder(OpusDotNet.Application.Audio, 48000, 1);
-            OpusDecoder decoder = new OpusDecoder(20, 48000, 1);
-            encoder.MaxBandwidth = Bandwidth.FullBand;
-            encoder.Bitrate = 128000;
-            encoder.DTX = false;
-            encoder.VBR = false;
-            encoder.Complexity = 10;
-            byte[] opusBytes = new byte[320];
-            Bitmap bitmap_frame = new Bitmap("TEST\\45.png");
-            Color pixelColor;
-            List<short> RFrame0Shorts = new List<short>();
-            List<short> RFrame1Shorts = new List<short>();
-            List<short> GFrame0Shorts = new List<short>();
-            List<short> GFrame1Shorts = new List<short>();
-            List<short> BFrame0Shorts = new List<short>();
-            List<short> BFrame1Shorts = new List<short>();
-            for (int x = 0, y = 0; y < 20; x++)
+            if (window_encoder != null)
             {
-                pixelColor = bitmap_frame.GetPixel(x, y);
-                RFrame0Shorts.Add((Int16)pixelColor.R);
-                GFrame0Shorts.Add((Int16)pixelColor.G);
-                BFrame0Shorts.Add((short)((16300 * (Int16)pixelColor.B) / 255));
-                if (x == 47) { x = -1; y++; }
+                window_encoder.Dispose();
+                window_encoder = new form_encoder();
             }
-            for (int x = 0, y = 20; y < 40; x++)
+            window_encoder.ShowDialog();
+        }
+
+        private void записатьНаЛентуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_tapeRecordingWizard != null)
             {
-                pixelColor = bitmap_frame.GetPixel(x, y);
-                RFrame1Shorts.Add((Int16)pixelColor.R);
-                GFrame1Shorts.Add((Int16)pixelColor.G);
-                BFrame1Shorts.Add((Int16)pixelColor.B);
-                if (x == 47) { x = -1; y++; }
+                window_tapeRecordingWizard.Dispose();
+                window_tapeRecordingWizard = new form_tapeRecordingWizard();
             }
-            List<byte> BFrame0Bytes = new List<byte>();
-            for (int i = 0; i < BFrame0Shorts.Count; i++) BFrame0Bytes.AddRange(BitConverter.GetBytes(BFrame0Shorts[i]));
-            encoder.Encode(BFrame0Bytes.ToArray(), BFrame0Bytes.Count, opusBytes, opusBytes.Length);
-            encoder.Encode(BFrame0Bytes.ToArray(), BFrame0Bytes.Count, opusBytes, opusBytes.Length);
-            encoder.Encode(BFrame0Bytes.ToArray(), BFrame0Bytes.Count, opusBytes, opusBytes.Length);
-            byte[] decodedBytes = new byte[1920];
-            List<short> decodedShorts = new List<short>();
-            decoder.Decode(opusBytes, opusBytes.Length, decodedBytes, decodedBytes.Length);
-            for (int i = 0; i < decodedBytes.Length; i+=2) { decodedShorts.Add(BitConverter.ToInt16(new byte[2] { decodedBytes[i], decodedBytes[i + 1] }, 0)); }
-            MessageBox.Show("e");
+            window_tapeRecordingWizard.ShowDialog();
+        }
+
+        private void получитьСЛентыToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (window_tapeRecoverWizard != null)
+            {
+                window_tapeRecoverWizard.Dispose();
+                window_tapeRecoverWizard = new form_tapeRecoverWizard();
+            }
+            window_tapeRecoverWizard.ShowDialog();
+        }
+
+        private void toolStripButton_alternateScreen_Click(object sender, EventArgs e)
+        {
+            if (!toolStripButton_alternateScreen.Checked)
+            {
+                toolStripButton_alternateScreen.Checked = true;
+                альтернативныйЭкранToolStripMenuItem.Checked = true;
+                mpsPlayer_tapeSkin = true;
+                if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
+                else MpsPlayerRunningIndicatorStop();
+            }
+            else
+            {
+                toolStripButton_alternateScreen.Checked = false;
+                альтернативныйЭкранToolStripMenuItem.Checked = false;
+                mpsPlayer_tapeSkin = false;
+                if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
+            }
+            MpsPlayerInterfaceInitialize();
+        }
+
+        private void toolStripButton_remainingTime_Click(object sender, EventArgs e)
+        {
+            if (!toolStripButton_remainingTime.Checked)
+            {
+                toolStripButton_remainingTime.Checked = true;
+                оставшеесяВремяToolStripMenuItem.Checked = true;
+                mpsPlayer_remainingTime = true;
+            }
+            else
+            {
+                toolStripButton_remainingTime.Checked = false;
+                оставшеесяВремяToolStripMenuItem.Checked = false;
+                mpsPlayer_remainingTime = false;
+            }
+            if (form_main.mpsPlayer_mode == "play" && mpsPlayer_tapeSkin == true) MpsPlayerRunningIndicatorPlay();
+        }
+
+        private void toolStripButton_invert_Click(object sender, EventArgs e)
+        {
+            if (!toolStripButton_invert.Checked)
+            {
+                toolStripButton_invert.Checked = true;
+                инвертироватьСигналToolStripMenuItem.Checked = true;
+                AudioIO.audio_invertSignal = true;
+            }
+            else
+            {
+                toolStripButton_invert.Checked = false;
+                инвертироватьСигналToolStripMenuItem.Checked = false;
+                AudioIO.audio_invertSignal = false;
+            }
+        }
+
+        private void альтернативныйЭкранToolStripMenuItem_Click(object sender, EventArgs e)
+        {          
+            if (!альтернативныйЭкранToolStripMenuItem.Checked)
+            {
+                toolStripButton_alternateScreen.Checked = true;
+                альтернативныйЭкранToolStripMenuItem.Checked = true;
+                mpsPlayer_tapeSkin = true;
+                if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
+                else MpsPlayerRunningIndicatorStop();
+
+            }
+            else
+            {
+                toolStripButton_alternateScreen.Checked = false;
+                альтернативныйЭкранToolStripMenuItem.Checked = false;
+                mpsPlayer_tapeSkin = false;
+                if (form_main.mpsPlayer_mode == "play") MpsPlayerRunningIndicatorPlay();
+            }
+            MpsPlayerInterfaceInitialize();
+        }
+
+        private void инвертироватьСигналToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!инвертироватьСигналToolStripMenuItem.Checked)
+            {
+                toolStripButton_invert.Checked = true;
+                инвертироватьСигналToolStripMenuItem.Checked = true;
+                AudioIO.audio_invertSignal = true;
+            }
+            else
+            {
+                toolStripButton_invert.Checked = false;
+                инвертироватьСигналToolStripMenuItem.Checked = false;
+                AudioIO.audio_invertSignal = false;
+            }
+        }
+
+        private void оставшеесяВремяToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!оставшеесяВремяToolStripMenuItem.Checked)
+            {
+                toolStripButton_remainingTime.Checked = true;
+                оставшеесяВремяToolStripMenuItem.Checked = true;
+                mpsPlayer_remainingTime = true;
+            }
+            else
+            {
+                toolStripButton_remainingTime.Checked = false;
+                оставшеесяВремяToolStripMenuItem.Checked = false;
+                mpsPlayer_remainingTime = false;
+            }
+            if (form_main.mpsPlayer_mode == "play" && mpsPlayer_tapeSkin == true) MpsPlayerRunningIndicatorPlay();
+        }
+
+        private void toolStripButton_rec_Click(object sender, EventArgs e)
+        {
+            записатьНаЛентуToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_get_Click(object sender, EventArgs e)
+        {
+            получитьСЛентыToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_opus_Click(object sender, EventArgs e)
+        {
+            if (window_encoder != null)
+            {
+                window_encoder.Dispose();
+                window_encoder = new form_encoder();
+            }
+            window_encoder.ShowDialog();
+        }
+
+        private void toolStripButton_settings_Click(object sender, EventArgs e)
+        {
+            настройкиToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_debug_Click(object sender, EventArgs e)
+        {
+            отладкаToolStripMenuItem_Click(this, null);
+        }
+
+        private void mPSOPUSВоспроизведениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!Decoder.decoderActive)
+            {
+                Decoder.decoderActive = true;
+                AudioIO.SignalCaptureInit();
+                DataHandler.StartMp3Listening();
+                Decoder.Start();
+                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
+                AudioIO.MPSAudioOutputCaptureInit();
+                timer_mpsPlayerHandler.Enabled = true;
+                timer_mpsPlayerSpectrumHandler.Enabled = true;
+                timer_mpsPlayerSpectrumUpdater.Enabled = true;
+                timer_mpsPlayerTimeUpdater.Enabled = true;
+                timer_signalQualityUpdater.Enabled = true;
+                mpsPlayer_currentTrackNumber = 1;
+                mpsPlayer_trackCount = 16;
+                DataHandler.fs_decodedAudio = new FileStream("DecodedAudio.wav", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
+                DataHandler.fs_decodedAudio.Seek(44, SeekOrigin.Begin);
+            }
+        }
+
+        private void mPSOPUSОстановитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Decoder.decoderActive = false;
+            Decoder.Stop();
+            AudioIO.SignalCaptureClose();
+            DataHandler.StopMp3Listening();
+            MpsPlayerRunningIndicatorStop();
+            MpsPlayerTrackCalendarSetAmount(16);
+            MpsPlayerTrackCalendarSetCurrentTrack(0);
+            timer_mpsPlayerHandler.Enabled = false;
+            timer_mpsPlayerSpectrumHandler.Enabled = false;
+            timer_mpsPlayerSpectrumUpdater.Enabled = false;
+            timer_mpsPlayerTimeUpdater.Enabled = false;
+            timer_signalQualityUpdater.Enabled = false;
+            Decoder.ClearBuffers();
+            MpsPlayerInterfaceInitialize();
+            DataHandler.fs_decodedAudio.Seek(0, SeekOrigin.Begin);
+            Encoder.WriteHeader(DataHandler.fs_decodedAudio, 48000, 1);
+            DataHandler.fs_decodedAudio.Close();
+            DataHandler.fs_decodedAudio.Dispose();
+        }
+
+        private void toolStripButton_play_Click(object sender, EventArgs e)
+        {
+            mPSOPUSВоспроизведениеToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_stop_Click(object sender, EventArgs e)
+        {
+            mPSOPUSОстановитьToolStripMenuItem_Click(this, null);
         }
     }
 }

@@ -32,24 +32,35 @@ namespace AudioDataInterface
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(form_main));
             this.menuStrip = new System.Windows.Forms.MenuStrip();
-            this.кодировщикToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.мастерЗаписиНаЛентуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.кодироватьВФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.декодированиеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.мастерВосстановленияДанныхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.файлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.записатьНаЛентуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.получитьСЛентыToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.кодироватьВWAVToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.правкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.настройкиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.отладкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.журналToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.видToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.скинToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.редактироватьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
+            this.сохранитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
+            this.альтернативныйЭкранToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mPSПлеерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.оставшеесяВремяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.аудиоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mPSOPUSВоспроизведениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.mPSOPUSОстановитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.инвертироватьСигналToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.справкаToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
-            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.menu_edit = new System.Windows.Forms.ToolStripMenuItem();
-            this.menuSeparator = new System.Windows.Forms.ToolStripSeparator();
-            this.menu_remove = new System.Windows.Forms.ToolStripMenuItem();
             this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
+            this.panel_base = new System.Windows.Forms.Panel();
+            this.panel_dataControl = new System.Windows.Forms.Panel();
             this.tabControl_dataControl = new System.Windows.Forms.TabControl();
             this.tabPage_graphicalView = new System.Windows.Forms.TabPage();
             this.pictureBox_cassette = new System.Windows.Forms.PictureBox();
@@ -88,9 +99,6 @@ namespace AudioDataInterface
             this.pictureBox_track1 = new System.Windows.Forms.PictureBox();
             this.pictureBox_runningIndicator = new System.Windows.Forms.PictureBox();
             this.pictureBox_mpsPlayer = new System.Windows.Forms.PictureBox();
-            this.tabPage1 = new System.Windows.Forms.TabPage();
-            this.panel_base = new System.Windows.Forms.Panel();
-            this.panel_dataControl = new System.Windows.Forms.Panel();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
             this.label_packetLoss = new System.Windows.Forms.Label();
             this.label_mute = new System.Windows.Forms.Label();
@@ -115,13 +123,7 @@ namespace AudioDataInterface
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.trackBar_spectrumGain = new System.Windows.Forms.TrackBar();
             this.label2 = new System.Windows.Forms.Label();
-            this.checkBox_remainingTime = new System.Windows.Forms.CheckBox();
-            this.checkBox_invertSignal = new System.Windows.Forms.CheckBox();
-            this.checkBox_tapeSkin = new System.Windows.Forms.CheckBox();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button_buffMp3 = new System.Windows.Forms.Button();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
-            this.button2 = new System.Windows.Forms.Button();
             this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
             this.label1 = new System.Windows.Forms.Label();
             this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
@@ -134,6 +136,22 @@ namespace AudioDataInterface
             this.label_recDevice = new System.Windows.Forms.Label();
             this.pictureBox_waveGraphL = new System.Windows.Forms.PictureBox();
             this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
+            this.toolStrip1 = new System.Windows.Forms.ToolStrip();
+            this.toolStripButton_rec = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_get = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton_opus = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton_alternateScreen = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_remainingTime = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton_play = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_stop = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton_invert = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator10 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripButton_settings = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton_debug = new System.Windows.Forms.ToolStripButton();
             this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
@@ -141,8 +159,14 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
+            this.contextMenuStrip = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.задатьЭлементДляВыравниванияToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выровнятьПоВертикалиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.выровнятьПоГоризонталиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator11 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip.SuspendLayout();
-            this.contextMenuStrip.SuspendLayout();
+            this.panel_base.SuspendLayout();
+            this.panel_dataControl.SuspendLayout();
             this.tabControl_dataControl.SuspendLayout();
             this.tabPage_graphicalView.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_cassette)).BeginInit();
@@ -181,8 +205,6 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_runningIndicator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_mpsPlayer)).BeginInit();
-            this.panel_base.SuspendLayout();
-            this.panel_dataControl.SuspendLayout();
             this.groupBox_info.SuspendLayout();
             this.panel_signalCapture.SuspendLayout();
             this.groupBox1.SuspendLayout();
@@ -192,15 +214,18 @@ namespace AudioDataInterface
             this.groupBox_BIASAdjust.SuspendLayout();
             this.groupBox_scaleAdjust.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).BeginInit();
+            this.toolStrip1.SuspendLayout();
+            this.contextMenuStrip.SuspendLayout();
             this.SuspendLayout();
             // 
             // menuStrip
             // 
             this.menuStrip.BackColor = System.Drawing.SystemColors.Control;
             this.menuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.кодировщикToolStripMenuItem,
-            this.декодированиеToolStripMenuItem,
+            this.файлToolStripMenuItem,
             this.правкаToolStripMenuItem,
+            this.видToolStripMenuItem,
+            this.аудиоToolStripMenuItem,
             this.справкаToolStripMenuItem});
             this.menuStrip.Location = new System.Drawing.Point(0, 0);
             this.menuStrip.Name = "menuStrip";
@@ -208,80 +233,198 @@ namespace AudioDataInterface
             this.menuStrip.TabIndex = 0;
             this.menuStrip.Text = "menuStrip";
             // 
-            // кодировщикToolStripMenuItem
+            // файлToolStripMenuItem
             // 
-            this.кодировщикToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.мастерЗаписиНаЛентуToolStripMenuItem,
-            this.кодироватьВФайлToolStripMenuItem});
-            this.кодировщикToolStripMenuItem.Name = "кодировщикToolStripMenuItem";
-            this.кодировщикToolStripMenuItem.Size = new System.Drawing.Size(92, 20);
-            this.кодировщикToolStripMenuItem.Text = "Кодирование";
+            this.файлToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.записатьНаЛентуToolStripMenuItem,
+            this.получитьСЛентыToolStripMenuItem,
+            this.toolStripSeparator4,
+            this.кодироватьВWAVToolStripMenuItem});
+            this.файлToolStripMenuItem.Name = "файлToolStripMenuItem";
+            this.файлToolStripMenuItem.Size = new System.Drawing.Size(48, 20);
+            this.файлToolStripMenuItem.Text = "Файл";
             // 
-            // мастерЗаписиНаЛентуToolStripMenuItem
+            // записатьНаЛентуToolStripMenuItem
             // 
-            this.мастерЗаписиНаЛентуToolStripMenuItem.Name = "мастерЗаписиНаЛентуToolStripMenuItem";
-            this.мастерЗаписиНаЛентуToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.мастерЗаписиНаЛентуToolStripMenuItem.Text = "Мастер записи на ленту";
-            this.мастерЗаписиНаЛентуToolStripMenuItem.Click += new System.EventHandler(this.мастерЗаписиНаЛентуToolStripMenuItem_Click);
+            this.записатьНаЛентуToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.record;
+            this.записатьНаЛентуToolStripMenuItem.Name = "записатьНаЛентуToolStripMenuItem";
+            this.записатьНаЛентуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
+            this.записатьНаЛентуToolStripMenuItem.Size = new System.Drawing.Size(328, 22);
+            this.записатьНаЛентуToolStripMenuItem.Text = "Записать на ленту";
+            this.записатьНаЛентуToolStripMenuItem.Click += new System.EventHandler(this.записатьНаЛентуToolStripMenuItem_Click);
             // 
-            // кодироватьВФайлToolStripMenuItem
+            // получитьСЛентыToolStripMenuItem
             // 
-            this.кодироватьВФайлToolStripMenuItem.Name = "кодироватьВФайлToolStripMenuItem";
-            this.кодироватьВФайлToolStripMenuItem.Size = new System.Drawing.Size(206, 22);
-            this.кодироватьВФайлToolStripMenuItem.Text = "MP3 кодировщик";
-            this.кодироватьВФайлToolStripMenuItem.Click += new System.EventHandler(this.кодироватьВФайлToolStripMenuItem_Click);
+            this.получитьСЛентыToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.down;
+            this.получитьСЛентыToolStripMenuItem.Name = "получитьСЛентыToolStripMenuItem";
+            this.получитьСЛентыToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
+            this.получитьСЛентыToolStripMenuItem.Size = new System.Drawing.Size(328, 22);
+            this.получитьСЛентыToolStripMenuItem.Text = "Получить с ленты";
+            this.получитьСЛентыToolStripMenuItem.Click += new System.EventHandler(this.получитьСЛентыToolStripMenuItem_Click);
             // 
-            // декодированиеToolStripMenuItem
+            // toolStripSeparator4
             // 
-            this.декодированиеToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.мастерВосстановленияДанныхToolStripMenuItem});
-            this.декодированиеToolStripMenuItem.Name = "декодированиеToolStripMenuItem";
-            this.декодированиеToolStripMenuItem.Size = new System.Drawing.Size(105, 20);
-            this.декодированиеToolStripMenuItem.Text = "Декодирование";
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(325, 6);
             // 
-            // мастерВосстановленияДанныхToolStripMenuItem
+            // кодироватьВWAVToolStripMenuItem
             // 
-            this.мастерВосстановленияДанныхToolStripMenuItem.Name = "мастерВосстановленияДанныхToolStripMenuItem";
-            this.мастерВосстановленияДанныхToolStripMenuItem.Size = new System.Drawing.Size(296, 22);
-            this.мастерВосстановленияДанныхToolStripMenuItem.Text = "Мастер восстановления данных с ленты";
-            this.мастерВосстановленияДанныхToolStripMenuItem.Click += new System.EventHandler(this.мастерВосстановленияДанныхToolStripMenuItem_Click);
+            this.кодироватьВWAVToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.wav;
+            this.кодироватьВWAVToolStripMenuItem.Name = "кодироватьВWAVToolStripMenuItem";
+            this.кодироватьВWAVToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.кодироватьВWAVToolStripMenuItem.Size = new System.Drawing.Size(328, 22);
+            this.кодироватьВWAVToolStripMenuItem.Text = "Кодировать аудио в OPUS MPS WAVE";
+            this.кодироватьВWAVToolStripMenuItem.Click += new System.EventHandler(this.кодироватьВWAVToolStripMenuItem_Click);
             // 
             // правкаToolStripMenuItem
             // 
             this.правкаToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.настройкиToolStripMenuItem,
             this.toolStripSeparator1,
-            this.отладкаToolStripMenuItem,
-            this.журналToolStripMenuItem});
+            this.отладкаToolStripMenuItem});
             this.правкаToolStripMenuItem.Name = "правкаToolStripMenuItem";
             this.правкаToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.правкаToolStripMenuItem.Text = "Правка";
             // 
             // настройкиToolStripMenuItem
             // 
+            this.настройкиToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.settings;
             this.настройкиToolStripMenuItem.Name = "настройкиToolStripMenuItem";
-            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.настройкиToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.P)));
+            this.настройкиToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.настройкиToolStripMenuItem.Text = "Настройки";
             this.настройкиToolStripMenuItem.Click += new System.EventHandler(this.настройкиToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(131, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(181, 6);
             // 
             // отладкаToolStripMenuItem
             // 
+            this.отладкаToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.log;
             this.отладкаToolStripMenuItem.Name = "отладкаToolStripMenuItem";
-            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.отладкаToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.D)));
+            this.отладкаToolStripMenuItem.Size = new System.Drawing.Size(184, 22);
             this.отладкаToolStripMenuItem.Text = "Отладка";
             this.отладкаToolStripMenuItem.Click += new System.EventHandler(this.отладкаToolStripMenuItem_Click);
             // 
-            // журналToolStripMenuItem
+            // видToolStripMenuItem
             // 
-            this.журналToolStripMenuItem.Name = "журналToolStripMenuItem";
-            this.журналToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
-            this.журналToolStripMenuItem.Text = "Журнал";
-            this.журналToolStripMenuItem.Click += new System.EventHandler(this.журналToolStripMenuItem_Click);
+            this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.скинToolStripMenuItem1,
+            this.mPSПлеерToolStripMenuItem});
+            this.видToolStripMenuItem.Name = "видToolStripMenuItem";
+            this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
+            this.видToolStripMenuItem.Text = "Вид";
+            // 
+            // скинToolStripMenuItem1
+            // 
+            this.скинToolStripMenuItem1.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.редактироватьToolStripMenuItem1,
+            this.toolStripSeparator5,
+            this.сохранитьToolStripMenuItem1,
+            this.toolStripSeparator3,
+            this.альтернативныйЭкранToolStripMenuItem});
+            this.скинToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.theme;
+            this.скинToolStripMenuItem1.Name = "скинToolStripMenuItem1";
+            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.скинToolStripMenuItem1.Text = "Скин";
+            // 
+            // редактироватьToolStripMenuItem1
+            // 
+            this.редактироватьToolStripMenuItem1.Name = "редактироватьToolStripMenuItem1";
+            this.редактироватьToolStripMenuItem1.Size = new System.Drawing.Size(292, 22);
+            this.редактироватьToolStripMenuItem1.Text = "Редактировать";
+            this.редактироватьToolStripMenuItem1.Click += new System.EventHandler(this.редактироватьToolStripMenuItem1_Click);
+            // 
+            // toolStripSeparator5
+            // 
+            this.toolStripSeparator5.Name = "toolStripSeparator5";
+            this.toolStripSeparator5.Size = new System.Drawing.Size(289, 6);
+            // 
+            // сохранитьToolStripMenuItem1
+            // 
+            this.сохранитьToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.save;
+            this.сохранитьToolStripMenuItem1.Name = "сохранитьToolStripMenuItem1";
+            this.сохранитьToolStripMenuItem1.Size = new System.Drawing.Size(292, 22);
+            this.сохранитьToolStripMenuItem1.Text = "Сохранить";
+            // 
+            // toolStripSeparator3
+            // 
+            this.toolStripSeparator3.Name = "toolStripSeparator3";
+            this.toolStripSeparator3.Size = new System.Drawing.Size(289, 6);
+            // 
+            // альтернативныйЭкранToolStripMenuItem
+            // 
+            this.альтернативныйЭкранToolStripMenuItem.Name = "альтернативныйЭкранToolStripMenuItem";
+            this.альтернативныйЭкранToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.A)));
+            this.альтернативныйЭкранToolStripMenuItem.Size = new System.Drawing.Size(292, 22);
+            this.альтернативныйЭкранToolStripMenuItem.Text = "Альтернативный экран";
+            this.альтернативныйЭкранToolStripMenuItem.Click += new System.EventHandler(this.альтернативныйЭкранToolStripMenuItem_Click);
+            // 
+            // mPSПлеерToolStripMenuItem
+            // 
+            this.mPSПлеерToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.оставшеесяВремяToolStripMenuItem});
+            this.mPSПлеерToolStripMenuItem.Name = "mPSПлеерToolStripMenuItem";
+            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mPSПлеерToolStripMenuItem.Text = "MPS плеер";
+            // 
+            // оставшеесяВремяToolStripMenuItem
+            // 
+            this.оставшеесяВремяToolStripMenuItem.Name = "оставшеесяВремяToolStripMenuItem";
+            this.оставшеесяВремяToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.R)));
+            this.оставшеесяВремяToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
+            this.оставшеесяВремяToolStripMenuItem.Text = "Оставшееся время";
+            this.оставшеесяВремяToolStripMenuItem.Click += new System.EventHandler(this.оставшеесяВремяToolStripMenuItem_Click);
+            // 
+            // аудиоToolStripMenuItem
+            // 
+            this.аудиоToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.mPSOPUSВоспроизведениеToolStripMenuItem,
+            this.mPSOPUSОстановитьToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.инвертироватьСигналToolStripMenuItem});
+            this.аудиоToolStripMenuItem.Name = "аудиоToolStripMenuItem";
+            this.аудиоToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.аудиоToolStripMenuItem.Text = "Аудио";
+            // 
+            // mPSOPUSВоспроизведениеToolStripMenuItem
+            // 
+            this.mPSOPUSВоспроизведениеToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.play;
+            this.mPSOPUSВоспроизведениеToolStripMenuItem.Name = "mPSOPUSВоспроизведениеToolStripMenuItem";
+            this.mPSOPUSВоспроизведениеToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.P)));
+            this.mPSOPUSВоспроизведениеToolStripMenuItem.Size = new System.Drawing.Size(286, 22);
+            this.mPSOPUSВоспроизведениеToolStripMenuItem.Text = "MPS воспроизведение";
+            this.mPSOPUSВоспроизведениеToolStripMenuItem.Click += new System.EventHandler(this.mPSOPUSВоспроизведениеToolStripMenuItem_Click);
+            // 
+            // mPSOPUSОстановитьToolStripMenuItem
+            // 
+            this.mPSOPUSОстановитьToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.stop;
+            this.mPSOPUSОстановитьToolStripMenuItem.Name = "mPSOPUSОстановитьToolStripMenuItem";
+            this.mPSOPUSОстановитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.S)));
+            this.mPSOPUSОстановитьToolStripMenuItem.Size = new System.Drawing.Size(286, 22);
+            this.mPSOPUSОстановитьToolStripMenuItem.Text = "MPS стоп";
+            this.mPSOPUSОстановитьToolStripMenuItem.Click += new System.EventHandler(this.mPSOPUSОстановитьToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(283, 6);
+            // 
+            // инвертироватьСигналToolStripMenuItem
+            // 
+            this.инвертироватьСигналToolStripMenuItem.Name = "инвертироватьСигналToolStripMenuItem";
+            this.инвертироватьСигналToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
+            | System.Windows.Forms.Keys.I)));
+            this.инвертироватьСигналToolStripMenuItem.Size = new System.Drawing.Size(286, 22);
+            this.инвертироватьСигналToolStripMenuItem.Text = "Инвертировать сигнал";
+            this.инвертироватьСигналToolStripMenuItem.Click += new System.EventHandler(this.инвертироватьСигналToolStripMenuItem_Click);
             // 
             // справкаToolStripMenuItem
             // 
@@ -308,50 +451,44 @@ namespace AudioDataInterface
             this.statusStrip.Text = "statusStrip";
             this.statusStrip.ItemClicked += new System.Windows.Forms.ToolStripItemClickedEventHandler(this.statusStrip_ItemClicked);
             // 
-            // contextMenuStrip
-            // 
-            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.menu_edit,
-            this.menuSeparator,
-            this.menu_remove});
-            this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(192, 54);
-            // 
-            // menu_edit
-            // 
-            this.menu_edit.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.menu_edit.Name = "menu_edit";
-            this.menu_edit.Size = new System.Drawing.Size(191, 22);
-            this.menu_edit.Text = "Редактировать блок";
-            // 
-            // menuSeparator
-            // 
-            this.menuSeparator.Name = "menuSeparator";
-            this.menuSeparator.Size = new System.Drawing.Size(188, 6);
-            // 
-            // menu_remove
-            // 
-            this.menu_remove.Image = global::AudioDataInterface.Properties.Resources.icon_remove;
-            this.menu_remove.Name = "menu_remove";
-            this.menu_remove.Size = new System.Drawing.Size(191, 22);
-            this.menu_remove.Text = "Удалить";
-            // 
             // timer_controlHandler
             // 
             this.timer_controlHandler.Enabled = true;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
             // 
+            // panel_base
+            // 
+            this.panel_base.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_base.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_base.Controls.Add(this.panel_dataControl);
+            this.panel_base.Controls.Add(this.panel_signalCapture);
+            this.panel_base.Controls.Add(this.toolStrip1);
+            this.panel_base.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_base.Location = new System.Drawing.Point(0, 24);
+            this.panel_base.Name = "panel_base";
+            this.panel_base.Size = new System.Drawing.Size(1024, 592);
+            this.panel_base.TabIndex = 5;
+            // 
+            // panel_dataControl
+            // 
+            this.panel_dataControl.BackColor = System.Drawing.SystemColors.Control;
+            this.panel_dataControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.panel_dataControl.Controls.Add(this.tabControl_dataControl);
+            this.panel_dataControl.Controls.Add(this.groupBox_info);
+            this.panel_dataControl.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel_dataControl.Location = new System.Drawing.Point(0, 25);
+            this.panel_dataControl.Name = "panel_dataControl";
+            this.panel_dataControl.Size = new System.Drawing.Size(1022, 369);
+            this.panel_dataControl.TabIndex = 5;
+            // 
             // tabControl_dataControl
             // 
-            this.tabControl_dataControl.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl_dataControl.Controls.Add(this.tabPage_graphicalView);
-            this.tabControl_dataControl.Controls.Add(this.tabPage1);
+            this.tabControl_dataControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl_dataControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl_dataControl.Name = "tabControl_dataControl";
             this.tabControl_dataControl.SelectedIndex = 0;
-            this.tabControl_dataControl.Size = new System.Drawing.Size(824, 392);
+            this.tabControl_dataControl.Size = new System.Drawing.Size(824, 367);
             this.tabControl_dataControl.TabIndex = 4;
             // 
             // tabPage_graphicalView
@@ -395,7 +532,7 @@ namespace AudioDataInterface
             this.tabPage_graphicalView.Location = new System.Drawing.Point(4, 22);
             this.tabPage_graphicalView.Name = "tabPage_graphicalView";
             this.tabPage_graphicalView.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage_graphicalView.Size = new System.Drawing.Size(816, 366);
+            this.tabPage_graphicalView.Size = new System.Drawing.Size(816, 341);
             this.tabPage_graphicalView.TabIndex = 1;
             this.tabPage_graphicalView.Text = "Графический";
             this.tabPage_graphicalView.UseVisualStyleBackColor = true;
@@ -404,8 +541,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_cassette.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_cassette.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_cassette.Image = global::AudioDataInterface.Properties.Resources.cassette;
-            this.pictureBox_cassette.Location = new System.Drawing.Point(8, 197);
+            this.pictureBox_cassette.Location = new System.Drawing.Point(8, 184);
             this.pictureBox_cassette.Name = "pictureBox_cassette";
             this.pictureBox_cassette.Size = new System.Drawing.Size(33, 22);
             this.pictureBox_cassette.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -416,8 +552,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_disc3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_disc3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_disc3.Image = global::AudioDataInterface.Properties.Resources.disc3Empty;
-            this.pictureBox_disc3.Location = new System.Drawing.Point(576, 141);
+            this.pictureBox_disc3.Location = new System.Drawing.Point(576, 128);
             this.pictureBox_disc3.Name = "pictureBox_disc3";
             this.pictureBox_disc3.Size = new System.Drawing.Size(48, 40);
             this.pictureBox_disc3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -428,8 +563,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_disc2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_disc2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_disc2.Image = global::AudioDataInterface.Properties.Resources.disc2Empty;
-            this.pictureBox_disc2.Location = new System.Drawing.Point(528, 141);
+            this.pictureBox_disc2.Location = new System.Drawing.Point(528, 128);
             this.pictureBox_disc2.Name = "pictureBox_disc2";
             this.pictureBox_disc2.Size = new System.Drawing.Size(48, 40);
             this.pictureBox_disc2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -440,8 +574,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_disc1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_disc1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_disc1.Image = global::AudioDataInterface.Properties.Resources.disc1Empty;
-            this.pictureBox_disc1.Location = new System.Drawing.Point(480, 141);
+            this.pictureBox_disc1.Location = new System.Drawing.Point(480, 128);
             this.pictureBox_disc1.Name = "pictureBox_disc1";
             this.pictureBox_disc1.Size = new System.Drawing.Size(48, 40);
             this.pictureBox_disc1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -452,8 +585,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_playPause.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_playPause.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_playPause.Image = global::AudioDataInterface.Properties.Resources.play;
-            this.pictureBox_playPause.Location = new System.Drawing.Point(488, 109);
+            this.pictureBox_playPause.Location = new System.Drawing.Point(488, 96);
             this.pictureBox_playPause.Name = "pictureBox_playPause";
             this.pictureBox_playPause.Size = new System.Drawing.Size(45, 25);
             this.pictureBox_playPause.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -464,8 +596,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol10.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol10.Image = global::AudioDataInterface.Properties.Resources._0symbol;
-            this.pictureBox_symbol10.Location = new System.Drawing.Point(392, 125);
+            this.pictureBox_symbol10.Location = new System.Drawing.Point(392, 112);
             this.pictureBox_symbol10.Name = "pictureBox_symbol10";
             this.pictureBox_symbol10.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -476,8 +607,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol9.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol9.Image = global::AudioDataInterface.Properties.Resources._0symbol;
-            this.pictureBox_symbol9.Location = new System.Drawing.Point(352, 125);
+            this.pictureBox_symbol9.Location = new System.Drawing.Point(352, 112);
             this.pictureBox_symbol9.Name = "pictureBox_symbol9";
             this.pictureBox_symbol9.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -489,7 +619,7 @@ namespace AudioDataInterface
             this.pictureBox_dots.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_dots.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_dots.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox_dots.Image")));
-            this.pictureBox_dots.Location = new System.Drawing.Point(344, 137);
+            this.pictureBox_dots.Location = new System.Drawing.Point(344, 124);
             this.pictureBox_dots.Name = "pictureBox_dots";
             this.pictureBox_dots.Size = new System.Drawing.Size(5, 36);
             this.pictureBox_dots.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -500,8 +630,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol8.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol8.Image = global::AudioDataInterface.Properties.Resources._0symbol;
-            this.pictureBox_symbol8.Location = new System.Drawing.Point(288, 125);
+            this.pictureBox_symbol8.Location = new System.Drawing.Point(288, 112);
             this.pictureBox_symbol8.Name = "pictureBox_symbol8";
             this.pictureBox_symbol8.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -512,7 +641,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol7.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol7.Location = new System.Drawing.Point(248, 125);
+            this.pictureBox_symbol7.Location = new System.Drawing.Point(248, 112);
             this.pictureBox_symbol7.Name = "pictureBox_symbol7";
             this.pictureBox_symbol7.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -523,7 +652,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol6.Location = new System.Drawing.Point(208, 125);
+            this.pictureBox_symbol6.Location = new System.Drawing.Point(208, 112);
             this.pictureBox_symbol6.Name = "pictureBox_symbol6";
             this.pictureBox_symbol6.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -534,8 +663,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol5.Image = global::AudioDataInterface.Properties.Resources.DASHsymbol;
-            this.pictureBox_symbol5.Location = new System.Drawing.Point(168, 125);
+            this.pictureBox_symbol5.Location = new System.Drawing.Point(168, 112);
             this.pictureBox_symbol5.Name = "pictureBox_symbol5";
             this.pictureBox_symbol5.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -546,8 +674,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol4.Image = global::AudioDataInterface.Properties.Resources.DASHsymbol;
-            this.pictureBox_symbol4.Location = new System.Drawing.Point(128, 125);
+            this.pictureBox_symbol4.Location = new System.Drawing.Point(128, 112);
             this.pictureBox_symbol4.Name = "pictureBox_symbol4";
             this.pictureBox_symbol4.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -558,7 +685,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol3.Location = new System.Drawing.Point(88, 125);
+            this.pictureBox_symbol3.Location = new System.Drawing.Point(88, 112);
             this.pictureBox_symbol3.Name = "pictureBox_symbol3";
             this.pictureBox_symbol3.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -569,8 +696,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol2.Image = global::AudioDataInterface.Properties.Resources.Psymbol;
-            this.pictureBox_symbol2.Location = new System.Drawing.Point(48, 125);
+            this.pictureBox_symbol2.Location = new System.Drawing.Point(48, 112);
             this.pictureBox_symbol2.Name = "pictureBox_symbol2";
             this.pictureBox_symbol2.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -582,8 +708,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_symbol1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_symbol1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_symbol1.Image = global::AudioDataInterface.Properties.Resources.Msymbol;
-            this.pictureBox_symbol1.Location = new System.Drawing.Point(8, 125);
+            this.pictureBox_symbol1.Location = new System.Drawing.Point(8, 112);
             this.pictureBox_symbol1.Name = "pictureBox_symbol1";
             this.pictureBox_symbol1.Size = new System.Drawing.Size(40, 55);
             this.pictureBox_symbol1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -594,8 +719,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_spectrumBorder2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_spectrumBorder2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_spectrumBorder2.Image = global::AudioDataInterface.Properties.Resources.border;
-            this.pictureBox_spectrumBorder2.Location = new System.Drawing.Point(580, 241);
+            this.pictureBox_spectrumBorder2.Location = new System.Drawing.Point(580, 228);
             this.pictureBox_spectrumBorder2.Name = "pictureBox_spectrumBorder2";
             this.pictureBox_spectrumBorder2.Size = new System.Drawing.Size(12, 110);
             this.pictureBox_spectrumBorder2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -606,8 +730,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_spectrumBorder1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_spectrumBorder1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_spectrumBorder1.Image = global::AudioDataInterface.Properties.Resources.border;
-            this.pictureBox_spectrumBorder1.Location = new System.Drawing.Point(3, 241);
+            this.pictureBox_spectrumBorder1.Location = new System.Drawing.Point(3, 228);
             this.pictureBox_spectrumBorder1.Name = "pictureBox_spectrumBorder1";
             this.pictureBox_spectrumBorder1.Size = new System.Drawing.Size(12, 110);
             this.pictureBox_spectrumBorder1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -618,8 +741,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track12.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track12.Image = global::AudioDataInterface.Properties.Resources._12_trackNumber;
-            this.pictureBox_track12.Location = new System.Drawing.Point(664, 318);
+            this.pictureBox_track12.Location = new System.Drawing.Point(664, 305);
             this.pictureBox_track12.Name = "pictureBox_track12";
             this.pictureBox_track12.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -630,8 +752,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track16.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track16.Image = global::AudioDataInterface.Properties.Resources._16_trackNumber;
-            this.pictureBox_track16.Location = new System.Drawing.Point(597, 256);
+            this.pictureBox_track16.Location = new System.Drawing.Point(597, 243);
             this.pictureBox_track16.Name = "pictureBox_track16";
             this.pictureBox_track16.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -642,8 +763,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track15.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track15.Image = global::AudioDataInterface.Properties.Resources._15_trackNumber;
-            this.pictureBox_track15.Location = new System.Drawing.Point(595, 283);
+            this.pictureBox_track15.Location = new System.Drawing.Point(595, 270);
             this.pictureBox_track15.Name = "pictureBox_track15";
             this.pictureBox_track15.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -654,8 +774,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track14.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track14.Image = global::AudioDataInterface.Properties.Resources._14_trackNumber;
-            this.pictureBox_track14.Location = new System.Drawing.Point(608, 308);
+            this.pictureBox_track14.Location = new System.Drawing.Point(608, 295);
             this.pictureBox_track14.Name = "pictureBox_track14";
             this.pictureBox_track14.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -666,8 +785,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track13.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track13.Image = global::AudioDataInterface.Properties.Resources._13_trackNumber;
-            this.pictureBox_track13.Location = new System.Drawing.Point(633, 318);
+            this.pictureBox_track13.Location = new System.Drawing.Point(633, 305);
             this.pictureBox_track13.Name = "pictureBox_track13";
             this.pictureBox_track13.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -678,8 +796,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track11.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track11.Image = global::AudioDataInterface.Properties.Resources._11_trackNumber;
-            this.pictureBox_track11.Location = new System.Drawing.Point(697, 311);
+            this.pictureBox_track11.Location = new System.Drawing.Point(697, 298);
             this.pictureBox_track11.Name = "pictureBox_track11";
             this.pictureBox_track11.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -690,8 +807,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track10.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track10.Image = global::AudioDataInterface.Properties.Resources._10_trackNumber;
-            this.pictureBox_track10.Location = new System.Drawing.Point(726, 294);
+            this.pictureBox_track10.Location = new System.Drawing.Point(726, 281);
             this.pictureBox_track10.Name = "pictureBox_track10";
             this.pictureBox_track10.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -702,8 +818,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track9.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track9.Image = global::AudioDataInterface.Properties.Resources._9_trackNumber;
-            this.pictureBox_track9.Location = new System.Drawing.Point(751, 268);
+            this.pictureBox_track9.Location = new System.Drawing.Point(751, 255);
             this.pictureBox_track9.Name = "pictureBox_track9";
             this.pictureBox_track9.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -714,8 +829,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track8.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track8.Image = global::AudioDataInterface.Properties.Resources._8_trackNumber;
-            this.pictureBox_track8.Location = new System.Drawing.Point(761, 238);
+            this.pictureBox_track8.Location = new System.Drawing.Point(761, 225);
             this.pictureBox_track8.Name = "pictureBox_track8";
             this.pictureBox_track8.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -726,8 +840,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track7.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track7.Image = global::AudioDataInterface.Properties.Resources._7_trackNumber;
-            this.pictureBox_track7.Location = new System.Drawing.Point(761, 210);
+            this.pictureBox_track7.Location = new System.Drawing.Point(761, 197);
             this.pictureBox_track7.Name = "pictureBox_track7";
             this.pictureBox_track7.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -738,8 +851,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track6.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track6.Image = global::AudioDataInterface.Properties.Resources._6_trackNumber;
-            this.pictureBox_track6.Location = new System.Drawing.Point(742, 186);
+            this.pictureBox_track6.Location = new System.Drawing.Point(742, 173);
             this.pictureBox_track6.Name = "pictureBox_track6";
             this.pictureBox_track6.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -750,8 +862,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track5.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track5.Image = global::AudioDataInterface.Properties.Resources._5_trackNumber;
-            this.pictureBox_track5.Location = new System.Drawing.Point(714, 179);
+            this.pictureBox_track5.Location = new System.Drawing.Point(714, 166);
             this.pictureBox_track5.Name = "pictureBox_track5";
             this.pictureBox_track5.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -762,8 +873,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track4.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track4.Image = global::AudioDataInterface.Properties.Resources._4_trackNumber;
-            this.pictureBox_track4.Location = new System.Drawing.Point(686, 182);
+            this.pictureBox_track4.Location = new System.Drawing.Point(686, 169);
             this.pictureBox_track4.Name = "pictureBox_track4";
             this.pictureBox_track4.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -774,8 +884,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track3.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track3.Image = global::AudioDataInterface.Properties.Resources._3_trackNumber;
-            this.pictureBox_track3.Location = new System.Drawing.Point(657, 193);
+            this.pictureBox_track3.Location = new System.Drawing.Point(657, 180);
             this.pictureBox_track3.Name = "pictureBox_track3";
             this.pictureBox_track3.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -786,8 +895,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track2.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track2.Image = global::AudioDataInterface.Properties.Resources._2_trackNumber;
-            this.pictureBox_track2.Location = new System.Drawing.Point(632, 209);
+            this.pictureBox_track2.Location = new System.Drawing.Point(632, 196);
             this.pictureBox_track2.Name = "pictureBox_track2";
             this.pictureBox_track2.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -798,8 +906,7 @@ namespace AudioDataInterface
             // 
             this.pictureBox_track1.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_track1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_track1.Image = global::AudioDataInterface.Properties.Resources._1_trackNumber;
-            this.pictureBox_track1.Location = new System.Drawing.Point(610, 228);
+            this.pictureBox_track1.Location = new System.Drawing.Point(610, 215);
             this.pictureBox_track1.Name = "pictureBox_track1";
             this.pictureBox_track1.Size = new System.Drawing.Size(28, 23);
             this.pictureBox_track1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -811,8 +918,7 @@ namespace AudioDataInterface
             this.pictureBox_runningIndicator.Anchor = System.Windows.Forms.AnchorStyles.None;
             this.pictureBox_runningIndicator.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_runningIndicator.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-            this.pictureBox_runningIndicator.Image = global::AudioDataInterface.Properties.Resources.Running_Indicator;
-            this.pictureBox_runningIndicator.Location = new System.Drawing.Point(592, 149);
+            this.pictureBox_runningIndicator.Location = new System.Drawing.Point(592, 136);
             this.pictureBox_runningIndicator.Name = "pictureBox_runningIndicator";
             this.pictureBox_runningIndicator.Size = new System.Drawing.Size(200, 200);
             this.pictureBox_runningIndicator.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
@@ -822,52 +928,17 @@ namespace AudioDataInterface
             // pictureBox_mpsPlayer
             // 
             this.pictureBox_mpsPlayer.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_mpsPlayer.ContextMenuStrip = this.contextMenuStrip;
             this.pictureBox_mpsPlayer.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox_mpsPlayer.Location = new System.Drawing.Point(3, 3);
             this.pictureBox_mpsPlayer.Name = "pictureBox_mpsPlayer";
-            this.pictureBox_mpsPlayer.Size = new System.Drawing.Size(810, 360);
+            this.pictureBox_mpsPlayer.Size = new System.Drawing.Size(810, 335);
             this.pictureBox_mpsPlayer.TabIndex = 0;
             this.pictureBox_mpsPlayer.TabStop = false;
             this.pictureBox_mpsPlayer.Click += new System.EventHandler(this.pictureBox_mpsPlayer_Click);
             // 
-            // tabPage1
-            // 
-            this.tabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.tabPage1.Location = new System.Drawing.Point(4, 22);
-            this.tabPage1.Name = "tabPage1";
-            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(816, 366);
-            this.tabPage1.TabIndex = 2;
-            this.tabPage1.Text = "tabPage1";
-            this.tabPage1.UseVisualStyleBackColor = true;
-            // 
-            // panel_base
-            // 
-            this.panel_base.BackColor = System.Drawing.SystemColors.Control;
-            this.panel_base.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_base.Controls.Add(this.panel_dataControl);
-            this.panel_base.Controls.Add(this.panel_signalCapture);
-            this.panel_base.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_base.Location = new System.Drawing.Point(0, 24);
-            this.panel_base.Name = "panel_base";
-            this.panel_base.Size = new System.Drawing.Size(1024, 592);
-            this.panel_base.TabIndex = 5;
-            // 
-            // panel_dataControl
-            // 
-            this.panel_dataControl.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.panel_dataControl.Controls.Add(this.groupBox_info);
-            this.panel_dataControl.Controls.Add(this.tabControl_dataControl);
-            this.panel_dataControl.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panel_dataControl.Location = new System.Drawing.Point(0, 0);
-            this.panel_dataControl.Name = "panel_dataControl";
-            this.panel_dataControl.Size = new System.Drawing.Size(1022, 394);
-            this.panel_dataControl.TabIndex = 5;
-            // 
             // groupBox_info
             // 
-            this.groupBox_info.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_info.Controls.Add(this.label_packetLoss);
             this.groupBox_info.Controls.Add(this.label_mute);
             this.groupBox_info.Controls.Add(this.label_interpolation);
@@ -887,9 +958,10 @@ namespace AudioDataInterface
             this.groupBox_info.Controls.Add(this.label_fixedErrorCount);
             this.groupBox_info.Controls.Add(this.label3);
             this.groupBox_info.Controls.Add(this.label_border1);
-            this.groupBox_info.Location = new System.Drawing.Point(824, 24);
+            this.groupBox_info.Dock = System.Windows.Forms.DockStyle.Right;
+            this.groupBox_info.Location = new System.Drawing.Point(824, 0);
             this.groupBox_info.Name = "groupBox_info";
-            this.groupBox_info.Size = new System.Drawing.Size(196, 369);
+            this.groupBox_info.Size = new System.Drawing.Size(196, 367);
             this.groupBox_info.TabIndex = 5;
             this.groupBox_info.TabStop = false;
             this.groupBox_info.Text = "Информация";
@@ -1099,11 +1171,6 @@ namespace AudioDataInterface
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox1.Controls.Add(this.trackBar_spectrumGain);
             this.groupBox1.Controls.Add(this.label2);
-            this.groupBox1.Controls.Add(this.checkBox_remainingTime);
-            this.groupBox1.Controls.Add(this.checkBox_invertSignal);
-            this.groupBox1.Controls.Add(this.checkBox_tapeSkin);
-            this.groupBox1.Controls.Add(this.button1);
-            this.groupBox1.Controls.Add(this.button_buffMp3);
             this.groupBox1.Location = new System.Drawing.Point(872, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(150, 192);
@@ -1114,7 +1181,7 @@ namespace AudioDataInterface
             // trackBar_spectrumGain
             // 
             this.trackBar_spectrumGain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar_spectrumGain.Location = new System.Drawing.Point(3, 144);
+            this.trackBar_spectrumGain.Location = new System.Drawing.Point(3, 29);
             this.trackBar_spectrumGain.Maximum = 20;
             this.trackBar_spectrumGain.Minimum = 1;
             this.trackBar_spectrumGain.Name = "trackBar_spectrumGain";
@@ -1126,76 +1193,17 @@ namespace AudioDataInterface
             // label2
             // 
             this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.Location = new System.Drawing.Point(3, 131);
+            this.label2.Location = new System.Drawing.Point(3, 16);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(144, 13);
             this.label2.TabIndex = 18;
             this.label2.Text = "Уровень спектра:";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
-            // checkBox_remainingTime
-            // 
-            this.checkBox_remainingTime.AutoSize = true;
-            this.checkBox_remainingTime.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_remainingTime.Location = new System.Drawing.Point(3, 114);
-            this.checkBox_remainingTime.Name = "checkBox_remainingTime";
-            this.checkBox_remainingTime.Size = new System.Drawing.Size(144, 17);
-            this.checkBox_remainingTime.TabIndex = 1;
-            this.checkBox_remainingTime.Text = "Оставшееся время";
-            this.checkBox_remainingTime.UseVisualStyleBackColor = true;
-            this.checkBox_remainingTime.CheckedChanged += new System.EventHandler(this.checkBox_remainingTime_CheckedChanged);
-            // 
-            // checkBox_invertSignal
-            // 
-            this.checkBox_invertSignal.AutoSize = true;
-            this.checkBox_invertSignal.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_invertSignal.Location = new System.Drawing.Point(3, 97);
-            this.checkBox_invertSignal.Name = "checkBox_invertSignal";
-            this.checkBox_invertSignal.Size = new System.Drawing.Size(144, 17);
-            this.checkBox_invertSignal.TabIndex = 0;
-            this.checkBox_invertSignal.Text = "Инвертировать сигнал";
-            this.checkBox_invertSignal.UseVisualStyleBackColor = true;
-            this.checkBox_invertSignal.CheckedChanged += new System.EventHandler(this.checkBox_invertSignal_CheckedChanged);
-            // 
-            // checkBox_tapeSkin
-            // 
-            this.checkBox_tapeSkin.AutoSize = true;
-            this.checkBox_tapeSkin.Dock = System.Windows.Forms.DockStyle.Top;
-            this.checkBox_tapeSkin.Location = new System.Drawing.Point(3, 80);
-            this.checkBox_tapeSkin.Name = "checkBox_tapeSkin";
-            this.checkBox_tapeSkin.Size = new System.Drawing.Size(144, 17);
-            this.checkBox_tapeSkin.TabIndex = 16;
-            this.checkBox_tapeSkin.Text = "TAPE Skin";
-            this.checkBox_tapeSkin.UseVisualStyleBackColor = true;
-            this.checkBox_tapeSkin.CheckedChanged += new System.EventHandler(this.checkBox_tapeSkin_CheckedChanged);
-            // 
-            // button1
-            // 
-            this.button1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button1.Location = new System.Drawing.Point(3, 48);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(144, 32);
-            this.button1.TabIndex = 17;
-            this.button1.Text = "STOP MP3";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.button1_Click_1);
-            // 
-            // button_buffMp3
-            // 
-            this.button_buffMp3.Dock = System.Windows.Forms.DockStyle.Top;
-            this.button_buffMp3.Location = new System.Drawing.Point(3, 16);
-            this.button_buffMp3.Name = "button_buffMp3";
-            this.button_buffMp3.Size = new System.Drawing.Size(144, 32);
-            this.button_buffMp3.TabIndex = 14;
-            this.button_buffMp3.Text = "PLAY MP3";
-            this.button_buffMp3.UseVisualStyleBackColor = true;
-            this.button_buffMp3.Click += new System.EventHandler(this.button_buffMp3_Click);
-            // 
             // groupBox_signalCapture
             // 
             this.groupBox_signalCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_signalCapture.Controls.Add(this.button2);
             this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphR);
             this.groupBox_signalCapture.Controls.Add(this.label1);
             this.groupBox_signalCapture.Controls.Add(this.comboBox_playDevices);
@@ -1211,16 +1219,6 @@ namespace AudioDataInterface
             this.groupBox_signalCapture.TabStop = false;
             this.groupBox_signalCapture.Text = "Осциллограф";
             this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(357, 137);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 19;
-            this.button2.Text = "TEST";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click_2);
             // 
             // pictureBox_waveGraphR
             // 
@@ -1360,6 +1358,156 @@ namespace AudioDataInterface
             this.comboBox_recDevices.TabIndex = 10;
             this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged);
             // 
+            // toolStrip1
+            // 
+            this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripButton_rec,
+            this.toolStripButton_get,
+            this.toolStripSeparator6,
+            this.toolStripButton_opus,
+            this.toolStripSeparator7,
+            this.toolStripButton_alternateScreen,
+            this.toolStripButton_remainingTime,
+            this.toolStripSeparator8,
+            this.toolStripButton_play,
+            this.toolStripButton_stop,
+            this.toolStripSeparator9,
+            this.toolStripButton_invert,
+            this.toolStripSeparator10,
+            this.toolStripButton_settings,
+            this.toolStripButton_debug});
+            this.toolStrip1.Location = new System.Drawing.Point(0, 0);
+            this.toolStrip1.Name = "toolStrip1";
+            this.toolStrip1.Size = new System.Drawing.Size(1022, 25);
+            this.toolStrip1.TabIndex = 7;
+            this.toolStrip1.Text = "toolStrip1";
+            // 
+            // toolStripButton_rec
+            // 
+            this.toolStripButton_rec.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_rec.Image = global::AudioDataInterface.Properties.Resources.record;
+            this.toolStripButton_rec.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_rec.Name = "toolStripButton_rec";
+            this.toolStripButton_rec.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_rec.ToolTipText = "Записать на ленту (Ctrl + R)";
+            this.toolStripButton_rec.Click += new System.EventHandler(this.toolStripButton_rec_Click);
+            // 
+            // toolStripButton_get
+            // 
+            this.toolStripButton_get.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_get.Image = global::AudioDataInterface.Properties.Resources.down;
+            this.toolStripButton_get.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_get.Name = "toolStripButton_get";
+            this.toolStripButton_get.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_get.ToolTipText = "Получить с ленты (Ctrl + G)";
+            this.toolStripButton_get.Click += new System.EventHandler(this.toolStripButton_get_Click);
+            // 
+            // toolStripSeparator6
+            // 
+            this.toolStripSeparator6.Name = "toolStripSeparator6";
+            this.toolStripSeparator6.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton_opus
+            // 
+            this.toolStripButton_opus.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_opus.Image = global::AudioDataInterface.Properties.Resources.wav;
+            this.toolStripButton_opus.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_opus.Name = "toolStripButton_opus";
+            this.toolStripButton_opus.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_opus.ToolTipText = "Кодировать аудио в OPUS MPS WAVE (Ctrl + O))";
+            this.toolStripButton_opus.Click += new System.EventHandler(this.toolStripButton_opus_Click);
+            // 
+            // toolStripSeparator7
+            // 
+            this.toolStripSeparator7.Name = "toolStripSeparator7";
+            this.toolStripSeparator7.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton_alternateScreen
+            // 
+            this.toolStripButton_alternateScreen.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_alternateScreen.Image = global::AudioDataInterface.Properties.Resources.change;
+            this.toolStripButton_alternateScreen.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_alternateScreen.Name = "toolStripButton_alternateScreen";
+            this.toolStripButton_alternateScreen.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_alternateScreen.ToolTipText = "Альтернативный экран (Ctrl + Shift + A)";
+            this.toolStripButton_alternateScreen.Click += new System.EventHandler(this.toolStripButton_alternateScreen_Click);
+            // 
+            // toolStripButton_remainingTime
+            // 
+            this.toolStripButton_remainingTime.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_remainingTime.Image = global::AudioDataInterface.Properties.Resources.remainingTime;
+            this.toolStripButton_remainingTime.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_remainingTime.Name = "toolStripButton_remainingTime";
+            this.toolStripButton_remainingTime.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_remainingTime.ToolTipText = "Оставшееся время (Ctrl + Shift + R)";
+            this.toolStripButton_remainingTime.Click += new System.EventHandler(this.toolStripButton_remainingTime_Click);
+            // 
+            // toolStripSeparator8
+            // 
+            this.toolStripSeparator8.Name = "toolStripSeparator8";
+            this.toolStripSeparator8.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton_play
+            // 
+            this.toolStripButton_play.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_play.Image = global::AudioDataInterface.Properties.Resources.play;
+            this.toolStripButton_play.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_play.Name = "toolStripButton_play";
+            this.toolStripButton_play.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_play.ToolTipText = "MPS воспроизведение (Ctrl + Shift + P)";
+            this.toolStripButton_play.Click += new System.EventHandler(this.toolStripButton_play_Click);
+            // 
+            // toolStripButton_stop
+            // 
+            this.toolStripButton_stop.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_stop.Image = global::AudioDataInterface.Properties.Resources.stop;
+            this.toolStripButton_stop.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_stop.Name = "toolStripButton_stop";
+            this.toolStripButton_stop.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_stop.ToolTipText = "MPS стоп (Ctrl + Shift + S)";
+            this.toolStripButton_stop.Click += new System.EventHandler(this.toolStripButton_stop_Click);
+            // 
+            // toolStripSeparator9
+            // 
+            this.toolStripSeparator9.Name = "toolStripSeparator9";
+            this.toolStripSeparator9.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton_invert
+            // 
+            this.toolStripButton_invert.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_invert.Image = global::AudioDataInterface.Properties.Resources.invert;
+            this.toolStripButton_invert.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_invert.Name = "toolStripButton_invert";
+            this.toolStripButton_invert.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_invert.ToolTipText = "Инвертировать сигнал (Ctrl + Shift + I)";
+            this.toolStripButton_invert.Click += new System.EventHandler(this.toolStripButton_invert_Click);
+            // 
+            // toolStripSeparator10
+            // 
+            this.toolStripSeparator10.Name = "toolStripSeparator10";
+            this.toolStripSeparator10.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripButton_settings
+            // 
+            this.toolStripButton_settings.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_settings.Image = global::AudioDataInterface.Properties.Resources.settings;
+            this.toolStripButton_settings.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_settings.Name = "toolStripButton_settings";
+            this.toolStripButton_settings.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_settings.ToolTipText = "Настройки (Ctrl + P)";
+            this.toolStripButton_settings.Click += new System.EventHandler(this.toolStripButton_settings_Click);
+            // 
+            // toolStripButton_debug
+            // 
+            this.toolStripButton_debug.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton_debug.Image = global::AudioDataInterface.Properties.Resources.log;
+            this.toolStripButton_debug.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton_debug.Name = "toolStripButton_debug";
+            this.toolStripButton_debug.Size = new System.Drawing.Size(23, 22);
+            this.toolStripButton_debug.Text = "toolStripButton3";
+            this.toolStripButton_debug.ToolTipText = "Отладка (Ctrl + D)";
+            this.toolStripButton_debug.Click += new System.EventHandler(this.toolStripButton_debug_Click);
+            // 
             // timer_drawWaveGraphFrame
             // 
             this.timer_drawWaveGraphFrame.Interval = 40;
@@ -1394,6 +1542,39 @@ namespace AudioDataInterface
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
             // 
+            // contextMenuStrip
+            // 
+            this.contextMenuStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.задатьЭлементДляВыравниванияToolStripMenuItem,
+            this.toolStripSeparator11,
+            this.выровнятьПоВертикалиToolStripMenuItem,
+            this.выровнятьПоГоризонталиToolStripMenuItem});
+            this.contextMenuStrip.Name = "contextMenuStrip";
+            this.contextMenuStrip.Size = new System.Drawing.Size(265, 76);
+            // 
+            // задатьЭлементДляВыравниванияToolStripMenuItem
+            // 
+            this.задатьЭлементДляВыравниванияToolStripMenuItem.Name = "задатьЭлементДляВыравниванияToolStripMenuItem";
+            this.задатьЭлементДляВыравниванияToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
+            this.задатьЭлементДляВыравниванияToolStripMenuItem.Text = "Задать элемент для выравнивания";
+            // 
+            // выровнятьПоВертикалиToolStripMenuItem
+            // 
+            this.выровнятьПоВертикалиToolStripMenuItem.Name = "выровнятьПоВертикалиToolStripMenuItem";
+            this.выровнятьПоВертикалиToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
+            this.выровнятьПоВертикалиToolStripMenuItem.Text = "Выровнять по вертикали";
+            // 
+            // выровнятьПоГоризонталиToolStripMenuItem
+            // 
+            this.выровнятьПоГоризонталиToolStripMenuItem.Name = "выровнятьПоГоризонталиToolStripMenuItem";
+            this.выровнятьПоГоризонталиToolStripMenuItem.Size = new System.Drawing.Size(264, 22);
+            this.выровнятьПоГоризонталиToolStripMenuItem.Text = "Выровнять по горизонтали";
+            // 
+            // toolStripSeparator11
+            // 
+            this.toolStripSeparator11.Name = "toolStripSeparator11";
+            this.toolStripSeparator11.Size = new System.Drawing.Size(261, 6);
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -1416,7 +1597,9 @@ namespace AudioDataInterface
             this.SizeChanged += new System.EventHandler(this.form_main_SizeChanged);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
-            this.contextMenuStrip.ResumeLayout(false);
+            this.panel_base.ResumeLayout(false);
+            this.panel_base.PerformLayout();
+            this.panel_dataControl.ResumeLayout(false);
             this.tabControl_dataControl.ResumeLayout(false);
             this.tabPage_graphicalView.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_cassette)).EndInit();
@@ -1455,8 +1638,6 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_runningIndicator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_mpsPlayer)).EndInit();
-            this.panel_base.ResumeLayout(false);
-            this.panel_dataControl.ResumeLayout(false);
             this.groupBox_info.ResumeLayout(false);
             this.groupBox_info.PerformLayout();
             this.panel_signalCapture.ResumeLayout(false);
@@ -1471,6 +1652,9 @@ namespace AudioDataInterface
             this.groupBox_scaleAdjust.ResumeLayout(false);
             this.groupBox_scaleAdjust.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).EndInit();
+            this.toolStrip1.ResumeLayout(false);
+            this.toolStrip1.PerformLayout();
+            this.contextMenuStrip.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1482,13 +1666,7 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripMenuItem справкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem оПрограммеToolStripMenuItem;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
-        private System.Windows.Forms.ToolStripMenuItem menu_edit;
-        private System.Windows.Forms.ToolStripSeparator menuSeparator;
-        private System.Windows.Forms.ToolStripMenuItem menu_remove;
         private System.Windows.Forms.Timer timer_controlHandler;
-        private System.Windows.Forms.TabControl tabControl_dataControl;
-        private System.Windows.Forms.TabPage tabPage_graphicalView;
         private System.Windows.Forms.Panel panel_base;
         private System.Windows.Forms.Panel panel_dataControl;
         private System.Windows.Forms.Panel panel_signalCapture;
@@ -1503,15 +1681,11 @@ namespace AudioDataInterface
         private System.Windows.Forms.GroupBox groupBox_scaleAdjust;
         private System.Windows.Forms.RadioButton radioButton_verticalScale;
         private System.Windows.Forms.RadioButton radioButton_horizontalScale;
-        public System.Windows.Forms.Button button_buffMp3;
         private System.Windows.Forms.PictureBox pictureBox_mpsPlayer;
         private System.Windows.Forms.Timer timer_mpsPlayerHandler;
         private System.Windows.Forms.Timer timer_mpsPlayerTimeUpdater;
-        private System.Windows.Forms.CheckBox checkBox_remainingTime;
-        public System.Windows.Forms.CheckBox checkBox_invertSignal;
         private System.Windows.Forms.GroupBox groupBox_info;
         private System.Windows.Forms.Label label_fixedErrorCount;
-        private System.Windows.Forms.CheckBox checkBox_tapeSkin;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ComboBox comboBox_playDevices;
         private System.Windows.Forms.Label label_frameSyncErrorCount;
@@ -1519,21 +1693,14 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label_border1;
         public System.Windows.Forms.Timer timer_mpsPlayerSpectrumHandler;
-        public System.Windows.Forms.Button button1;
-        private System.Windows.Forms.TabPage tabPage1;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.Label label_signalQuality;
         public System.Windows.Forms.PictureBox pictureBox_runningIndicator;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem кодировщикToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem мастерЗаписиНаЛентуToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem кодироватьВФайлToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem отладкаToolStripMenuItem;
         public System.Windows.Forms.Timer timer_signalQualityUpdater;
-        private System.Windows.Forms.ToolStripMenuItem декодированиеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem мастерВосстановленияДанныхToolStripMenuItem;
         private System.Windows.Forms.TrackBar trackBar_spectrumGain;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer timer_mpsPlayerRunningIndicatorHandler;
@@ -1571,7 +1738,6 @@ namespace AudioDataInterface
         public System.Windows.Forms.PictureBox pictureBox_symbol3;
         public System.Windows.Forms.PictureBox pictureBox_symbol2;
         public System.Windows.Forms.PictureBox pictureBox_symbol1;
-        private System.Windows.Forms.ToolStripMenuItem журналToolStripMenuItem;
         private System.Windows.Forms.Label label_decodedPacketSize;
         private System.Windows.Forms.Label label_audioBufferSize;
         private System.Windows.Forms.ProgressBar progressBar_audioBuffer;
@@ -1587,7 +1753,48 @@ namespace AudioDataInterface
         public System.Windows.Forms.Timer timer_mpsPlayerSpectrumUpdater;
         private System.Windows.Forms.Label label_packetLoss;
         private System.Windows.Forms.PictureBox pictureBox_waveGraphR;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.ToolStripMenuItem файлToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem записатьНаЛентуToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem получитьСЛентыToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem кодироватьВWAVToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem видToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem скинToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem редактироватьToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem аудиоToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mPSOPUSВоспроизведениеToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mPSOPUSОстановитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
+        private System.Windows.Forms.ToolStripMenuItem альтернативныйЭкранToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem mPSПлеерToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem оставшеесяВремяToolStripMenuItem;
+        private System.Windows.Forms.ToolStrip toolStrip1;
+        private System.Windows.Forms.TabControl tabControl_dataControl;
+        private System.Windows.Forms.TabPage tabPage_graphicalView;
+        private System.Windows.Forms.ToolStripButton toolStripButton_rec;
+        private System.Windows.Forms.ToolStripButton toolStripButton_get;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
+        private System.Windows.Forms.ToolStripButton toolStripButton_opus;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator7;
+        private System.Windows.Forms.ToolStripButton toolStripButton_alternateScreen;
+        private System.Windows.Forms.ToolStripButton toolStripButton_remainingTime;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
+        private System.Windows.Forms.ToolStripButton toolStripButton_play;
+        private System.Windows.Forms.ToolStripButton toolStripButton_stop;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator10;
+        private System.Windows.Forms.ToolStripButton toolStripButton_settings;
+        private System.Windows.Forms.ToolStripButton toolStripButton_debug;
+        public System.Windows.Forms.ToolStripMenuItem инвертироватьСигналToolStripMenuItem;
+        public System.Windows.Forms.ToolStripButton toolStripButton_invert;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStrip;
+        private System.Windows.Forms.ToolStripMenuItem задатьЭлементДляВыравниванияToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem выровнятьПоВертикалиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem выровнятьПоГоризонталиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator11;
     }
 }
 

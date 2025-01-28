@@ -37,7 +37,6 @@ namespace AudioDataInterface
             this.button_ok = new System.Windows.Forms.Button();
             this.groupBox_file = new System.Windows.Forms.GroupBox();
             this.groupBox_properties = new System.Windows.Forms.GroupBox();
-            this.checkBox_longLeadIn = new System.Windows.Forms.CheckBox();
             this.trackBar_trackCount = new System.Windows.Forms.TrackBar();
             this.label_trackNumber = new System.Windows.Forms.Label();
             this.label_trackCount = new System.Windows.Forms.Label();
@@ -47,7 +46,6 @@ namespace AudioDataInterface
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.button_convert = new System.Windows.Forms.Button();
             this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
-            this.button_clear = new System.Windows.Forms.Button();
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.statusStrip.SuspendLayout();
             this.groupBox_file.SuspendLayout();
@@ -62,7 +60,7 @@ namespace AudioDataInterface
             this.label_encoding,
             this.progressBar,
             this.label_percent});
-            this.statusStrip.Location = new System.Drawing.Point(0, 187);
+            this.statusStrip.Location = new System.Drawing.Point(0, 177);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(445, 22);
             this.statusStrip.TabIndex = 0;
@@ -91,7 +89,8 @@ namespace AudioDataInterface
             // button_ok
             // 
             this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_ok.Location = new System.Drawing.Point(358, 161);
+            this.button_ok.AutoSize = true;
+            this.button_ok.Location = new System.Drawing.Point(364, 151);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(75, 23);
             this.button_ok.TabIndex = 1;
@@ -102,41 +101,31 @@ namespace AudioDataInterface
             // groupBox_file
             // 
             this.groupBox_file.BackColor = System.Drawing.SystemColors.Window;
+            this.groupBox_file.Controls.Add(this.button_convert);
             this.groupBox_file.Controls.Add(this.groupBox_properties);
+            this.groupBox_file.Controls.Add(this.button_ok);
             this.groupBox_file.Controls.Add(this.textBox);
             this.groupBox_file.Controls.Add(this.button_select);
             this.groupBox_file.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_file.Location = new System.Drawing.Point(0, 0);
             this.groupBox_file.Name = "groupBox_file";
-            this.groupBox_file.Size = new System.Drawing.Size(445, 209);
+            this.groupBox_file.Size = new System.Drawing.Size(445, 199);
             this.groupBox_file.TabIndex = 12;
             this.groupBox_file.TabStop = false;
-            this.groupBox_file.Text = "MPS-SDI";
+            this.groupBox_file.Text = "OPUS MPS WAVE кодировщик";
             // 
             // groupBox_properties
             // 
-            this.groupBox_properties.Controls.Add(this.checkBox_longLeadIn);
             this.groupBox_properties.Controls.Add(this.trackBar_trackCount);
             this.groupBox_properties.Controls.Add(this.label_trackNumber);
             this.groupBox_properties.Controls.Add(this.label_trackCount);
             this.groupBox_properties.Controls.Add(this.trackBar_trackNumber);
             this.groupBox_properties.Location = new System.Drawing.Point(4, 46);
             this.groupBox_properties.Name = "groupBox_properties";
-            this.groupBox_properties.Size = new System.Drawing.Size(435, 106);
+            this.groupBox_properties.Size = new System.Drawing.Size(435, 98);
             this.groupBox_properties.TabIndex = 7;
             this.groupBox_properties.TabStop = false;
-            this.groupBox_properties.Text = "Настройки";
-            // 
-            // checkBox_longLeadIn
-            // 
-            this.checkBox_longLeadIn.AutoSize = true;
-            this.checkBox_longLeadIn.Location = new System.Drawing.Point(8, 72);
-            this.checkBox_longLeadIn.Name = "checkBox_longLeadIn";
-            this.checkBox_longLeadIn.Size = new System.Drawing.Size(171, 17);
-            this.checkBox_longLeadIn.TabIndex = 6;
-            this.checkBox_longLeadIn.Text = "Длинная входящая дорожка";
-            this.checkBox_longLeadIn.UseVisualStyleBackColor = true;
-            this.checkBox_longLeadIn.CheckedChanged += new System.EventHandler(this.checkBox_longLeadIn_CheckedChanged);
+            this.groupBox_properties.Text = "Настройка субкодов";
             // 
             // trackBar_trackCount
             // 
@@ -204,9 +193,10 @@ namespace AudioDataInterface
             // button_convert
             // 
             this.button_convert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_convert.Location = new System.Drawing.Point(253, 161);
+            this.button_convert.AutoSize = true;
+            this.button_convert.Location = new System.Drawing.Point(256, 151);
             this.button_convert.Name = "button_convert";
-            this.button_convert.Size = new System.Drawing.Size(99, 23);
+            this.button_convert.Size = new System.Drawing.Size(100, 23);
             this.button_convert.TabIndex = 6;
             this.button_convert.Text = "Конвертировать";
             this.button_convert.UseVisualStyleBackColor = true;
@@ -217,26 +207,12 @@ namespace AudioDataInterface
             this.timer_controlHandler.Enabled = true;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
             // 
-            // button_clear
-            // 
-            this.button_clear.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.button_clear.Location = new System.Drawing.Point(13, 161);
-            this.button_clear.Name = "button_clear";
-            this.button_clear.Size = new System.Drawing.Size(75, 23);
-            this.button_clear.TabIndex = 7;
-            this.button_clear.Text = "Очистить";
-            this.button_clear.UseVisualStyleBackColor = true;
-            this.button_clear.Click += new System.EventHandler(this.button_clear_Click);
-            // 
             // form_encoder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(445, 209);
-            this.Controls.Add(this.button_clear);
-            this.Controls.Add(this.button_convert);
-            this.Controls.Add(this.button_ok);
+            this.ClientSize = new System.Drawing.Size(445, 199);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBox_file);
             this.MaximizeBox = false;
@@ -244,7 +220,7 @@ namespace AudioDataInterface
             this.Name = "form_encoder";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "Audio Data Interface - Энкодер";
+            this.Text = "OPUS MPS WAVE кодировщик";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.EncoderWindow_FormClosing);
             this.Load += new System.EventHandler(this.EncoderWindow_Load);
             this.statusStrip.ResumeLayout(false);
@@ -274,12 +250,10 @@ namespace AudioDataInterface
         private System.Windows.Forms.GroupBox groupBox_properties;
         private System.Windows.Forms.Button button_convert;
         private System.Windows.Forms.Timer timer_controlHandler;
-        private System.Windows.Forms.Button button_clear;
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog;
         private System.Windows.Forms.TrackBar trackBar_trackCount;
         private System.Windows.Forms.Label label_trackNumber;
         private System.Windows.Forms.Label label_trackCount;
         private System.Windows.Forms.TrackBar trackBar_trackNumber;
-        private System.Windows.Forms.CheckBox checkBox_longLeadIn;
     }
 }
