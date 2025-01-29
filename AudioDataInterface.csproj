@@ -474,6 +474,36 @@
   <ItemGroup>
     <None Include="Resources\invert.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomOut.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomIn.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\yAllign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\xAllign.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomOutAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zoomInAll.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heightUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\widthDown.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\widthUp.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\heightDown.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

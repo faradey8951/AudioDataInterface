@@ -113,8 +113,12 @@ namespace AudioDataInterface
         public static int mpsPlayer_runningIndicatorAnimationFrameIndex = 0; //Текущий индекс кадра анимации бегущего индикатора
         public static double mpsPlayerWidth = 0; //Ширина mps плеера
         public static double mpsPlayerHeight = 0; //Высота mps плеера
-        public static bool mpsPlayer_skinEdit = false;
-        public static object mpsPlayer_control = null;
+        public static bool mpsPlayer_skinEdit = false; //Управляет вкл/выкл режима редактирования скина
+        public static bool mpsPlayer_controlFree = false; //Управляет режимом свободного перемещения элементов
+        public static bool mpsPlayer_allControl = false; //Управляет режимом выбора всех элементов сразу
+        public static object mpsPlayer_control = null; //Ссылается на перемещаемый мышкой элемент
+        public static object mpsPlayer_selectedControl = null; //Ссылается на последний выбранный элемент по ЛКМ/ПКМ
+        public static object mpsPlayer_alignmentControl = null; //Ссылается на элемент, выбранный в качестве ориентира для выравнивания
 
         public static double spectrumBarWidth = 0; //Ширина области спектра относительно ширины mps плеера
         public static double spectrumBarHeight = 0; //Высота области спектра относительно высоты mps плеера
@@ -511,12 +515,11 @@ namespace AudioDataInterface
             if (scope_verticalBIASInc == true) scope_verticalBIAS += 2;
             if (scope_verticalBIASDec == true) scope_verticalBIAS -= 2;
 
-            if (mpsPlayer_skinEdit && mpsPlayer_control != null)
+            if (mpsPlayer_skinEdit && mpsPlayer_control != null && mpsPlayer_controlFree)
             {
                 PictureBox pb = (PictureBox)mpsPlayer_control;
                 var pos = pictureBox_mpsPlayer.PointToClient(Cursor.Position);
                 pb.Location = new Point(pos.X, pos.Y);
-
             }
         }
 
@@ -806,16 +809,16 @@ namespace AudioDataInterface
             window_main.pictureBox_dots.Image = class_mpsPlayerSkinHandler.image_symbols[18];
             pictureBox_playPause.Visible = true;
             pictureBox_playPause.Image = class_mpsPlayerSkinHandler.image_CD[9];
-            pictureBox_symbol1.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol2.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol3.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol4.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol5.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol6.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol7.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol8.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol1.Image = class_mpsPlayerSkinHandler.image_symbols[0];
+            pictureBox_symbol2.Image = class_mpsPlayerSkinHandler.image_symbols[1];
+            pictureBox_symbol3.Image = class_mpsPlayerSkinHandler.image_symbols[2];
+            pictureBox_symbol4.Image = class_mpsPlayerSkinHandler.image_symbols[3];
+            pictureBox_symbol5.Image = class_mpsPlayerSkinHandler.image_symbols[4];
+            pictureBox_symbol6.Image = class_mpsPlayerSkinHandler.image_symbols[5];
+            pictureBox_symbol7.Image = class_mpsPlayerSkinHandler.image_symbols[6];
+            pictureBox_symbol8.Image = class_mpsPlayerSkinHandler.image_symbols[7];
             pictureBox_symbol9.Image = class_mpsPlayerSkinHandler.image_symbols[8];
-            pictureBox_symbol10.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol10.Image = class_mpsPlayerSkinHandler.image_symbols[9];
             pictureBox_track1.Image = class_mpsPlayerSkinHandler.image_trackCalendar[0];
             pictureBox_track2.Image = class_mpsPlayerSkinHandler.image_trackCalendar[1];
             pictureBox_track3.Image = class_mpsPlayerSkinHandler.image_trackCalendar[2];
@@ -1142,8 +1145,32 @@ namespace AudioDataInterface
             {
                 редактироватьToolStripMenuItem1.Checked = true;
                 редактированиеToolStripMenuItem.Checked = true;
+                задатьЭлементДляВыравниванияToolStripMenuItem.Enabled = true;
+                выровнятьПоВертикалиToolStripMenuItem.Enabled = true;
+                выровнятьПоГоризонталиToolStripMenuItem.Enabled = true;
+                уменьшитьToolStripMenuItem.Enabled = true;
+                увеличитьToolStripMenuItem.Enabled = true;
+                выстроитьСогласноСкинуToolStripMenuItem.Enabled = true;
+                выстроитьВНулевоеПоложениеToolStripMenuItem.Enabled = true;
+                перемещениеToolStripMenuItem.Enabled = true;
+                увеличитьВсеToolStripMenuItem.Enabled = true;
+                уменьшитьВсеToolStripMenuItem.Enabled = true;
+                toolStripButton_alignX.Enabled = true;
+                toolStripButton_alignY.Enabled = true;
+                toolStripButton_zoomIn.Enabled = true;
+                toolStripButton_zoomOut.Enabled = true;
+                toolStripButton_zoomInAll.Enabled = true;
+                toolStripButton_zoomOutAll.Enabled = true;
+                увеличитьВысотуToolStripMenuItem.Enabled = true;
+                toolStripButton_heightUp.Enabled = true;
+                уменьшитьВысотуToolStripMenuItem.Enabled = true;
+                toolStripButton_heightDown.Enabled = true;
+                увеличитьДлинуToolStripMenuItem.Enabled = true;
+                toolStripButton_widthUp.Enabled = true;
+                уменьшитьДлинуToolStripMenuItem.Enabled = true;
+                toolStripButton_widthDown.Enabled = true;
+                выбранныйЭлементToolStripMenuItem.Enabled = true;
                 mpsPlayer_skinEdit = true;
-                //pictureBox_mpsPlayer.BackColor = Color.White;
                 timer_mpsPlayerHandler.Enabled = false;              
                 timer_mpsPlayerSpectrumUpdater.Enabled = false;
                 mpsPlayer_instantSpectrum = new int[] { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 };
@@ -1159,6 +1186,31 @@ namespace AudioDataInterface
             {
                 редактироватьToolStripMenuItem1.Checked = false;
                 редактированиеToolStripMenuItem.Checked = false;
+                задатьЭлементДляВыравниванияToolStripMenuItem.Enabled = false;
+                выровнятьПоВертикалиToolStripMenuItem.Enabled = false;
+                выровнятьПоГоризонталиToolStripMenuItem.Enabled = false;
+                уменьшитьToolStripMenuItem.Enabled = false;
+                увеличитьToolStripMenuItem.Enabled = false;
+                выстроитьСогласноСкинуToolStripMenuItem.Enabled = false;
+                выстроитьВНулевоеПоложениеToolStripMenuItem.Enabled = false;
+                перемещениеToolStripMenuItem.Enabled = false;
+                увеличитьВсеToolStripMenuItem.Enabled = false;
+                уменьшитьВсеToolStripMenuItem.Enabled = false;
+                toolStripButton_alignX.Enabled = false;
+                toolStripButton_alignY.Enabled = false;
+                toolStripButton_zoomIn.Enabled = false;
+                toolStripButton_zoomOut.Enabled = false;
+                toolStripButton_zoomInAll.Enabled = false;
+                toolStripButton_zoomOutAll.Enabled = false;
+                увеличитьВысотуToolStripMenuItem.Enabled = false;
+                toolStripButton_heightUp.Enabled = false;
+                уменьшитьВысотуToolStripMenuItem.Enabled = false;
+                toolStripButton_heightDown.Enabled = false;
+                увеличитьДлинуToolStripMenuItem.Enabled = false;
+                toolStripButton_widthUp.Enabled = false;
+                уменьшитьДлинуToolStripMenuItem.Enabled = false;
+                toolStripButton_widthDown.Enabled = false;
+                выбранныйЭлементToolStripMenuItem.Enabled = false;
                 mpsPlayer_skinEdit = false;
                 timer_mpsPlayerHandler.Enabled = true;
                 timer_mpsPlayerSpectrumHandler.Enabled = true;
@@ -1168,7 +1220,6 @@ namespace AudioDataInterface
                 mpsPlayer_currentTrackNumber = 1;
                 mpsPlayer_trackCount = 16;
                 MpsPlayerInterfaceInitialize();
-                //pictureBox_mpsPlayer.BackColor = class_mpsPlayerSkinHandler.color_playerBackColor;
             }
         }
 
@@ -1406,7 +1457,7 @@ namespace AudioDataInterface
 
         private void pictureBox_control_MouseDown(object sender, MouseEventArgs e)
         {
-            if (mpsPlayer_skinEdit) mpsPlayer_control = sender;
+            if (mpsPlayer_skinEdit) { mpsPlayer_control = sender; mpsPlayer_selectedControl = sender; }
         }
 
         private void pictureBox_control_MouseUp(object sender, MouseEventArgs e)
@@ -1446,6 +1497,207 @@ namespace AudioDataInterface
                 отображатьСпектрToolStripMenuItem.Checked = false;
                 mpsPlayer_spectrumMode = "off";
             }
+        }
+
+        private void задатьЭлементДляВыравниванияToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            mpsPlayer_alignmentControl = mpsPlayer_selectedControl;
+        }
+
+        private void выровнятьПоВертикалиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mpsPlayer_selectedControl != null && mpsPlayer_alignmentControl != null)
+            {
+                PictureBox selectedPB = (PictureBox)mpsPlayer_selectedControl;
+                PictureBox alignmentPB = (PictureBox)mpsPlayer_alignmentControl;
+                selectedPB.Location = new Point(alignmentPB.Location.X, selectedPB.Location.Y);
+            }
+        }
+
+        private void выровнятьПоГоризонталиToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (mpsPlayer_selectedControl != null && mpsPlayer_alignmentControl != null)
+            {
+                PictureBox selectedPB = (PictureBox)mpsPlayer_selectedControl;
+                PictureBox alignmentPB = (PictureBox)mpsPlayer_alignmentControl;
+                selectedPB.Location = new Point(selectedPB.Location.X, alignmentPB.Location.Y);
+            }
+        }
+
+        private void перемещениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!перемещениеToolStripMenuItem.Checked)
+            {
+                перемещениеToolStripMenuItem.Checked = true;
+                mpsPlayer_controlFree = true;
+            }
+            else
+            {
+                перемещениеToolStripMenuItem.Checked = false;
+                mpsPlayer_controlFree = false;
+            }
+        }
+
+        private void выстроитьСогласноСкинуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            class_mpsPlayerSkinHandler.Load();
+        }
+
+        private void выстроитьВНулевоеПоложениеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(0, 0);
+        }
+
+        private void увеличитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+            pb.Size = new Size(pb.Width + 1, pb.Height + 1);
+        }
+
+        private void уменьшитьToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+            pb.Size = new Size(pb.Width - 1, pb.Height - 1);
+        }
+
+        private void toolStripButton_alignX_Click(object sender, EventArgs e)
+        {
+            выровнятьПоГоризонталиToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_alignY_Click(object sender, EventArgs e)
+        {
+            выровнятьПоВертикалиToolStripMenuItem_Click(this, null);
+        }
+
+        private void выровнятьПоГоризонталиToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            выровнятьПоГоризонталиToolStripMenuItem_Click(this, null);
+        }
+
+        private void выровнятьПоВертикалиToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            выровнятьПоВертикалиToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_zoomOut_Click(object sender, EventArgs e)
+        {
+            уменьшитьToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_zoomInAll_Click(object sender, EventArgs e)
+        {
+            увеличитьВсеToolStripMenuItem_Click(this, null);
+        }
+
+        private void увеличитьToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            увеличитьToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_zoomOutAll_Click(object sender, EventArgs e)
+        {
+            уменьшитьВсеToolStripMenuItem_Click(this, null);
+        }
+
+        private void уменьшитьToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            уменьшитьToolStripMenuItem_Click(this, null);
+        }
+
+        private void увеличитьВсеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Size = new Size(control.Width + 1, control.Height + 1);
+        }
+
+        private void уменьшитьВсеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Size = new Size(control.Width - 1, control.Height - 1);
+        }
+
+        private void toolStripButton_zoomIn_Click(object sender, EventArgs e)
+        {
+            увеличитьToolStripMenuItem_Click(this, null);
+        }
+
+        private void увеличитьВсеToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            увеличитьВсеToolStripMenuItem_Click(this, null);
+        }
+
+        private void уменьшитьВсеToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            уменьшитьВсеToolStripMenuItem_Click(this, null);
+        }
+
+        private void увеличитьВысотуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+            pb.Size = new Size(pb.Width, pb.Height + 1);
+        }
+
+        private void уменьшитьВысотуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+            pb.Size = new Size(pb.Width, pb.Height - 1);
+        }
+
+        private void увеличитьДлинуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+            pb.Size = new Size(pb.Width + 1, pb.Height);
+        }
+
+        private void уменьшитьДлинуToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+            pb.Size = new Size(pb.Width - 1, pb.Height);
+        }
+
+        private void увеличитьВысотуToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            увеличитьВысотуToolStripMenuItem_Click(this, null);
+        }
+
+        private void уменьшитьВысотуToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            уменьшитьВысотуToolStripMenuItem_Click(this, null);
+        }
+
+        private void увеличитьДлинуToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            увеличитьДлинуToolStripMenuItem_Click(this, null);
+        }
+
+        private void уменьшитьДлинуToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            уменьшитьДлинуToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_heightUp_Click(object sender, EventArgs e)
+        {
+            увеличитьВысотуToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_heightDown_Click(object sender, EventArgs e)
+        {
+            уменьшитьВысотуToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_widthUp_Click(object sender, EventArgs e)
+        {
+            увеличитьДлинуToolStripMenuItem_Click(this, null);
+        }
+
+        private void toolStripButton_widthDown_Click(object sender, EventArgs e)
+        {
+            уменьшитьДлинуToolStripMenuItem_Click(this, null);
         }
     }
 }

@@ -142,6 +142,12 @@
   <data name="down" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\down.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="heightDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\heightDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="heightUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\heightUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="insert" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\insert.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -183,5 +189,29 @@
   </data>
   <data name="wav" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\wav.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="widthDown" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\widthDown.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="widthUp" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\widthUp.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="xAllign" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\xAllign.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="yAllign" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\yAllign.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zoomIn" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\zoomIn.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zoomInAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\zoomInAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zoomOut" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\zoomOut.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="zoomOutAll" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\zoomOutAll.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

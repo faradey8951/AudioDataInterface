@@ -41,7 +41,6 @@
             this.label_mpsPlayerSubcodeIntervalValue = new System.Windows.Forms.Label();
             this.trackBar_mpsPlayerSubcodeInterval = new System.Windows.Forms.TrackBar();
             this.label_mpsPlayerSubcodeInterval = new System.Windows.Forms.Label();
-            this.label_leadInOutSubcodesAmountValue = new System.Windows.Forms.Label();
             this.label_silenceSecondsValue = new System.Windows.Forms.Label();
             this.trackBar_silenceSeconds = new System.Windows.Forms.TrackBar();
             this.label_silenceSeconds = new System.Windows.Forms.Label();
@@ -191,7 +190,6 @@
             this.tabPage3.Controls.Add(this.label_mpsPlayerSubcodeIntervalValue);
             this.tabPage3.Controls.Add(this.trackBar_mpsPlayerSubcodeInterval);
             this.tabPage3.Controls.Add(this.label_mpsPlayerSubcodeInterval);
-            this.tabPage3.Controls.Add(this.label_leadInOutSubcodesAmountValue);
             this.tabPage3.Controls.Add(this.label_silenceSecondsValue);
             this.tabPage3.Controls.Add(this.trackBar_silenceSeconds);
             this.tabPage3.Controls.Add(this.label_silenceSeconds);
@@ -211,7 +209,7 @@
             // label_mpsPlayerSubcodeIntervalValue
             // 
             this.label_mpsPlayerSubcodeIntervalValue.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_mpsPlayerSubcodeIntervalValue.Location = new System.Drawing.Point(3, 287);
+            this.label_mpsPlayerSubcodeIntervalValue.Location = new System.Drawing.Point(3, 274);
             this.label_mpsPlayerSubcodeIntervalValue.Name = "label_mpsPlayerSubcodeIntervalValue";
             this.label_mpsPlayerSubcodeIntervalValue.Size = new System.Drawing.Size(376, 13);
             this.label_mpsPlayerSubcodeIntervalValue.TabIndex = 17;
@@ -222,7 +220,7 @@
             // 
             this.trackBar_mpsPlayerSubcodeInterval.Dock = System.Windows.Forms.DockStyle.Top;
             this.trackBar_mpsPlayerSubcodeInterval.LargeChange = 1;
-            this.trackBar_mpsPlayerSubcodeInterval.Location = new System.Drawing.Point(3, 242);
+            this.trackBar_mpsPlayerSubcodeInterval.Location = new System.Drawing.Point(3, 229);
             this.trackBar_mpsPlayerSubcodeInterval.Minimum = 1;
             this.trackBar_mpsPlayerSubcodeInterval.Name = "trackBar_mpsPlayerSubcodeInterval";
             this.trackBar_mpsPlayerSubcodeInterval.Size = new System.Drawing.Size(376, 45);
@@ -234,22 +232,12 @@
             // label_mpsPlayerSubcodeInterval
             // 
             this.label_mpsPlayerSubcodeInterval.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_mpsPlayerSubcodeInterval.Location = new System.Drawing.Point(3, 229);
+            this.label_mpsPlayerSubcodeInterval.Location = new System.Drawing.Point(3, 216);
             this.label_mpsPlayerSubcodeInterval.Name = "label_mpsPlayerSubcodeInterval";
             this.label_mpsPlayerSubcodeInterval.Size = new System.Drawing.Size(376, 13);
             this.label_mpsPlayerSubcodeInterval.TabIndex = 15;
             this.label_mpsPlayerSubcodeInterval.Text = "Интервал между субкодами MPS плеера, (сек)";
             this.label_mpsPlayerSubcodeInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
-            // label_leadInOutSubcodesAmountValue
-            // 
-            this.label_leadInOutSubcodesAmountValue.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_leadInOutSubcodesAmountValue.Location = new System.Drawing.Point(3, 216);
-            this.label_leadInOutSubcodesAmountValue.Name = "label_leadInOutSubcodesAmountValue";
-            this.label_leadInOutSubcodesAmountValue.Size = new System.Drawing.Size(376, 13);
-            this.label_leadInOutSubcodesAmountValue.TabIndex = 14;
-            this.label_leadInOutSubcodesAmountValue.Text = "0";
-            this.label_leadInOutSubcodesAmountValue.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_silenceSecondsValue
             // 
@@ -539,7 +527,6 @@
         private System.Windows.Forms.Label label_mpsPlayerSubcodeIntervalValue;
         private System.Windows.Forms.TrackBar trackBar_mpsPlayerSubcodeInterval;
         private System.Windows.Forms.Label label_mpsPlayerSubcodeInterval;
-        private System.Windows.Forms.Label label_leadInOutSubcodesAmountValue;
         private System.Windows.Forms.Label label_fftSizeValue;
         private System.Windows.Forms.TrackBar trackBar_fftSize;
         private System.Windows.Forms.Label label_fftSize;
