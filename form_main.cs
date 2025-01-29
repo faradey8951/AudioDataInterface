@@ -114,6 +114,7 @@ namespace AudioDataInterface
         public static double mpsPlayerWidth = 0; //Ширина mps плеера
         public static double mpsPlayerHeight = 0; //Высота mps плеера
         public static bool mpsPlayer_skinEdit = false;
+        public static object mpsPlayer_control = null;
 
         public static double spectrumBarWidth = 0; //Ширина области спектра относительно ширины mps плеера
         public static double spectrumBarHeight = 0; //Высота области спектра относительно высоты mps плеера
@@ -509,6 +510,14 @@ namespace AudioDataInterface
             if (scope_horizontalBIASDec == true) scope_horizontalBIAS += 1;
             if (scope_verticalBIASInc == true) scope_verticalBIAS += 2;
             if (scope_verticalBIASDec == true) scope_verticalBIAS -= 2;
+
+            if (mpsPlayer_skinEdit && mpsPlayer_control != null)
+            {
+                PictureBox pb = (PictureBox)mpsPlayer_control;
+                var pos = pictureBox_mpsPlayer.PointToClient(Cursor.Position);
+                pb.Location = new Point(pos.X, pos.Y);
+
+            }
         }
 
         private void statusStrip_ItemClicked(object sender, ToolStripItemClickedEventArgs e)
@@ -727,6 +736,7 @@ namespace AudioDataInterface
                 pictureBox_symbol3.Image = null;
                 pictureBox_symbol4.Image = class_mpsPlayerSkinHandler.image_symbols[0];
                 pictureBox_symbol5.Image = class_mpsPlayerSkinHandler.image_symbols[0];
+                pictureBox_symbol6.Image = null;
                 pictureBox_symbol7.Image = null;
                 pictureBox_symbol8.Image = class_mpsPlayerSkinHandler.image_symbols[0];
                 pictureBox_symbol9.Image = class_mpsPlayerSkinHandler.image_symbols[0];
@@ -765,12 +775,71 @@ namespace AudioDataInterface
                 pictureBox_symbol3.Image = class_mpsPlayerSkinHandler.image_symbols[13];
                 pictureBox_symbol4.Image = class_mpsPlayerSkinHandler.image_symbols[16];
                 pictureBox_symbol5.Image = null;
+                pictureBox_symbol6.Image = null;
                 pictureBox_symbol7.Image = class_mpsPlayerSkinHandler.image_symbols[0];
                 pictureBox_dots.Visible = false;
                 pictureBox_disc1.Visible = false;
                 pictureBox_disc2.Visible = false;
                 pictureBox_disc3.Visible = false;
             }
+        }
+
+        /// <summary>
+        /// Включает отладочный режим отображения дисплея MPS
+        /// </summary>
+        public void MpsPlayerInterfaceDebug()
+        {
+            symbolImages = new Image[] { class_mpsPlayerSkinHandler.image_symbols[0], class_mpsPlayerSkinHandler.image_symbols[1], class_mpsPlayerSkinHandler.image_symbols[2], class_mpsPlayerSkinHandler.image_symbols[3], class_mpsPlayerSkinHandler.image_symbols[4], class_mpsPlayerSkinHandler.image_symbols[5], class_mpsPlayerSkinHandler.image_symbols[6], class_mpsPlayerSkinHandler.image_symbols[7], class_mpsPlayerSkinHandler.image_symbols[8], class_mpsPlayerSkinHandler.image_symbols[9] };
+            mpsPlayerWidth = 810;
+            mpsPlayerHeight = 335;
+            spectrumBarWidthP = (int)Math.Ceiling(mpsPlayerWidth * spectrumBarWidth);
+            spectrumBarHeightP = (int)Math.Ceiling((double)mpsPlayerHeight * (double)spectrumBarHeight);
+            spectrumBarSegmentWidthP = (int)Math.Ceiling((double)spectrumBarWidthP / spectrumBarSegmentWidthCount);
+            spectrumBarSegmentHeightP = (int)Math.Floor((double)spectrumBarHeightP / spectrumBarSegmentHeightCount);
+            spectrumBarSegmentDeltaP = (int)Math.Ceiling((double)spectrumBarSegmentWidthP / spectrumBarSegmentDeltaCount);
+            spectrumBarHeightGapReducerP = -1;
+
+            pictureBox_timeSymbols = new PictureBox[] { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
+            pictureBox_trackNumberSymbols = new PictureBox[] { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
+            pictureBox_spectrumBorder1.Image = class_mpsPlayerSkinHandler.image_misc[0];
+            pictureBox_spectrumBorder2.Image = class_mpsPlayerSkinHandler.image_misc[0];
+            window_main.pictureBox_dots.Image = class_mpsPlayerSkinHandler.image_symbols[18];
+            pictureBox_playPause.Visible = true;
+            pictureBox_playPause.Image = class_mpsPlayerSkinHandler.image_CD[9];
+            pictureBox_symbol1.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol2.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol3.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol4.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol5.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol6.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol7.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol8.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol9.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_symbol10.Image = class_mpsPlayerSkinHandler.image_symbols[8];
+            pictureBox_track1.Image = class_mpsPlayerSkinHandler.image_trackCalendar[0];
+            pictureBox_track2.Image = class_mpsPlayerSkinHandler.image_trackCalendar[1];
+            pictureBox_track3.Image = class_mpsPlayerSkinHandler.image_trackCalendar[2];
+            pictureBox_track4.Image = class_mpsPlayerSkinHandler.image_trackCalendar[3];
+            pictureBox_track5.Image = class_mpsPlayerSkinHandler.image_trackCalendar[4];
+            pictureBox_track6.Image = class_mpsPlayerSkinHandler.image_trackCalendar[5];
+            pictureBox_track7.Image = class_mpsPlayerSkinHandler.image_trackCalendar[6];
+            pictureBox_track8.Image = class_mpsPlayerSkinHandler.image_trackCalendar[7];
+            pictureBox_track9.Image = class_mpsPlayerSkinHandler.image_trackCalendar[8];
+            pictureBox_track10.Image = class_mpsPlayerSkinHandler.image_trackCalendar[9];
+            pictureBox_track11.Image = class_mpsPlayerSkinHandler.image_trackCalendar[10];
+            pictureBox_track12.Image = class_mpsPlayerSkinHandler.image_trackCalendar[11];
+            pictureBox_track13.Image = class_mpsPlayerSkinHandler.image_trackCalendar[12];
+            pictureBox_track14.Image = class_mpsPlayerSkinHandler.image_trackCalendar[13];
+            pictureBox_track15.Image = class_mpsPlayerSkinHandler.image_trackCalendar[14];
+            pictureBox_track16.Image = class_mpsPlayerSkinHandler.image_trackCalendar[15];
+            pictureBox_dots.Visible = true;
+            pictureBox_disc1.Visible = true;
+            pictureBox_disc2.Visible = true;
+            pictureBox_disc3.Visible = true;
+            pictureBox_cassette.Image = class_mpsPlayerSkinHandler.image_tape[0];
+            pictureBox_disc1.Image = class_mpsPlayerSkinHandler.image_CD[0];
+            pictureBox_disc2.Image = class_mpsPlayerSkinHandler.image_CD[3];
+            pictureBox_disc3.Image = class_mpsPlayerSkinHandler.image_CD[6];
         }
 
         private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
@@ -858,8 +927,11 @@ namespace AudioDataInterface
                 else if (mpsPlayer_liveSpectrum[i] > 0) mpsPlayer_liveSpectrum[i]--;
             }
             for (int i = 0; i < mpsPlayer_liveSpectrum.Length; i++) if (mpsPlayer_spectrumPeakHold[i] < mpsPlayer_liveSpectrum[i]) mpsPlayer_spectrumPeakHold[i] = mpsPlayer_liveSpectrum[i];
-            if (mpsPlayer_spectrumMode == "noPeak") mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
-            if (mpsPlayer_spectrumMode != "off") DrawMPSPlayerInterface();
+            if (mpsPlayer_spectrumMode == "noPeak") { mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; задержкаПиковToolStripMenuItem.Checked = false; }
+            if (mpsPlayer_spectrumMode == "peakHold") задержкаПиковToolStripMenuItem.Checked = true;
+            if (mpsPlayer_spectrumMode == "off") { отображатьСпектрToolStripMenuItem.Checked = false; mpsPlayer_spectrumPeakHold = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; mpsPlayer_liveSpectrum = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; mpsPlayer_instantSpectrum = new int[] { 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 }; }
+            if (mpsPlayer_spectrumMode != "off") { отображатьСпектрToolStripMenuItem.Checked = true; }
+            DrawMPSPlayerInterface();
             mpsPlayer_peakHoldTimeCount++;
         }
 
@@ -921,7 +993,6 @@ namespace AudioDataInterface
         private void timer_mpsPlayerTimeUpdate_Tick(object sender, EventArgs e)
         {
             if (mpsPlayer_mode == "play") mpsPlayer_timeSeconds++;
-
         }
 
         private void groupBox_signalCapture_Enter(object sender, EventArgs e)
@@ -1067,8 +1138,38 @@ namespace AudioDataInterface
 
         private void редактироватьToolStripMenuItem1_Click(object sender, EventArgs e)
         {
-            if (!редактироватьToolStripMenuItem1.Checked) редактироватьToolStripMenuItem1.Checked = true;
-            else редактироватьToolStripMenuItem1.Checked = false;
+            if (!редактироватьToolStripMenuItem1.Checked)
+            {
+                редактироватьToolStripMenuItem1.Checked = true;
+                редактированиеToolStripMenuItem.Checked = true;
+                mpsPlayer_skinEdit = true;
+                //pictureBox_mpsPlayer.BackColor = Color.White;
+                timer_mpsPlayerHandler.Enabled = false;              
+                timer_mpsPlayerSpectrumUpdater.Enabled = false;
+                mpsPlayer_instantSpectrum = new int[] { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 };
+                mpsPlayer_liveSpectrum = new int[] { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 };
+                timer_mpsPlayerRunningIndicatorHandler.Enabled = false;
+                timer_signalQualityUpdater.Enabled = false;
+                MpsPlayerTrackCalendarSetAmount(16);
+                MpsPlayerTrackCalendarSetCurrentTrack(1);
+                MpsPlayerRunningIndicatorStop();
+                MpsPlayerInterfaceDebug();
+            }
+            else
+            {
+                редактироватьToolStripMenuItem1.Checked = false;
+                редактированиеToolStripMenuItem.Checked = false;
+                mpsPlayer_skinEdit = false;
+                timer_mpsPlayerHandler.Enabled = true;
+                timer_mpsPlayerSpectrumHandler.Enabled = true;
+                timer_mpsPlayerSpectrumUpdater.Enabled = true;
+                timer_mpsPlayerTimeUpdater.Enabled = true;
+                timer_signalQualityUpdater.Enabled = true;
+                mpsPlayer_currentTrackNumber = 1;
+                mpsPlayer_trackCount = 16;
+                MpsPlayerInterfaceInitialize();
+                //pictureBox_mpsPlayer.BackColor = class_mpsPlayerSkinHandler.color_playerBackColor;
+            }
         }
 
         private void кодироватьВWAVToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1290,6 +1391,61 @@ namespace AudioDataInterface
         private void toolStripButton_stop_Click(object sender, EventArgs e)
         {
             mPSOPUSОстановитьToolStripMenuItem_Click(this, null);
+        }
+
+        private void pictureBox_mpsPlayer_MouseDown(object sender, MouseEventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(pictureBox_mpsPlayer.Controls.OfType<PictureBox>());
+            int id = -1;
+            foreach (PictureBox control in controls)
+            {
+                if ((e.Location.X >= control.Location.X && e.Location.X <= (control.Location.X + control.Width)) && (e.Location.Y >= control.Location.Y && e.Location.Y <= (control.Location.Y + control.Height))) id = controls.IndexOf(control);
+            }
+        }
+
+        private void pictureBox_control_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (mpsPlayer_skinEdit) mpsPlayer_control = sender;
+        }
+
+        private void pictureBox_control_MouseUp(object sender, MouseEventArgs e)
+        {
+            mpsPlayer_control = null;
+        }
+
+        private void редактированиеToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            редактироватьToolStripMenuItem1_Click(this, null);
+        }
+
+        private void задержкаПиковToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!задержкаПиковToolStripMenuItem.Checked)
+            {
+                задержкаПиковToolStripMenuItem.Checked = true;
+                mpsPlayer_spectrumMode = "peakHold";
+            }
+            else
+            {
+                задержкаПиковToolStripMenuItem.Checked = false;
+                mpsPlayer_spectrumMode = "noPeak";
+            }
+        }
+
+        private void отображатьСпектрToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!отображатьСпектрToolStripMenuItem.Checked)
+            {
+                отображатьСпектрToolStripMenuItem.Checked = true;
+                if (задержкаПиковToolStripMenuItem.Checked) mpsPlayer_spectrumMode = "peakHold";
+                else mpsPlayer_spectrumMode = "noPeak";
+            }
+            else
+            {
+                отображатьСпектрToolStripMenuItem.Checked = false;
+                mpsPlayer_spectrumMode = "off";
+            }
         }
     }
 }
