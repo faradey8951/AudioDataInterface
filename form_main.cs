@@ -491,6 +491,7 @@ namespace AudioDataInterface
             label_audioBufferSize.Text = "Аудио буфер: ";
             label_trackNumber.Text = "Дорожка: " + mpsPlayer_currentTrackNumber.ToString();
             label_trackCount.Text = "Всего дорожек: " + mpsPlayer_trackCount.ToString();
+            this.Text = new string(DataHandler.artist) + " / " + new string(DataHandler.album) + " / " + new string(DataHandler.track);
             try
             {
                 if (DataHandler.ms != null)

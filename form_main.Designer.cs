@@ -212,6 +212,26 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
+            this.pictureBox_8 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_7 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_6 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_5 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_4 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_3 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_1 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_16 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_15 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_14 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_13 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_12 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_11 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_10 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_9 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_20 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_19 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_18 = new System.Windows.Forms.PictureBox();
+            this.pictureBox_17 = new System.Windows.Forms.PictureBox();
             this.menuStrip.SuspendLayout();
             this.panel_base.SuspendLayout();
             this.panel_dataControl.SuspendLayout();
@@ -264,6 +284,26 @@ namespace AudioDataInterface
             this.groupBox_scaleAdjust.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).BeginInit();
             this.toolStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_8)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_7)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_6)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_5)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_4)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_16)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_15)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_14)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_13)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_12)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_11)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_10)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_9)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_20)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_19)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_18)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_17)).BeginInit();
             this.SuspendLayout();
             // 
             // menuStrip
@@ -377,7 +417,7 @@ namespace AudioDataInterface
             this.альтернативныйЭкранToolStripMenuItem});
             this.скинToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.theme;
             this.скинToolStripMenuItem1.Name = "скинToolStripMenuItem1";
-            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(134, 22);
             this.скинToolStripMenuItem1.Text = "Скин";
             // 
             // редактироватьToolStripMenuItem1
@@ -519,7 +559,7 @@ namespace AudioDataInterface
             this.mPSПлеерToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.оставшеесяВремяToolStripMenuItem});
             this.mPSПлеерToolStripMenuItem.Name = "mPSПлеерToolStripMenuItem";
-            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.mPSПлеерToolStripMenuItem.Text = "MPS плеер";
             // 
             // оставшеесяВремяToolStripMenuItem
@@ -677,6 +717,26 @@ namespace AudioDataInterface
             // 
             // tabPage_graphicalView
             // 
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_20);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_19);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_18);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_17);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_16);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_15);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_14);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_13);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_12);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_11);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_10);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_9);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_8);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_7);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_6);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_5);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_4);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_3);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_2);
+            this.tabPage_graphicalView.Controls.Add(this.pictureBox_1);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_symbol9);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_cassette);
             this.tabPage_graphicalView.Controls.Add(this.pictureBox_disc3);
@@ -2200,6 +2260,246 @@ namespace AudioDataInterface
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
             // 
+            // pictureBox_8
+            // 
+            this.pictureBox_8.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_8.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_8.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_8.Location = new System.Drawing.Point(288, 51);
+            this.pictureBox_8.Name = "pictureBox_8";
+            this.pictureBox_8.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_8.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_8.TabIndex = 43;
+            this.pictureBox_8.TabStop = false;
+            // 
+            // pictureBox_7
+            // 
+            this.pictureBox_7.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_7.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_7.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_7.Location = new System.Drawing.Point(248, 51);
+            this.pictureBox_7.Name = "pictureBox_7";
+            this.pictureBox_7.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_7.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_7.TabIndex = 42;
+            this.pictureBox_7.TabStop = false;
+            // 
+            // pictureBox_6
+            // 
+            this.pictureBox_6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_6.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_6.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_6.Location = new System.Drawing.Point(208, 51);
+            this.pictureBox_6.Name = "pictureBox_6";
+            this.pictureBox_6.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_6.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_6.TabIndex = 41;
+            this.pictureBox_6.TabStop = false;
+            // 
+            // pictureBox_5
+            // 
+            this.pictureBox_5.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_5.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_5.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_5.Location = new System.Drawing.Point(168, 51);
+            this.pictureBox_5.Name = "pictureBox_5";
+            this.pictureBox_5.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_5.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_5.TabIndex = 40;
+            this.pictureBox_5.TabStop = false;
+            // 
+            // pictureBox_4
+            // 
+            this.pictureBox_4.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_4.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_4.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_4.Location = new System.Drawing.Point(128, 51);
+            this.pictureBox_4.Name = "pictureBox_4";
+            this.pictureBox_4.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_4.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_4.TabIndex = 39;
+            this.pictureBox_4.TabStop = false;
+            // 
+            // pictureBox_3
+            // 
+            this.pictureBox_3.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_3.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_3.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_3.Location = new System.Drawing.Point(88, 51);
+            this.pictureBox_3.Name = "pictureBox_3";
+            this.pictureBox_3.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_3.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_3.TabIndex = 38;
+            this.pictureBox_3.TabStop = false;
+            // 
+            // pictureBox_2
+            // 
+            this.pictureBox_2.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_2.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_2.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_2.Location = new System.Drawing.Point(48, 51);
+            this.pictureBox_2.Name = "pictureBox_2";
+            this.pictureBox_2.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_2.TabIndex = 37;
+            this.pictureBox_2.TabStop = false;
+            // 
+            // pictureBox_1
+            // 
+            this.pictureBox_1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_1.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_1.Location = new System.Drawing.Point(8, 51);
+            this.pictureBox_1.Name = "pictureBox_1";
+            this.pictureBox_1.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_1.TabIndex = 36;
+            this.pictureBox_1.TabStop = false;
+            // 
+            // pictureBox_16
+            // 
+            this.pictureBox_16.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_16.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_16.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_16.Location = new System.Drawing.Point(605, 51);
+            this.pictureBox_16.Name = "pictureBox_16";
+            this.pictureBox_16.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_16.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_16.TabIndex = 51;
+            this.pictureBox_16.TabStop = false;
+            // 
+            // pictureBox_15
+            // 
+            this.pictureBox_15.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_15.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_15.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_15.Location = new System.Drawing.Point(565, 51);
+            this.pictureBox_15.Name = "pictureBox_15";
+            this.pictureBox_15.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_15.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_15.TabIndex = 50;
+            this.pictureBox_15.TabStop = false;
+            // 
+            // pictureBox_14
+            // 
+            this.pictureBox_14.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_14.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_14.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_14.Location = new System.Drawing.Point(525, 51);
+            this.pictureBox_14.Name = "pictureBox_14";
+            this.pictureBox_14.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_14.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_14.TabIndex = 49;
+            this.pictureBox_14.TabStop = false;
+            // 
+            // pictureBox_13
+            // 
+            this.pictureBox_13.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_13.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_13.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_13.Location = new System.Drawing.Point(485, 51);
+            this.pictureBox_13.Name = "pictureBox_13";
+            this.pictureBox_13.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_13.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_13.TabIndex = 48;
+            this.pictureBox_13.TabStop = false;
+            // 
+            // pictureBox_12
+            // 
+            this.pictureBox_12.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_12.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_12.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_12.Location = new System.Drawing.Point(445, 51);
+            this.pictureBox_12.Name = "pictureBox_12";
+            this.pictureBox_12.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_12.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_12.TabIndex = 47;
+            this.pictureBox_12.TabStop = false;
+            // 
+            // pictureBox_11
+            // 
+            this.pictureBox_11.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_11.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_11.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_11.Location = new System.Drawing.Point(405, 51);
+            this.pictureBox_11.Name = "pictureBox_11";
+            this.pictureBox_11.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_11.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_11.TabIndex = 46;
+            this.pictureBox_11.TabStop = false;
+            // 
+            // pictureBox_10
+            // 
+            this.pictureBox_10.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_10.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_10.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_10.Location = new System.Drawing.Point(365, 51);
+            this.pictureBox_10.Name = "pictureBox_10";
+            this.pictureBox_10.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_10.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_10.TabIndex = 45;
+            this.pictureBox_10.TabStop = false;
+            // 
+            // pictureBox_9
+            // 
+            this.pictureBox_9.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_9.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_9.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_9.Location = new System.Drawing.Point(325, 51);
+            this.pictureBox_9.Name = "pictureBox_9";
+            this.pictureBox_9.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_9.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_9.TabIndex = 44;
+            this.pictureBox_9.TabStop = false;
+            // 
+            // pictureBox_20
+            // 
+            this.pictureBox_20.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_20.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_20.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_20.Location = new System.Drawing.Point(765, 51);
+            this.pictureBox_20.Name = "pictureBox_20";
+            this.pictureBox_20.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_20.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_20.TabIndex = 55;
+            this.pictureBox_20.TabStop = false;
+            // 
+            // pictureBox_19
+            // 
+            this.pictureBox_19.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_19.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_19.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_19.Location = new System.Drawing.Point(725, 51);
+            this.pictureBox_19.Name = "pictureBox_19";
+            this.pictureBox_19.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_19.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_19.TabIndex = 54;
+            this.pictureBox_19.TabStop = false;
+            // 
+            // pictureBox_18
+            // 
+            this.pictureBox_18.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_18.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_18.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_18.Location = new System.Drawing.Point(685, 51);
+            this.pictureBox_18.Name = "pictureBox_18";
+            this.pictureBox_18.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_18.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_18.TabIndex = 53;
+            this.pictureBox_18.TabStop = false;
+            // 
+            // pictureBox_17
+            // 
+            this.pictureBox_17.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.pictureBox_17.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_17.ContextMenuStrip = this.contextMenuStrip;
+            this.pictureBox_17.Location = new System.Drawing.Point(645, 51);
+            this.pictureBox_17.Name = "pictureBox_17";
+            this.pictureBox_17.Size = new System.Drawing.Size(40, 55);
+            this.pictureBox_17.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox_17.TabIndex = 52;
+            this.pictureBox_17.TabStop = false;
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2280,6 +2580,26 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_8)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_7)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_6)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_5)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_4)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_3)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_16)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_15)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_14)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_13)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_12)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_11)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_10)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_9)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_20)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_19)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_18)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_17)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -2468,6 +2788,26 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripButton toolStripButton_widthDown;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator24;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
+        public System.Windows.Forms.PictureBox pictureBox_20;
+        public System.Windows.Forms.PictureBox pictureBox_19;
+        public System.Windows.Forms.PictureBox pictureBox_18;
+        public System.Windows.Forms.PictureBox pictureBox_17;
+        public System.Windows.Forms.PictureBox pictureBox_16;
+        public System.Windows.Forms.PictureBox pictureBox_15;
+        public System.Windows.Forms.PictureBox pictureBox_14;
+        public System.Windows.Forms.PictureBox pictureBox_13;
+        public System.Windows.Forms.PictureBox pictureBox_12;
+        public System.Windows.Forms.PictureBox pictureBox_11;
+        public System.Windows.Forms.PictureBox pictureBox_10;
+        public System.Windows.Forms.PictureBox pictureBox_9;
+        public System.Windows.Forms.PictureBox pictureBox_8;
+        public System.Windows.Forms.PictureBox pictureBox_7;
+        public System.Windows.Forms.PictureBox pictureBox_6;
+        public System.Windows.Forms.PictureBox pictureBox_5;
+        public System.Windows.Forms.PictureBox pictureBox_4;
+        public System.Windows.Forms.PictureBox pictureBox_3;
+        public System.Windows.Forms.PictureBox pictureBox_2;
+        public System.Windows.Forms.PictureBox pictureBox_1;
     }
 }
 

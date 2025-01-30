@@ -882,9 +882,9 @@ namespace AudioDataInterface
                                 byteL3 = ConvertSymbolToByte(form_encoder.artist[m + 1]);
                                 byteL4 = ConvertSymbolToByte(form_encoder.artist[m + 2]);
                                 byteR1 = (byte)(b1+1);
-                                byteR2 = ConvertSymbolToByte(form_encoder.artist[m]);
-                                byteR3 = ConvertSymbolToByte(form_encoder.artist[m + 1]);
-                                byteR4 = ConvertSymbolToByte(form_encoder.artist[m + 2]);
+                                byteR2 = ConvertSymbolToByte(form_encoder.artist[m + 3]);
+                                byteR3 = ConvertSymbolToByte(form_encoder.artist[m + 4]);
+                                byteR4 = ConvertSymbolToByte(form_encoder.artist[m + 5]);
                                 GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
                             }
                             for (int m = 0; m < 24; m += 6, b1 += 2)
@@ -894,9 +894,9 @@ namespace AudioDataInterface
                                 byteL3 = ConvertSymbolToByte(form_encoder.album[m + 1]);
                                 byteL4 = ConvertSymbolToByte(form_encoder.album[m + 2]);
                                 byteR1 = (byte)(b1 + 1);
-                                byteR2 = ConvertSymbolToByte(form_encoder.album[m]);
-                                byteR3 = ConvertSymbolToByte(form_encoder.album[m + 1]);
-                                byteR4 = ConvertSymbolToByte(form_encoder.album[m + 2]);
+                                byteR2 = ConvertSymbolToByte(form_encoder.album[m + 3]);
+                                byteR3 = ConvertSymbolToByte(form_encoder.album[m + 4]);
+                                byteR4 = ConvertSymbolToByte(form_encoder.album[m + 5]);
                                 GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
                             }
                             for (int m = 0; m < 24; m += 6, b1 += 2)
@@ -906,9 +906,9 @@ namespace AudioDataInterface
                                 byteL3 = ConvertSymbolToByte(form_encoder.track[m + 1]);
                                 byteL4 = ConvertSymbolToByte(form_encoder.track[m + 2]);
                                 byteR1 = (byte)(b1 + 1);
-                                byteR2 = ConvertSymbolToByte(form_encoder.track[m]);
-                                byteR3 = ConvertSymbolToByte(form_encoder.track[m + 1]);
-                                byteR4 = ConvertSymbolToByte(form_encoder.track[m + 2]);
+                                byteR2 = ConvertSymbolToByte(form_encoder.track[m + 3]);
+                                byteR3 = ConvertSymbolToByte(form_encoder.track[m + 4]);
+                                byteR4 = ConvertSymbolToByte(form_encoder.track[m + 5]);
                                 GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
                             }
                         }
