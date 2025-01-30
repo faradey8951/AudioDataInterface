@@ -498,6 +498,7 @@ namespace AudioDataInterface
             this.сохранитьToolStripMenuItem1.Name = "сохранитьToolStripMenuItem1";
             this.сохранитьToolStripMenuItem1.Size = new System.Drawing.Size(292, 22);
             this.сохранитьToolStripMenuItem1.Text = "Сохранить";
+            this.сохранитьToolStripMenuItem1.Click += new System.EventHandler(this.сохранитьToolStripMenuItem1_Click);
             // 
             // toolStripSeparator3
             // 
@@ -717,7 +718,7 @@ namespace AudioDataInterface
             this.tabPage_graphicalView.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage_graphicalView.Size = new System.Drawing.Size(816, 341);
             this.tabPage_graphicalView.TabIndex = 1;
-            this.tabPage_graphicalView.Text = "Графический";
+            this.tabPage_graphicalView.Text = "MPS-PLAYER VFD DISPLAY";
             this.tabPage_graphicalView.UseVisualStyleBackColor = true;
             // 
             // pictureBox_symbol9
@@ -952,6 +953,7 @@ namespace AudioDataInterface
             this.сохранитьСкинToolStripMenuItem.Name = "сохранитьСкинToolStripMenuItem";
             this.сохранитьСкинToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
             this.сохранитьСкинToolStripMenuItem.Text = "Сохранить скин";
+            this.сохранитьСкинToolStripMenuItem.Click += new System.EventHandler(this.сохранитьСкинToolStripMenuItem_Click);
             // 
             // pictureBox_cassette
             // 

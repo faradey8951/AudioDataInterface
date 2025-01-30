@@ -147,6 +147,185 @@ namespace AudioDataInterface
             return skins;
         }
 
+        /// <summary>
+        /// Сохраняет изменения разметки, внесенные редактором, в скин
+        /// </summary>
+        public void WriteLayout()
+        {
+            string dir = "";
+            var skins = GetSkins();
+            if (currentSkinName == "") dir = "mpsPlayerSkins\\Default";
+            else dir = currentSkinName;
+            if (File.Exists(dir + "\\layout.txt"))
+            {
+                FileStream fs = new FileStream(dir + "\\layout.txt", FileMode.Create);
+                StreamWriter sw = new StreamWriter(fs);
+                sw.WriteLine("1symbolPosX=" + form_main.window_main.pictureBox_symbol1.Location.X); sw.WriteLine("1symbolPosY=" + form_main.window_main.pictureBox_symbol1.Location.Y);
+                sw.WriteLine("1symbolSizeX=" + form_main.window_main.pictureBox_symbol1.Size.Width); sw.WriteLine("1symbolSizeY=" + form_main.window_main.pictureBox_symbol1.Size.Height);
+                sw.WriteLine("2symbolPosX=" + form_main.window_main.pictureBox_symbol2.Location.X); sw.WriteLine("2symbolPosY=" + form_main.window_main.pictureBox_symbol2.Location.Y);
+                sw.WriteLine("2symbolSizeX=" + form_main.window_main.pictureBox_symbol2.Size.Width); sw.WriteLine("2symbolSizeY=" + form_main.window_main.pictureBox_symbol2.Size.Height);
+                sw.WriteLine("3symbolPosX=" + form_main.window_main.pictureBox_symbol3.Location.X); sw.WriteLine("3symbolPosY=" + form_main.window_main.pictureBox_symbol3.Location.Y);
+                sw.WriteLine("3symbolSizeX=" + form_main.window_main.pictureBox_symbol3.Size.Width); sw.WriteLine("3symbolSizeY=" + form_main.window_main.pictureBox_symbol3.Size.Height);
+                sw.WriteLine("4symbolPosX=" + form_main.window_main.pictureBox_symbol4.Location.X); sw.WriteLine("4symbolPosY=" + form_main.window_main.pictureBox_symbol4.Location.Y);
+                sw.WriteLine("4symbolSizeX=" + form_main.window_main.pictureBox_symbol4.Size.Width); sw.WriteLine("4symbolSizeY=" + form_main.window_main.pictureBox_symbol4.Size.Height);
+                sw.WriteLine("5symbolPosX=" + form_main.window_main.pictureBox_symbol5.Location.X); sw.WriteLine("5symbolPosY=" + form_main.window_main.pictureBox_symbol5.Location.Y);
+                sw.WriteLine("5symbolSizeX=" + form_main.window_main.pictureBox_symbol5.Size.Width); sw.WriteLine("5symbolSizeY=" + form_main.window_main.pictureBox_symbol5.Size.Height);
+
+                sw.WriteLine("6symbolPosX=" + form_main.window_main.pictureBox_symbol6.Location.X);
+                sw.WriteLine("6symbolPosY=" + form_main.window_main.pictureBox_symbol6.Location.Y);
+                sw.WriteLine("6symbolSizeX=" + form_main.window_main.pictureBox_symbol6.Size.Width);
+                sw.WriteLine("6symbolSizeY=" + form_main.window_main.pictureBox_symbol6.Size.Height);
+
+                sw.WriteLine("7symbolPosX=" + form_main.window_main.pictureBox_symbol7.Location.X);
+                sw.WriteLine("7symbolPosY=" + form_main.window_main.pictureBox_symbol7.Location.Y);
+                sw.WriteLine("7symbolSizeX=" + form_main.window_main.pictureBox_symbol7.Size.Width);
+                sw.WriteLine("7symbolSizeY=" + form_main.window_main.pictureBox_symbol7.Size.Height);
+
+                sw.WriteLine("8symbolPosX=" + form_main.window_main.pictureBox_symbol8.Location.X);
+                sw.WriteLine("8symbolPosY=" + form_main.window_main.pictureBox_symbol8.Location.Y);
+                sw.WriteLine("8symbolSizeX=" + form_main.window_main.pictureBox_symbol8.Size.Width);
+                sw.WriteLine("8symbolSizeY=" + form_main.window_main.pictureBox_symbol8.Size.Height);
+
+                sw.WriteLine("9symbolPosX=" + form_main.window_main.pictureBox_symbol9.Location.X);
+                sw.WriteLine("9symbolPosY=" + form_main.window_main.pictureBox_symbol9.Location.Y);
+                sw.WriteLine("9symbolSizeX=" + form_main.window_main.pictureBox_symbol9.Size.Width);
+                sw.WriteLine("9symbolSizeY=" + form_main.window_main.pictureBox_symbol9.Size.Height);
+
+                sw.WriteLine("10symbolPosX=" + form_main.window_main.pictureBox_symbol10.Location.X);
+                sw.WriteLine("10symbolPosY=" + form_main.window_main.pictureBox_symbol10.Location.Y);
+                sw.WriteLine("10symbolSizeX=" + form_main.window_main.pictureBox_symbol10.Size.Width);
+                sw.WriteLine("10symbolSizeY=" + form_main.window_main.pictureBox_symbol10.Size.Height);
+
+                sw.WriteLine("dotsPosX=" + form_main.window_main.pictureBox_dots.Location.X);
+                sw.WriteLine("dotsPosY=" + form_main.window_main.pictureBox_dots.Location.Y);
+                sw.WriteLine("dotsSizeX=" + form_main.window_main.pictureBox_dots.Size.Width);
+                sw.WriteLine("dotsSizeY=" + form_main.window_main.pictureBox_dots.Size.Height);
+
+                sw.WriteLine("disc1PosX=" + form_main.window_main.pictureBox_disc1.Location.X);
+                sw.WriteLine("disc1PosY=" + form_main.window_main.pictureBox_disc1.Location.Y);
+                sw.WriteLine("disc1SizeX=" + form_main.window_main.pictureBox_disc1.Size.Width);
+                sw.WriteLine("disc1SizeY=" + form_main.window_main.pictureBox_disc1.Size.Height);
+
+                sw.WriteLine("disc2PosX=" + form_main.window_main.pictureBox_disc2.Location.X);
+                sw.WriteLine("disc2PosY=" + form_main.window_main.pictureBox_disc2.Location.Y);
+                sw.WriteLine("disc2SizeX=" + form_main.window_main.pictureBox_disc2.Size.Width);
+                sw.WriteLine("disc2SizeY=" + form_main.window_main.pictureBox_disc2.Size.Height);
+
+                sw.WriteLine("disc3PosX=" + form_main.window_main.pictureBox_disc3.Location.X);
+                sw.WriteLine("disc3PosY=" + form_main.window_main.pictureBox_disc3.Location.Y);
+                sw.WriteLine("disc3SizeX=" + form_main.window_main.pictureBox_disc3.Size.Width);
+                sw.WriteLine("disc3SizeY=" + form_main.window_main.pictureBox_disc3.Size.Height);
+
+                sw.WriteLine("playPausePosX=" + form_main.window_main.pictureBox_playPause.Location.X);
+                sw.WriteLine("playPausePosY=" + form_main.window_main.pictureBox_playPause.Location.Y);
+                sw.WriteLine("playPauseSizeX=" + form_main.window_main.pictureBox_playPause.Size.Width);
+                sw.WriteLine("playPauseSizeY=" + form_main.window_main.pictureBox_playPause.Size.Height);
+
+                sw.WriteLine("cassettePosX=" + form_main.window_main.pictureBox_cassette.Location.X);
+                sw.WriteLine("cassettePosY=" + form_main.window_main.pictureBox_cassette.Location.Y);
+                sw.WriteLine("cassetteSizeX=" + form_main.window_main.pictureBox_cassette.Size.Width);
+                sw.WriteLine("cassetteSizeY=" + form_main.window_main.pictureBox_cassette.Size.Height);
+
+                sw.WriteLine("spectrumBorder1PosX=" + form_main.window_main.pictureBox_spectrumBorder1.Location.X);
+                sw.WriteLine("spectrumBorder1PosY=" + form_main.window_main.pictureBox_spectrumBorder1.Location.Y);
+                sw.WriteLine("spectrumBorder1SizeX=" + form_main.window_main.pictureBox_spectrumBorder1.Size.Width);
+                sw.WriteLine("spectrumBorder1SizeY=" + form_main.window_main.pictureBox_spectrumBorder1.Size.Height);
+
+                sw.WriteLine("spectrumBorder2PosX=" + form_main.window_main.pictureBox_spectrumBorder2.Location.X);
+                sw.WriteLine("spectrumBorder2PosY=" + form_main.window_main.pictureBox_spectrumBorder2.Location.Y);
+                sw.WriteLine("spectrumBorder2SizeX=" + form_main.window_main.pictureBox_spectrumBorder2.Size.Width);
+                sw.WriteLine("spectrumBorder2SizeY=" + form_main.window_main.pictureBox_spectrumBorder2.Size.Height);
+
+                sw.WriteLine("runningIndicatorPosX=" + form_main.window_main.pictureBox_runningIndicator.Location.X);
+                sw.WriteLine("runningIndicatorPosY=" + form_main.window_main.pictureBox_runningIndicator.Location.Y);
+                sw.WriteLine("runningIndicatorSizeX=" + form_main.window_main.pictureBox_runningIndicator.Size.Width);
+                sw.WriteLine("runningIndicatorSizeY=" + form_main.window_main.pictureBox_runningIndicator.Size.Height);
+
+                sw.WriteLine("track1PosX=" + form_main.window_main.pictureBox_track1.Location.X);
+                sw.WriteLine("track1PosY=" + form_main.window_main.pictureBox_track1.Location.Y);
+                sw.WriteLine("track1SizeX=" + form_main.window_main.pictureBox_track1.Size.Width);
+                sw.WriteLine("track1SizeY=" + form_main.window_main.pictureBox_track1.Size.Height);
+
+                sw.WriteLine("track2PosX=" + form_main.window_main.pictureBox_track2.Location.X);
+                sw.WriteLine("track2PosY=" + form_main.window_main.pictureBox_track2.Location.Y);
+                sw.WriteLine("track2SizeX=" + form_main.window_main.pictureBox_track2.Size.Width);
+                sw.WriteLine("track2SizeY=" + form_main.window_main.pictureBox_track2.Size.Height);
+
+                sw.WriteLine("track3PosX=" + form_main.window_main.pictureBox_track3.Location.X);
+                sw.WriteLine("track3PosY=" + form_main.window_main.pictureBox_track3.Location.Y);
+                sw.WriteLine("track3SizeX=" + form_main.window_main.pictureBox_track3.Size.Width);
+                sw.WriteLine("track3SizeY=" + form_main.window_main.pictureBox_track3.Size.Height);
+
+                sw.WriteLine("track4PosX=" + form_main.window_main.pictureBox_track4.Location.X);
+                sw.WriteLine("track4PosY=" + form_main.window_main.pictureBox_track4.Location.Y);
+                sw.WriteLine("track4SizeX=" + form_main.window_main.pictureBox_track4.Size.Width);
+                sw.WriteLine("track4SizeY=" + form_main.window_main.pictureBox_track4.Size.Height);
+
+                sw.WriteLine("track5PosX=" + form_main.window_main.pictureBox_track5.Location.X);
+                sw.WriteLine("track5PosY=" + form_main.window_main.pictureBox_track5.Location.Y);
+                sw.WriteLine("track5SizeX=" + form_main.window_main.pictureBox_track5.Size.Width);
+                sw.WriteLine("track5SizeY=" + form_main.window_main.pictureBox_track5.Size.Height);
+
+                sw.WriteLine("track6PosX=" + form_main.window_main.pictureBox_track6.Location.X);
+                sw.WriteLine("track6PosY=" + form_main.window_main.pictureBox_track6.Location.Y);
+                sw.WriteLine("track6SizeX=" + form_main.window_main.pictureBox_track6.Size.Width);
+                sw.WriteLine("track6SizeY=" + form_main.window_main.pictureBox_track6.Size.Height);
+
+                sw.WriteLine("track7PosX=" + form_main.window_main.pictureBox_track7.Location.X);
+                sw.WriteLine("track7PosY=" + form_main.window_main.pictureBox_track7.Location.Y);
+                sw.WriteLine("track7SizeX=" + form_main.window_main.pictureBox_track7.Size.Width);
+                sw.WriteLine("track7SizeY=" + form_main.window_main.pictureBox_track7.Size.Height);
+
+                sw.WriteLine("track8PosX=" + form_main.window_main.pictureBox_track8.Location.X);
+                sw.WriteLine("track8PosY=" + form_main.window_main.pictureBox_track8.Location.Y);
+                sw.WriteLine("track8SizeX=" + form_main.window_main.pictureBox_track8.Size.Width);
+                sw.WriteLine("track8SizeY=" + form_main.window_main.pictureBox_track8.Size.Height);
+
+                sw.WriteLine("track9PosX=" + form_main.window_main.pictureBox_track9.Location.X);
+                sw.WriteLine("track9PosY=" + form_main.window_main.pictureBox_track9.Location.Y);
+                sw.WriteLine("track9SizeX=" + form_main.window_main.pictureBox_track9.Size.Width);
+                sw.WriteLine("track9SizeY=" + form_main.window_main.pictureBox_track9.Size.Height);
+
+                sw.WriteLine("10trackPosX=" + form_main.window_main.pictureBox_track10.Location.X);
+                sw.WriteLine("10trackPosY=" + form_main.window_main.pictureBox_track10.Location.Y);
+                sw.WriteLine("10trackSizeX=" + form_main.window_main.pictureBox_track10.Size.Width);
+                sw.WriteLine("10trackSizeY=" + form_main.window_main.pictureBox_track10.Size.Height);
+
+                sw.WriteLine("11trackPosX=" + form_main.window_main.pictureBox_track11.Location.X);
+                sw.WriteLine("11trackPosY=" + form_main.window_main.pictureBox_track11.Location.Y);
+                sw.WriteLine("11trackSizeX=" + form_main.window_main.pictureBox_track11.Size.Width);
+                sw.WriteLine("11trackSizeY=" + form_main.window_main.pictureBox_track11.Size.Height);
+
+                sw.WriteLine("12trackPosX=" + form_main.window_main.pictureBox_track12.Location.X);
+                sw.WriteLine("12trackPosY=" + form_main.window_main.pictureBox_track12.Location.Y);
+                sw.WriteLine("12trackSizeX=" + form_main.window_main.pictureBox_track12.Size.Width);
+                sw.WriteLine("12trackSizeY=" + form_main.window_main.pictureBox_track12.Size.Height);
+
+                sw.WriteLine("13trackPosX=" + form_main.window_main.pictureBox_track13.Location.X);
+                sw.WriteLine("13trackPosY=" + form_main.window_main.pictureBox_track13.Location.Y);
+                sw.WriteLine("13trackSizeX=" + form_main.window_main.pictureBox_track13.Size.Width);
+                sw.WriteLine("13trackSizeY=" + form_main.window_main.pictureBox_track13.Size.Height);
+
+                sw.WriteLine("14trackPosX=" + form_main.window_main.pictureBox_track14.Location.X);
+                sw.WriteLine("14trackPosY=" + form_main.window_main.pictureBox_track14.Location.Y);
+                sw.WriteLine("14trackSizeX=" + form_main.window_main.pictureBox_track14.Size.Width);
+                sw.WriteLine("14trackSizeY=" + form_main.window_main.pictureBox_track14.Size.Height);
+
+                sw.WriteLine("15trackPosX=" + form_main.window_main.pictureBox_track15.Location.X);
+                sw.WriteLine("15trackPosY=" + form_main.window_main.pictureBox_track15.Location.Y);
+                sw.WriteLine("15trackSizeX=" + form_main.window_main.pictureBox_track15.Size.Width);
+                sw.WriteLine("15trackSizeY=" + form_main.window_main.pictureBox_track15.Size.Height);
+
+                sw.WriteLine("16trackPosX=" + form_main.window_main.pictureBox_track16.Location.X);
+                sw.WriteLine("16trackPosY=" + form_main.window_main.pictureBox_track16.Location.Y);
+                sw.WriteLine("16trackSizeX=" + form_main.window_main.pictureBox_track16.Size.Width);
+                sw.WriteLine("16trackSizeY=" + form_main.window_main.pictureBox_track16.Size.Height);
+
+                sw.Close();
+                fs.Close();
+            }
+        }
+
         public void Load()
         {
             string dir = "";

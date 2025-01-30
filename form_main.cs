@@ -1705,5 +1705,15 @@ namespace AudioDataInterface
         {
             уменьшитьДлинуToolStripMenuItem_Click(this, null);
         }
+
+        private void сохранитьToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            class_mpsPlayerSkinHandler.WriteLayout();
+        }
+
+        private void сохранитьСкинToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            сохранитьToolStripMenuItem1_Click(this, null);
+        }
     }
 }
