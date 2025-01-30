@@ -246,6 +246,7 @@ namespace AudioDataInterface
 
         static void MPS_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
+            /*
             buff_fftSamples = new double[form_main.mpsPlayer_fftSize];
             int bytesPerSamplePerChannel = waveLoop.WaveFormat.BitsPerSample / 8;
             int bytesPerSample = bytesPerSamplePerChannel * waveLoop.WaveFormat.Channels;
@@ -271,6 +272,7 @@ namespace AudioDataInterface
             double[] paddedAudio = FftSharp.Pad.ZeroPad(buff_fftSamples);
             double[] fftMag = FftSharp.Transform.FFTpower(paddedAudio);
             buff_fftValues = new double[fftMag.Length];
+            */
         }
 
     }

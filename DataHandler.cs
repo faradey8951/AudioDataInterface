@@ -116,6 +116,7 @@ namespace AudioDataInterface
                                         if (dropout == true) { dropoutFramesCount++; }
                                         else //Триггер конца выпадения
                                         {
+                                            #region Обработка выпадений
                                             //if (dropoutFramesCount > 0) LogHandler.WriteStatus("DataHandler/AudioBuffer", "Corrupted " + dropoutFramesCount.ToString() + " frames (" + (dropoutFramesCount * 960).ToString() + " samples)");
                                             /*
                                             //Интерполяция выпавших фреймов
@@ -194,6 +195,7 @@ namespace AudioDataInterface
                                             }                     
                                             */
                                             dropoutFramesCount = 0;
+                                            #endregion
                                         }
                                         try
                                         {
@@ -206,6 +208,7 @@ namespace AudioDataInterface
                                         }
                                         catch (Exception ex)
                                         {
+                                            //LogHandler.WriteStatus("DataHandler/AudioBuffer", ex.Message);
                                             dropout = true;
                                             for (int t = 0; t < 480; t++) outputPCMBytes.AddRange(BitConverter.GetBytes(0));
                                             mute = true;

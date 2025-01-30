@@ -528,32 +528,6 @@ namespace AudioDataInterface
 
         }
 
-        /*
-        async void ListViewUpdate()
-        {
-            while (true)
-            {
-                if (Decoder.buff_decodedData.Count() > 1)
-                {
-                    Decoder.buff_decodedData[0].CopyTo(decodedData, 0);
-                    listView.Invoke((MethodInvoker)(() => listView.Items.Add(listView.Items.Count.ToString())));
-                    listView.Invoke((MethodInvoker)(() => listView.Items[listView.Items.Count - 1].SubItems.Add(decodedData[8])));
-                    listView.Invoke((MethodInvoker)(() => listView.Items[listView.Items.Count - 1].SubItems.Add("-")));
-                    listView.Invoke((MethodInvoker)(() => listView.Items[listView.Items.Count - 1].SubItems.Add("-")));
-                    listView.Invoke((MethodInvoker)(() => listView.Items[listView.Items.Count - 1].SubItems.Add(decodedData[9])));
-                    listView.Invoke((MethodInvoker)(() => listView.Items[listView.Items.Count - 1].EnsureVisible()));
-                    Decoder.buff_decodedData.RemoveAt(0);
-                }
-                else
-                    Thread.Sleep(10);
-            }
-        }
-        async void TaskListViewUpdate()
-        {
-            await Task.Run(() => ListViewUpdate());
-        }
-        */
-
         private void pictureBox_Click(object sender, EventArgs e)
         {
 
@@ -940,18 +914,32 @@ namespace AudioDataInterface
 
         private void timer_mpsPlayerSpectrumUpdater_Tick(object sender, EventArgs e)
         {
+            //Подсос RAW PCM декодирвоанного аудио для спектроанализатора
+            AudioIO.buff_fftSamples = new double[form_main.mpsPlayer_fftSize];
+            List<double> tempSamples = new List<double>();
+            byte[] PCMbytes = new byte[form_main.mpsPlayer_fftSize * 2];
+            long msPos = DataHandler.ms.Position;
+            DataHandler.ms.Read(PCMbytes, 0, PCMbytes.Length);
+            DataHandler.ms.Seek(msPos, SeekOrigin.Begin);
+            for (int k = 0; k < (AudioIO.buff_fftSamples.Length * 2) - 1; k += 2) tempSamples.Add(BitConverter.ToInt16(new byte[] { PCMbytes[k], PCMbytes[k + 1] }, 0));
+            AudioIO.buff_fftSamples = tempSamples.ToArray();
+            double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioIO.buff_fftSamples);
+            double[] fftMag = FftSharp.Transform.FFTpower(paddedAudio);
+            AudioIO.buff_fftValues = new double[fftMag.Length];
+            //LogHandler.WriteStatus("DataHandler/AudioBuffer", "fft");
+
             if (AudioIO.buff_fftValues != null)
             {
-                double[] paddedAudio = FftSharp.Pad.ZeroPad(AudioIO.buff_fftSamples);
+                paddedAudio = FftSharp.Pad.ZeroPad(AudioIO.buff_fftSamples);
                 System.Numerics.Complex[] complex = FftSharp.FFT.Forward(paddedAudio);
-                double[] fftMag = FftSharp.FFT.Magnitude(complex);
+                fftMag = FftSharp.FFT.Magnitude(complex);
                 double[] frequencyValues = FftSharp.FFT.FrequencyScale(fftMag.Length, AudioIO.waveLoop.WaveFormat.SampleRate);
                 Array.Copy(fftMag, AudioIO.buff_fftValues, fftMag.Length);
                 double[] RAWspectrumSelection = new double[mpsPlayer_instantSpectrum.Length];
                 double[] RAWspectrumSelectionKenwood = new double[mpsPlayer_spectrumFreq.Length];
 
                 //Выборка заданных частот
-                for (int i = 0, k = 0; i < AudioIO.buff_fftValues.Length && k < mpsPlayer_spectrumFreq.Length; )
+                for (int i = 0, k = 0; i < AudioIO.buff_fftValues.Length && k < mpsPlayer_spectrumFreq.Length;)
                 {
                     if (Math.Round(frequencyValues[i]) >= mpsPlayer_spectrumFreq[k])
                     {
@@ -961,26 +949,29 @@ namespace AudioDataInterface
                     }
                     else i++;
                 }
+
                 //Интерполяция промежуточных значений
-                for (int i = 0, k = 0, j = 1; (i < RAWspectrumSelectionKenwood.Length); i++, k+=2, j+=2)
+                for (int i = 0, k = 0, j = 1; (i < RAWspectrumSelectionKenwood.Length); i++, k += 2, j += 2)
                 {
                     RAWspectrumSelection[k] = RAWspectrumSelectionKenwood[i];
-                    if (j < RAWspectrumSelection.Length) RAWspectrumSelection[j] = 0.5*(RAWspectrumSelectionKenwood[i] + RAWspectrumSelectionKenwood[i + 1]);
+                    if (j < RAWspectrumSelection.Length) RAWspectrumSelection[j] = 0.5 * (RAWspectrumSelectionKenwood[i] + RAWspectrumSelectionKenwood[i + 1]);
                 }
 
                 //Преобразование уровня спектра к шкале 0-9
                 for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++)
-                {   if (i == 0) RAWspectrumSelection[i] = 0.5 * RAWspectrumSelection[i];
-                    if (i > 3) RAWspectrumSelection[i] = 4 *  Math.Log10(i) * RAWspectrumSelection[i]; //Фильтр АЧХ
-                    if (12 - i > 3) RAWspectrumSelection[12 - i] = 4 * Math.Log10(12 - i) * RAWspectrumSelection[12 - i]; //Фильтр АЧХ
+                {
+                    //Фильтры чистого спектра
+                    if (i == 0) RAWspectrumSelection[i] *= 0.5;
+                    if (i == 8) RAWspectrumSelection[i] *= 2.0;
+                    if (i == 9) RAWspectrumSelection[i] *= 4.0;
+                    if (i == 10) RAWspectrumSelection[i] *= 11.0;
+                    if (i == 11) RAWspectrumSelection[i] *= 20.0;
+                    if (i == 12) RAWspectrumSelection[i] *= 25.0;
                     if (RAWspectrumSelection[i] > 3000) RAWspectrumSelection[i] = 3000;
                     mpsPlayer_instantSpectrum[i] = (int)Math.Floor((9 * RAWspectrumSelection[i]) / 3000.0);
                 }
             }
-            else
-            {
-                for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++) mpsPlayer_instantSpectrum[i] = 0;
-            }
+            else for (int i = 0; i < mpsPlayer_instantSpectrum.Length; i++) mpsPlayer_instantSpectrum[i] = 0;
         }
 
         private void pictureBox_mpsPlayer_Click(object sender, EventArgs e)
