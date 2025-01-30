@@ -1153,14 +1153,10 @@ namespace AudioDataInterface
                 выстроитьСогласноСкинуToolStripMenuItem.Enabled = true;
                 выстроитьВНулевоеПоложениеToolStripMenuItem.Enabled = true;
                 перемещениеToolStripMenuItem.Enabled = true;
-                увеличитьВсеToolStripMenuItem.Enabled = true;
-                уменьшитьВсеToolStripMenuItem.Enabled = true;
                 toolStripButton_alignX.Enabled = true;
                 toolStripButton_alignY.Enabled = true;
                 toolStripButton_zoomIn.Enabled = true;
                 toolStripButton_zoomOut.Enabled = true;
-                toolStripButton_zoomInAll.Enabled = true;
-                toolStripButton_zoomOutAll.Enabled = true;
                 увеличитьВысотуToolStripMenuItem.Enabled = true;
                 toolStripButton_heightUp.Enabled = true;
                 уменьшитьВысотуToolStripMenuItem.Enabled = true;
@@ -1194,14 +1190,10 @@ namespace AudioDataInterface
                 выстроитьСогласноСкинуToolStripMenuItem.Enabled = false;
                 выстроитьВНулевоеПоложениеToolStripMenuItem.Enabled = false;
                 перемещениеToolStripMenuItem.Enabled = false;
-                увеличитьВсеToolStripMenuItem.Enabled = false;
-                уменьшитьВсеToolStripMenuItem.Enabled = false;
                 toolStripButton_alignX.Enabled = false;
                 toolStripButton_alignY.Enabled = false;
                 toolStripButton_zoomIn.Enabled = false;
                 toolStripButton_zoomOut.Enabled = false;
-                toolStripButton_zoomInAll.Enabled = false;
-                toolStripButton_zoomOutAll.Enabled = false;
                 увеличитьВысотуToolStripMenuItem.Enabled = false;
                 toolStripButton_heightUp.Enabled = false;
                 уменьшитьВысотуToolStripMenuItem.Enabled = false;
@@ -1211,6 +1203,11 @@ namespace AudioDataInterface
                 уменьшитьДлинуToolStripMenuItem.Enabled = false;
                 toolStripButton_widthDown.Enabled = false;
                 выбранныйЭлементToolStripMenuItem.Enabled = false;
+                if (mpsPlayer_selectedControl != null)
+                {
+                    PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
+                    pb.BorderStyle = BorderStyle.None;
+                }
                 mpsPlayer_skinEdit = false;
                 timer_mpsPlayerHandler.Enabled = true;
                 timer_mpsPlayerSpectrumHandler.Enabled = true;
@@ -1457,7 +1454,16 @@ namespace AudioDataInterface
 
         private void pictureBox_control_MouseDown(object sender, MouseEventArgs e)
         {
-            if (mpsPlayer_skinEdit) { mpsPlayer_control = sender; mpsPlayer_selectedControl = sender; }
+            if (mpsPlayer_skinEdit) 
+            {
+                PictureBox pb1 = (PictureBox)sender;
+                PictureBox pb0 = null;
+                if (mpsPlayer_selectedControl != null) pb0 = (PictureBox)mpsPlayer_selectedControl; else pb0 = pb1;
+                mpsPlayer_control = sender;                
+                mpsPlayer_selectedControl = sender;
+                pb1.BorderStyle = BorderStyle.FixedSingle;
+                if (pb1.Name != pb0.Name) pb0.BorderStyle = BorderStyle.None;
+            }
         }
 
         private void pictureBox_control_MouseUp(object sender, MouseEventArgs e)

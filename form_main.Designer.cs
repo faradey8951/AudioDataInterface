@@ -50,8 +50,6 @@ namespace AudioDataInterface
             this.toolStripSeparator21 = new System.Windows.Forms.ToolStripSeparator();
             this.увеличитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.уменьшитьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.увеличитьВсеToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
-            this.уменьшитьВсеToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.увеличитьВысотуToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.уменьшитьВысотуToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.увеличитьДлинуToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
@@ -92,8 +90,6 @@ namespace AudioDataInterface
             this.toolStripSeparator13 = new System.Windows.Forms.ToolStripSeparator();
             this.увеличитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.уменьшитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.увеличитьВсеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.уменьшитьВсеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.увеличитьВысотуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.уменьшитьВысотуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.увеличитьДлинуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -199,9 +195,6 @@ namespace AudioDataInterface
             this.toolStripButton_alignX = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_alignY = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator20 = new System.Windows.Forms.ToolStripSeparator();
-            this.toolStripButton_zoomInAll = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton_zoomOutAll = new System.Windows.Forms.ToolStripButton();
-            this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton_zoomIn = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_zoomOut = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator22 = new System.Windows.Forms.ToolStripSeparator();
@@ -210,6 +203,8 @@ namespace AudioDataInterface
             this.toolStripSeparator23 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripButton_widthUp = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_widthDown = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
             this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
@@ -400,8 +395,6 @@ namespace AudioDataInterface
             this.toolStripSeparator21,
             this.увеличитьToolStripMenuItem1,
             this.уменьшитьToolStripMenuItem1,
-            this.увеличитьВсеToolStripMenuItem1,
-            this.уменьшитьВсеToolStripMenuItem1,
             this.увеличитьВысотуToolStripMenuItem1,
             this.уменьшитьВысотуToolStripMenuItem1,
             this.увеличитьДлинуToolStripMenuItem1,
@@ -413,6 +406,7 @@ namespace AudioDataInterface
             // 
             // выровнятьПоВертикалиToolStripMenuItem1
             // 
+            this.выровнятьПоВертикалиToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.yAllign;
             this.выровнятьПоВертикалиToolStripMenuItem1.Name = "выровнятьПоВертикалиToolStripMenuItem1";
             this.выровнятьПоВертикалиToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Y)));
@@ -422,6 +416,7 @@ namespace AudioDataInterface
             // 
             // выровнятьПоГоризонталиToolStripMenuItem1
             // 
+            this.выровнятьПоГоризонталиToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.xAllign;
             this.выровнятьПоГоризонталиToolStripMenuItem1.Name = "выровнятьПоГоризонталиToolStripMenuItem1";
             this.выровнятьПоГоризонталиToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.X)));
@@ -436,6 +431,7 @@ namespace AudioDataInterface
             // 
             // увеличитьToolStripMenuItem1
             // 
+            this.увеличитьToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.zoomIn;
             this.увеличитьToolStripMenuItem1.Name = "увеличитьToolStripMenuItem1";
             this.увеличитьToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
             this.увеличитьToolStripMenuItem1.Size = new System.Drawing.Size(313, 22);
@@ -444,32 +440,16 @@ namespace AudioDataInterface
             // 
             // уменьшитьToolStripMenuItem1
             // 
+            this.уменьшитьToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.zoomOut;
             this.уменьшитьToolStripMenuItem1.Name = "уменьшитьToolStripMenuItem1";
             this.уменьшитьToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
             this.уменьшитьToolStripMenuItem1.Size = new System.Drawing.Size(313, 22);
             this.уменьшитьToolStripMenuItem1.Text = "Уменьшить";
             this.уменьшитьToolStripMenuItem1.Click += new System.EventHandler(this.уменьшитьToolStripMenuItem1_Click);
             // 
-            // увеличитьВсеToolStripMenuItem1
-            // 
-            this.увеличитьВсеToolStripMenuItem1.Name = "увеличитьВсеToolStripMenuItem1";
-            this.увеличитьВсеToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Up)));
-            this.увеличитьВсеToolStripMenuItem1.Size = new System.Drawing.Size(313, 22);
-            this.увеличитьВсеToolStripMenuItem1.Text = "Увеличить все";
-            this.увеличитьВсеToolStripMenuItem1.Click += new System.EventHandler(this.увеличитьВсеToolStripMenuItem1_Click);
-            // 
-            // уменьшитьВсеToolStripMenuItem1
-            // 
-            this.уменьшитьВсеToolStripMenuItem1.Name = "уменьшитьВсеToolStripMenuItem1";
-            this.уменьшитьВсеToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Down)));
-            this.уменьшитьВсеToolStripMenuItem1.Size = new System.Drawing.Size(313, 22);
-            this.уменьшитьВсеToolStripMenuItem1.Text = "Уменьшить все";
-            this.уменьшитьВсеToolStripMenuItem1.Click += new System.EventHandler(this.уменьшитьВсеToolStripMenuItem1_Click);
-            // 
             // увеличитьВысотуToolStripMenuItem1
             // 
+            this.увеличитьВысотуToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.heightUp;
             this.увеличитьВысотуToolStripMenuItem1.Name = "увеличитьВысотуToolStripMenuItem1";
             this.увеличитьВысотуToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Up)));
@@ -479,6 +459,7 @@ namespace AudioDataInterface
             // 
             // уменьшитьВысотуToolStripMenuItem1
             // 
+            this.уменьшитьВысотуToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.heightDown;
             this.уменьшитьВысотуToolStripMenuItem1.Name = "уменьшитьВысотуToolStripMenuItem1";
             this.уменьшитьВысотуToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Down)));
@@ -488,6 +469,7 @@ namespace AudioDataInterface
             // 
             // увеличитьДлинуToolStripMenuItem1
             // 
+            this.увеличитьДлинуToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.widthUp;
             this.увеличитьДлинуToolStripMenuItem1.Name = "увеличитьДлинуToolStripMenuItem1";
             this.увеличитьДлинуToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Right)));
@@ -497,6 +479,7 @@ namespace AudioDataInterface
             // 
             // уменьшитьДлинуToolStripMenuItem1
             // 
+            this.уменьшитьДлинуToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.widthDown;
             this.уменьшитьДлинуToolStripMenuItem1.Name = "уменьшитьДлинуToolStripMenuItem1";
             this.уменьшитьДлинуToolStripMenuItem1.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Left)));
@@ -764,8 +747,6 @@ namespace AudioDataInterface
             this.toolStripSeparator13,
             this.увеличитьToolStripMenuItem,
             this.уменьшитьToolStripMenuItem,
-            this.увеличитьВсеToolStripMenuItem,
-            this.уменьшитьВсеToolStripMenuItem,
             this.увеличитьВысотуToolStripMenuItem,
             this.уменьшитьВысотуToolStripMenuItem,
             this.увеличитьДлинуToolStripMenuItem,
@@ -778,7 +759,7 @@ namespace AudioDataInterface
             this.toolStripSeparator16,
             this.сохранитьСкинToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(314, 414);
+            this.contextMenuStrip.Size = new System.Drawing.Size(314, 370);
             // 
             // редактированиеToolStripMenuItem
             // 
@@ -816,6 +797,7 @@ namespace AudioDataInterface
             // выровнятьПоВертикалиToolStripMenuItem
             // 
             this.выровнятьПоВертикалиToolStripMenuItem.Enabled = false;
+            this.выровнятьПоВертикалиToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.yAllign;
             this.выровнятьПоВертикалиToolStripMenuItem.Name = "выровнятьПоВертикалиToolStripMenuItem";
             this.выровнятьПоВертикалиToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.Y)));
@@ -826,6 +808,7 @@ namespace AudioDataInterface
             // выровнятьПоГоризонталиToolStripMenuItem
             // 
             this.выровнятьПоГоризонталиToolStripMenuItem.Enabled = false;
+            this.выровнятьПоГоризонталиToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.xAllign;
             this.выровнятьПоГоризонталиToolStripMenuItem.Name = "выровнятьПоГоризонталиToolStripMenuItem";
             this.выровнятьПоГоризонталиToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
             | System.Windows.Forms.Keys.X)));
@@ -841,6 +824,7 @@ namespace AudioDataInterface
             // увеличитьToolStripMenuItem
             // 
             this.увеличитьToolStripMenuItem.Enabled = false;
+            this.увеличитьToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.zoomIn;
             this.увеличитьToolStripMenuItem.Name = "увеличитьToolStripMenuItem";
             this.увеличитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Up)));
             this.увеличитьToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
@@ -850,35 +834,17 @@ namespace AudioDataInterface
             // уменьшитьToolStripMenuItem
             // 
             this.уменьшитьToolStripMenuItem.Enabled = false;
+            this.уменьшитьToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.zoomOut;
             this.уменьшитьToolStripMenuItem.Name = "уменьшитьToolStripMenuItem";
             this.уменьшитьToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Down)));
             this.уменьшитьToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
             this.уменьшитьToolStripMenuItem.Text = "Уменьшить";
             this.уменьшитьToolStripMenuItem.Click += new System.EventHandler(this.уменьшитьToolStripMenuItem_Click);
             // 
-            // увеличитьВсеToolStripMenuItem
-            // 
-            this.увеличитьВсеToolStripMenuItem.Enabled = false;
-            this.увеличитьВсеToolStripMenuItem.Name = "увеличитьВсеToolStripMenuItem";
-            this.увеличитьВсеToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Up)));
-            this.увеличитьВсеToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.увеличитьВсеToolStripMenuItem.Text = "Увеличить все";
-            this.увеличитьВсеToolStripMenuItem.Click += new System.EventHandler(this.увеличитьВсеToolStripMenuItem_Click);
-            // 
-            // уменьшитьВсеToolStripMenuItem
-            // 
-            this.уменьшитьВсеToolStripMenuItem.Enabled = false;
-            this.уменьшитьВсеToolStripMenuItem.Name = "уменьшитьВсеToolStripMenuItem";
-            this.уменьшитьВсеToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Shift) 
-            | System.Windows.Forms.Keys.Down)));
-            this.уменьшитьВсеToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.уменьшитьВсеToolStripMenuItem.Text = "Уменьшить все";
-            this.уменьшитьВсеToolStripMenuItem.Click += new System.EventHandler(this.уменьшитьВсеToolStripMenuItem_Click);
-            // 
             // увеличитьВысотуToolStripMenuItem
             // 
             this.увеличитьВысотуToolStripMenuItem.Enabled = false;
+            this.увеличитьВысотуToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.heightUp;
             this.увеличитьВысотуToolStripMenuItem.Name = "увеличитьВысотуToolStripMenuItem";
             this.увеличитьВысотуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Up)));
@@ -889,6 +855,7 @@ namespace AudioDataInterface
             // уменьшитьВысотуToolStripMenuItem
             // 
             this.уменьшитьВысотуToolStripMenuItem.Enabled = false;
+            this.уменьшитьВысотуToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.heightDown;
             this.уменьшитьВысотуToolStripMenuItem.Name = "уменьшитьВысотуToolStripMenuItem";
             this.уменьшитьВысотуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Down)));
@@ -899,6 +866,7 @@ namespace AudioDataInterface
             // увеличитьДлинуToolStripMenuItem
             // 
             this.увеличитьДлинуToolStripMenuItem.Enabled = false;
+            this.увеличитьДлинуToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.widthUp;
             this.увеличитьДлинуToolStripMenuItem.Name = "увеличитьДлинуToolStripMenuItem";
             this.увеличитьДлинуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Right)));
@@ -909,6 +877,7 @@ namespace AudioDataInterface
             // уменьшитьДлинуToolStripMenuItem
             // 
             this.уменьшитьДлинуToolStripMenuItem.Enabled = false;
+            this.уменьшитьДлинуToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.widthDown;
             this.уменьшитьДлинуToolStripMenuItem.Name = "уменьшитьДлинуToolStripMenuItem";
             this.уменьшитьДлинуToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt) 
             | System.Windows.Forms.Keys.Left)));
@@ -948,6 +917,7 @@ namespace AudioDataInterface
             this.задержкаПиковToolStripMenuItem,
             this.toolStripSeparator17,
             this.отображатьСпектрToolStripMenuItem});
+            this.спектрToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.spectrum;
             this.спектрToolStripMenuItem.Name = "спектрToolStripMenuItem";
             this.спектрToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
             this.спектрToolStripMenuItem.Text = "Спектр";
@@ -978,6 +948,7 @@ namespace AudioDataInterface
             // 
             // сохранитьСкинToolStripMenuItem
             // 
+            this.сохранитьСкинToolStripMenuItem.Image = global::AudioDataInterface.Properties.Resources.save;
             this.сохранитьСкинToolStripMenuItem.Name = "сохранитьСкинToolStripMenuItem";
             this.сохранитьСкинToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
             this.сохранитьСкинToolStripMenuItem.Text = "Сохранить скин";
@@ -1916,9 +1887,6 @@ namespace AudioDataInterface
             this.toolStripButton_alignX,
             this.toolStripButton_alignY,
             this.toolStripSeparator20,
-            this.toolStripButton_zoomInAll,
-            this.toolStripButton_zoomOutAll,
-            this.toolStripSeparator19,
             this.toolStripButton_zoomIn,
             this.toolStripButton_zoomOut,
             this.toolStripSeparator22,
@@ -1926,7 +1894,9 @@ namespace AudioDataInterface
             this.toolStripButton_heightDown,
             this.toolStripSeparator23,
             this.toolStripButton_widthUp,
-            this.toolStripButton_widthDown});
+            this.toolStripButton_widthDown,
+            this.toolStripSeparator24,
+            this.toolStripLabel1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(1022, 25);
@@ -2091,38 +2061,6 @@ namespace AudioDataInterface
             this.toolStripSeparator20.Name = "toolStripSeparator20";
             this.toolStripSeparator20.Size = new System.Drawing.Size(6, 25);
             // 
-            // toolStripButton_zoomInAll
-            // 
-            this.toolStripButton_zoomInAll.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButton_zoomInAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_zoomInAll.Enabled = false;
-            this.toolStripButton_zoomInAll.Image = global::AudioDataInterface.Properties.Resources.zoomInAll;
-            this.toolStripButton_zoomInAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_zoomInAll.Name = "toolStripButton_zoomInAll";
-            this.toolStripButton_zoomInAll.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_zoomInAll.Text = "toolStripButton3";
-            this.toolStripButton_zoomInAll.ToolTipText = "Увеличить все (Ctrl + Shift + Up)";
-            this.toolStripButton_zoomInAll.Click += new System.EventHandler(this.toolStripButton_zoomInAll_Click);
-            // 
-            // toolStripButton_zoomOutAll
-            // 
-            this.toolStripButton_zoomOutAll.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripButton_zoomOutAll.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton_zoomOutAll.Enabled = false;
-            this.toolStripButton_zoomOutAll.Image = global::AudioDataInterface.Properties.Resources.zoomOutAll;
-            this.toolStripButton_zoomOutAll.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton_zoomOutAll.Name = "toolStripButton_zoomOutAll";
-            this.toolStripButton_zoomOutAll.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton_zoomOutAll.Text = "toolStripButton4";
-            this.toolStripButton_zoomOutAll.ToolTipText = "Уменьшить все (Ctrl + Shift + Down)";
-            this.toolStripButton_zoomOutAll.Click += new System.EventHandler(this.toolStripButton_zoomOutAll_Click);
-            // 
-            // toolStripSeparator19
-            // 
-            this.toolStripSeparator19.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
-            this.toolStripSeparator19.Name = "toolStripSeparator19";
-            this.toolStripSeparator19.Size = new System.Drawing.Size(6, 25);
-            // 
             // toolStripButton_zoomIn
             // 
             this.toolStripButton_zoomIn.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -2211,6 +2149,20 @@ namespace AudioDataInterface
             this.toolStripButton_widthDown.Text = "toolStripButton4";
             this.toolStripButton_widthDown.ToolTipText = "Уменьшить ширину (Ctrl + Alt + Left)";
             this.toolStripButton_widthDown.Click += new System.EventHandler(this.toolStripButton_widthDown_Click);
+            // 
+            // toolStripSeparator24
+            // 
+            this.toolStripSeparator24.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripSeparator24.Name = "toolStripSeparator24";
+            this.toolStripSeparator24.Size = new System.Drawing.Size(6, 25);
+            // 
+            // toolStripLabel1
+            // 
+            this.toolStripLabel1.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
+            this.toolStripLabel1.Font = new System.Drawing.Font("Segoe UI", 7F);
+            this.toolStripLabel1.Name = "toolStripLabel1";
+            this.toolStripLabel1.Size = new System.Drawing.Size(79, 22);
+            this.toolStripLabel1.Text = "Редактор скина:";
             // 
             // timer_drawWaveGraphFrame
             // 
@@ -2487,14 +2439,9 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator18;
         private System.Windows.Forms.ToolStripMenuItem руководствоToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem перемещениеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem увеличитьВсеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem уменьшитьВсеToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton_alignX;
         private System.Windows.Forms.ToolStripButton toolStripButton_alignY;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator20;
-        private System.Windows.Forms.ToolStripButton toolStripButton_zoomInAll;
-        private System.Windows.Forms.ToolStripButton toolStripButton_zoomOutAll;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
         private System.Windows.Forms.ToolStripButton toolStripButton_zoomIn;
         private System.Windows.Forms.ToolStripButton toolStripButton_zoomOut;
         private System.Windows.Forms.ToolStripMenuItem выбранныйЭлементToolStripMenuItem;
@@ -2503,8 +2450,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator21;
         private System.Windows.Forms.ToolStripMenuItem увеличитьToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem уменьшитьToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem увеличитьВсеToolStripMenuItem1;
-        private System.Windows.Forms.ToolStripMenuItem уменьшитьВсеToolStripMenuItem1;
         private System.Windows.Forms.ToolStripMenuItem увеличитьВысотуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem уменьшитьВысотуToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem увеличитьДлинуToolStripMenuItem;
@@ -2519,6 +2464,8 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator23;
         private System.Windows.Forms.ToolStripButton toolStripButton_widthUp;
         private System.Windows.Forms.ToolStripButton toolStripButton_widthDown;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator24;
+        private System.Windows.Forms.ToolStripLabel toolStripLabel1;
     }
 }
 
