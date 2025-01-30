@@ -69,7 +69,7 @@ namespace AudioDataInterface
             maxBitrate = 2 * sampleRate / 8.0;
             maxBlockrate = maxBitrate / 39.0;
             effectiveBlockRate = maxBitrate / 41.0;
-            effectiveBitrate = Math.Round(((effectiveBlockRate * 32.0) / 1000),2);
+            effectiveBitrate = Math.Round((((effectiveBlockRate - 28) * 32.0) / 1000),2);
             label_encodingDensityValue.Text = effectiveBitrate.ToString();
         }
 

@@ -20,6 +20,9 @@ namespace AudioDataInterface
         public static int trackNumber = 1;
         public static int trackCount = 1;
         static string status = "";
+        public static string artist = "";
+        public static string album = "";
+        public static string track = "";
         static Thread thread_convertWaveToOPUS = new Thread(ConvertWaveToOPUS);
         public form_encoder()
         {
@@ -121,6 +124,12 @@ namespace AudioDataInterface
                     folderBrowserDialog.ShowDialog();
                     Encoder.encoder_outputFilePath = folderBrowserDialog.SelectedPath + "\\" + Path.GetFileNameWithoutExtension(Encoder.encoder_inputFilePath) + ".wav";
                     Encoder.encoder_mode = "opus";
+                    artist = textBox_artist.Text;
+                    for (int i = artist.Length; i < 24; i++) artist += " ";
+                    album = textBox_album.Text;
+                    for (int i = album.Length; i < 24; i++) album += " ";
+                    track = textBox_track.Text;
+                    for (int i = track.Length; i < 24; i++) track += " ";
                     if (File.Exists("input.wav")) File.Delete("input.wav");
                     if (File.Exists("outputOpusEncoded.wav")) File.Delete("outputOpusEncoded.wav");
                     string firstCmd = "/C ffmpeg -i " + @"""" + Encoder.encoder_inputFilePath + @"""" + " " + "-acodec pcm_s16le -ar 48000 -ac 1 input.wav";
@@ -166,6 +175,11 @@ namespace AudioDataInterface
         private void trackBar_trackCount_Scroll(object sender, EventArgs e)
         {
             trackCount = trackBar_trackCount.Value;
+        }
+
+        private void groupBox_mpsText_Enter(object sender, EventArgs e)
+        {
+
         }
     }
 }

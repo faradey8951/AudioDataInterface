@@ -19,6 +19,7 @@ namespace AudioDataInterface
         public static FileStream fs_output = null;
         public static FileStream fs_input = null;
         public static List<short> list_outputFileSamples = new List<short>(); //Коллекция сэмплов для записи выходного файла
+        public static char[] alphabet = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', '1', '2', '3', '4', '5', '6', '7', '8', '9', '0', '!', '@', '#', '$', '%', '^', '&', '*', '(', ')', '-', '=', '~', '_', '+', '/', '|', '<', '>', '.', ',', '`', ';', ':', '?', '[', ']', '{', '}', ' ' };
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Энкодер
@@ -851,7 +852,7 @@ namespace AudioDataInterface
                 GenerateRAWDataBlockStereo(binaryL, binaryR);
                 binaryL = "";
                 binaryR = "";
-
+                //Запись секции субкодов
                 if (targetBytePositions.Count > 0)
                 {
                     if (fs_input.Position >= targetBytePositions[0])
@@ -872,8 +873,46 @@ namespace AudioDataInterface
                             byte byteR3 = Convert.ToByte(form_encoder.trackCount);
                             byte byteR4 = Convert.ToByte(0);
                             GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
+
+                            int b1 = 10;
+                            for (int m = 0; m < 24; m+=6, b1+=2)
+                            {
+                                byteL1 = (byte)b1;
+                                byteL2 = ConvertSymbolToByte(form_encoder.artist[m]);
+                                byteL3 = ConvertSymbolToByte(form_encoder.artist[m + 1]);
+                                byteL4 = ConvertSymbolToByte(form_encoder.artist[m + 2]);
+                                byteR1 = (byte)(b1+1);
+                                byteR2 = ConvertSymbolToByte(form_encoder.artist[m]);
+                                byteR3 = ConvertSymbolToByte(form_encoder.artist[m + 1]);
+                                byteR4 = ConvertSymbolToByte(form_encoder.artist[m + 2]);
+                                GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
+                            }
+                            for (int m = 0; m < 24; m += 6, b1 += 2)
+                            {
+                                byteL1 = (byte)b1;
+                                byteL2 = ConvertSymbolToByte(form_encoder.album[m]);
+                                byteL3 = ConvertSymbolToByte(form_encoder.album[m + 1]);
+                                byteL4 = ConvertSymbolToByte(form_encoder.album[m + 2]);
+                                byteR1 = (byte)(b1 + 1);
+                                byteR2 = ConvertSymbolToByte(form_encoder.album[m]);
+                                byteR3 = ConvertSymbolToByte(form_encoder.album[m + 1]);
+                                byteR4 = ConvertSymbolToByte(form_encoder.album[m + 2]);
+                                GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
+                            }
+                            for (int m = 0; m < 24; m += 6, b1 += 2)
+                            {
+                                byteL1 = (byte)b1;
+                                byteL2 = ConvertSymbolToByte(form_encoder.track[m]);
+                                byteL3 = ConvertSymbolToByte(form_encoder.track[m + 1]);
+                                byteL4 = ConvertSymbolToByte(form_encoder.track[m + 2]);
+                                byteR1 = (byte)(b1 + 1);
+                                byteR2 = ConvertSymbolToByte(form_encoder.track[m]);
+                                byteR3 = ConvertSymbolToByte(form_encoder.track[m + 1]);
+                                byteR4 = ConvertSymbolToByte(form_encoder.track[m + 2]);
+                                GenerateSubCodeBlockStereo(byteL1, byteL2, byteL3, byteL4, byteR1, byteR2, byteR3, byteR4);
+                            }
                         }
-                        GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1);
+                        GenerateSubCodeBlockStereo(123, 0, 0, 0, 123, 1, 1, 1); //Субкод канальной синхронизации
                         targetDurations.RemoveAt(0);
                         targetBytePositions.RemoveAt(0);
                     }
@@ -892,6 +931,17 @@ namespace AudioDataInterface
             encoder_progress = ProgressHandler.GetPercent(100, 100);
             LogHandler.WriteStatus("Encoder.cs->EncoderFileStream()", "Encoding finished");
             form_encoder.trackNumber++;
+        }
+
+        public static byte ConvertSymbolToByte(char symbol)
+        {            
+            if (alphabet.Contains(symbol)) return (byte)Array.IndexOf(alphabet, symbol);
+            else return (byte)Array.IndexOf(alphabet, '?');
+        }
+        public static char ConvertByteToChar(byte b)
+        {
+            if ((int)b < alphabet.Length) return alphabet[b];
+            else return '?';
         }
 
         public static void EncodeFileStream()

@@ -36,6 +36,7 @@ namespace AudioDataInterface
             this.label_percent = new System.Windows.Forms.ToolStripStatusLabel();
             this.button_ok = new System.Windows.Forms.Button();
             this.groupBox_file = new System.Windows.Forms.GroupBox();
+            this.button_convert = new System.Windows.Forms.Button();
             this.groupBox_properties = new System.Windows.Forms.GroupBox();
             this.trackBar_trackCount = new System.Windows.Forms.TrackBar();
             this.label_trackNumber = new System.Windows.Forms.Label();
@@ -44,14 +45,21 @@ namespace AudioDataInterface
             this.textBox = new System.Windows.Forms.TextBox();
             this.button_select = new System.Windows.Forms.Button();
             this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
-            this.button_convert = new System.Windows.Forms.Button();
             this.timer_controlHandler = new System.Windows.Forms.Timer(this.components);
             this.folderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.groupBox_mpsText = new System.Windows.Forms.GroupBox();
+            this.label1 = new System.Windows.Forms.Label();
+            this.textBox_artist = new System.Windows.Forms.TextBox();
+            this.textBox_album = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.textBox_track = new System.Windows.Forms.TextBox();
+            this.label3 = new System.Windows.Forms.Label();
             this.statusStrip.SuspendLayout();
             this.groupBox_file.SuspendLayout();
             this.groupBox_properties.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackCount)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackNumber)).BeginInit();
+            this.groupBox_mpsText.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStrip
@@ -60,7 +68,7 @@ namespace AudioDataInterface
             this.label_encoding,
             this.progressBar,
             this.label_percent});
-            this.statusStrip.Location = new System.Drawing.Point(0, 177);
+            this.statusStrip.Location = new System.Drawing.Point(0, 262);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(445, 22);
             this.statusStrip.TabIndex = 0;
@@ -90,7 +98,7 @@ namespace AudioDataInterface
             // 
             this.button_ok.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.button_ok.AutoSize = true;
-            this.button_ok.Location = new System.Drawing.Point(364, 151);
+            this.button_ok.Location = new System.Drawing.Point(364, 236);
             this.button_ok.Name = "button_ok";
             this.button_ok.Size = new System.Drawing.Size(75, 23);
             this.button_ok.TabIndex = 1;
@@ -109,20 +117,33 @@ namespace AudioDataInterface
             this.groupBox_file.Dock = System.Windows.Forms.DockStyle.Fill;
             this.groupBox_file.Location = new System.Drawing.Point(0, 0);
             this.groupBox_file.Name = "groupBox_file";
-            this.groupBox_file.Size = new System.Drawing.Size(445, 199);
+            this.groupBox_file.Size = new System.Drawing.Size(445, 284);
             this.groupBox_file.TabIndex = 12;
             this.groupBox_file.TabStop = false;
             this.groupBox_file.Text = "OPUS MPS WAVE кодировщик";
             // 
+            // button_convert
+            // 
+            this.button_convert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button_convert.AutoSize = true;
+            this.button_convert.Location = new System.Drawing.Point(256, 236);
+            this.button_convert.Name = "button_convert";
+            this.button_convert.Size = new System.Drawing.Size(100, 23);
+            this.button_convert.TabIndex = 6;
+            this.button_convert.Text = "Конвертировать";
+            this.button_convert.UseVisualStyleBackColor = true;
+            this.button_convert.Click += new System.EventHandler(this.button_convert_Click);
+            // 
             // groupBox_properties
             // 
+            this.groupBox_properties.Controls.Add(this.groupBox_mpsText);
             this.groupBox_properties.Controls.Add(this.trackBar_trackCount);
             this.groupBox_properties.Controls.Add(this.label_trackNumber);
             this.groupBox_properties.Controls.Add(this.label_trackCount);
             this.groupBox_properties.Controls.Add(this.trackBar_trackNumber);
             this.groupBox_properties.Location = new System.Drawing.Point(4, 46);
             this.groupBox_properties.Name = "groupBox_properties";
-            this.groupBox_properties.Size = new System.Drawing.Size(435, 98);
+            this.groupBox_properties.Size = new System.Drawing.Size(435, 184);
             this.groupBox_properties.TabIndex = 7;
             this.groupBox_properties.TabStop = false;
             this.groupBox_properties.Text = "Настройка субкодов";
@@ -190,33 +211,87 @@ namespace AudioDataInterface
             this.button_select.UseVisualStyleBackColor = true;
             this.button_select.Click += new System.EventHandler(this.button_select_Click);
             // 
-            // button_convert
-            // 
-            this.button_convert.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button_convert.AutoSize = true;
-            this.button_convert.Location = new System.Drawing.Point(256, 151);
-            this.button_convert.Name = "button_convert";
-            this.button_convert.Size = new System.Drawing.Size(100, 23);
-            this.button_convert.TabIndex = 6;
-            this.button_convert.Text = "Конвертировать";
-            this.button_convert.UseVisualStyleBackColor = true;
-            this.button_convert.Click += new System.EventHandler(this.button_convert_Click);
-            // 
             // timer_controlHandler
             // 
             this.timer_controlHandler.Enabled = true;
             this.timer_controlHandler.Tick += new System.EventHandler(this.timer_controlHandler_Tick);
+            // 
+            // groupBox_mpsText
+            // 
+            this.groupBox_mpsText.Controls.Add(this.textBox_track);
+            this.groupBox_mpsText.Controls.Add(this.label3);
+            this.groupBox_mpsText.Controls.Add(this.textBox_album);
+            this.groupBox_mpsText.Controls.Add(this.label2);
+            this.groupBox_mpsText.Controls.Add(this.textBox_artist);
+            this.groupBox_mpsText.Controls.Add(this.label1);
+            this.groupBox_mpsText.Location = new System.Drawing.Point(9, 79);
+            this.groupBox_mpsText.Name = "groupBox_mpsText";
+            this.groupBox_mpsText.Size = new System.Drawing.Size(420, 99);
+            this.groupBox_mpsText.TabIndex = 6;
+            this.groupBox_mpsText.TabStop = false;
+            this.groupBox_mpsText.Text = "MPS-Text";
+            this.groupBox_mpsText.Enter += new System.EventHandler(this.groupBox_mpsText_Enter);
+            // 
+            // label1
+            // 
+            this.label1.AutoSize = true;
+            this.label1.Location = new System.Drawing.Point(7, 20);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(74, 13);
+            this.label1.TabIndex = 0;
+            this.label1.Text = "Исполнитель";
+            // 
+            // textBox_artist
+            // 
+            this.textBox_artist.Location = new System.Drawing.Point(87, 17);
+            this.textBox_artist.MaxLength = 24;
+            this.textBox_artist.Name = "textBox_artist";
+            this.textBox_artist.Size = new System.Drawing.Size(327, 20);
+            this.textBox_artist.TabIndex = 1;
+            // 
+            // textBox_album
+            // 
+            this.textBox_album.Location = new System.Drawing.Point(87, 45);
+            this.textBox_album.MaxLength = 24;
+            this.textBox_album.Name = "textBox_album";
+            this.textBox_album.Size = new System.Drawing.Size(327, 20);
+            this.textBox_album.TabIndex = 3;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(7, 48);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(46, 13);
+            this.label2.TabIndex = 2;
+            this.label2.Text = "Альбом";
+            // 
+            // textBox_track
+            // 
+            this.textBox_track.Location = new System.Drawing.Point(87, 73);
+            this.textBox_track.MaxLength = 24;
+            this.textBox_track.Name = "textBox_track";
+            this.textBox_track.Size = new System.Drawing.Size(327, 20);
+            this.textBox_track.TabIndex = 5;
+            // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(7, 76);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(54, 13);
+            this.label3.TabIndex = 4;
+            this.label3.Text = "Дорожка";
             // 
             // form_encoder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Window;
-            this.ClientSize = new System.Drawing.Size(445, 199);
+            this.ClientSize = new System.Drawing.Size(445, 284);
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.groupBox_file);
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(461, 248);
             this.Name = "form_encoder";
             this.ShowIcon = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -231,6 +306,8 @@ namespace AudioDataInterface
             this.groupBox_properties.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackCount)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_trackNumber)).EndInit();
+            this.groupBox_mpsText.ResumeLayout(false);
+            this.groupBox_mpsText.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -255,5 +332,12 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label_trackNumber;
         private System.Windows.Forms.Label label_trackCount;
         private System.Windows.Forms.TrackBar trackBar_trackNumber;
+        private System.Windows.Forms.GroupBox groupBox_mpsText;
+        private System.Windows.Forms.TextBox textBox_track;
+        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.TextBox textBox_album;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox textBox_artist;
+        private System.Windows.Forms.Label label1;
     }
 }
