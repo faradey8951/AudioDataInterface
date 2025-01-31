@@ -491,7 +491,7 @@ namespace AudioDataInterface
             label_audioBufferSize.Text = "Аудио буфер: ";
             label_trackNumber.Text = "Дорожка: " + mpsPlayer_currentTrackNumber.ToString();
             label_trackCount.Text = "Всего дорожек: " + mpsPlayer_trackCount.ToString();
-            this.Text = new string(DataHandler.artist) + " / " + new string(DataHandler.album) + " / " + new string(DataHandler.track);
+            this.Text = new string(DataHandler.artist) + " / " + new string(DataHandler.track);
             try
             {
                 if (DataHandler.ms != null)
@@ -1065,12 +1065,103 @@ namespace AudioDataInterface
 
         private void оПрограммеToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            string bitSequence = "s01110010s"; // Задайте свою последовательность бит с синхроимпульсами
+            int sampleRate = 82000; // Частота дискретизации
+            int frequency = 10000; // Частота сигнала
 
+            short[] amSignal = GenerateAMSignal(bitSequence, sampleRate, frequency);
+            short[] filteredSignal = LowPassFilter(amSignal, sampleRate, frequency);
+
+            SaveWav("am_signal.wav", filteredSignal, sampleRate);
         }
 
         private void trackBar_spectrumGain_Scroll(object sender, EventArgs e)
         {
             mps_Player_spectrumGain = trackBar_spectrumGain.Value;
+        }
+
+        static short[] GenerateAMSignal(string bitSequence, int sampleRate, int frequency)
+        {
+            int amplitudeSync = short.MaxValue; // Амплитуда для синхроимпульса
+            int amplitudeOne = amplitudeSync / 2; // Амплитуда для единицы
+            int amplitudeZero = amplitudeOne / 2; // Амплитуда для нуля
+            double period = 1.0 / frequency; // Длительность одного периода в секундах
+            int samplesPerBit = (int)(sampleRate * period); // Количество отсчетов на один бит
+            short[] signal = new short[samplesPerBit * bitSequence.Length];
+
+            for (int i = 0; i < bitSequence.Length; i++)
+            {
+                int amplitude;
+
+                // Определяем амплитуду в зависимости от символа
+                if (bitSequence[i] == 's')
+                {
+                    amplitude = amplitudeSync; // Синхроимпульс
+                }
+                else if (bitSequence[i] == '1')
+                {
+                    amplitude = amplitudeOne; // Амплитуда для единицы
+                }
+                else if (bitSequence[i] == '0')
+                {
+                    amplitude = amplitudeZero; // Амплитуда для нуля
+                }
+                else
+                {
+                    throw new ArgumentException("Неподдерживаемый символ в последовательности: " + bitSequence[i]);
+                }
+
+                // Генерация звукового сегмента
+                for (int j = 0; j < samplesPerBit; j++)
+                {
+                    double t = j / (double)sampleRate;
+                    signal[i * samplesPerBit + j] = (short)(amplitude * Math.Sin(2 * Math.PI * frequency * t));
+                }
+            }
+
+            return signal;
+        }
+
+        static short[] LowPassFilter(short[] signal, int sampleRate, int cutoffFrequency)
+        {
+            int filterOrder = 5; // Порядок фильтра
+            double alpha = 1.0 / (1.0 + (sampleRate / (2 * Math.PI * cutoffFrequency)));
+
+            short[] filteredSignal = new short[signal.Length];
+            filteredSignal[0] = signal[0]; // Инициализация первого значения
+
+            for (int i = 1; i < signal.Length; i++)
+            {
+                filteredSignal[i] = (short)(alpha * signal[i] + (1 - alpha) * filteredSignal[i - 1]);
+            }
+
+            return filteredSignal;
+        }
+
+        static void SaveWav(string filename, short[] signal, int sampleRate)
+        {
+            using (var fs = new FileStream(filename, FileMode.Create))
+            using (var bw = new BinaryWriter(fs))
+            {
+                // Запись заголовка WAV
+                bw.Write("RIFF".ToCharArray());
+                bw.Write(36 + signal.Length * sizeof(short)); // Размер файла - 8 байт
+                bw.Write("WAVE".ToCharArray());
+                bw.Write("fmt ".ToCharArray());
+                bw.Write(16); // Размер структуры fmt
+                bw.Write((short)1); // Тип формата (1 = PCM)
+                bw.Write((short)1); // Количество каналов
+                bw.Write(sampleRate); // Частота дискретизации
+                bw.Write(sampleRate * sizeof(short)); // Битрейт
+                bw.Write((short)sizeof(short)); // Размер блока
+                bw.Write((short)(8 * sizeof(short))); // Количество бит на сэмпл
+                bw.Write("data".ToCharArray());
+                bw.Write(signal.Length * sizeof(short)); // Размер данных
+                foreach (short sample in signal)
+                {
+                    bw.Write(sample);
+                }
+            }
         }
 
         private void timer_mpsPlayerRunningIndicatorHandler_Tick(object sender, EventArgs e)

@@ -21,7 +21,6 @@ namespace AudioDataInterface
         public static int trackCount = 1;
         static string status = "";
         public static string artist = "";
-        public static string album = "";
         public static string track = "";
         static Thread thread_convertWaveToOPUS = new Thread(ConvertWaveToOPUS);
         public form_encoder()
@@ -126,8 +125,6 @@ namespace AudioDataInterface
                     Encoder.encoder_mode = "opus";
                     artist = textBox_artist.Text;
                     for (int i = artist.Length; i < 24; i++) artist += " ";
-                    album = textBox_album.Text;
-                    for (int i = album.Length; i < 24; i++) album += " ";
                     track = textBox_track.Text;
                     for (int i = track.Length; i < 24; i++) track += " ";
                     if (File.Exists("input.wav")) File.Delete("input.wav");
