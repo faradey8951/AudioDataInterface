@@ -37,8 +37,9 @@ namespace AudioDataInterface
         public static bool interpolation = false;
         public static bool mute = false;
         public static bool packetLoss = false;
-        public static char[] artist = { 'n', 'o', ' ', 'a', 'r', 't', 'i', 's', 't', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
-        public static char[] track = { 'n', 'o', ' ', 't', 'r', 'a', 'c', 'k', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
+        public static bool textUpdatePause = false;
+        public static char[] artist = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
+        public static char[] track = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
 
         FileStream fs = null;
 
@@ -83,104 +84,106 @@ namespace AudioDataInterface
                         byte subCodeByte3 = Convert.ToByte(Convert.ToInt16(subCode.Substring(16, 8), 2));
                         byte subCodeByte4 = Convert.ToByte(Convert.ToInt16(subCode.Substring(24, 8), 2));
 
-                        if (subCodeByte1 == 10)
+                        if (!textUpdatePause)
                         {
-                            artist[0] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[1] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[2] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 11)
-                        {
-                            artist[3] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[4] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[5] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 12)
-                        {
-                            artist[6] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[7] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[8] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 13)
-                        {
-                            artist[9] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[10] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[11] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 14)
-                        {
-                            artist[12] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[13] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[14] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 15)
-                        {
-                            artist[15] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[16] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[17] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 16)
-                        {
-                            artist[18] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[19] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[20] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 17)
-                        {
-                            artist[21] = Encoder.ConvertByteToChar(subCodeByte2);
-                            artist[22] = Encoder.ConvertByteToChar(subCodeByte3);
-                            artist[23] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
+                            if (subCodeByte1 == 10)
+                            {
+                                artist[0] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[1] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[2] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 11)
+                            {
+                                artist[3] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[4] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[5] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 12)
+                            {
+                                artist[6] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[7] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[8] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 13)
+                            {
+                                artist[9] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[10] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[11] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 14)
+                            {
+                                artist[12] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[13] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[14] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 15)
+                            {
+                                artist[15] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[16] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[17] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 16)
+                            {
+                                artist[18] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[19] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[20] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 17)
+                            {
+                                artist[21] = Encoder.ConvertByteToChar(subCodeByte2);
+                                artist[22] = Encoder.ConvertByteToChar(subCodeByte3);
+                                artist[23] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
 
-                        if (subCodeByte1 == 18)
-                        {
-                            track[0] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[1] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[2] = Encoder.ConvertByteToChar(subCodeByte4);
+                            if (subCodeByte1 == 18)
+                            {
+                                track[0] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[1] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[2] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 19)
+                            {
+                                track[3] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[4] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[5] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 20)
+                            {
+                                track[6] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[7] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[8] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 21)
+                            {
+                                track[9] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[10] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[11] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 22)
+                            {
+                                track[12] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[13] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[14] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 23)
+                            {
+                                track[15] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[16] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[17] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 24)
+                            {
+                                track[18] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[19] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[20] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
+                            if (subCodeByte1 == 25)
+                            {
+                                track[21] = Encoder.ConvertByteToChar(subCodeByte2);
+                                track[22] = Encoder.ConvertByteToChar(subCodeByte3);
+                                track[23] = Encoder.ConvertByteToChar(subCodeByte4);
+                            }
                         }
-                        if (subCodeByte1 == 19)
-                        {
-                            track[3] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[4] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[5] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 20)
-                        {
-                            track[6] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[7] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[8] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 21)
-                        {
-                            track[9] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[10] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[11] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 22)
-                        {
-                            track[12] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[13] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[14] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 23)
-                        {
-                            track[15] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[16] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[17] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 24)
-                        {
-                            track[18] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[19] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[20] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-                        if (subCodeByte1 == 25)
-                        {
-                            track[21] = Encoder.ConvertByteToChar(subCodeByte2);
-                            track[22] = Encoder.ConvertByteToChar(subCodeByte3);
-                            track[23] = Encoder.ConvertByteToChar(subCodeByte4);
-                        }
-
                         if (subCodeByte1 == 100) //Таймкод
                         {
                             //subcodeSync = false;

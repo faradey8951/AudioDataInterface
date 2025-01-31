@@ -232,6 +232,7 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTimeUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
+            this.timer_mpsPlayerTextHandler = new System.Windows.Forms.Timer(this.components);
             this.menuStrip.SuspendLayout();
             this.panel_base.SuspendLayout();
             this.panel_dataControl.SuspendLayout();
@@ -641,6 +642,7 @@ namespace AudioDataInterface
             this.списокИзмененийToolStripMenuItem.Name = "списокИзмененийToolStripMenuItem";
             this.списокИзмененийToolStripMenuItem.Size = new System.Drawing.Size(199, 22);
             this.списокИзмененийToolStripMenuItem.Text = "Список изменений";
+            this.списокИзмененийToolStripMenuItem.Click += new System.EventHandler(this.списокИзмененийToolStripMenuItem_Click);
             // 
             // сайтПроектаToolStripMenuItem
             // 
@@ -2540,6 +2542,11 @@ namespace AudioDataInterface
             this.timer_mpsPlayerRunningIndicatorHandler.Interval = 90;
             this.timer_mpsPlayerRunningIndicatorHandler.Tick += new System.EventHandler(this.timer_mpsPlayerRunningIndicatorHandler_Tick);
             // 
+            // timer_mpsPlayerTextHandler
+            // 
+            this.timer_mpsPlayerTextHandler.Interval = 250;
+            this.timer_mpsPlayerTextHandler.Tick += new System.EventHandler(this.timer_mpsPlayerTextHandler_Tick);
+            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2848,6 +2855,7 @@ namespace AudioDataInterface
         public System.Windows.Forms.PictureBox pictureBox_3;
         public System.Windows.Forms.PictureBox pictureBox_2;
         public System.Windows.Forms.PictureBox pictureBox_1;
+        private System.Windows.Forms.Timer timer_mpsPlayerTextHandler;
     }
 }
 

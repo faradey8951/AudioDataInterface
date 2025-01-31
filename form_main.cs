@@ -70,6 +70,7 @@ namespace AudioDataInterface
         Image[] symbolImages; //Изображения отображаемых символов mps плеера
         PictureBox[] pictureBox_timeSymbols; 
         PictureBox[] pictureBox_trackNumberSymbols;
+        PictureBox[] pictureBox_textSymbols;
         //////////////////////////////////////////////////////////////////////////////////////
 
         //Настройка осциллографа
@@ -119,6 +120,12 @@ namespace AudioDataInterface
         public static object mpsPlayer_control = null; //Ссылается на перемещаемый мышкой элемент
         public static object mpsPlayer_selectedControl = null; //Ссылается на последний выбранный элемент по ЛКМ/ПКМ
         public static object mpsPlayer_alignmentControl = null; //Ссылается на элемент, выбранный в качестве ориентира для выравнивания
+        public static char[] mpsPlayer_MPSTextMatrix = { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
+        public static string mpsPlayer_MPSTextLastArtist = "                        ";
+        public static string mpsPlayer_MPSTextLastTrack = "                        ";
+        public static int mpsPlayer_MPSTextHoldTimeDelay = 0;
+        public static bool mpsPlayer_MPSTextChange = false;
+        public static int mpsPlayer_MPSTextChangeCount = 0;
 
         public static double spectrumBarWidth = 0; //Ширина области спектра относительно ширины mps плеера
         public static double spectrumBarHeight = 0; //Высота области спектра относительно высоты mps плеера
@@ -703,6 +710,7 @@ namespace AudioDataInterface
 
             pictureBox_timeSymbols = new PictureBox[] { window_main.pictureBox_symbol7, window_main.pictureBox_symbol8, window_main.pictureBox_symbol9, window_main.pictureBox_symbol10 };
             pictureBox_trackNumberSymbols = new PictureBox[] { window_main.pictureBox_symbol4, window_main.pictureBox_symbol5 };
+            pictureBox_textSymbols = new PictureBox[] { window_main.pictureBox_1, window_main.pictureBox_2, window_main.pictureBox_3, window_main.pictureBox_4, window_main.pictureBox_5, window_main.pictureBox_6, window_main.pictureBox_7, window_main.pictureBox_8, window_main.pictureBox_9, window_main.pictureBox_10, window_main.pictureBox_11, window_main.pictureBox_12, window_main.pictureBox_13, window_main.pictureBox_14, window_main.pictureBox_15, window_main.pictureBox_16, window_main.pictureBox_17, window_main.pictureBox_18, window_main.pictureBox_19, window_main.pictureBox_20 };
             pictureBox_spectrumBorder1.Image = class_mpsPlayerSkinHandler.image_misc[0];
             pictureBox_spectrumBorder2.Image = class_mpsPlayerSkinHandler.image_misc[0];
             window_main.pictureBox_dots.Image = class_mpsPlayerSkinHandler.image_symbols[18];
@@ -1485,6 +1493,7 @@ namespace AudioDataInterface
                 timer_mpsPlayerSpectrumUpdater.Enabled = true;
                 timer_mpsPlayerTimeUpdater.Enabled = true;
                 timer_signalQualityUpdater.Enabled = true;
+                timer_mpsPlayerTextHandler.Enabled = true;
                 mpsPlayer_currentTrackNumber = 1;
                 mpsPlayer_trackCount = 16;
                 DataHandler.fs_decodedAudio = new FileStream("DecodedAudio.wav", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
@@ -1797,6 +1806,221 @@ namespace AudioDataInterface
         private void сохранитьСкинToolStripMenuItem_Click(object sender, EventArgs e)
         {
             сохранитьToolStripMenuItem1_Click(this, null);
+        }
+
+        private void timer_mpsPlayerTextHandler_Tick(object sender, EventArgs e)
+        {
+            if (mpsPlayer_MPSTextLastArtist != new string(DataHandler.artist) || mpsPlayer_MPSTextLastTrack != new string(DataHandler.track)) mpsPlayer_MPSTextChange = true;
+            mpsPlayer_MPSTextLastArtist = new string(DataHandler.artist);
+            mpsPlayer_MPSTextLastTrack = new string(DataHandler.track);
+            string change = mpsPlayer_MPSTextLastArtist + " - " + mpsPlayer_MPSTextLastTrack;
+            //for (int i = 0; i < 20; i++) mpsPlayer_MPSTextMatrix[i] = mpsPlayer_MPSTextLastTrack[i];
+            if (mpsPlayer_MPSTextChange)
+            {
+                DataHandler.textUpdatePause = true;
+                mpsPlayer_MPSTextMatrix[0] = mpsPlayer_MPSTextMatrix[1];
+                mpsPlayer_MPSTextMatrix[1] = mpsPlayer_MPSTextMatrix[2];
+                mpsPlayer_MPSTextMatrix[2] = mpsPlayer_MPSTextMatrix[3];
+                mpsPlayer_MPSTextMatrix[3] = mpsPlayer_MPSTextMatrix[4];
+                mpsPlayer_MPSTextMatrix[4] = mpsPlayer_MPSTextMatrix[5];
+                mpsPlayer_MPSTextMatrix[5] = mpsPlayer_MPSTextMatrix[6];
+                mpsPlayer_MPSTextMatrix[6] = mpsPlayer_MPSTextMatrix[7];
+                mpsPlayer_MPSTextMatrix[7] = mpsPlayer_MPSTextMatrix[8];
+                mpsPlayer_MPSTextMatrix[8] = mpsPlayer_MPSTextMatrix[9];
+                mpsPlayer_MPSTextMatrix[9] = mpsPlayer_MPSTextMatrix[10];
+                mpsPlayer_MPSTextMatrix[10] = mpsPlayer_MPSTextMatrix[11];
+                mpsPlayer_MPSTextMatrix[11] = mpsPlayer_MPSTextMatrix[12];
+                mpsPlayer_MPSTextMatrix[12] = mpsPlayer_MPSTextMatrix[13];
+                mpsPlayer_MPSTextMatrix[13] = mpsPlayer_MPSTextMatrix[14];
+                mpsPlayer_MPSTextMatrix[14] = mpsPlayer_MPSTextMatrix[15];
+                mpsPlayer_MPSTextMatrix[15] = mpsPlayer_MPSTextMatrix[16];
+                mpsPlayer_MPSTextMatrix[16] = mpsPlayer_MPSTextMatrix[17];
+                mpsPlayer_MPSTextMatrix[17] = mpsPlayer_MPSTextMatrix[18];
+                mpsPlayer_MPSTextMatrix[18] = mpsPlayer_MPSTextMatrix[19];
+                if (mpsPlayer_MPSTextChangeCount < change.Length)
+                {
+                    mpsPlayer_MPSTextMatrix[19] = change[mpsPlayer_MPSTextChangeCount];
+                }
+                mpsPlayer_MPSTextChangeCount++;
+                if (mpsPlayer_MPSTextChangeCount >= change.Length + 16) { DataHandler.textUpdatePause = false; mpsPlayer_MPSTextChange = false; for (int i = 0; i < 20; i++) mpsPlayer_MPSTextMatrix[i] = mpsPlayer_MPSTextLastTrack[i]; mpsPlayer_MPSTextChangeCount = 0; }
+            }
+            for (int i = 0; i < 20; i++)
+            {
+                switch (mpsPlayer_MPSTextMatrix[i])
+                {
+                    default:
+                        pictureBox_textSymbols[i].Image = null;
+                        break;
+                    case '1':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\1symbol.png")];
+                        break;
+                    case '2':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\2symbol.png")];
+                        break;
+                    case '3':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\3symbol.png")];
+                        break;
+                    case '4':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\4symbol.png")];
+                        break;
+                    case '5':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\5symbol.png")];
+                        break;
+                    case '6':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\6symbol.png")];
+                        break;
+                    case '7':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\7symbol.png")];
+                        break;
+                    case '8':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\8symbol.png")];
+                        break;
+                    case '9':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\9symbol.png")];
+                        break;
+                    case '0':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\0symbol.png")];
+                        break;
+                    case 'a':
+                    case 'A':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Asymbol.png")];
+                        break;
+                    case 'b':
+                    case 'B':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Bsymbol.png")];
+                        break;
+                    case 'c':
+                    case 'C':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Csymbol.png")];
+                        break;
+                    case 'd':
+                    case 'D':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Dsymbol.png")];
+                        break;
+                    case 'e':
+                    case 'E':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Esymbol.png")];
+                        break;
+                    case 'f':
+                    case 'F':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Fsymbol.png")];
+                        break;
+                    case 'g':
+                    case 'G':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Gsymbol.png")];
+                        break;
+                    case 'h':
+                    case 'H':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Hsymbol.png")];
+                        break;
+                    case 'i':
+                    case 'I':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Isymbol.png")];
+                        break;
+                    case 'j':
+                    case 'J':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Jsymbol.png")];
+                        break;
+                    case 'k':
+                    case 'K':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Ksymbol.png")];
+                        break;
+                    case 'l':
+                    case 'L':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Lsymbol.png")];
+                        break;
+                    case 'm':
+                    case 'M':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Msymbol.png")];
+                        break;
+                    case 'n':
+                    case 'N':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Nsymbol.png")];
+                        break;
+                    case 'o':
+                    case 'O':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Osymbol.png")];
+                        break;
+                    case 'p':
+                    case 'P':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Psymbol.png")];
+                        break;
+                    case 'q':
+                    case 'Q':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Qsymbol.png")];
+                        break;
+                    case 'r':
+                    case 'R':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Rsymbol.png")];
+                        break;
+                    case 's':
+                    case 'S':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Ssymbol.png")];
+                        break;
+                    case 't':
+                    case 'T':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Tsymbol.png")];
+                        break;
+                    case 'u':
+                    case 'U':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Usymbol.png")];
+                        break;
+                    case 'v':
+                    case 'V':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Vsymbol.png")];
+                        break;
+                    case 'w':
+                    case 'W':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Wsymbol.png")];
+                        break;
+                    case 'x':
+                    case 'X':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Xsymbol.png")];
+                        break;
+                    case 'y':
+                    case 'Y':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Ysymbol.png")];
+                        break;
+                    case 'z':
+                    case 'Z':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Zsymbol.png")];
+                        break;
+                    case '-':
+                    case '_':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\DASHsymbol.png")];
+                        break;
+                    case '*':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\ASTERISKsymbol.png")];
+                        break;
+                    case '/':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\SLASHsymbol.png")];
+                        break;
+                    case '(':
+                    case '[':
+                    case '{':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\OPENPARENTHESISsymbol.png")];
+                        break;
+                    case ')':
+                    case ']':
+                    case '}':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\CLOSEPARENTHESISsymbol.png")];
+                        break;
+                    case ',':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\COMMAsymbol.png")];
+                        break;
+                    case '|':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\PIPEsymbol.png")];
+                        break;
+                    case '+':
+                        pictureBox_textSymbols[i].Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\PLUSsymbol.png")];
+                        break;
+                }
+            }
+        }
+
+        private void списокИзмененийToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show(Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Esymbol.png").ToString());
         }
     }
 }
