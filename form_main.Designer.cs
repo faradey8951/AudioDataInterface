@@ -233,6 +233,10 @@ namespace AudioDataInterface
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTextHandler = new System.Windows.Forms.Timer(this.components);
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.panel_base.SuspendLayout();
             this.panel_dataControl.SuspendLayout();
@@ -418,7 +422,7 @@ namespace AudioDataInterface
             this.альтернативныйЭкранToolStripMenuItem});
             this.скинToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.theme;
             this.скинToolStripMenuItem1.Name = "скинToolStripMenuItem1";
-            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(134, 22);
+            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
             this.скинToolStripMenuItem1.Text = "Скин";
             // 
             // редактироватьToolStripMenuItem1
@@ -560,7 +564,7 @@ namespace AudioDataInterface
             this.mPSПлеерToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.оставшеесяВремяToolStripMenuItem});
             this.mPSПлеерToolStripMenuItem.Name = "mPSПлеерToolStripMenuItem";
-            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.mPSПлеерToolStripMenuItem.Text = "MPS плеер";
             // 
             // оставшеесяВремяToolStripMenuItem
@@ -814,6 +818,10 @@ namespace AudioDataInterface
             this.уменьшитьВысотуToolStripMenuItem,
             this.увеличитьДлинуToolStripMenuItem,
             this.уменьшитьДлинуToolStripMenuItem,
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem,
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem,
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem,
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem,
             this.toolStripSeparator14,
             this.выстроитьСогласноСкинуToolStripMenuItem,
             this.выстроитьВНулевоеПоложениеToolStripMenuItem,
@@ -822,7 +830,7 @@ namespace AudioDataInterface
             this.toolStripSeparator16,
             this.сохранитьСкинToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(314, 370);
+            this.contextMenuStrip.Size = new System.Drawing.Size(314, 480);
             // 
             // редактированиеToolStripMenuItem
             // 
@@ -2544,8 +2552,40 @@ namespace AudioDataInterface
             // 
             // timer_mpsPlayerTextHandler
             // 
-            this.timer_mpsPlayerTextHandler.Interval = 250;
+            this.timer_mpsPlayerTextHandler.Interval = 200;
             this.timer_mpsPlayerTextHandler.Tick += new System.EventHandler(this.timer_mpsPlayerTextHandler_Tick);
+            // 
+            // сдвинутьВсеЭлементыВправоToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Name = "сдвинутьВсеЭлементыВправоToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Text = "Сдвинуть все элементы вправо";
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВправоToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВлевоToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Name = "сдвинутьВсеЭлементыВлевоToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Text = "Сдвинуть все элементы влево";
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВлевоToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВверхToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Name = "сдвинутьВсеЭлементыВверхToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Text = "Сдвинуть все элементы вверх";
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВверхToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВнизToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Name = "сдвинутьВсеЭлементыВнизToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Text = "Сдвинуть все элементы вниз";
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВнизToolStripMenuItem_Click);
             // 
             // form_main
             // 
@@ -2856,6 +2896,10 @@ namespace AudioDataInterface
         public System.Windows.Forms.PictureBox pictureBox_2;
         public System.Windows.Forms.PictureBox pictureBox_1;
         private System.Windows.Forms.Timer timer_mpsPlayerTextHandler;
+        private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВправоToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВлевоToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВверхToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВнизToolStripMenuItem;
     }
 }
 

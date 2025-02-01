@@ -826,6 +826,8 @@ namespace AudioDataInterface
             pictureBox_disc1.Image = class_mpsPlayerSkinHandler.image_CD[0];
             pictureBox_disc2.Image = class_mpsPlayerSkinHandler.image_CD[3];
             pictureBox_disc3.Image = class_mpsPlayerSkinHandler.image_CD[6];
+
+            foreach (PictureBox pb in pictureBox_textSymbols) pb.Image = class_mpsPlayerSkinHandler.image_symbols[Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\symbol.png")];
         }
 
         private void timer_mpsPlayerHandler_Tick(object sender, EventArgs e)
@@ -1257,13 +1259,18 @@ namespace AudioDataInterface
                 уменьшитьДлинуToolStripMenuItem.Enabled = true;
                 toolStripButton_widthDown.Enabled = true;
                 выбранныйЭлементToolStripMenuItem.Enabled = true;
+                сдвинутьВсеЭлементыВверхToolStripMenuItem.Enabled = true;
+                сдвинутьВсеЭлементыВнизToolStripMenuItem.Enabled = true;
+                сдвинутьВсеЭлементыВлевоToolStripMenuItem.Enabled = true;
+                сдвинутьВсеЭлементыВправоToolStripMenuItem.Enabled = true;
                 mpsPlayer_skinEdit = true;
                 timer_mpsPlayerHandler.Enabled = false;              
-                timer_mpsPlayerSpectrumUpdater.Enabled = false;
+                //timer_mpsPlayerSpectrumUpdater.Enabled = false;
                 mpsPlayer_instantSpectrum = new int[] { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 };
                 mpsPlayer_liveSpectrum = new int[] { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 };
                 timer_mpsPlayerRunningIndicatorHandler.Enabled = false;
                 timer_signalQualityUpdater.Enabled = false;
+                timer_mpsPlayerTextHandler.Enabled = false;
                 MpsPlayerTrackCalendarSetAmount(16);
                 MpsPlayerTrackCalendarSetCurrentTrack(1);
                 MpsPlayerRunningIndicatorStop();
@@ -1294,6 +1301,10 @@ namespace AudioDataInterface
                 уменьшитьДлинуToolStripMenuItem.Enabled = false;
                 toolStripButton_widthDown.Enabled = false;
                 выбранныйЭлементToolStripMenuItem.Enabled = false;
+                сдвинутьВсеЭлементыВверхToolStripMenuItem.Enabled = false;
+                сдвинутьВсеЭлементыВнизToolStripMenuItem.Enabled = false;
+                сдвинутьВсеЭлементыВлевоToolStripMenuItem.Enabled = false;
+                сдвинутьВсеЭлементыВправоToolStripMenuItem.Enabled = false;
                 if (mpsPlayer_selectedControl != null)
                 {
                     PictureBox pb = (PictureBox)mpsPlayer_selectedControl;
@@ -1302,9 +1313,10 @@ namespace AudioDataInterface
                 mpsPlayer_skinEdit = false;
                 timer_mpsPlayerHandler.Enabled = true;
                 timer_mpsPlayerSpectrumHandler.Enabled = true;
-                timer_mpsPlayerSpectrumUpdater.Enabled = true;
+                //timer_mpsPlayerSpectrumUpdater.Enabled = true;
                 timer_mpsPlayerTimeUpdater.Enabled = true;
                 timer_signalQualityUpdater.Enabled = true;
+                timer_mpsPlayerTextHandler.Enabled = true;
                 mpsPlayer_currentTrackNumber = 1;
                 mpsPlayer_trackCount = 16;
                 MpsPlayerInterfaceInitialize();
@@ -2020,7 +2032,41 @@ namespace AudioDataInterface
 
         private void списокИзмененийToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            MessageBox.Show(Array.IndexOf(class_mpsPlayerSkinHandler.symbols, "Symbols\\Esymbol.png").ToString());
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X + 10, control.Location.Y);
+        }
+
+        private void сдвинутьВсеЭлементыВправоToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X + 10, control.Location.Y);
+            spectrumBarX0P += 10;
+        }
+
+        private void сдвинутьВсеЭлементыВлевоToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X - 10, control.Location.Y);
+            spectrumBarX0P -= 10;
+        }
+
+        private void сдвинутьВсеЭлементыВверхToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X, control.Location.Y + 10);
+            spectrumBarY0P += 10;
+        }
+
+        private void сдвинутьВсеЭлементыВнизToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X, control.Location.Y - 10);
+            spectrumBarY0P -= 10;
         }
     }
 }

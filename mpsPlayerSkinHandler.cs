@@ -51,6 +51,7 @@ namespace AudioDataInterface
         public Image symbol_X;
         public Image symbol_Y;
         public Image symbol_Z;
+        public Image symbol_symbol;
 
         public Image symbol_DASH;
         public Image symbol_ASTERISK;
@@ -351,6 +352,107 @@ namespace AudioDataInterface
                 sw.WriteLine("16trackSizeX=" + form_main.window_main.pictureBox_track16.Size.Width);
                 sw.WriteLine("16trackSizeY=" + form_main.window_main.pictureBox_track16.Size.Height);
 
+                sw.WriteLine("1segmentPosX=" + form_main.window_main.pictureBox_1.Location.X);
+                sw.WriteLine("1segmentPosY=" + form_main.window_main.pictureBox_1.Location.Y);
+                sw.WriteLine("1segmentSizeX=" + form_main.window_main.pictureBox_1.Size.Width);
+                sw.WriteLine("1segmentSizeY=" + form_main.window_main.pictureBox_1.Size.Height);
+
+                sw.WriteLine("2segmentPosX=" + form_main.window_main.pictureBox_2.Location.X);
+                sw.WriteLine("2segmentPosY=" + form_main.window_main.pictureBox_2.Location.Y);
+                sw.WriteLine("2segmentSizeX=" + form_main.window_main.pictureBox_2.Size.Width);
+                sw.WriteLine("2segmentSizeY=" + form_main.window_main.pictureBox_2.Size.Height);
+
+                sw.WriteLine("3segmentPosX=" + form_main.window_main.pictureBox_3.Location.X);
+                sw.WriteLine("3segmentPosY=" + form_main.window_main.pictureBox_3.Location.Y);
+                sw.WriteLine("3segmentSizeX=" + form_main.window_main.pictureBox_3.Size.Width);
+                sw.WriteLine("3segmentSizeY=" + form_main.window_main.pictureBox_3.Size.Height);
+
+                sw.WriteLine("4segmentPosX=" + form_main.window_main.pictureBox_4.Location.X);
+                sw.WriteLine("4segmentPosY=" + form_main.window_main.pictureBox_4.Location.Y);
+                sw.WriteLine("4segmentSizeX=" + form_main.window_main.pictureBox_4.Size.Width);
+                sw.WriteLine("4segmentSizeY=" + form_main.window_main.pictureBox_4.Size.Height);
+
+                sw.WriteLine("5segmentPosX=" + form_main.window_main.pictureBox_5.Location.X);
+                sw.WriteLine("5segmentPosY=" + form_main.window_main.pictureBox_5.Location.Y);
+                sw.WriteLine("5segmentSizeX=" + form_main.window_main.pictureBox_5.Size.Width);
+                sw.WriteLine("5segmentSizeY=" + form_main.window_main.pictureBox_5.Size.Height);
+
+                sw.WriteLine("6segmentPosX=" + form_main.window_main.pictureBox_6.Location.X);
+                sw.WriteLine("6segmentPosY=" + form_main.window_main.pictureBox_6.Location.Y);
+                sw.WriteLine("6segmentSizeX=" + form_main.window_main.pictureBox_6.Size.Width);
+                sw.WriteLine("6segmentSizeY=" + form_main.window_main.pictureBox_6.Size.Height);
+
+                sw.WriteLine("7segmentPosX=" + form_main.window_main.pictureBox_7.Location.X);
+                sw.WriteLine("7segmentPosY=" + form_main.window_main.pictureBox_7.Location.Y);
+                sw.WriteLine("7segmentSizeX=" + form_main.window_main.pictureBox_7.Size.Width);
+                sw.WriteLine("7segmentSizeY=" + form_main.window_main.pictureBox_7.Size.Height);
+
+                sw.WriteLine("8segmentPosX=" + form_main.window_main.pictureBox_8.Location.X);
+                sw.WriteLine("8segmentPosY=" + form_main.window_main.pictureBox_8.Location.Y);
+                sw.WriteLine("8segmentSizeX=" + form_main.window_main.pictureBox_8.Size.Width);
+                sw.WriteLine("8segmentSizeY=" + form_main.window_main.pictureBox_8.Size.Height);
+
+                sw.WriteLine("9segmentPosX=" + form_main.window_main.pictureBox_9.Location.X);
+                sw.WriteLine("9segmentPosY=" + form_main.window_main.pictureBox_9.Location.Y);
+                sw.WriteLine("9segmentSizeX=" + form_main.window_main.pictureBox_9.Size.Width);
+                sw.WriteLine("9segmentSizeY=" + form_main.window_main.pictureBox_9.Size.Height);
+
+                sw.WriteLine("10segmentPosX=" + form_main.window_main.pictureBox_10.Location.X);
+                sw.WriteLine("10segmentPosY=" + form_main.window_main.pictureBox_10.Location.Y);
+                sw.WriteLine("10segmentSizeX=" + form_main.window_main.pictureBox_10.Size.Width);
+                sw.WriteLine("10segmentSizeY=" + form_main.window_main.pictureBox_10.Size.Height);
+
+                sw.WriteLine("11segmentPosX=" + form_main.window_main.pictureBox_11.Location.X);
+                sw.WriteLine("11segmentPosY=" + form_main.window_main.pictureBox_11.Location.Y);
+                sw.WriteLine("11segmentSizeX=" + form_main.window_main.pictureBox_11.Size.Width);
+                sw.WriteLine("11segmentSizeY=" + form_main.window_main.pictureBox_11.Size.Height);
+
+                sw.WriteLine("12segmentPosX=" + form_main.window_main.pictureBox_12.Location.X);
+                sw.WriteLine("12segmentPosY=" + form_main.window_main.pictureBox_12.Location.Y);
+                sw.WriteLine("12segmentSizeX=" + form_main.window_main.pictureBox_12.Size.Width);
+                sw.WriteLine("12segmentSizeY=" + form_main.window_main.pictureBox_12.Size.Height);
+
+                sw.WriteLine("13segmentPosX=" + form_main.window_main.pictureBox_13.Location.X);
+                sw.WriteLine("13segmentPosY=" + form_main.window_main.pictureBox_13.Location.Y);
+                sw.WriteLine("13segmentSizeX=" + form_main.window_main.pictureBox_13.Size.Width);
+                sw.WriteLine("13segmentSizeY=" + form_main.window_main.pictureBox_13.Size.Height);
+
+                sw.WriteLine("14segmentPosX=" + form_main.window_main.pictureBox_14.Location.X);
+                sw.WriteLine("14segmentPosY=" + form_main.window_main.pictureBox_14.Location.Y);
+                sw.WriteLine("14segmentSizeX=" + form_main.window_main.pictureBox_14.Size.Width);
+                sw.WriteLine("14segmentSizeY=" + form_main.window_main.pictureBox_14.Size.Height);
+
+                sw.WriteLine("15segmentPosX=" + form_main.window_main.pictureBox_15.Location.X);
+                sw.WriteLine("15segmentPosY=" + form_main.window_main.pictureBox_15.Location.Y);
+                sw.WriteLine("15segmentSizeX=" + form_main.window_main.pictureBox_15.Size.Width);
+                sw.WriteLine("15segmentSizeY=" + form_main.window_main.pictureBox_15.Size.Height);
+
+                sw.WriteLine("16segmentPosX=" + form_main.window_main.pictureBox_16.Location.X);
+                sw.WriteLine("16segmentPosY=" + form_main.window_main.pictureBox_16.Location.Y);
+                sw.WriteLine("16segmentSizeX=" + form_main.window_main.pictureBox_16.Size.Width);
+                sw.WriteLine("16segmentSizeY=" + form_main.window_main.pictureBox_16.Size.Height);
+
+                sw.WriteLine("17segmentPosX=" + form_main.window_main.pictureBox_17.Location.X);
+                sw.WriteLine("17segmentPosY=" + form_main.window_main.pictureBox_17.Location.Y);
+                sw.WriteLine("17segmentSizeX=" + form_main.window_main.pictureBox_17.Size.Width);
+                sw.WriteLine("17segmentSizeY=" + form_main.window_main.pictureBox_17.Size.Height);
+
+                sw.WriteLine("18segmentPosX=" + form_main.window_main.pictureBox_18.Location.X);
+                sw.WriteLine("18segmentPosY=" + form_main.window_main.pictureBox_18.Location.Y);
+                sw.WriteLine("18segmentSizeX=" + form_main.window_main.pictureBox_18.Size.Width);
+                sw.WriteLine("18segmentSizeY=" + form_main.window_main.pictureBox_18.Size.Height);
+
+                sw.WriteLine("19segmentPosX=" + form_main.window_main.pictureBox_19.Location.X);
+                sw.WriteLine("19segmentPosY=" + form_main.window_main.pictureBox_19.Location.Y);
+                sw.WriteLine("19segmentSizeX=" + form_main.window_main.pictureBox_19.Size.Width);
+                sw.WriteLine("19segmentSizeY=" + form_main.window_main.pictureBox_19.Size.Height);
+
+                sw.WriteLine("20segmentPosX=" + form_main.window_main.pictureBox_20.Location.X);
+                sw.WriteLine("20segmentPosY=" + form_main.window_main.pictureBox_20.Location.Y);
+                sw.WriteLine("20segmentSizeX=" + form_main.window_main.pictureBox_20.Size.Width);
+                sw.WriteLine("20segmentSizeY=" + form_main.window_main.pictureBox_20.Size.Height);
+
+
                 sw.Close();
                 fs.Close();
             }
@@ -364,13 +466,13 @@ namespace AudioDataInterface
             else dir = currentSkinName;
             string[] CD = new string[] { "CD\\disc1Detected.png", "CD\\disc1Empty.png", "CD\\disc1Selected.png", "CD\\disc2Detected.png", "CD\\disc2Empty.png", "CD\\disc2Selected.png", "CD\\disc3Detected.png", "CD\\disc3Empty.png", "CD\\disc3Selected.png", "CD\\play.png", "CD\\pause.png" };
             string[] runningIndicator = new string[] { "Running Indicator\\STOP.png", "Running Indicator\\CD\\1.png", "Running Indicator\\CD\\2.png", "Running Indicator\\CD\\3.png", "Running Indicator\\CD\\4.png", "Running Indicator\\CD\\5.png", "Running Indicator\\CD\\6.png", "Running Indicator\\CD\\7.png", "Running Indicator\\CD\\8.png", "Running Indicator\\CD\\9.png", "Running Indicator\\CD\\10.png", "Running Indicator\\CD\\11.png", "Running Indicator\\CD\\12.png", "Running Indicator\\TAPE\\FWD\\0.png", "Running Indicator\\TAPE\\FWD\\1.png", "Running Indicator\\TAPE\\FWD\\2.png", "Running Indicator\\TAPE\\FWD\\3.png", "Running Indicator\\TAPE\\FWD\\4.png", "Running Indicator\\TAPE\\FWD\\5.png", "Running Indicator\\TAPE\\FWD\\6.png", "Running Indicator\\TAPE\\FWD\\7.png", "Running Indicator\\TAPE\\FWD\\8.png", "Running Indicator\\TAPE\\FWD\\9.png", "Running Indicator\\TAPE\\FWD\\10.png", "Running Indicator\\TAPE\\FWD\\11.png", "Running Indicator\\TAPE\\FWD\\12.png", "Running Indicator\\TAPE\\RVS\\0.png", "Running Indicator\\TAPE\\RVS\\1.png", "Running Indicator\\TAPE\\RVS\\2.png", "Running Indicator\\TAPE\\RVS\\3.png", "Running Indicator\\TAPE\\RVS\\4.png", "Running Indicator\\TAPE\\RVS\\5.png", "Running Indicator\\TAPE\\RVS\\6.png", "Running Indicator\\TAPE\\RVS\\7.png", "Running Indicator\\TAPE\\RVS\\8.png", "Running Indicator\\TAPE\\RVS\\9.png", "Running Indicator\\TAPE\\RVS\\10.png", "Running Indicator\\TAPE\\RVS\\11.png", "Running Indicator\\TAPE\\RVS\\12.png" };
-            symbols = new string[] { "Symbols\\0symbol.png", "Symbols\\1symbol.png", "Symbols\\2symbol.png", "Symbols\\3symbol.png", "Symbols\\4symbol.png", "Symbols\\5symbol.png", "Symbols\\6symbol.png", "Symbols\\7symbol.png", "Symbols\\8symbol.png", "Symbols\\9symbol.png", "Symbols\\Csymbol.png", "Symbols\\Dsymbol.png", "Symbols\\Msymbol.png", "Symbols\\Psymbol.png", "Symbols\\Tsymbol.png", "Symbols\\Asymbol.png", "Symbols\\Esymbol.png", "Symbols\\DASHsymbol.png", "Symbols\\DOTS.png", "Symbols\\Bsymbol.png", "Symbols\\Fsymbol.png", "Symbols\\Gsymbol.png", "Symbols\\Hsymbol.png", "Symbols\\Isymbol.png", "Symbols\\Jsymbol.png", "Symbols\\Ksymbol.png", "Symbols\\Lsymbol.png", "Symbols\\Nsymbol.png", "Symbols\\Osymbol.png", "Symbols\\Qsymbol.png", "Symbols\\Rsymbol.png", "Symbols\\Ssymbol.png", "Symbols\\Usymbol.png", "Symbols\\Vsymbol.png", "Symbols\\Wsymbol.png", "Symbols\\Xsymbol.png", "Symbols\\Ysymbol.png", "Symbols\\Zsymbol.png", "Symbols\\ASTERISKsymbol.png", "Symbols\\SLASHsymbol.png", "Symbols\\OPENPARENTHESISsymbol.png", "Symbols\\CLOSEPARENTHESISsymbol.png", "Symbols\\COMMAsymbol.png", "Symbols\\APOSTROPHEsymbol.png", "Symbols\\PIPEsymbol.png", "Symbols\\PLUSsymbol.png" };
+            symbols = new string[] { "Symbols\\0symbol.png", "Symbols\\1symbol.png", "Symbols\\2symbol.png", "Symbols\\3symbol.png", "Symbols\\4symbol.png", "Symbols\\5symbol.png", "Symbols\\6symbol.png", "Symbols\\7symbol.png", "Symbols\\8symbol.png", "Symbols\\9symbol.png", "Symbols\\Csymbol.png", "Symbols\\Dsymbol.png", "Symbols\\Msymbol.png", "Symbols\\Psymbol.png", "Symbols\\Tsymbol.png", "Symbols\\Asymbol.png", "Symbols\\Esymbol.png", "Symbols\\DASHsymbol.png", "Symbols\\DOTS.png", "Symbols\\Bsymbol.png", "Symbols\\Fsymbol.png", "Symbols\\Gsymbol.png", "Symbols\\Hsymbol.png", "Symbols\\Isymbol.png", "Symbols\\Jsymbol.png", "Symbols\\Ksymbol.png", "Symbols\\Lsymbol.png", "Symbols\\Nsymbol.png", "Symbols\\Osymbol.png", "Symbols\\Qsymbol.png", "Symbols\\Rsymbol.png", "Symbols\\Ssymbol.png", "Symbols\\Usymbol.png", "Symbols\\Vsymbol.png", "Symbols\\Wsymbol.png", "Symbols\\Xsymbol.png", "Symbols\\Ysymbol.png", "Symbols\\Zsymbol.png", "Symbols\\ASTERISKsymbol.png", "Symbols\\SLASHsymbol.png", "Symbols\\OPENPARENTHESISsymbol.png", "Symbols\\CLOSEPARENTHESISsymbol.png", "Symbols\\COMMAsymbol.png", "Symbols\\APOSTROPHEsymbol.png", "Symbols\\PIPEsymbol.png", "Symbols\\PLUSsymbol.png", "Symbols\\symbol.png" };
             string[] tape = new string[] { "TAPE\\cassette.png" };
             string[] trackCalendar = new string[] { "Track Calendar\\1.png", "Track Calendar\\2.png", "Track Calendar\\3.png", "Track Calendar\\4.png", "Track Calendar\\5.png", "Track Calendar\\6.png", "Track Calendar\\7.png", "Track Calendar\\8.png", "Track Calendar\\9.png", "Track Calendar\\10.png", "Track Calendar\\11.png", "Track Calendar\\12.png", "Track Calendar\\13.png", "Track Calendar\\14.png", "Track Calendar\\15.png", "Track Calendar\\16.png" };
             string[] misc = new string[] { "border.png" };
             image_CD = new Image[] { CD_disc1Detected, CD_disc1Empty, CD_disc1Selected, CD_disc2Detected, CD_disc2Empty, CD_disc2Selected, CD_disc3Detected, CD_disc3Empty, CD_disc3Selected, CD_play, CD_pause };
             image_runningIndicator = new Image[] { runningIndicator_stop, runningIndicator_CD_1, runningIndicator_CD_2, runningIndicator_CD_3, runningIndicator_CD_4, runningIndicator_CD_5, runningIndicator_CD_6, runningIndicator_CD_7, runningIndicator_CD_8, runningIndicator_CD_9, runningIndicator_CD_10, runningIndicator_CD_11, runningIndicator_CD_12, runningIndicator_tape_FWD_0, runningIndicator_tape_FWD_1, runningIndicator_tape_FWD_2, runningIndicator_tape_FWD_3, runningIndicator_tape_FWD_4, runningIndicator_tape_FWD_5, runningIndicator_tape_FWD_6, runningIndicator_tape_FWD_7, runningIndicator_tape_FWD_8, runningIndicator_tape_FWD_9, runningIndicator_tape_FWD_10, runningIndicator_tape_FWD_11, runningIndicator_tape_FWD_12, runningIndicator_tape_RVS_0, runningIndicator_tape_RVS_1, runningIndicator_tape_RVS_2, runningIndicator_tape_RVS_3, runningIndicator_tape_RVS_4, runningIndicator_tape_RVS_5, runningIndicator_tape_RVS_6, runningIndicator_tape_RVS_7, runningIndicator_tape_RVS_8, runningIndicator_tape_RVS_9, runningIndicator_tape_RVS_10, runningIndicator_tape_RVS_11, runningIndicator_tape_RVS_12 };
-            image_symbols = new Image[] { symbol_0, symbol_1, symbol_2, symbol_3, symbol_4, symbol_5, symbol_6, symbol_7, symbol_8, symbol_9, symbol_C, symbol_D, symbol_M, symbol_P, symbol_T, symbol_A, symbol_E, symbol_DASH, dots, symbol_B, symbol_F, symbol_G, symbol_H, symbol_I, symbol_J, symbol_K, symbol_L, symbol_N, symbol_O, symbol_Q, symbol_R, symbol_S, symbol_U, symbol_V, symbol_W, symbol_X, symbol_Y, symbol_Z, symbol_ASTERISK, symbol_SLASH, symbol_OPENPARENTHESIS, symbol_CLOSEPARENTHESIS, symbol_COMMA, symbol_APOSTROPHE, symbol_PIPE, symbol_PLUS };
+            image_symbols = new Image[] { symbol_0, symbol_1, symbol_2, symbol_3, symbol_4, symbol_5, symbol_6, symbol_7, symbol_8, symbol_9, symbol_C, symbol_D, symbol_M, symbol_P, symbol_T, symbol_A, symbol_E, symbol_DASH, dots, symbol_B, symbol_F, symbol_G, symbol_H, symbol_I, symbol_J, symbol_K, symbol_L, symbol_N, symbol_O, symbol_Q, symbol_R, symbol_S, symbol_U, symbol_V, symbol_W, symbol_X, symbol_Y, symbol_Z, symbol_ASTERISK, symbol_SLASH, symbol_OPENPARENTHESIS, symbol_CLOSEPARENTHESIS, symbol_COMMA, symbol_APOSTROPHE, symbol_PIPE, symbol_PLUS, symbol_symbol };
             image_tape = new Image[] { tape_cassette };
             image_trackCalendar = new Image[] { trackCalendar_1, trackCalendar_2, trackCalendar_3, trackCalendar_4, trackCalendar_5, trackCalendar_6, trackCalendar_7, trackCalendar_8, trackCalendar_9, trackCalendar_10, trackCalendar_11, trackCalendar_12, trackCalendar_13, trackCalendar_14, trackCalendar_15, trackCalendar_16 };
             image_misc = new Image[] { spectrum_border };
@@ -463,6 +565,46 @@ namespace AudioDataInterface
                 form_main.window_main.pictureBox_track15.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
                 form_main.window_main.pictureBox_track16.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
                 form_main.window_main.pictureBox_track16.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_1.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_1.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_2.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_2.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_3.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_3.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_4.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_4.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_5.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_5.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_6.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_6.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_7.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_7.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_8.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_8.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_9.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_9.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_10.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_10.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_11.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_11.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_12.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_12.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_13.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_13.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_14.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_14.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_15.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_15.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_16.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_16.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_17.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_17.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_18.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_18.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_19.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_19.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_20.Location = new Point(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
+                form_main.window_main.pictureBox_20.Size = new Size(Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())), Convert.ToInt16(TextHandler.GetLineValue(sr.ReadLine())));
                 sr.Close();
                 fs.Close();
             }
