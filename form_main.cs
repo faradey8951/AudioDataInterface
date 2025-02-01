@@ -155,10 +155,11 @@ namespace AudioDataInterface
         {
             if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_graphSamples.Count > 0)
             {
+                //Автосинхронизация сигнала спектра
                 short sync = AudioIO.buff_graphSamples.Max();
-                sync = (short)(sync * 0.9);
+                sync = (short)(sync * 0.8);
+                while (AudioIO.buff_graphSamples[0] < sync && AudioIO.buff_graphSamples.Count > 2000) { AudioIO.buff_graphSamples.RemoveAt(0); AudioIO.buff_graphSamples.RemoveAt(0); }
 
-                while (AudioIO.buff_graphSamples[0] < sync && AudioIO.buff_graphSamples.Count > 5000) AudioIO.buff_graphSamples.RemoveAt(0);
                 graphics_waveGraphL.Clear(Color.FromArgb(34, 31, 31));
                 graphics_waveGraphR.Clear(Color.FromArgb(34, 31, 31));
                 int pointsCount = (pictureBox_waveGraphL.Width / scope_horizontalScale) + 8;
