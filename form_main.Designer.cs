@@ -94,6 +94,10 @@ namespace AudioDataInterface
             this.уменьшитьВысотуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.увеличитьДлинуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.уменьшитьДлинуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator14 = new System.Windows.Forms.ToolStripSeparator();
             this.выстроитьСогласноСкинуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.выстроитьВНулевоеПоложениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -181,21 +185,15 @@ namespace AudioDataInterface
             this.label_border1 = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.trackBar_spectrumGain = new System.Windows.Forms.TrackBar();
-            this.label2 = new System.Windows.Forms.Label();
             this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
             this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
             this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
             this.radioButton_verticalBIAS = new System.Windows.Forms.RadioButton();
             this.radioButton_horizontalBIAS = new System.Windows.Forms.RadioButton();
             this.groupBox_scaleAdjust = new System.Windows.Forms.GroupBox();
             this.radioButton_verticalScale = new System.Windows.Forms.RadioButton();
             this.radioButton_horizontalScale = new System.Windows.Forms.RadioButton();
-            this.label_recDevice = new System.Windows.Forms.Label();
             this.pictureBox_waveGraphL = new System.Windows.Forms.PictureBox();
-            this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_rec = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton_get = new System.Windows.Forms.ToolStripButton();
@@ -233,10 +231,6 @@ namespace AudioDataInterface
             this.timer_signalQualityUpdater = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerRunningIndicatorHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerTextHandler = new System.Windows.Forms.Timer(this.components);
-            this.сдвинутьВсеЭлементыВправоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сдвинутьВсеЭлементыВверхToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сдвинутьВсеЭлементыВнизToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip.SuspendLayout();
             this.panel_base.SuspendLayout();
             this.panel_dataControl.SuspendLayout();
@@ -302,7 +296,6 @@ namespace AudioDataInterface
             this.groupBox_info.SuspendLayout();
             this.panel_signalCapture.SuspendLayout();
             this.groupBox1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumGain)).BeginInit();
             this.groupBox_signalCapture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).BeginInit();
             this.groupBox_BIASAdjust.SuspendLayout();
@@ -422,7 +415,7 @@ namespace AudioDataInterface
             this.альтернативныйЭкранToolStripMenuItem});
             this.скинToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.theme;
             this.скинToolStripMenuItem1.Name = "скинToolStripMenuItem1";
-            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(134, 22);
             this.скинToolStripMenuItem1.Text = "Скин";
             // 
             // редактироватьToolStripMenuItem1
@@ -564,7 +557,7 @@ namespace AudioDataInterface
             this.mPSПлеерToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.оставшеесяВремяToolStripMenuItem});
             this.mPSПлеерToolStripMenuItem.Name = "mPSПлеерToolStripMenuItem";
-            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
             this.mPSПлеерToolStripMenuItem.Text = "MPS плеер";
             // 
             // оставшеесяВремяToolStripMenuItem
@@ -830,7 +823,7 @@ namespace AudioDataInterface
             this.toolStripSeparator16,
             this.сохранитьСкинToolStripMenuItem});
             this.contextMenuStrip.Name = "contextMenuStrip";
-            this.contextMenuStrip.Size = new System.Drawing.Size(314, 480);
+            this.contextMenuStrip.Size = new System.Drawing.Size(314, 458);
             // 
             // редактированиеToolStripMenuItem
             // 
@@ -955,6 +948,38 @@ namespace AudioDataInterface
             this.уменьшитьДлинуToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
             this.уменьшитьДлинуToolStripMenuItem.Text = "Уменьшить ширину";
             this.уменьшитьДлинуToolStripMenuItem.Click += new System.EventHandler(this.уменьшитьДлинуToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВправоToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Name = "сдвинутьВсеЭлементыВправоToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Text = "Сдвинуть все элементы вправо";
+            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВправоToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВлевоToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Name = "сдвинутьВсеЭлементыВлевоToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Text = "Сдвинуть все элементы влево";
+            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВлевоToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВверхToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Name = "сдвинутьВсеЭлементыВверхToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Text = "Сдвинуть все элементы вверх";
+            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВверхToolStripMenuItem_Click);
+            // 
+            // сдвинутьВсеЭлементыВнизToolStripMenuItem
+            // 
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Enabled = false;
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Name = "сдвинутьВсеЭлементыВнизToolStripMenuItem";
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Text = "Сдвинуть все элементы вниз";
+            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВнизToolStripMenuItem_Click);
             // 
             // toolStripSeparator14
             // 
@@ -2029,49 +2054,21 @@ namespace AudioDataInterface
             // groupBox1
             // 
             this.groupBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox1.Controls.Add(this.trackBar_spectrumGain);
-            this.groupBox1.Controls.Add(this.label2);
+            this.groupBox1.Controls.Add(this.groupBox_scaleAdjust);
+            this.groupBox1.Controls.Add(this.groupBox_BIASAdjust);
             this.groupBox1.Location = new System.Drawing.Point(872, 0);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(150, 192);
             this.groupBox1.TabIndex = 19;
             this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Управление декодером";
-            // 
-            // trackBar_spectrumGain
-            // 
-            this.trackBar_spectrumGain.Dock = System.Windows.Forms.DockStyle.Top;
-            this.trackBar_spectrumGain.Location = new System.Drawing.Point(3, 29);
-            this.trackBar_spectrumGain.Maximum = 20;
-            this.trackBar_spectrumGain.Minimum = 1;
-            this.trackBar_spectrumGain.Name = "trackBar_spectrumGain";
-            this.trackBar_spectrumGain.Size = new System.Drawing.Size(144, 45);
-            this.trackBar_spectrumGain.TabIndex = 19;
-            this.trackBar_spectrumGain.Value = 1;
-            this.trackBar_spectrumGain.Scroll += new System.EventHandler(this.trackBar_spectrumGain_Scroll);
-            // 
-            // label2
-            // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.Location = new System.Drawing.Point(3, 16);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(144, 13);
-            this.label2.TabIndex = 18;
-            this.label2.Text = "Уровень спектра:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.groupBox1.Text = "Настройка:";
             // 
             // groupBox_signalCapture
             // 
             this.groupBox_signalCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphR);
-            this.groupBox_signalCapture.Controls.Add(this.label1);
-            this.groupBox_signalCapture.Controls.Add(this.comboBox_playDevices);
-            this.groupBox_signalCapture.Controls.Add(this.groupBox_BIASAdjust);
-            this.groupBox_signalCapture.Controls.Add(this.groupBox_scaleAdjust);
-            this.groupBox_signalCapture.Controls.Add(this.label_recDevice);
             this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphL);
-            this.groupBox_signalCapture.Controls.Add(this.comboBox_recDevices);
             this.groupBox_signalCapture.Location = new System.Drawing.Point(0, 0);
             this.groupBox_signalCapture.Name = "groupBox_signalCapture";
             this.groupBox_signalCapture.Size = new System.Drawing.Size(872, 192);
@@ -2086,40 +2083,20 @@ namespace AudioDataInterface
             | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBox_waveGraphR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
             this.pictureBox_waveGraphR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox_waveGraphR.Location = new System.Drawing.Point(8, 64);
+            this.pictureBox_waveGraphR.Location = new System.Drawing.Point(8, 102);
             this.pictureBox_waveGraphR.Name = "pictureBox_waveGraphR";
-            this.pictureBox_waveGraphR.Size = new System.Drawing.Size(856, 48);
+            this.pictureBox_waveGraphR.Size = new System.Drawing.Size(856, 84);
             this.pictureBox_waveGraphR.TabIndex = 18;
             this.pictureBox_waveGraphR.TabStop = false;
-            // 
-            // label1
-            // 
-            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(558, 144);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(106, 13);
-            this.label1.TabIndex = 17;
-            this.label1.Text = "Устройство воспр.:";
-            // 
-            // comboBox_playDevices
-            // 
-            this.comboBox_playDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_playDevices.FormattingEnabled = true;
-            this.comboBox_playDevices.Location = new System.Drawing.Point(670, 141);
-            this.comboBox_playDevices.Name = "comboBox_playDevices";
-            this.comboBox_playDevices.Size = new System.Drawing.Size(194, 21);
-            this.comboBox_playDevices.TabIndex = 16;
-            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
             // 
             // groupBox_BIASAdjust
             // 
             this.groupBox_BIASAdjust.Controls.Add(this.radioButton_verticalBIAS);
             this.groupBox_BIASAdjust.Controls.Add(this.radioButton_horizontalBIAS);
-            this.groupBox_BIASAdjust.Location = new System.Drawing.Point(159, 117);
+            this.groupBox_BIASAdjust.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox_BIASAdjust.Location = new System.Drawing.Point(3, 16);
             this.groupBox_BIASAdjust.Name = "groupBox_BIASAdjust";
-            this.groupBox_BIASAdjust.Size = new System.Drawing.Size(145, 73);
+            this.groupBox_BIASAdjust.Size = new System.Drawing.Size(144, 73);
             this.groupBox_BIASAdjust.TabIndex = 13;
             this.groupBox_BIASAdjust.TabStop = false;
             this.groupBox_BIASAdjust.Text = "Смещение развертки";
@@ -2150,9 +2127,10 @@ namespace AudioDataInterface
             // 
             this.groupBox_scaleAdjust.Controls.Add(this.radioButton_verticalScale);
             this.groupBox_scaleAdjust.Controls.Add(this.radioButton_horizontalScale);
-            this.groupBox_scaleAdjust.Location = new System.Drawing.Point(8, 117);
+            this.groupBox_scaleAdjust.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox_scaleAdjust.Location = new System.Drawing.Point(3, 89);
             this.groupBox_scaleAdjust.Name = "groupBox_scaleAdjust";
-            this.groupBox_scaleAdjust.Size = new System.Drawing.Size(145, 73);
+            this.groupBox_scaleAdjust.Size = new System.Drawing.Size(144, 73);
             this.groupBox_scaleAdjust.TabIndex = 12;
             this.groupBox_scaleAdjust.TabStop = false;
             this.groupBox_scaleAdjust.Text = "Масштаб развертки";
@@ -2179,16 +2157,6 @@ namespace AudioDataInterface
             this.radioButton_horizontalScale.Text = "По горизонтали";
             this.radioButton_horizontalScale.UseVisualStyleBackColor = true;
             // 
-            // label_recDevice
-            // 
-            this.label_recDevice.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.label_recDevice.AutoSize = true;
-            this.label_recDevice.Location = new System.Drawing.Point(558, 120);
-            this.label_recDevice.Name = "label_recDevice";
-            this.label_recDevice.Size = new System.Drawing.Size(109, 13);
-            this.label_recDevice.TabIndex = 11;
-            this.label_recDevice.Text = "Устройство записи:";
-            // 
             // pictureBox_waveGraphL
             // 
             this.pictureBox_waveGraphL.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -2197,7 +2165,7 @@ namespace AudioDataInterface
             this.pictureBox_waveGraphL.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pictureBox_waveGraphL.Location = new System.Drawing.Point(8, 15);
             this.pictureBox_waveGraphL.Name = "pictureBox_waveGraphL";
-            this.pictureBox_waveGraphL.Size = new System.Drawing.Size(856, 48);
+            this.pictureBox_waveGraphL.Size = new System.Drawing.Size(856, 84);
             this.pictureBox_waveGraphL.TabIndex = 9;
             this.pictureBox_waveGraphL.TabStop = false;
             this.pictureBox_waveGraphL.Click += new System.EventHandler(this.pictureBox_Click);
@@ -2206,17 +2174,6 @@ namespace AudioDataInterface
             this.pictureBox_waveGraphL.MouseEnter += new System.EventHandler(this.pictureBox_waveGraph_MouseEnter);
             this.pictureBox_waveGraphL.MouseLeave += new System.EventHandler(this.pictureBox_waveGraph_MouseLeave);
             this.pictureBox_waveGraphL.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pictureBox_waveGraph_MouseUp);
-            // 
-            // comboBox_recDevices
-            // 
-            this.comboBox_recDevices.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.comboBox_recDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_recDevices.FormattingEnabled = true;
-            this.comboBox_recDevices.Location = new System.Drawing.Point(670, 117);
-            this.comboBox_recDevices.Name = "comboBox_recDevices";
-            this.comboBox_recDevices.Size = new System.Drawing.Size(194, 21);
-            this.comboBox_recDevices.TabIndex = 10;
-            this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged);
             // 
             // toolStrip1
             // 
@@ -2555,38 +2512,6 @@ namespace AudioDataInterface
             this.timer_mpsPlayerTextHandler.Interval = 200;
             this.timer_mpsPlayerTextHandler.Tick += new System.EventHandler(this.timer_mpsPlayerTextHandler_Tick);
             // 
-            // сдвинутьВсеЭлементыВправоToolStripMenuItem
-            // 
-            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Enabled = false;
-            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Name = "сдвинутьВсеЭлементыВправоToolStripMenuItem";
-            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Text = "Сдвинуть все элементы вправо";
-            this.сдвинутьВсеЭлементыВправоToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВправоToolStripMenuItem_Click);
-            // 
-            // сдвинутьВсеЭлементыВлевоToolStripMenuItem
-            // 
-            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Enabled = false;
-            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Name = "сдвинутьВсеЭлементыВлевоToolStripMenuItem";
-            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Text = "Сдвинуть все элементы влево";
-            this.сдвинутьВсеЭлементыВлевоToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВлевоToolStripMenuItem_Click);
-            // 
-            // сдвинутьВсеЭлементыВверхToolStripMenuItem
-            // 
-            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Enabled = false;
-            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Name = "сдвинутьВсеЭлементыВверхToolStripMenuItem";
-            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Text = "Сдвинуть все элементы вверх";
-            this.сдвинутьВсеЭлементыВверхToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВверхToolStripMenuItem_Click);
-            // 
-            // сдвинутьВсеЭлементыВнизToolStripMenuItem
-            // 
-            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Enabled = false;
-            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Name = "сдвинутьВсеЭлементыВнизToolStripMenuItem";
-            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Size = new System.Drawing.Size(313, 22);
-            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Text = "Сдвинуть все элементы вниз";
-            this.сдвинутьВсеЭлементыВнизToolStripMenuItem.Click += new System.EventHandler(this.сдвинутьВсеЭлементыВнизToolStripMenuItem_Click);
-            // 
             // form_main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -2675,10 +2600,7 @@ namespace AudioDataInterface
             this.groupBox_info.PerformLayout();
             this.panel_signalCapture.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox1.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.trackBar_spectrumGain)).EndInit();
             this.groupBox_signalCapture.ResumeLayout(false);
-            this.groupBox_signalCapture.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).EndInit();
             this.groupBox_BIASAdjust.ResumeLayout(false);
             this.groupBox_BIASAdjust.PerformLayout();
@@ -2704,8 +2626,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.Panel panel_signalCapture;
         private System.Windows.Forms.PictureBox pictureBox_waveGraphL;
         private System.Windows.Forms.GroupBox groupBox_signalCapture;
-        private System.Windows.Forms.Label label_recDevice;
-        private System.Windows.Forms.ComboBox comboBox_recDevices;
         private System.Windows.Forms.Timer timer_drawWaveGraphFrame;
         private System.Windows.Forms.GroupBox groupBox_BIASAdjust;
         private System.Windows.Forms.RadioButton radioButton_verticalBIAS;
@@ -2718,8 +2638,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.Timer timer_mpsPlayerTimeUpdater;
         private System.Windows.Forms.GroupBox groupBox_info;
         private System.Windows.Forms.Label label_fixedErrorCount;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.ComboBox comboBox_playDevices;
         private System.Windows.Forms.Label label_frameSyncErrorCount;
         private System.Windows.Forms.Label label_unfixedErrorCount;
         private System.Windows.Forms.Label label3;
@@ -2733,8 +2651,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem отладкаToolStripMenuItem;
         public System.Windows.Forms.Timer timer_signalQualityUpdater;
-        private System.Windows.Forms.TrackBar trackBar_spectrumGain;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Timer timer_mpsPlayerRunningIndicatorHandler;
         public System.Windows.Forms.PictureBox pictureBox_spectrumBorder2;
         public System.Windows.Forms.PictureBox pictureBox_spectrumBorder1;

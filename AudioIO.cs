@@ -25,7 +25,6 @@ namespace AudioDataInterface
         public static MMDeviceEnumerator enumerator = new MMDeviceEnumerator();
         public static MMDeviceCollection mm_dev = null;
         public static WasapiOut naudio_playDeviceWasapiOut = null;
-        public static WasapiCapture waveLoop = null;
         //WaveFormat fmt = waveLoop.WaveFormat;
         public static BiQuadFilter graphLowPassFilterL = null;
         public static BiQuadFilter graphHighPassFilterL = null;
@@ -199,19 +198,6 @@ namespace AudioDataInterface
                 if (leftSwitch == true) leftSwitch = false; else leftSwitch = true;
             }
             form_main.window_main.DrawWaveGraphFrame();
-        }
-
-        public static void MPSAudioOutputCaptureInit()
-        {
-            if (waveLoop != null) waveLoop.Dispose();
-            waveLoop = new WasapiLoopbackCapture(mm_dev[audio_playDeviceId]);
-            waveLoop.DataAvailable += new EventHandler<WaveInEventArgs>(MPS_DataAvailable);
-            waveLoop.StartRecording();
-        }
-
-        public static void MPSAudioOutputCaptureClose()
-        {
-            if (waveLoop != null) waveLoop.Dispose();
         }
 
         /// <summary>

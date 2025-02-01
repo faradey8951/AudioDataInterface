@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NAudio.CoreAudioApi;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -105,6 +106,13 @@ namespace AudioDataInterface
             List<string[]> skins = mpsPlayerSkinHandler.GetSkins();
             if (skins != null) foreach (string[] skin in skins) comboBox_skins.Items.Add(skin[1]);
             comboBox_skins.Text = form_main.class_mpsPlayerSkinHandler.currentSkinName;
+
+            string[] rec = AudioIO.GetRecDevices();
+            string[] play = AudioIO.GetPlayDevices();
+            comboBox_recDevices.Items.AddRange(rec);
+            comboBox_recDevices.Text = rec[AudioIO.audio_recDeviceId];
+            comboBox_playDevices.Items.AddRange(play);
+            comboBox_playDevices.Text = play[AudioIO.audio_playDeviceId];
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -126,6 +134,13 @@ namespace AudioDataInterface
             form_main.class_mpsPlayerSkinHandler.Load();
             form_main.window_main.MpsPlayerInterfaceInitialize();
 
+            AudioIO.audio_recDeviceId = comboBox_recDevices.SelectedIndex;
+            AudioIO.GraphCaptureInit();
+            if (Decoder.decoderActive) AudioIO.SignalCaptureInit();
+            AudioIO.audio_playDeviceId = comboBox_playDevices.SelectedIndex;
+            AudioIO.naudio_wasapiOut.Dispose();
+            AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioIO.enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[AudioIO.audio_playDeviceId], AudioClientShareMode.Shared, true, 50);
+
             Settings.Save();            
         }
 
@@ -136,6 +151,21 @@ namespace AudioDataInterface
         }
 
         private void comboBox_skins_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            
+        }
+
+        private void comboBox_recDevices_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox_recDevices_SelectedIndexChanged_1(object sender, EventArgs e)
+        {
+
+        }
+
+        private void comboBox_playDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
             
         }

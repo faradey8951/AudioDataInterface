@@ -56,11 +56,13 @@
             this.label_fftSizeValue = new System.Windows.Forms.Label();
             this.trackBar_fftSize = new System.Windows.Forms.TrackBar();
             this.label_fftSize = new System.Windows.Forms.Label();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
-            this.tabPage6 = new System.Windows.Forms.TabPage();
             this.button2 = new System.Windows.Forms.Button();
             this.button_save = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
+            this.label1 = new System.Windows.Forms.Label();
+            this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_mp3BuffSize)).BeginInit();
@@ -80,8 +82,6 @@
             this.tabControl.Controls.Add(this.tabPage2);
             this.tabControl.Controls.Add(this.tabPage3);
             this.tabControl.Controls.Add(this.tabPage4);
-            this.tabControl.Controls.Add(this.tabPage5);
-            this.tabControl.Controls.Add(this.tabPage6);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Top;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl.Name = "tabControl";
@@ -92,6 +92,10 @@
             // tabPage1
             // 
             this.tabPage1.BackColor = System.Drawing.SystemColors.Window;
+            this.tabPage1.Controls.Add(this.comboBox_playDevices);
+            this.tabPage1.Controls.Add(this.label2);
+            this.tabPage1.Controls.Add(this.comboBox_recDevices);
+            this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.label_mp3BuffSizeValue);
             this.tabPage1.Controls.Add(this.trackBar_mp3BuffSize);
             this.tabPage1.Controls.Add(this.label_mp3BuffSize);
@@ -127,7 +131,6 @@
             this.trackBar_mp3BuffSize.Size = new System.Drawing.Size(393, 45);
             this.trackBar_mp3BuffSize.TabIndex = 4;
             this.trackBar_mp3BuffSize.TickFrequency = 128;
-            this.trackBar_mp3BuffSize.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar_mp3BuffSize.Value = 128;
             this.trackBar_mp3BuffSize.Scroll += new System.EventHandler(this.trackBar_mp3BuffSize_Scroll);
             // 
@@ -139,7 +142,7 @@
             this.label_mp3BuffSize.Size = new System.Drawing.Size(393, 13);
             this.label_mp3BuffSize.TabIndex = 3;
             this.label_mp3BuffSize.Text = "Размер буфера MP3, (byte)";
-            this.label_mp3BuffSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_mp3BuffSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_signalHeightValue
             // 
@@ -171,7 +174,7 @@
             this.label_signalHeight.Size = new System.Drawing.Size(393, 13);
             this.label_signalHeight.TabIndex = 0;
             this.label_signalHeight.Text = "Смещение сигнала";
-            this.label_signalHeight.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_signalHeight.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage2
             // 
@@ -225,7 +228,6 @@
             this.trackBar_mpsPlayerSubcodeInterval.Name = "trackBar_mpsPlayerSubcodeInterval";
             this.trackBar_mpsPlayerSubcodeInterval.Size = new System.Drawing.Size(376, 45);
             this.trackBar_mpsPlayerSubcodeInterval.TabIndex = 16;
-            this.trackBar_mpsPlayerSubcodeInterval.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar_mpsPlayerSubcodeInterval.Value = 1;
             this.trackBar_mpsPlayerSubcodeInterval.Scroll += new System.EventHandler(this.trackBar_mpsPlayerSubcodeInterval_Scroll);
             // 
@@ -237,7 +239,7 @@
             this.label_mpsPlayerSubcodeInterval.Size = new System.Drawing.Size(376, 13);
             this.label_mpsPlayerSubcodeInterval.TabIndex = 15;
             this.label_mpsPlayerSubcodeInterval.Text = "Интервал между субкодами MPS плеера, (сек)";
-            this.label_mpsPlayerSubcodeInterval.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_mpsPlayerSubcodeInterval.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_silenceSecondsValue
             // 
@@ -258,7 +260,6 @@
             this.trackBar_silenceSeconds.Name = "trackBar_silenceSeconds";
             this.trackBar_silenceSeconds.Size = new System.Drawing.Size(376, 45);
             this.trackBar_silenceSeconds.TabIndex = 10;
-            this.trackBar_silenceSeconds.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar_silenceSeconds.Scroll += new System.EventHandler(this.trackBar_silenceSeconds_Scroll);
             // 
             // label_silenceSeconds
@@ -269,7 +270,7 @@
             this.label_silenceSeconds.Size = new System.Drawing.Size(376, 13);
             this.label_silenceSeconds.TabIndex = 9;
             this.label_silenceSeconds.Text = "Тишина в начале и конце сигнала, (sec)";
-            this.label_silenceSeconds.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_silenceSeconds.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_signalGainValue
             // 
@@ -291,7 +292,7 @@
             this.trackBar_signalGain.Name = "trackBar_signalGain";
             this.trackBar_signalGain.Size = new System.Drawing.Size(376, 45);
             this.trackBar_signalGain.TabIndex = 7;
-            this.trackBar_signalGain.TickStyle = System.Windows.Forms.TickStyle.Both;
+            this.trackBar_signalGain.TickStyle = System.Windows.Forms.TickStyle.None;
             this.trackBar_signalGain.Value = 1;
             this.trackBar_signalGain.Scroll += new System.EventHandler(this.trackBar_signalGain_Scroll);
             // 
@@ -303,7 +304,7 @@
             this.label_signalGain.Size = new System.Drawing.Size(376, 13);
             this.label_signalGain.TabIndex = 6;
             this.label_signalGain.Text = "Усиление кодируемого сигнала";
-            this.label_signalGain.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_signalGain.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // label_encodingDensityValue
             // 
@@ -326,7 +327,6 @@
             this.trackBar_encodingSampleRate.Size = new System.Drawing.Size(376, 45);
             this.trackBar_encodingSampleRate.TabIndex = 4;
             this.trackBar_encodingSampleRate.TickFrequency = 10000;
-            this.trackBar_encodingSampleRate.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar_encodingSampleRate.Value = 40000;
             this.trackBar_encodingSampleRate.Scroll += new System.EventHandler(this.trackBar_encodingSampleRate_Scroll);
             // 
@@ -338,7 +338,7 @@
             this.label_encodingDensity.Size = new System.Drawing.Size(376, 13);
             this.label_encodingDensity.TabIndex = 3;
             this.label_encodingDensity.Text = "Плотность кодирования данных, (kbps)";
-            this.label_encodingDensity.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_encodingDensity.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // tabPage4
             // 
@@ -398,7 +398,6 @@
             this.trackBar_fftSize.Size = new System.Drawing.Size(393, 45);
             this.trackBar_fftSize.TabIndex = 10;
             this.trackBar_fftSize.TickFrequency = 256;
-            this.trackBar_fftSize.TickStyle = System.Windows.Forms.TickStyle.Both;
             this.trackBar_fftSize.Value = 256;
             this.trackBar_fftSize.Scroll += new System.EventHandler(this.trackBar_fftSize_Scroll);
             // 
@@ -410,28 +409,8 @@
             this.label_fftSize.Size = new System.Drawing.Size(393, 13);
             this.label_fftSize.TabIndex = 9;
             this.label_fftSize.Text = "Размер FFT буфера спектроанализатора, (samples)";
-            this.label_fftSize.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label_fftSize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             this.label_fftSize.Click += new System.EventHandler(this.label2_Click);
-            // 
-            // tabPage5
-            // 
-            this.tabPage5.BackColor = System.Drawing.SystemColors.Window;
-            this.tabPage5.Location = new System.Drawing.Point(4, 22);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage5.Size = new System.Drawing.Size(399, 234);
-            this.tabPage5.TabIndex = 4;
-            this.tabPage5.Text = "Запись данных на ленту";
-            // 
-            // tabPage6
-            // 
-            this.tabPage6.BackColor = System.Drawing.SystemColors.Window;
-            this.tabPage6.Location = new System.Drawing.Point(4, 22);
-            this.tabPage6.Name = "tabPage6";
-            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage6.Size = new System.Drawing.Size(399, 234);
-            this.tabPage6.TabIndex = 5;
-            this.tabPage6.Text = "Восстановление данных с ленты";
             // 
             // button2
             // 
@@ -463,6 +442,50 @@
             this.button_cancel.TabIndex = 2;
             this.button_cancel.Text = "Отмена";
             this.button_cancel.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(3, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(393, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Устройство записи:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // comboBox_recDevices
+            // 
+            this.comboBox_recDevices.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBox_recDevices.Dock = System.Windows.Forms.DockStyle.Top;
+            this.comboBox_recDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_recDevices.FormattingEnabled = true;
+            this.comboBox_recDevices.Location = new System.Drawing.Point(3, 158);
+            this.comboBox_recDevices.Name = "comboBox_recDevices";
+            this.comboBox_recDevices.Size = new System.Drawing.Size(393, 21);
+            this.comboBox_recDevices.TabIndex = 7;
+            this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged_1);
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Location = new System.Drawing.Point(3, 179);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(393, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Устройство воспроизведения:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // comboBox_playDevices
+            // 
+            this.comboBox_playDevices.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBox_playDevices.Dock = System.Windows.Forms.DockStyle.Top;
+            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_playDevices.FormattingEnabled = true;
+            this.comboBox_playDevices.Location = new System.Drawing.Point(3, 192);
+            this.comboBox_playDevices.Name = "comboBox_playDevices";
+            this.comboBox_playDevices.Size = new System.Drawing.Size(393, 21);
+            this.comboBox_playDevices.TabIndex = 9;
+            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
             // 
             // form_settings
             // 
@@ -531,10 +554,12 @@
         private System.Windows.Forms.TrackBar trackBar_fftSize;
         private System.Windows.Forms.Label label_fftSize;
         private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.TabPage tabPage5;
-        private System.Windows.Forms.TabPage tabPage6;
         private System.Windows.Forms.ComboBox comboBox_skins;
         private System.Windows.Forms.Label label_mpsPlayerSkin;
         private System.Windows.Forms.Button button_cancel;
+        private System.Windows.Forms.ComboBox comboBox_recDevices;
+        private System.Windows.Forms.Label label1;
+        private System.Windows.Forms.ComboBox comboBox_playDevices;
+        private System.Windows.Forms.Label label2;
     }
 }

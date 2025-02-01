@@ -93,7 +93,6 @@ namespace AudioDataInterface
         public static int[] mpsPlayer_instantSpectrum = { 9,9,9,9,9,9,9,9,9,9,9,9, 9 }; //Массив мгновенных уровней спектра [0-9]
         public static int[] mpsPlayer_liveSpectrum = { 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9 , 9}; //Массив динамических уровней спектра [0-9]
         public static int[] mpsPlayer_spectrumPeakHold = { 5,5,5,5,5,5,5,5,5,5,5,5 , 5}; //Массив пиков спектра [0-9]
-        public static int mps_Player_spectrumGain = 1; //Усиление уровня спектра
         int[] mpsPlayer_spectrumFreq = { 68, 170, 420, 1000, 2400, 5900, 14400}; //Массив опорных частот, для которых строится спектр [Гц]
         public static int mpsPlayer_peakHoldTimeDelay = 0; //Задержка итераций отрисовки пиков спектра
         int mpsPlayer_peakHoldTimeCount = 0; //Счетчик пропущенных итераций отрисовки пиков
@@ -461,19 +460,6 @@ namespace AudioDataInterface
             graphics_packetLossIndicator = Graphics.FromImage(bitmap_packetLossIndicator);
 
             DrawAudioProcessorStatus();
-
-            try
-            {
-                comboBox_recDevices.Items.AddRange(AudioIO.GetRecDevices());
-                comboBox_recDevices.Text = AudioIO.GetRecDevices()[AudioIO.audio_recDeviceId];
-                comboBox_playDevices.Items.AddRange(AudioIO.GetPlayDevices());
-                comboBox_playDevices.Text = AudioIO.GetPlayDevices()[AudioIO.audio_playDeviceId];
-            }
-            catch
-            {
-                Properties.Settings.Default.Reset();
-                Settings.Load();
-            }
             AudioIO.GraphCaptureInit();
             MpsPlayerRunningIndicatorStop();         
         }
@@ -553,9 +539,7 @@ namespace AudioDataInterface
 
         private void comboBox_recDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AudioIO.audio_recDeviceId = comboBox_recDevices.SelectedIndex;
-            AudioIO.GraphCaptureInit();
-            if (Decoder.decoderActive) AudioIO.SignalCaptureInit();
+
         }
 
         private void form_main_SizeChanged(object sender, EventArgs e)
@@ -627,7 +611,6 @@ namespace AudioDataInterface
                 DataHandler.StartMp3Listening();
                 Decoder.Start();
                 mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };             
-                AudioIO.MPSAudioOutputCaptureInit();
                 timer_mpsPlayerHandler.Enabled = true;
                 timer_mpsPlayerSpectrumHandler.Enabled = true;
                 timer_mpsPlayerSpectrumUpdater.Enabled = true;
@@ -944,7 +927,7 @@ namespace AudioDataInterface
                 paddedAudio = FftSharp.Pad.ZeroPad(AudioIO.buff_fftSamples);
                 System.Numerics.Complex[] complex = FftSharp.FFT.Forward(paddedAudio);
                 fftMag = FftSharp.FFT.Magnitude(complex);
-                double[] frequencyValues = FftSharp.FFT.FrequencyScale(fftMag.Length, AudioIO.waveLoop.WaveFormat.SampleRate);
+                double[] frequencyValues = FftSharp.FFT.FrequencyScale(fftMag.Length, 48000);
                 Array.Copy(fftMag, AudioIO.buff_fftValues, fftMag.Length);
                 double[] RAWspectrumSelection = new double[mpsPlayer_instantSpectrum.Length];
                 double[] RAWspectrumSelectionKenwood = new double[mpsPlayer_spectrumFreq.Length];
@@ -954,7 +937,7 @@ namespace AudioDataInterface
                 {
                     if (Math.Round(frequencyValues[i]) >= mpsPlayer_spectrumFreq[k])
                     {
-                        RAWspectrumSelectionKenwood[k] = AudioIO.buff_fftValues[i] * mps_Player_spectrumGain;
+                        RAWspectrumSelectionKenwood[k] = AudioIO.buff_fftValues[i];
                         k++;
                         i = 0;
                     }
@@ -1007,8 +990,7 @@ namespace AudioDataInterface
 
         private void comboBox_playDevices_SelectedIndexChanged(object sender, EventArgs e)
         {
-            AudioIO.audio_playDeviceId = comboBox_playDevices.SelectedIndex;
-            if (Decoder.decoderActive) AudioIO.MPSAudioOutputCaptureInit();
+            
         }
 
         private void button1_Click_1(object sender, EventArgs e)
@@ -1059,7 +1041,7 @@ namespace AudioDataInterface
                 window_settings.Dispose();
                 window_settings = new form_settings();
             }
-            window_settings.ShowDialog();
+            window_settings.Show();
         }
 
         private void отладкаToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1087,7 +1069,7 @@ namespace AudioDataInterface
 
         private void trackBar_spectrumGain_Scroll(object sender, EventArgs e)
         {
-            mps_Player_spectrumGain = trackBar_spectrumGain.Value;
+            
         }
 
         static short[] GenerateAMSignal(string bitSequence, int sampleRate, int frequency)
@@ -1494,12 +1476,12 @@ namespace AudioDataInterface
         {
             if (!Decoder.decoderActive)
             {
+                AudioIO.GetPlayDevices();
                 Decoder.decoderActive = true;
                 AudioIO.SignalCaptureInit();
                 DataHandler.StartMp3Listening();
                 Decoder.Start();
                 mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
-                AudioIO.MPSAudioOutputCaptureInit();
                 timer_mpsPlayerHandler.Enabled = true;
                 timer_mpsPlayerSpectrumHandler.Enabled = true;
                 timer_mpsPlayerSpectrumUpdater.Enabled = true;
@@ -2039,34 +2021,46 @@ namespace AudioDataInterface
 
         private void сдвинутьВсеЭлементыВправоToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             List<PictureBox> controls = new List<PictureBox>();
             controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
             foreach (PictureBox control in controls) control.Location = new Point(control.Location.X + 10, control.Location.Y);
             spectrumBarX0P += 10;
+            
+            //foreach (PictureBox control in pictureBox_textSymbols) control.Location = new Point(control.Location.X + 1, control.Location.Y);
         }
 
         private void сдвинутьВсеЭлементыВлевоToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            
             List<PictureBox> controls = new List<PictureBox>();
             controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
             foreach (PictureBox control in controls) control.Location = new Point(control.Location.X - 10, control.Location.Y);
             spectrumBarX0P -= 10;
+            
+            //foreach (PictureBox control in pictureBox_textSymbols) control.Location = new Point(control.Location.X - 1, control.Location.Y);
         }
 
         private void сдвинутьВсеЭлементыВверхToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            List<PictureBox> controls = new List<PictureBox>();
-            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
-            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X, control.Location.Y + 10);
-            spectrumBarY0P += 10;
-        }
-
-        private void сдвинутьВсеЭлементыВнизToolStripMenuItem_Click(object sender, EventArgs e)
-        {
+            
             List<PictureBox> controls = new List<PictureBox>();
             controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
             foreach (PictureBox control in controls) control.Location = new Point(control.Location.X, control.Location.Y - 10);
             spectrumBarY0P -= 10;
+            
+            //foreach (PictureBox control in pictureBox_textSymbols) control.Location = new Point(control.Location.X, control.Location.Y - 1);
+        }
+
+        private void сдвинутьВсеЭлементыВнизToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            
+            List<PictureBox> controls = new List<PictureBox>();
+            controls.AddRange(tabPage_graphicalView.Controls.OfType<PictureBox>());
+            foreach (PictureBox control in controls) control.Location = new Point(control.Location.X, control.Location.Y + 10);
+            spectrumBarY0P += 10;
+            
+            //foreach (PictureBox control in pictureBox_textSymbols) control.Location = new Point(control.Location.X, control.Location.Y + 1);
         }
     }
 }

@@ -456,6 +456,24 @@ namespace AudioDataInterface
                 sw.Close();
                 fs.Close();
             }
+
+            if (File.Exists(dir + "\\spectrum.txt"))
+            {
+                FileStream fs = new FileStream(dir + "\\spectrum.txt", FileMode.Open);
+                StreamWriter sw = new StreamWriter(fs);
+                sw.WriteLine("spectrumBarX0=" + form_main.spectrumBarX0P);
+                sw.WriteLine("spectrumBarY0=" + form_main.spectrumBarY0P);
+                sw.WriteLine("spectrumBarWidth=" + form_main.spectrumBarWidth);
+                sw.WriteLine("spectrumBarHeight=" + form_main.spectrumBarHeight);
+                sw.WriteLine("spectrumBarSegmentWidthCount=" + form_main.spectrumBarSegmentWidthCount);
+                sw.WriteLine("spectrumBarSegmentHeightCount=" + form_main.spectrumBarSegmentHeightCount);
+                sw.WriteLine("spectrumBarSegmentDeltaCount=" + form_main.spectrumBarSegmentDeltaCount);
+                sw.WriteLine("spectrumVescosity=" + form_main.window_main.timer_mpsPlayerSpectrumHandler.Interval);
+                sw.WriteLine("spectrumMode=" + form_main.mpsPlayer_spectrumMode);
+                sw.WriteLine("spectrumPeakHoldTimeDelay=" + form_main.mpsPlayer_peakHoldTimeDelay);
+                sw.Close();
+                fs.Close();
+            }
         }
 
         public void Load()

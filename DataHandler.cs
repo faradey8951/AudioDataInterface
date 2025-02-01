@@ -384,7 +384,7 @@ namespace AudioDataInterface
                     //Буферизация данных
                     while (ms.Length - ms.Position < 48000 && AudioIO.naudio_wasapiOut.PlaybackState != NAudio.Wave.PlaybackState.Playing) { Thread.Sleep(10); form_main.mpsPlayer_showTime = false; }
                     rawSourceWaveStream = new RawSourceWaveStream(ms, new WaveFormat(48000, 16, 1));
-                    AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioClientShareMode.Shared, true, 50);
+                    AudioIO.naudio_wasapiOut = new NAudio.Wave.WasapiOut(AudioIO.enumerator.EnumerateAudioEndPoints(DataFlow.Render, DeviceState.Active)[AudioIO.audio_playDeviceId],AudioClientShareMode.Shared, true, 50);
                     AudioIO.naudio_wasapiOut.Init(rawSourceWaveStream);
                     AudioIO.naudio_wasapiOut.Play();
                     while (AudioIO.naudio_wasapiOut.PlaybackState == NAudio.Wave.PlaybackState.Playing)
@@ -396,7 +396,7 @@ namespace AudioDataInterface
                 }
                 catch (Exception ex)
                 {
-                    LogHandler.WriteError("PlayMp3()", ex.Message);
+                   LogHandler.WriteError("PlayMp3()", ex.Message);
                     Thread.Sleep(10);
                 }
             }
