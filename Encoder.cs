@@ -34,7 +34,7 @@ namespace AudioDataInterface
         public static string encoder_inputFilePath = ""; //Путь ко входному файлу энкодера
         public static int encoder_signalGain = 2; //Коэффициент усиления аудиосигнала выходного файла
         public static int encoder_sampleRate = 96000; //Частота дискретизации выходного файла
-        public static int encoder_blockRate = 260;
+        public static int encoder_blockRate = 270; //Количество блоков в секунду на канал (250 бл/сек для 1 пакета OPUS + 10 бл/сек для субкодов + 10 бл/сек для запаса буферизации)
         public static int encoder_samplesPerBit = 4;
         public static bool encoder_ADIFShell = false; //Функция ADIFShell
         public static bool encoder_forceStop = false; //Принудительная остановка конвертации
@@ -469,6 +469,10 @@ namespace AudioDataInterface
             short[] srereoSignal = CreateStereoSignal(list_outputFileLSamples.ToArray(), list_outputFileRSamples.ToArray());
 
             SaveWav(encoder_outputFilePath, srereoSignal, encoder_sampleRate);
+
+            list_outputFileLSamples.Clear();
+            list_outputFileRSamples.Clear();
+            list_outputFileSamples.Clear();
 
             fs_input.Close();
             fs_input.Dispose();

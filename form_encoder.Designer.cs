@@ -163,7 +163,7 @@ namespace AudioDataInterface
             // textBox_track
             // 
             this.textBox_track.Location = new System.Drawing.Point(87, 43);
-            this.textBox_track.MaxLength = 20;
+            this.textBox_track.MaxLength = 24;
             this.textBox_track.Name = "textBox_track";
             this.textBox_track.Size = new System.Drawing.Size(327, 20);
             this.textBox_track.TabIndex = 5;
