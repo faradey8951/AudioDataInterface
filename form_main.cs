@@ -125,6 +125,7 @@ namespace AudioDataInterface
         public static int mpsPlayer_MPSTextHoldTimeDelay = 0;
         public static bool mpsPlayer_MPSTextChange = false;
         public static int mpsPlayer_MPSTextChangeCount = 0;
+        public static bool mpsPlayer_simplifiedMode = false; //Включает упрощенный быстрый режим
 
         public static double spectrumBarWidth = 0; //Ширина области спектра относительно ширины mps плеера
         public static double spectrumBarHeight = 0; //Высота области спектра относительно высоты mps плеера
@@ -192,7 +193,8 @@ namespace AudioDataInterface
                 graphics_waveGraphR.DrawLines(new Pen(Color.FromArgb(153, 255, 153)), points);
                 pictureBox_waveGraphL.Image = bitmap_waveGraphL;
                 pictureBox_waveGraphR.Image = bitmap_waveGraphR;
-                AudioIO.buff_graphSamples.RemoveRange(0, AudioIO.buff_graphSamples.Count);
+                AudioIO.buff_graphSamples.Clear();
+                //AudioIO.buff_graphSamples.RemoveRange(0, AudioIO.buff_graphSamples.Count);
             }
         }
 
@@ -486,19 +488,31 @@ namespace AudioDataInterface
             label_signalQuality.Text = "Качество сигнала: " + Decoder.signalQuality.ToString() + "%";
             label_decodedPacketSize.Text = "Размер пакета: " + DataHandler.packetSize.ToString() + " байт";
             label_audioBufferSize.Text = "Аудио буфер: ";
-            label_trackNumber.Text = "Дорожка: " + mpsPlayer_currentTrackNumber.ToString();
-            label_trackCount.Text = "Всего дорожек: " + mpsPlayer_trackCount.ToString();
             this.Text = new string(DataHandler.artist) + " / " + new string(DataHandler.track);
-            try
+            //this.Text = "bytes: " + AudioIO.buff_signalBytes.Count.ToString() + " / samplesL: " + AudioIO.buff_signalSamplesL.Count.ToString() + " / samplesR: " + AudioIO.buff_signalSamplesR.Count.ToString();
+            if (!mpsPlayer_simplifiedMode)
             {
-                if (DataHandler.ms != null)
+                try
                 {
-                    int audioBufferSamples = (int)(0.5 * ((int)DataHandler.ms.Length - (int)DataHandler.ms.Position));
-                    label_audioBufferSize.Text += ((double)audioBufferSamples / 48000).ToString() + " сек";
-                    if (audioBufferSamples <= progressBar_audioBuffer.Maximum) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = progressBar_audioBuffer.Maximum;
+                    if (DataHandler.ms != null)
+                    {
+                        int audioBufferSamples = (int)(0.5 * ((int)DataHandler.ms.Length - (int)DataHandler.ms.Position));
+                        label_audioBufferSize.Text += ((double)audioBufferSamples / 48000).ToString() + " сек";
+                        if (audioBufferSamples <= progressBar_audioBuffer.Maximum) progressBar_audioBuffer.Value = audioBufferSamples; else progressBar_audioBuffer.Value = progressBar_audioBuffer.Maximum;
+                    }
                 }
+                catch { }
             }
-            catch { }
+            int[] current = Decoder.GetTimeFromSeconds(mpsPlayer_timeSeconds);
+            int[] dur = Decoder.GetTimeFromSeconds(mpsPlayer_timeDurationSeconds);
+            label_time.Text = "(" + current[0].ToString() + current[1].ToString() + ":" + current[2].ToString() + current[3].ToString() + "/" + dur[0].ToString() + dur[1].ToString() + ":" + dur[2].ToString() + dur[3].ToString() + ")";
+            label_trackCountNumber.Text = "Всего дорожек: " + mpsPlayer_trackCount.ToString();
+            label_currentTrackNumber.Text = "Текущая дорожка: " + mpsPlayer_currentTrackNumber.ToString();
+            label_artist.Text = "Исполнитель: " + new string(DataHandler.artist);
+            label_title.Text = "Название: " + new string(DataHandler.track);
+            if (mpsPlayer_mode == "seek") label_status.Text = "буферизация...";
+            if (mpsPlayer_mode == "play") label_status.Text = "воспроизведение";
+            if (mpsPlayer_mode == "stop") label_status.Text = "стоп";
 
             if (form_main.mpsPlayer_currentTrackNumber != form_main.mpsPlayer_lastTrackNumber)
             {
@@ -629,54 +643,69 @@ namespace AudioDataInterface
 
         public void MpsPlayerRunningIndicatorPlay()
         {
-            timer_mpsPlayerRunningIndicatorHandler.Interval = 85;
-            timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
-            window_main.pictureBox_playPause.Image = class_mpsPlayerSkinHandler.image_CD[9];
+            if (!mpsPlayer_simplifiedMode)
+            {
+                timer_mpsPlayerRunningIndicatorHandler.Interval = 85;
+                timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
+                window_main.pictureBox_playPause.Image = class_mpsPlayerSkinHandler.image_CD[9];
+            }
         }
 
         public void MpsPlayerRunningIndicatorSeek()
         {
-            if (mpsPlayer_tapeSkin == false)
+            if (!mpsPlayer_simplifiedMode)
             {
-                timer_mpsPlayerRunningIndicatorHandler.Interval = 45;
-                timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
+                if (mpsPlayer_tapeSkin == false)
+                {
+                    timer_mpsPlayerRunningIndicatorHandler.Interval = 45;
+                    timer_mpsPlayerRunningIndicatorHandler.Enabled = true;
+                }
+                else { timer_mpsPlayerRunningIndicatorHandler.Enabled = false; pictureBox_runningIndicator.Image = class_mpsPlayerSkinHandler.runningIndicator_stop; }
             }
-            else { timer_mpsPlayerRunningIndicatorHandler.Enabled = false; pictureBox_runningIndicator.Image = class_mpsPlayerSkinHandler.runningIndicator_stop; }
         }
 
         public void MpsPlayerRunningIndicatorStop()
         {
-            timer_mpsPlayerRunningIndicatorHandler.Enabled = false;
-            mpsPlayer_mode = "stop";
-            window_main.pictureBox_runningIndicator.Image = class_mpsPlayerSkinHandler.image_runningIndicator[0];
-            window_main.pictureBox_playPause.Image = null;
+            if (!mpsPlayer_simplifiedMode)
+            {
+                timer_mpsPlayerRunningIndicatorHandler.Enabled = false;
+                mpsPlayer_mode = "stop";
+                window_main.pictureBox_runningIndicator.Image = class_mpsPlayerSkinHandler.image_runningIndicator[0];
+                window_main.pictureBox_playPause.Image = null;
+            }
         }
 
         public static void MpsPlayerTrackCalendarSetAmount(int trackCount)
         {
-            if (trackCount > 16) trackCount = 16;
-            PictureBox[] pictureBox_trackNumber = { window_main.pictureBox_track1, window_main.pictureBox_track2, window_main.pictureBox_track3, window_main.pictureBox_track4, window_main.pictureBox_track5, window_main.pictureBox_track6, window_main.pictureBox_track7, window_main.pictureBox_track8, window_main.pictureBox_track9, window_main.pictureBox_track10, window_main.pictureBox_track11, window_main.pictureBox_track12, window_main.pictureBox_track13, window_main.pictureBox_track14, window_main.pictureBox_track15, window_main.pictureBox_track16 };
-
-            for (int i = 0; i < 16; i++)
+            if (!mpsPlayer_simplifiedMode)
             {
+                if (trackCount > 16) trackCount = 16;
+                PictureBox[] pictureBox_trackNumber = { window_main.pictureBox_track1, window_main.pictureBox_track2, window_main.pictureBox_track3, window_main.pictureBox_track4, window_main.pictureBox_track5, window_main.pictureBox_track6, window_main.pictureBox_track7, window_main.pictureBox_track8, window_main.pictureBox_track9, window_main.pictureBox_track10, window_main.pictureBox_track11, window_main.pictureBox_track12, window_main.pictureBox_track13, window_main.pictureBox_track14, window_main.pictureBox_track15, window_main.pictureBox_track16 };
 
-                if (i < trackCount) pictureBox_trackNumber[i].Visible = true;
-                else pictureBox_trackNumber[i].Visible = false;
+                for (int i = 0; i < 16; i++)
+                {
 
+                    if (i < trackCount) pictureBox_trackNumber[i].Visible = true;
+                    else pictureBox_trackNumber[i].Visible = false;
+
+                }
             }
         }
 
         public static void MpsPlayerTrackCalendarSetCurrentTrack(int currentTrackNum)
         {
-            try
+            if (!mpsPlayer_simplifiedMode)
             {
-                PictureBox[] pictureBox_trackNumber = { window_main.pictureBox_track1, window_main.pictureBox_track2, window_main.pictureBox_track3, window_main.pictureBox_track4, window_main.pictureBox_track5, window_main.pictureBox_track6, window_main.pictureBox_track7, window_main.pictureBox_track8, window_main.pictureBox_track9, window_main.pictureBox_track10, window_main.pictureBox_track11, window_main.pictureBox_track12, window_main.pictureBox_track13, window_main.pictureBox_track14, window_main.pictureBox_track15, window_main.pictureBox_track16 };
+                try
+                {
+                    PictureBox[] pictureBox_trackNumber = { window_main.pictureBox_track1, window_main.pictureBox_track2, window_main.pictureBox_track3, window_main.pictureBox_track4, window_main.pictureBox_track5, window_main.pictureBox_track6, window_main.pictureBox_track7, window_main.pictureBox_track8, window_main.pictureBox_track9, window_main.pictureBox_track10, window_main.pictureBox_track11, window_main.pictureBox_track12, window_main.pictureBox_track13, window_main.pictureBox_track14, window_main.pictureBox_track15, window_main.pictureBox_track16 };
 
-                for (int i = 0; i < currentTrackNum - 1; i++) pictureBox_trackNumber[i].Visible = false;
-            }
-            catch
-            {
+                    for (int i = 0; i < currentTrackNum - 1; i++) pictureBox_trackNumber[i].Visible = false;
+                }
+                catch
+                {
 
+                }
             }
         }
 
@@ -1485,15 +1514,18 @@ namespace AudioDataInterface
                 AudioIO.SignalCaptureInit();
                 DataHandler.StartMp3Listening();
                 Decoder.Start();
-                mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
-                timer_mpsPlayerHandler.Enabled = true;
-                timer_mpsPlayerSpectrumHandler.Enabled = true;
-                timer_mpsPlayerSpectrumUpdater.Enabled = true;
-                timer_mpsPlayerTimeUpdater.Enabled = true;
+                if (!mpsPlayer_simplifiedMode)
+                {
+                    mpsPlayer_liveSpectrum = new int[] { 6, 5, 3, 1, 2, 1, 3, 4, 3, 2, 3, 5, 6 };
+                    timer_mpsPlayerHandler.Enabled = true;
+                    timer_mpsPlayerSpectrumHandler.Enabled = true;
+                    timer_mpsPlayerSpectrumUpdater.Enabled = true;
+                    timer_mpsPlayerTimeUpdater.Enabled = true;                    
+                    timer_mpsPlayerTextHandler.Enabled = true;
+                    mpsPlayer_currentTrackNumber = 1;
+                    mpsPlayer_trackCount = 16;
+                }
                 timer_signalQualityUpdater.Enabled = true;
-                timer_mpsPlayerTextHandler.Enabled = true;
-                mpsPlayer_currentTrackNumber = 1;
-                mpsPlayer_trackCount = 16;
                 DataHandler.fs_decodedAudio = new FileStream("DecodedAudio.wav", FileMode.Create, FileAccess.Write, FileShare.ReadWrite);
                 DataHandler.fs_decodedAudio.Seek(44, SeekOrigin.Begin);
             }
@@ -1513,6 +1545,7 @@ namespace AudioDataInterface
             timer_mpsPlayerSpectrumUpdater.Enabled = false;
             timer_mpsPlayerTimeUpdater.Enabled = false;
             timer_signalQualityUpdater.Enabled = false;
+            mpsPlayer_mode = "stop";
             Decoder.ClearBuffers();
             MpsPlayerInterfaceInitialize();
             DataHandler.fs_decodedAudio.Seek(0, SeekOrigin.Begin);
@@ -1811,10 +1844,19 @@ namespace AudioDataInterface
             if (mpsPlayer_MPSTextLastArtist != new string(DataHandler.artist) || mpsPlayer_MPSTextLastTrack != new string(DataHandler.track)) mpsPlayer_MPSTextChange = true;
             mpsPlayer_MPSTextLastArtist = new string(DataHandler.artist);
             mpsPlayer_MPSTextLastTrack = new string(DataHandler.track);
-            string change = mpsPlayer_MPSTextLastArtist + " - " + mpsPlayer_MPSTextLastTrack;
+            //Поиск индекса последнего символа в тексте
+            int artistTextEndIndex = 0;
+            int trackTextEndIndex = 0;
+            for (int i = 0; i < mpsPlayer_MPSTextLastArtist.Length; i++) if (mpsPlayer_MPSTextLastArtist[i] != ' ') artistTextEndIndex = i;
+            for (int i = 0; i < mpsPlayer_MPSTextLastTrack.Length; i++) if (mpsPlayer_MPSTextLastTrack[i] != ' ') trackTextEndIndex = i;
+            string change = "";
+            for (int i = 0; i <= artistTextEndIndex; i++) change += mpsPlayer_MPSTextLastArtist[i];
+            change += " - ";
+            for (int i = 0; i <= trackTextEndIndex; i++) change += mpsPlayer_MPSTextLastTrack[i];
             //for (int i = 0; i < 20; i++) mpsPlayer_MPSTextMatrix[i] = mpsPlayer_MPSTextLastTrack[i];
             if (mpsPlayer_MPSTextChange)
             {
+                if (mpsPlayer_MPSTextChangeCount == 0) mpsPlayer_MPSTextMatrix = new char[] { ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ', ' ' };
                 DataHandler.textUpdatePause = true;
                 mpsPlayer_MPSTextMatrix[0] = mpsPlayer_MPSTextMatrix[1];
                 mpsPlayer_MPSTextMatrix[1] = mpsPlayer_MPSTextMatrix[2];
@@ -1835,12 +1877,10 @@ namespace AudioDataInterface
                 mpsPlayer_MPSTextMatrix[16] = mpsPlayer_MPSTextMatrix[17];
                 mpsPlayer_MPSTextMatrix[17] = mpsPlayer_MPSTextMatrix[18];
                 mpsPlayer_MPSTextMatrix[18] = mpsPlayer_MPSTextMatrix[19];
-                if (mpsPlayer_MPSTextChangeCount < change.Length)
-                {
-                    mpsPlayer_MPSTextMatrix[19] = change[mpsPlayer_MPSTextChangeCount];
-                }
+                if (mpsPlayer_MPSTextChangeCount < change.Length) mpsPlayer_MPSTextMatrix[19] = change[mpsPlayer_MPSTextChangeCount];
+                else mpsPlayer_MPSTextMatrix[19] = ' ';
                 mpsPlayer_MPSTextChangeCount++;
-                if (mpsPlayer_MPSTextChangeCount >= change.Length + 16) { DataHandler.textUpdatePause = false; mpsPlayer_MPSTextChange = false; for (int i = 0; i < 20; i++) mpsPlayer_MPSTextMatrix[i] = mpsPlayer_MPSTextLastTrack[i]; mpsPlayer_MPSTextChangeCount = 0; }
+                if (mpsPlayer_MPSTextChangeCount >= 51) { DataHandler.textUpdatePause = false; mpsPlayer_MPSTextChange = false; for (int i = 0; i < 20; i++) mpsPlayer_MPSTextMatrix[i] = mpsPlayer_MPSTextLastTrack[i]; mpsPlayer_MPSTextChangeCount = 0; }
             }
             for (int i = 0; i < 20; i++)
             {
@@ -2065,6 +2105,26 @@ namespace AudioDataInterface
             spectrumBarY0P += 10;
             
             //foreach (PictureBox control in pictureBox_textSymbols) control.Location = new Point(control.Location.X, control.Location.Y + 1);
+        }
+
+        private void упрощенныйРежимToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!упрощенныйРежимToolStripMenuItem.Checked)
+            {
+                упрощенныйРежимToolStripMenuItem.Checked = true;
+                mpsPlayer_simplifiedMode = true;
+                timer_mpsPlayerHandler.Enabled = false;
+                timer_mpsPlayerSpectrumHandler.Enabled = false;
+                timer_mpsPlayerSpectrumUpdater.Enabled = false;
+                timer_mpsPlayerRunningIndicatorHandler.Enabled = false;
+                timer_mpsPlayerTimeUpdater.Enabled = false;
+                timer_mpsPlayerTextHandler.Enabled = false;
+                timer_signalQualityUpdater.Interval = 500;
+                //AudioIO.GraphCaptureClose();
+                progressBar_audioBuffer.Visible = false;
+                label_audioBufferSize.Visible = false;
+            }
+            else упрощенныйРежимToolStripMenuItem.Checked = false;
         }
     }
 }

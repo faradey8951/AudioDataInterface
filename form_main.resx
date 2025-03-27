@@ -127,10 +127,10 @@
     <value>234, 17</value>
   </metadata>
   <metadata name="toolStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>702, 54</value>
+    <value>426, 54</value>
   </metadata>
   <metadata name="contextMenuStrip.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1262, 17</value>
+    <value>1055, 17</value>
   </metadata>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="pictureBox_dots.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
@@ -152,29 +152,26 @@
         WkYto5ZRy6hl1DJqGbWMWkYto5ZRy6hl1DJqGbWM1rm+AHJrFz0pjj+gAAAAAElFTkSuQmCC
 </value>
   </data>
-  <metadata name="timer_drawWaveGraphFrame.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+  <metadata name="timer_mpsPlayerHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>401, 17</value>
   </metadata>
-  <metadata name="timer_mpsPlayerHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>606, 25</value>
-  </metadata>
   <metadata name="timer_mpsPlayerSpectrumHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>792, 17</value>
+    <value>585, 17</value>
   </metadata>
   <metadata name="timer_mpsPlayerSpectrumUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>1027, 17</value>
+    <value>820, 17</value>
   </metadata>
   <metadata name="timer_mpsPlayerTimeUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>293, 54</value>
-  </metadata>
-  <metadata name="timer_signalQualityUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>504, 49</value>
-  </metadata>
-  <metadata name="timer_mpsPlayerRunningIndicatorHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>17, 54</value>
   </metadata>
+  <metadata name="timer_signalQualityUpdater.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>228, 54</value>
+  </metadata>
+  <metadata name="timer_mpsPlayerRunningIndicatorHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>1203, 17</value>
+  </metadata>
   <metadata name="timer_mpsPlayerTextHandler.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>807, 54</value>
+    <value>531, 54</value>
   </metadata>
   <metadata name="$this.TrayHeight" type="System.Int32, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>79</value>

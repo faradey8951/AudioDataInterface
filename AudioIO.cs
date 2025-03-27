@@ -76,6 +76,12 @@ namespace AudioDataInterface
         public static short audio_maxAmplitude = 0;
         //////////////////////////////////////////////////////////////////////////////////////
 
+        static short sampleL = 0;
+        static float originalSampleFloat = 0;
+        static float filteredSampleFloat = 0;
+        static int filteredSampleShort = 0;
+        static short sampleR = 0;
+
         public static Thread thread_signalAutoGainControl = null;
 
         /// <summary>
@@ -227,7 +233,32 @@ namespace AudioDataInterface
 
         static void Signal_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)
         {
-            lock (Decoder.bytesLocker) buff_signalBytes.AddRange(e.Buffer);
+            //lock (Decoder.bytesLocker) buff_signalBytes.AddRange(e.Buffer);
+            for (int i = 0; i < e.Buffer.Length; i += 4)
+            {
+                if (!AudioIO.audio_invertSignal)
+                {
+                    sampleL = (short)(AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)AudioIO.audio_signalHeight);
+                    sampleR = (short)(AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { e.Buffer[i + 2], e.Buffer[i + 3] }, 0) + (short)AudioIO.audio_signalHeight);
+                }
+                else
+                {
+                    sampleL = (short)(-AudioIO.audio_signalGainL * BitConverter.ToInt16(new byte[2] { e.Buffer[i], e.Buffer[i + 1] }, 0) + (short)AudioIO.audio_signalHeight);
+                    sampleR = (short)(-AudioIO.audio_signalGainR * BitConverter.ToInt16(new byte[2] { e.Buffer[i + 2], e.Buffer[i + 3] }, 0) + (short)AudioIO.audio_signalHeight);
+                }
+                originalSampleFloat = Convert.ToInt32(sampleL);
+                filteredSampleFloat = AudioIO.signalHighPassFilterL.Transform(originalSampleFloat);
+                filteredSampleFloat = AudioIO.signalLowPassFilterL.Transform(filteredSampleFloat);
+                //filteredSampleFloat = AudioIO.signalCarrierFreqEQFilterL.Transform(filteredSampleFloat);
+                filteredSampleShort = (Int16)filteredSampleFloat;
+                lock (Decoder.samplesLLocker) AudioIO.buff_signalSamplesL.Add((short)filteredSampleShort);
+                originalSampleFloat = Convert.ToInt32(sampleR);
+                filteredSampleFloat = AudioIO.signalHighPassFilterR.Transform(originalSampleFloat);
+                filteredSampleFloat = AudioIO.signalLowPassFilterR.Transform(filteredSampleFloat);
+                //filteredSampleFloat = AudioIO.signalCarrierFreqEQFilterR.Transform(filteredSampleFloat);
+                filteredSampleShort = (Int16)filteredSampleFloat;
+                lock (Decoder.samplesRLocker) AudioIO.buff_signalSamplesR.Add((short)filteredSampleShort);
+            }
         }
 
         static void MPS_DataAvailable(object sender, NAudio.Wave.WaveInEventArgs e)

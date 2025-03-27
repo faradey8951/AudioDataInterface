@@ -53,6 +53,38 @@ namespace AudioDataInterface
         public static int decodedBlocksCountFirst = 0;
         public static int decodedBlocksCountSecond = 0;
 
+        //////////////////////////////////////////////////////////////
+        //Переменные декодера
+        //////////////////////////////////////////////////////////////
+        static string tempBin = ""; //Временное бинарное слово
+        static List<short> amplitudeBuff = new List<short>(); //Буфер амплитуд
+        static List<short> amplitudeBuffCopy = new List<short>(); //Копия буфера амплитуд
+        static List<int> tempSyncIndexes = new List<int>(); //Список индексов синхроимпульсов
+        static List<int> tempOneIndexes = new List<int>(); //Список индексов единиц
+        static bool sync = true; //Показатель обнаружения синхронизации
+        static List<short> dataBlockBuff = new List<short>(); //Буфер амплитуд блока данных
+        static List<short> dataBlockBuffLnr = new List<short>(); //Сглаженный буфер амплитуд блока данных
+        static List<short> dataBlockBuffCopy = new List<short>(); //Копия буфера амплитуд блока данных
+        static int syncPulse = 0; //Второй синхроимпульс блока данных
+        static int maxSyncPulse = 0; //Первый (максимальный) синхроимпульс блока данных
+        static int syncPulseIndex = 0; //Индекс второго синхроимпульса
+        static int maxSyncPulseIndex = 0; //Индекс максимального синхроимпульса
+        static int difference = 0; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
+        static int syncPulsePowerSpanL = 0;
+        static int syncPulsePowerSpanR = 0;
+        static int channelSwitch = 0;
+
+        static double[] derivative = null; //Первая производная сигнала
+        static List<double> frwLnrDerivative = new List<double>(); //Прямая линеаризованная производная сигнала
+        static List<double> rvsLnrDerivative = new List<double>(); //Обратная линеаризованная производная сигнала
+        static List<double> sortedLnrDerivative = new List<double>(); //Упорядоченная производная сигнала
+        static List<double> sortedLnrSecondDerivative = new List<double>();
+        static double sortedLnrSecondDerivativeMaxValue = 0;
+        static double sortedLnrDerivativeJumpValue = 0;
+        static List<string> derivativeDirection = new List<string>(); //Знак первой производной
+        static List<string> derivativeBinaryValue = new List<string>(); //Бинарное значение производной
+        static List<string> derivativeDecryptor = new List<string>();
+
         static void SamplesDecoderStereo()
         {
             short sampleL = 0;
@@ -156,24 +188,23 @@ namespace AudioDataInterface
             //Установить приоритет процесса на максимум
             //System.Diagnostics.Process thisProc = System.Diagnostics.Process.GetCurrentProcess();
             //thisProc.PriorityClass = System.Diagnostics.ProcessPriorityClass.High;
-            string tempBin = ""; //Временное бинарное слово
-            var amplitudeBuff = new List<short>(); //Буфер амплитуд
-            var amplitudeBuffCopy = new List<short>(); //Копия буфера амплитуд
-            var tempSyncIndexes = new List<int>(); //Список индексов синхроимпульсов
-            var tempOneIndexes = new List<int>(); //Список индексов единиц
-            bool sync = true; //Показатель обнаружения синхронизации
-            var dataBlockBuff = new List<short>(); //Буфер амплитуд блока данных
-            var dataBlockBuffLnr = new List<short>(); //Сглаженный буфер амплитуд блока данных
-            var dataBlockBuffCopy = new List<short>(); //Копия буфера амплитуд блока данных
-            int syncPulse = 0; //Второй синхроимпульс блока данных
-            int maxSyncPulse = 0; //Первый (максимальный) синхроимпульс блока данных
-            int syncPulseIndex = 0; //Индекс второго синхроимпульса
-            int maxSyncPulseIndex = 0; //Индекс максимального синхроимпульса
-            int difference = 0; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
-            int syncPulsePowerSpanL = 0;
-            int syncPulsePowerSpanR = 0;
-            int channelSwitch = 0;
-
+            tempBin = ""; //Временное бинарное слово
+            amplitudeBuff = new List<short>(); //Буфер амплитуд
+            amplitudeBuffCopy = new List<short>(); //Копия буфера амплитуд
+            tempSyncIndexes = new List<int>(); //Список индексов синхроимпульсов
+            tempOneIndexes = new List<int>(); //Список индексов единиц
+            sync = true; //Показатель обнаружения синхронизации
+            dataBlockBuff = new List<short>(); //Буфер амплитуд блока данных
+            dataBlockBuffLnr = new List<short>(); //Сглаженный буфер амплитуд блока данных
+            dataBlockBuffCopy = new List<short>(); //Копия буфера амплитуд блока данных
+            syncPulse = 0; //Второй синхроимпульс блока данных
+            maxSyncPulse = 0; //Первый (максимальный) синхроимпульс блока данных
+            syncPulseIndex = 0; //Индекс второго синхроимпульса
+            maxSyncPulseIndex = 0; //Индекс максимального синхроимпульса
+            difference = 0; //Кол-во амплитуд между максимальным синхроимпульсом и теоретической амплитудой второго синхроимпульса
+            syncPulsePowerSpanL = 0;
+            syncPulsePowerSpanR = 0;
+            channelSwitch = 0;
             while (Decoder.decoderActive)
             {
                 if (channelSwitch == 0) while (buff_signalAmplitudesL.Count < 80) Thread.Sleep(10);
@@ -259,16 +290,16 @@ namespace AudioDataInterface
                     {
                         //dataBlockBuff[0] = (short)(dataBlockBuff[0] * 0.97);
                         //Дифференциальный метод декодирования
-                        double[] derivative = new double[dataBlockBuff.Count - 1]; //Первая производная сигнала
-                        List<double> frwLnrDerivative = new List<double>(); //Прямая линеаризованная производная сигнала
-                        List<double> rvsLnrDerivative = new List<double>(); //Обратная линеаризованная производная сигнала
-                        List<double> sortedLnrDerivative = new List<double>(); //Упорядоченная производная сигнала
-                        List<double> sortedLnrSecondDerivative = new List<double>();
-                        double sortedLnrSecondDerivativeMaxValue = 0;
-                        double sortedLnrDerivativeJumpValue = 0;
-                        List<string> derivativeDirection = new List<string>(); //Знак первой производной
-                        List<string> derivativeBinaryValue = new List<string>(); //Бинарное значение производной
-                        List<string> derivativeDecryptor = new List<string>();
+                        derivative = new double[dataBlockBuff.Count - 1]; //Первая производная сигнала
+                        frwLnrDerivative = new List<double>(); //Прямая линеаризованная производная сигнала
+                        rvsLnrDerivative = new List<double>(); //Обратная линеаризованная производная сигнала
+                        sortedLnrDerivative = new List<double>(); //Упорядоченная производная сигнала
+                        sortedLnrSecondDerivative = new List<double>();
+                        sortedLnrSecondDerivativeMaxValue = 0;
+                        sortedLnrDerivativeJumpValue = 0;
+                        derivativeDirection = new List<string>(); //Знак первой производной
+                        derivativeBinaryValue = new List<string>(); //Бинарное значение производной
+                        derivativeDecryptor = new List<string>();
                         //dataBlockBuff = new List<short> { 6001, 3157, 3109, 6960, 3268, 3247, 7220, 7516, 3231, 3279, 7003, 6785, 3252, 3586, 3422, 3565, 3618, 3390, 3448, 3167, 6828, 2998, 3003, 3226, 2855, 6642, 3045, 3008, 6860, 2924, 6785, 3130, 3247, 3220, 3453, 3395, 3475, 3024, 6584 };
                         for (int i = 0; i < derivative.Length; i++)
                         {
@@ -277,51 +308,6 @@ namespace AudioDataInterface
                             if (derivativeValue < 0) derivativeDirection.Add("-");
                             else derivativeDirection.Add("+");
                         }
-                        /*
-                        //Линеаризация данных с помощью линейного полинома (A = k*i + b) методом наименьших квадратов
-                        double[] I = new double[derivative.Length];
-                        double[] iSquare = new double[derivative.Length];
-                        double[] Ai = new double[derivative.Length];
-                        double[] trend = new double[derivative.Length];
-                        double[] median = new double[derivative.Length];
-                        double[] mid = new double[derivative.Length];
-                        double iSumm = 0;
-                        double iSquareSumm = 0;
-                        double AiSumm = 0;
-                        double ASumm = 0;
-                        double n = derivative.Length;
-                        for (int p = 0; p < derivative.Length; p++)
-                        {
-                            I[p] = p + 1;
-                            iSquare[p] = (p + 1) * (p + 1);
-                            Ai[p] = derivative[p] * (p + 1);
-                        }
-                        for (int p = 0; p < derivative.Length; p++)
-                        {
-                            iSumm += I[p];
-                            iSquareSumm += iSquare[p];
-                            AiSumm += Ai[p];
-                            ASumm += derivative[p];
-                        }
-                        double k1 = ((n * AiSumm) - (ASumm * iSumm)) / ((n * ASumm) - (iSumm * iSumm));
-                        double b1 = ((ASumm * ASumm) - (iSumm * AiSumm)) / ((n * ASumm) - (iSumm * iSumm));
-                        double k2 = ((n * AiSumm) - (ASumm * iSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
-                        double b2 = ((ASumm * iSquareSumm) - (iSumm * AiSumm)) / ((n * iSquareSumm) - (iSumm * iSumm));
-                        for (int p = 0; p < median.Length; p++) median[p] = Math.Round((k1 * (p + 1)) + b1);
-                        for (int p = 0; p < trend.Length; p++) trend[p] = Math.Round((k2 * (p + 1)) + b2);
-                        for (int p = 0; p < mid.Length; p++) mid[p] = Math.Round((median[p] + trend[p]) / 2.0);
-
-                        for (int p = 1; p <= derivative.Length; p++)
-                        {
-                            double linearizedAmplitude = (double)derivative[p - 1] - (mid[p - 1] - mid[0]);
-                            frwLnrDerivative.Add(Convert.ToInt32(linearizedAmplitude));
-                        }
-                        for (int p = 1; p <= derivative.Length; p++)
-                        {
-                            double linearizedAmplitude = (double)frwLnrDerivative[p - 1] - (mid[mid.Length - 1] - mid[p - 1]);
-                            rvsLnrDerivative.Add(Convert.ToInt32(linearizedAmplitude));
-                        }
-                        */
                         rvsLnrDerivative.Clear();
                         rvsLnrDerivative.AddRange(derivative);
                         if (debug_clipper)
@@ -527,7 +513,7 @@ namespace AudioDataInterface
         public static void Start()
         {
             thread_samplesDecoderStereo = new Thread(SamplesDecoderStereo);
-            thread_samplesDecoderStereo.Start();
+            //thread_samplesDecoderStereo.Start();
             thread_amplitudeDecoderL = new Thread(AmplitudeDecoderL);
             thread_amplitudeDecoderL.Start();
             thread_amplitudeDecoderR = new Thread(AmplitudeDecoderR);

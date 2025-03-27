@@ -60,6 +60,8 @@ namespace AudioDataInterface
             this.альтернативныйЭкранToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mPSПлеерToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.оставшеесяВремяToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator19 = new System.Windows.Forms.ToolStripSeparator();
+            this.упрощенныйРежимToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.аудиоToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mPSOPUSВоспроизведениеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.mPSOPUSОстановитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -163,6 +165,13 @@ namespace AudioDataInterface
             this.pictureBox_track1 = new System.Windows.Forms.PictureBox();
             this.pictureBox_runningIndicator = new System.Windows.Forms.PictureBox();
             this.pictureBox_mpsPlayer = new System.Windows.Forms.PictureBox();
+            this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.label_status = new System.Windows.Forms.Label();
+            this.label_time = new System.Windows.Forms.Label();
+            this.label_trackCountNumber = new System.Windows.Forms.Label();
+            this.label_currentTrackNumber = new System.Windows.Forms.Label();
+            this.label_title = new System.Windows.Forms.Label();
+            this.label_artist = new System.Windows.Forms.Label();
             this.groupBox_info = new System.Windows.Forms.GroupBox();
             this.label_packetLoss = new System.Windows.Forms.Label();
             this.label_mute = new System.Windows.Forms.Label();
@@ -172,8 +181,6 @@ namespace AudioDataInterface
             this.label_subcodeSync = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
-            this.label_trackCount = new System.Windows.Forms.Label();
-            this.label_trackNumber = new System.Windows.Forms.Label();
             this.progressBar_audioBuffer = new System.Windows.Forms.ProgressBar();
             this.label_audioBufferSize = new System.Windows.Forms.Label();
             this.label_decodedPacketSize = new System.Windows.Forms.Label();
@@ -185,14 +192,14 @@ namespace AudioDataInterface
             this.label_border1 = new System.Windows.Forms.Label();
             this.panel_signalCapture = new System.Windows.Forms.Panel();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
-            this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
-            this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
-            this.radioButton_verticalBIAS = new System.Windows.Forms.RadioButton();
-            this.radioButton_horizontalBIAS = new System.Windows.Forms.RadioButton();
             this.groupBox_scaleAdjust = new System.Windows.Forms.GroupBox();
             this.radioButton_verticalScale = new System.Windows.Forms.RadioButton();
             this.radioButton_horizontalScale = new System.Windows.Forms.RadioButton();
+            this.groupBox_BIASAdjust = new System.Windows.Forms.GroupBox();
+            this.radioButton_verticalBIAS = new System.Windows.Forms.RadioButton();
+            this.radioButton_horizontalBIAS = new System.Windows.Forms.RadioButton();
+            this.groupBox_signalCapture = new System.Windows.Forms.GroupBox();
+            this.pictureBox_waveGraphR = new System.Windows.Forms.PictureBox();
             this.pictureBox_waveGraphL = new System.Windows.Forms.PictureBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripButton_rec = new System.Windows.Forms.ToolStripButton();
@@ -223,7 +230,6 @@ namespace AudioDataInterface
             this.toolStripButton_widthDown = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator24 = new System.Windows.Forms.ToolStripSeparator();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
-            this.timer_drawWaveGraphFrame = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumHandler = new System.Windows.Forms.Timer(this.components);
             this.timer_mpsPlayerSpectrumUpdater = new System.Windows.Forms.Timer(this.components);
@@ -293,13 +299,14 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_runningIndicator)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_mpsPlayer)).BeginInit();
+            this.tabPage1.SuspendLayout();
             this.groupBox_info.SuspendLayout();
             this.panel_signalCapture.SuspendLayout();
             this.groupBox1.SuspendLayout();
+            this.groupBox_scaleAdjust.SuspendLayout();
+            this.groupBox_BIASAdjust.SuspendLayout();
             this.groupBox_signalCapture.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).BeginInit();
-            this.groupBox_BIASAdjust.SuspendLayout();
-            this.groupBox_scaleAdjust.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).BeginInit();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -399,7 +406,9 @@ namespace AudioDataInterface
             // 
             this.видToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.скинToolStripMenuItem1,
-            this.mPSПлеерToolStripMenuItem});
+            this.mPSПлеерToolStripMenuItem,
+            this.toolStripSeparator19,
+            this.упрощенныйРежимToolStripMenuItem});
             this.видToolStripMenuItem.Name = "видToolStripMenuItem";
             this.видToolStripMenuItem.Size = new System.Drawing.Size(39, 20);
             this.видToolStripMenuItem.Text = "Вид";
@@ -415,7 +424,7 @@ namespace AudioDataInterface
             this.альтернативныйЭкранToolStripMenuItem});
             this.скинToolStripMenuItem1.Image = global::AudioDataInterface.Properties.Resources.theme;
             this.скинToolStripMenuItem1.Name = "скинToolStripMenuItem1";
-            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(134, 22);
+            this.скинToolStripMenuItem1.Size = new System.Drawing.Size(190, 22);
             this.скинToolStripMenuItem1.Text = "Скин";
             // 
             // редактироватьToolStripMenuItem1
@@ -557,7 +566,7 @@ namespace AudioDataInterface
             this.mPSПлеерToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.оставшеесяВремяToolStripMenuItem});
             this.mPSПлеерToolStripMenuItem.Name = "mPSПлеерToolStripMenuItem";
-            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(134, 22);
+            this.mPSПлеерToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
             this.mPSПлеерToolStripMenuItem.Text = "MPS плеер";
             // 
             // оставшеесяВремяToolStripMenuItem
@@ -568,6 +577,18 @@ namespace AudioDataInterface
             this.оставшеесяВремяToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.оставшеесяВремяToolStripMenuItem.Text = "Оставшееся время";
             this.оставшеесяВремяToolStripMenuItem.Click += new System.EventHandler(this.оставшеесяВремяToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator19
+            // 
+            this.toolStripSeparator19.Name = "toolStripSeparator19";
+            this.toolStripSeparator19.Size = new System.Drawing.Size(187, 6);
+            // 
+            // упрощенныйРежимToolStripMenuItem
+            // 
+            this.упрощенныйРежимToolStripMenuItem.Name = "упрощенныйРежимToolStripMenuItem";
+            this.упрощенныйРежимToolStripMenuItem.Size = new System.Drawing.Size(190, 22);
+            this.упрощенныйРежимToolStripMenuItem.Text = "Упрощенный режим";
+            this.упрощенныйРежимToolStripMenuItem.Click += new System.EventHandler(this.упрощенныйРежимToolStripMenuItem_Click);
             // 
             // аудиоToolStripMenuItem
             // 
@@ -707,6 +728,7 @@ namespace AudioDataInterface
             // tabControl_dataControl
             // 
             this.tabControl_dataControl.Controls.Add(this.tabPage_graphicalView);
+            this.tabControl_dataControl.Controls.Add(this.tabPage1);
             this.tabControl_dataControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl_dataControl.Location = new System.Drawing.Point(0, 0);
             this.tabControl_dataControl.Name = "tabControl_dataControl";
@@ -1822,6 +1844,94 @@ namespace AudioDataInterface
             this.pictureBox_mpsPlayer.Click += new System.EventHandler(this.pictureBox_mpsPlayer_Click);
             this.pictureBox_mpsPlayer.MouseDown += new System.Windows.Forms.MouseEventHandler(this.pictureBox_mpsPlayer_MouseDown);
             // 
+            // tabPage1
+            // 
+            this.tabPage1.Controls.Add(this.label_status);
+            this.tabPage1.Controls.Add(this.label_time);
+            this.tabPage1.Controls.Add(this.label_trackCountNumber);
+            this.tabPage1.Controls.Add(this.label_currentTrackNumber);
+            this.tabPage1.Controls.Add(this.label_title);
+            this.tabPage1.Controls.Add(this.label_artist);
+            this.tabPage1.Location = new System.Drawing.Point(4, 22);
+            this.tabPage1.Name = "tabPage1";
+            this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage1.Size = new System.Drawing.Size(816, 341);
+            this.tabPage1.TabIndex = 2;
+            this.tabPage1.Text = "Fast Simplified";
+            this.tabPage1.UseVisualStyleBackColor = true;
+            // 
+            // label_status
+            // 
+            this.label_status.AutoSize = true;
+            this.label_status.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_status.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Underline, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label_status.Location = new System.Drawing.Point(3, 103);
+            this.label_status.Name = "label_status";
+            this.label_status.Size = new System.Drawing.Size(44, 13);
+            this.label_status.TabIndex = 5;
+            this.label_status.Text = "Статус:";
+            this.label_status.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label_time
+            // 
+            this.label_time.AutoSize = true;
+            this.label_time.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_time.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_time.Location = new System.Drawing.Point(3, 83);
+            this.label_time.Name = "label_time";
+            this.label_time.Size = new System.Drawing.Size(84, 20);
+            this.label_time.TabIndex = 4;
+            this.label_time.Text = "(--:--/--:--)";
+            this.label_time.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label_trackCountNumber
+            // 
+            this.label_trackCountNumber.AutoSize = true;
+            this.label_trackCountNumber.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_trackCountNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_trackCountNumber.Location = new System.Drawing.Point(3, 63);
+            this.label_trackCountNumber.Name = "label_trackCountNumber";
+            this.label_trackCountNumber.Size = new System.Drawing.Size(131, 20);
+            this.label_trackCountNumber.TabIndex = 3;
+            this.label_trackCountNumber.Text = "Всего дорожек: ";
+            this.label_trackCountNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label_currentTrackNumber
+            // 
+            this.label_currentTrackNumber.AutoSize = true;
+            this.label_currentTrackNumber.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_currentTrackNumber.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_currentTrackNumber.Location = new System.Drawing.Point(3, 43);
+            this.label_currentTrackNumber.Name = "label_currentTrackNumber";
+            this.label_currentTrackNumber.Size = new System.Drawing.Size(133, 20);
+            this.label_currentTrackNumber.TabIndex = 2;
+            this.label_currentTrackNumber.Text = "Номер дорожки:";
+            this.label_currentTrackNumber.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label_title
+            // 
+            this.label_title.AutoSize = true;
+            this.label_title.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_title.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_title.Location = new System.Drawing.Point(3, 23);
+            this.label_title.Name = "label_title";
+            this.label_title.Size = new System.Drawing.Size(91, 20);
+            this.label_title.TabIndex = 1;
+            this.label_title.Text = "Название: ";
+            this.label_title.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // label_artist
+            // 
+            this.label_artist.AutoSize = true;
+            this.label_artist.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label_artist.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
+            this.label_artist.Location = new System.Drawing.Point(3, 3);
+            this.label_artist.Name = "label_artist";
+            this.label_artist.Size = new System.Drawing.Size(119, 20);
+            this.label_artist.TabIndex = 0;
+            this.label_artist.Text = "Исполнитель: ";
+            this.label_artist.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
             // groupBox_info
             // 
             this.groupBox_info.Controls.Add(this.label_packetLoss);
@@ -1832,8 +1942,6 @@ namespace AudioDataInterface
             this.groupBox_info.Controls.Add(this.label_subcodeSync);
             this.groupBox_info.Controls.Add(this.label5);
             this.groupBox_info.Controls.Add(this.label4);
-            this.groupBox_info.Controls.Add(this.label_trackCount);
-            this.groupBox_info.Controls.Add(this.label_trackNumber);
             this.groupBox_info.Controls.Add(this.progressBar_audioBuffer);
             this.groupBox_info.Controls.Add(this.label_audioBufferSize);
             this.groupBox_info.Controls.Add(this.label_decodedPacketSize);
@@ -1854,7 +1962,7 @@ namespace AudioDataInterface
             // label_packetLoss
             // 
             this.label_packetLoss.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_packetLoss.Location = new System.Drawing.Point(3, 252);
+            this.label_packetLoss.Location = new System.Drawing.Point(3, 226);
             this.label_packetLoss.Name = "label_packetLoss";
             this.label_packetLoss.Size = new System.Drawing.Size(190, 13);
             this.label_packetLoss.TabIndex = 21;
@@ -1864,7 +1972,7 @@ namespace AudioDataInterface
             // label_mute
             // 
             this.label_mute.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_mute.Location = new System.Drawing.Point(3, 239);
+            this.label_mute.Location = new System.Drawing.Point(3, 213);
             this.label_mute.Name = "label_mute";
             this.label_mute.Size = new System.Drawing.Size(190, 13);
             this.label_mute.TabIndex = 19;
@@ -1874,7 +1982,7 @@ namespace AudioDataInterface
             // label_interpolation
             // 
             this.label_interpolation.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_interpolation.Location = new System.Drawing.Point(3, 226);
+            this.label_interpolation.Location = new System.Drawing.Point(3, 200);
             this.label_interpolation.Name = "label_interpolation";
             this.label_interpolation.Size = new System.Drawing.Size(190, 13);
             this.label_interpolation.TabIndex = 18;
@@ -1884,7 +1992,7 @@ namespace AudioDataInterface
             // label_subcodeTOC
             // 
             this.label_subcodeTOC.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 213);
+            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 187);
             this.label_subcodeTOC.Name = "label_subcodeTOC";
             this.label_subcodeTOC.Size = new System.Drawing.Size(190, 13);
             this.label_subcodeTOC.TabIndex = 17;
@@ -1894,7 +2002,7 @@ namespace AudioDataInterface
             // label_subcodeTimecode
             // 
             this.label_subcodeTimecode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 200);
+            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 174);
             this.label_subcodeTimecode.Name = "label_subcodeTimecode";
             this.label_subcodeTimecode.Size = new System.Drawing.Size(190, 13);
             this.label_subcodeTimecode.TabIndex = 16;
@@ -1904,7 +2012,7 @@ namespace AudioDataInterface
             // label_subcodeSync
             // 
             this.label_subcodeSync.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeSync.Location = new System.Drawing.Point(3, 187);
+            this.label_subcodeSync.Location = new System.Drawing.Point(3, 161);
             this.label_subcodeSync.Name = "label_subcodeSync";
             this.label_subcodeSync.Size = new System.Drawing.Size(190, 13);
             this.label_subcodeSync.TabIndex = 15;
@@ -1914,7 +2022,7 @@ namespace AudioDataInterface
             // label5
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label5.Location = new System.Drawing.Point(3, 174);
+            this.label5.Location = new System.Drawing.Point(3, 148);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(190, 13);
             this.label5.TabIndex = 20;
@@ -1924,32 +2032,12 @@ namespace AudioDataInterface
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Location = new System.Drawing.Point(3, 161);
+            this.label4.Location = new System.Drawing.Point(3, 135);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(190, 13);
             this.label4.TabIndex = 14;
             this.label4.Text = "Аудиопроцессор:";
             this.label4.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // label_trackCount
-            // 
-            this.label_trackCount.AutoSize = true;
-            this.label_trackCount.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_trackCount.Location = new System.Drawing.Point(3, 148);
-            this.label_trackCount.Name = "label_trackCount";
-            this.label_trackCount.Size = new System.Drawing.Size(90, 13);
-            this.label_trackCount.TabIndex = 13;
-            this.label_trackCount.Text = "Всего дорожек: ";
-            // 
-            // label_trackNumber
-            // 
-            this.label_trackNumber.AutoSize = true;
-            this.label_trackNumber.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_trackNumber.Location = new System.Drawing.Point(3, 135);
-            this.label_trackNumber.Name = "label_trackNumber";
-            this.label_trackNumber.Size = new System.Drawing.Size(60, 13);
-            this.label_trackNumber.TabIndex = 12;
-            this.label_trackNumber.Text = "Дорожка: ";
             // 
             // progressBar_audioBuffer
             // 
@@ -2063,31 +2151,39 @@ namespace AudioDataInterface
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Настройка:";
             // 
-            // groupBox_signalCapture
+            // groupBox_scaleAdjust
             // 
-            this.groupBox_signalCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphR);
-            this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphL);
-            this.groupBox_signalCapture.Location = new System.Drawing.Point(0, 0);
-            this.groupBox_signalCapture.Name = "groupBox_signalCapture";
-            this.groupBox_signalCapture.Size = new System.Drawing.Size(872, 192);
-            this.groupBox_signalCapture.TabIndex = 12;
-            this.groupBox_signalCapture.TabStop = false;
-            this.groupBox_signalCapture.Text = "Осциллограф";
-            this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
+            this.groupBox_scaleAdjust.Controls.Add(this.radioButton_verticalScale);
+            this.groupBox_scaleAdjust.Controls.Add(this.radioButton_horizontalScale);
+            this.groupBox_scaleAdjust.Dock = System.Windows.Forms.DockStyle.Top;
+            this.groupBox_scaleAdjust.Location = new System.Drawing.Point(3, 89);
+            this.groupBox_scaleAdjust.Name = "groupBox_scaleAdjust";
+            this.groupBox_scaleAdjust.Size = new System.Drawing.Size(144, 73);
+            this.groupBox_scaleAdjust.TabIndex = 12;
+            this.groupBox_scaleAdjust.TabStop = false;
+            this.groupBox_scaleAdjust.Text = "Масштаб развертки";
             // 
-            // pictureBox_waveGraphR
+            // radioButton_verticalScale
             // 
-            this.pictureBox_waveGraphR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBox_waveGraphR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
-            this.pictureBox_waveGraphR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pictureBox_waveGraphR.Location = new System.Drawing.Point(8, 102);
-            this.pictureBox_waveGraphR.Name = "pictureBox_waveGraphR";
-            this.pictureBox_waveGraphR.Size = new System.Drawing.Size(856, 84);
-            this.pictureBox_waveGraphR.TabIndex = 18;
-            this.pictureBox_waveGraphR.TabStop = false;
+            this.radioButton_verticalScale.AutoSize = true;
+            this.radioButton_verticalScale.Location = new System.Drawing.Point(7, 43);
+            this.radioButton_verticalScale.Name = "radioButton_verticalScale";
+            this.radioButton_verticalScale.Size = new System.Drawing.Size(95, 17);
+            this.radioButton_verticalScale.TabIndex = 1;
+            this.radioButton_verticalScale.Text = "По вертикали";
+            this.radioButton_verticalScale.UseVisualStyleBackColor = true;
+            // 
+            // radioButton_horizontalScale
+            // 
+            this.radioButton_horizontalScale.AutoSize = true;
+            this.radioButton_horizontalScale.Checked = true;
+            this.radioButton_horizontalScale.Location = new System.Drawing.Point(7, 20);
+            this.radioButton_horizontalScale.Name = "radioButton_horizontalScale";
+            this.radioButton_horizontalScale.Size = new System.Drawing.Size(106, 17);
+            this.radioButton_horizontalScale.TabIndex = 0;
+            this.radioButton_horizontalScale.TabStop = true;
+            this.radioButton_horizontalScale.Text = "По горизонтали";
+            this.radioButton_horizontalScale.UseVisualStyleBackColor = true;
             // 
             // groupBox_BIASAdjust
             // 
@@ -2123,39 +2219,31 @@ namespace AudioDataInterface
             this.radioButton_horizontalBIAS.Text = "По горизонтали";
             this.radioButton_horizontalBIAS.UseVisualStyleBackColor = true;
             // 
-            // groupBox_scaleAdjust
+            // groupBox_signalCapture
             // 
-            this.groupBox_scaleAdjust.Controls.Add(this.radioButton_verticalScale);
-            this.groupBox_scaleAdjust.Controls.Add(this.radioButton_horizontalScale);
-            this.groupBox_scaleAdjust.Dock = System.Windows.Forms.DockStyle.Top;
-            this.groupBox_scaleAdjust.Location = new System.Drawing.Point(3, 89);
-            this.groupBox_scaleAdjust.Name = "groupBox_scaleAdjust";
-            this.groupBox_scaleAdjust.Size = new System.Drawing.Size(144, 73);
-            this.groupBox_scaleAdjust.TabIndex = 12;
-            this.groupBox_scaleAdjust.TabStop = false;
-            this.groupBox_scaleAdjust.Text = "Масштаб развертки";
+            this.groupBox_signalCapture.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphR);
+            this.groupBox_signalCapture.Controls.Add(this.pictureBox_waveGraphL);
+            this.groupBox_signalCapture.Location = new System.Drawing.Point(0, 0);
+            this.groupBox_signalCapture.Name = "groupBox_signalCapture";
+            this.groupBox_signalCapture.Size = new System.Drawing.Size(872, 192);
+            this.groupBox_signalCapture.TabIndex = 12;
+            this.groupBox_signalCapture.TabStop = false;
+            this.groupBox_signalCapture.Text = "Осциллограф";
+            this.groupBox_signalCapture.Enter += new System.EventHandler(this.groupBox_signalCapture_Enter);
             // 
-            // radioButton_verticalScale
+            // pictureBox_waveGraphR
             // 
-            this.radioButton_verticalScale.AutoSize = true;
-            this.radioButton_verticalScale.Location = new System.Drawing.Point(7, 43);
-            this.radioButton_verticalScale.Name = "radioButton_verticalScale";
-            this.radioButton_verticalScale.Size = new System.Drawing.Size(95, 17);
-            this.radioButton_verticalScale.TabIndex = 1;
-            this.radioButton_verticalScale.Text = "По вертикали";
-            this.radioButton_verticalScale.UseVisualStyleBackColor = true;
-            // 
-            // radioButton_horizontalScale
-            // 
-            this.radioButton_horizontalScale.AutoSize = true;
-            this.radioButton_horizontalScale.Checked = true;
-            this.radioButton_horizontalScale.Location = new System.Drawing.Point(7, 20);
-            this.radioButton_horizontalScale.Name = "radioButton_horizontalScale";
-            this.radioButton_horizontalScale.Size = new System.Drawing.Size(106, 17);
-            this.radioButton_horizontalScale.TabIndex = 0;
-            this.radioButton_horizontalScale.TabStop = true;
-            this.radioButton_horizontalScale.Text = "По горизонтали";
-            this.radioButton_horizontalScale.UseVisualStyleBackColor = true;
+            this.pictureBox_waveGraphR.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBox_waveGraphR.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(34)))), ((int)(((byte)(31)))), ((int)(((byte)(31)))));
+            this.pictureBox_waveGraphR.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.pictureBox_waveGraphR.Location = new System.Drawing.Point(8, 102);
+            this.pictureBox_waveGraphR.Name = "pictureBox_waveGraphR";
+            this.pictureBox_waveGraphR.Size = new System.Drawing.Size(856, 84);
+            this.pictureBox_waveGraphR.TabIndex = 18;
+            this.pictureBox_waveGraphR.TabStop = false;
             // 
             // pictureBox_waveGraphL
             // 
@@ -2473,11 +2561,6 @@ namespace AudioDataInterface
             this.toolStripLabel1.Size = new System.Drawing.Size(79, 22);
             this.toolStripLabel1.Text = "Редактор скина:";
             // 
-            // timer_drawWaveGraphFrame
-            // 
-            this.timer_drawWaveGraphFrame.Interval = 40;
-            this.timer_drawWaveGraphFrame.Tick += new System.EventHandler(this.timer_drawWaveGraphFrame_Tick);
-            // 
             // timer_mpsPlayerHandler
             // 
             this.timer_mpsPlayerHandler.Tick += new System.EventHandler(this.timer_mpsPlayerHandler_Tick);
@@ -2596,16 +2679,18 @@ namespace AudioDataInterface
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_track1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_runningIndicator)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_mpsPlayer)).EndInit();
+            this.tabPage1.ResumeLayout(false);
+            this.tabPage1.PerformLayout();
             this.groupBox_info.ResumeLayout(false);
             this.groupBox_info.PerformLayout();
             this.panel_signalCapture.ResumeLayout(false);
             this.groupBox1.ResumeLayout(false);
-            this.groupBox_signalCapture.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).EndInit();
-            this.groupBox_BIASAdjust.ResumeLayout(false);
-            this.groupBox_BIASAdjust.PerformLayout();
             this.groupBox_scaleAdjust.ResumeLayout(false);
             this.groupBox_scaleAdjust.PerformLayout();
+            this.groupBox_BIASAdjust.ResumeLayout(false);
+            this.groupBox_BIASAdjust.PerformLayout();
+            this.groupBox_signalCapture.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphR)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox_waveGraphL)).EndInit();
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -2626,7 +2711,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.Panel panel_signalCapture;
         private System.Windows.Forms.PictureBox pictureBox_waveGraphL;
         private System.Windows.Forms.GroupBox groupBox_signalCapture;
-        private System.Windows.Forms.Timer timer_drawWaveGraphFrame;
         private System.Windows.Forms.GroupBox groupBox_BIASAdjust;
         private System.Windows.Forms.RadioButton radioButton_verticalBIAS;
         private System.Windows.Forms.RadioButton radioButton_horizontalBIAS;
@@ -2689,8 +2773,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label_decodedPacketSize;
         private System.Windows.Forms.Label label_audioBufferSize;
         private System.Windows.Forms.ProgressBar progressBar_audioBuffer;
-        private System.Windows.Forms.Label label_trackCount;
-        private System.Windows.Forms.Label label_trackNumber;
         private System.Windows.Forms.Label label_subcodeSync;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Label label_subcodeTOC;
@@ -2816,6 +2898,15 @@ namespace AudioDataInterface
         private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВлевоToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВверхToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem сдвинутьВсеЭлементыВнизToolStripMenuItem;
+        private System.Windows.Forms.TabPage tabPage1;
+        private System.Windows.Forms.Label label_currentTrackNumber;
+        private System.Windows.Forms.Label label_title;
+        private System.Windows.Forms.Label label_artist;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator19;
+        private System.Windows.Forms.ToolStripMenuItem упрощенныйРежимToolStripMenuItem;
+        private System.Windows.Forms.Label label_status;
+        private System.Windows.Forms.Label label_time;
+        private System.Windows.Forms.Label label_trackCountNumber;
     }
 }
 
