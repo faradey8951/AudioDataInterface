@@ -156,8 +156,11 @@ namespace AudioDataInterface
         {
             if (this.WindowState != FormWindowState.Minimized && AudioIO.buff_graphSamples.Count > 0)
             {
-                //Автосинхронизация сигнала спектра
-                short sync = AudioIO.buff_graphSamples.Max();
+                //Автосинхронизация сигнала
+                List<short> temp = new List<short>();
+                for (int i = 0; temp.Count < 1024; i += 2) temp.Add(AudioIO.buff_graphSamples[i]);
+                short sync = temp.Max();
+                //short sync = AudioIO.buff_graphSamples.Max();
                 sync = (short)(sync * 0.8);
                 while (AudioIO.buff_graphSamples[0] < sync && AudioIO.buff_graphSamples.Count > 2000) { AudioIO.buff_graphSamples.RemoveAt(0); AudioIO.buff_graphSamples.RemoveAt(0); }
 
@@ -485,7 +488,6 @@ namespace AudioDataInterface
             label_fixedErrorCount.Text = "Исправлено: " + Decoder.fixedErrorCount.ToString();
             label_unfixedErrorCount.Text = "Неисправимые: " + Decoder.unfixedErrorCount.ToString();
             label_frameSyncErrorCount.Text = "Кадровая синхр.: " + Decoder.frameSyncErrorCount.ToString();
-            label_signalQuality.Text = "Качество сигнала: " + Decoder.signalQuality.ToString() + "%";
             label_decodedPacketSize.Text = "Размер пакета: " + DataHandler.packetSize.ToString() + " байт";
             label_audioBufferSize.Text = "Аудио буфер: ";
             this.Text = new string(DataHandler.artist) + " / " + new string(DataHandler.track);

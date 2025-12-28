@@ -184,7 +184,6 @@ namespace AudioDataInterface
             this.progressBar_audioBuffer = new System.Windows.Forms.ProgressBar();
             this.label_audioBufferSize = new System.Windows.Forms.Label();
             this.label_decodedPacketSize = new System.Windows.Forms.Label();
-            this.label_signalQuality = new System.Windows.Forms.Label();
             this.label_frameSyncErrorCount = new System.Windows.Forms.Label();
             this.label_unfixedErrorCount = new System.Windows.Forms.Label();
             this.label_fixedErrorCount = new System.Windows.Forms.Label();
@@ -1945,7 +1944,6 @@ namespace AudioDataInterface
             this.groupBox_info.Controls.Add(this.progressBar_audioBuffer);
             this.groupBox_info.Controls.Add(this.label_audioBufferSize);
             this.groupBox_info.Controls.Add(this.label_decodedPacketSize);
-            this.groupBox_info.Controls.Add(this.label_signalQuality);
             this.groupBox_info.Controls.Add(this.label_frameSyncErrorCount);
             this.groupBox_info.Controls.Add(this.label_unfixedErrorCount);
             this.groupBox_info.Controls.Add(this.label_fixedErrorCount);
@@ -1962,7 +1960,7 @@ namespace AudioDataInterface
             // label_packetLoss
             // 
             this.label_packetLoss.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_packetLoss.Location = new System.Drawing.Point(3, 226);
+            this.label_packetLoss.Location = new System.Drawing.Point(3, 213);
             this.label_packetLoss.Name = "label_packetLoss";
             this.label_packetLoss.Size = new System.Drawing.Size(190, 13);
             this.label_packetLoss.TabIndex = 21;
@@ -1972,7 +1970,7 @@ namespace AudioDataInterface
             // label_mute
             // 
             this.label_mute.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_mute.Location = new System.Drawing.Point(3, 213);
+            this.label_mute.Location = new System.Drawing.Point(3, 200);
             this.label_mute.Name = "label_mute";
             this.label_mute.Size = new System.Drawing.Size(190, 13);
             this.label_mute.TabIndex = 19;
@@ -1982,7 +1980,7 @@ namespace AudioDataInterface
             // label_interpolation
             // 
             this.label_interpolation.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_interpolation.Location = new System.Drawing.Point(3, 200);
+            this.label_interpolation.Location = new System.Drawing.Point(3, 187);
             this.label_interpolation.Name = "label_interpolation";
             this.label_interpolation.Size = new System.Drawing.Size(190, 13);
             this.label_interpolation.TabIndex = 18;
@@ -1992,7 +1990,7 @@ namespace AudioDataInterface
             // label_subcodeTOC
             // 
             this.label_subcodeTOC.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 187);
+            this.label_subcodeTOC.Location = new System.Drawing.Point(3, 174);
             this.label_subcodeTOC.Name = "label_subcodeTOC";
             this.label_subcodeTOC.Size = new System.Drawing.Size(190, 13);
             this.label_subcodeTOC.TabIndex = 17;
@@ -2002,7 +2000,7 @@ namespace AudioDataInterface
             // label_subcodeTimecode
             // 
             this.label_subcodeTimecode.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 174);
+            this.label_subcodeTimecode.Location = new System.Drawing.Point(3, 161);
             this.label_subcodeTimecode.Name = "label_subcodeTimecode";
             this.label_subcodeTimecode.Size = new System.Drawing.Size(190, 13);
             this.label_subcodeTimecode.TabIndex = 16;
@@ -2012,7 +2010,7 @@ namespace AudioDataInterface
             // label_subcodeSync
             // 
             this.label_subcodeSync.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_subcodeSync.Location = new System.Drawing.Point(3, 161);
+            this.label_subcodeSync.Location = new System.Drawing.Point(3, 148);
             this.label_subcodeSync.Name = "label_subcodeSync";
             this.label_subcodeSync.Size = new System.Drawing.Size(190, 13);
             this.label_subcodeSync.TabIndex = 15;
@@ -2022,7 +2020,7 @@ namespace AudioDataInterface
             // label5
             // 
             this.label5.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label5.Location = new System.Drawing.Point(3, 148);
+            this.label5.Location = new System.Drawing.Point(3, 135);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(190, 13);
             this.label5.TabIndex = 20;
@@ -2032,7 +2030,7 @@ namespace AudioDataInterface
             // label4
             // 
             this.label4.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label4.Location = new System.Drawing.Point(3, 135);
+            this.label4.Location = new System.Drawing.Point(3, 122);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(190, 13);
             this.label4.TabIndex = 14;
@@ -2042,7 +2040,7 @@ namespace AudioDataInterface
             // progressBar_audioBuffer
             // 
             this.progressBar_audioBuffer.Dock = System.Windows.Forms.DockStyle.Top;
-            this.progressBar_audioBuffer.Location = new System.Drawing.Point(3, 120);
+            this.progressBar_audioBuffer.Location = new System.Drawing.Point(3, 107);
             this.progressBar_audioBuffer.Maximum = 48000;
             this.progressBar_audioBuffer.Name = "progressBar_audioBuffer";
             this.progressBar_audioBuffer.Size = new System.Drawing.Size(190, 15);
@@ -2052,7 +2050,7 @@ namespace AudioDataInterface
             // 
             this.label_audioBufferSize.AutoSize = true;
             this.label_audioBufferSize.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_audioBufferSize.Location = new System.Drawing.Point(3, 107);
+            this.label_audioBufferSize.Location = new System.Drawing.Point(3, 94);
             this.label_audioBufferSize.Name = "label_audioBufferSize";
             this.label_audioBufferSize.Size = new System.Drawing.Size(77, 13);
             this.label_audioBufferSize.TabIndex = 10;
@@ -2062,21 +2060,11 @@ namespace AudioDataInterface
             // 
             this.label_decodedPacketSize.AutoSize = true;
             this.label_decodedPacketSize.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_decodedPacketSize.Location = new System.Drawing.Point(3, 94);
+            this.label_decodedPacketSize.Location = new System.Drawing.Point(3, 81);
             this.label_decodedPacketSize.Name = "label_decodedPacketSize";
             this.label_decodedPacketSize.Size = new System.Drawing.Size(90, 13);
             this.label_decodedPacketSize.TabIndex = 9;
             this.label_decodedPacketSize.Text = "Размер пакета: ";
-            // 
-            // label_signalQuality
-            // 
-            this.label_signalQuality.AutoSize = true;
-            this.label_signalQuality.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label_signalQuality.Location = new System.Drawing.Point(3, 81);
-            this.label_signalQuality.Name = "label_signalQuality";
-            this.label_signalQuality.Size = new System.Drawing.Size(101, 13);
-            this.label_signalQuality.TabIndex = 8;
-            this.label_signalQuality.Text = "Качество сигнала:";
             // 
             // label_frameSyncErrorCount
             // 
@@ -2728,7 +2716,6 @@ namespace AudioDataInterface
         private System.Windows.Forms.Label label_border1;
         public System.Windows.Forms.Timer timer_mpsPlayerSpectrumHandler;
         private System.Windows.Forms.GroupBox groupBox1;
-        private System.Windows.Forms.Label label_signalQuality;
         public System.Windows.Forms.PictureBox pictureBox_runningIndicator;
         private System.Windows.Forms.ToolStripMenuItem правкаToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem настройкиToolStripMenuItem;

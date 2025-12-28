@@ -52,6 +52,7 @@ namespace AudioDataInterface
                 return null;
         }
 
+
         /// <summary>
         /// Возвращает список значений, отделяемых точкой с запятой, в строке str
         /// </summary>
@@ -62,14 +63,14 @@ namespace AudioDataInterface
             List<string> values = new List<string>();
             int index = 0;
             string value = "";
-            index = str.IndexOf(";");
+            index = str.IndexOf(" ");
             while (index != -1)
             {
                 value = "";
                 for (int i = 0; i < index; i++) value += str[i];
                 str = str.Remove(0, index + 1);
                 values.Add(value);
-                index = str.IndexOf(";");
+                index = str.IndexOf(" ");
             }
             values.Add(str);
             return values.ToArray();

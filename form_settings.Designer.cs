@@ -30,6 +30,10 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabPage1 = new System.Windows.Forms.TabPage();
+            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
+            this.label1 = new System.Windows.Forms.Label();
             this.label_mp3BuffSizeValue = new System.Windows.Forms.Label();
             this.trackBar_mp3BuffSize = new System.Windows.Forms.TrackBar();
             this.label_mp3BuffSize = new System.Windows.Forms.Label();
@@ -59,10 +63,6 @@
             this.button2 = new System.Windows.Forms.Button();
             this.button_save = new System.Windows.Forms.Button();
             this.button_cancel = new System.Windows.Forms.Button();
-            this.label1 = new System.Windows.Forms.Label();
-            this.comboBox_recDevices = new System.Windows.Forms.ComboBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.comboBox_playDevices = new System.Windows.Forms.ComboBox();
             this.tabControl.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.trackBar_mp3BuffSize)).BeginInit();
@@ -109,6 +109,50 @@
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Аудио I/O";
             // 
+            // comboBox_playDevices
+            // 
+            this.comboBox_playDevices.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBox_playDevices.Dock = System.Windows.Forms.DockStyle.Top;
+            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_playDevices.FormattingEnabled = true;
+            this.comboBox_playDevices.Location = new System.Drawing.Point(3, 192);
+            this.comboBox_playDevices.Name = "comboBox_playDevices";
+            this.comboBox_playDevices.Size = new System.Drawing.Size(393, 21);
+            this.comboBox_playDevices.TabIndex = 9;
+            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
+            // 
+            // label2
+            // 
+            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label2.Location = new System.Drawing.Point(3, 179);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(393, 13);
+            this.label2.TabIndex = 8;
+            this.label2.Text = "Устройство воспроизведения:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // comboBox_recDevices
+            // 
+            this.comboBox_recDevices.BackColor = System.Drawing.SystemColors.Window;
+            this.comboBox_recDevices.Dock = System.Windows.Forms.DockStyle.Top;
+            this.comboBox_recDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.comboBox_recDevices.FormattingEnabled = true;
+            this.comboBox_recDevices.Location = new System.Drawing.Point(3, 158);
+            this.comboBox_recDevices.Name = "comboBox_recDevices";
+            this.comboBox_recDevices.Size = new System.Drawing.Size(393, 21);
+            this.comboBox_recDevices.TabIndex = 7;
+            this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged_1);
+            // 
+            // label1
+            // 
+            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
+            this.label1.Location = new System.Drawing.Point(3, 145);
+            this.label1.Name = "label1";
+            this.label1.Size = new System.Drawing.Size(393, 13);
+            this.label1.TabIndex = 6;
+            this.label1.Text = "Устройство записи:";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // label_mp3BuffSizeValue
             // 
             this.label_mp3BuffSizeValue.Dock = System.Windows.Forms.DockStyle.Top;
@@ -146,6 +190,7 @@
             // 
             // label_signalHeightValue
             // 
+            this.label_signalHeightValue.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label_signalHeightValue.Dock = System.Windows.Forms.DockStyle.Top;
             this.label_signalHeightValue.Location = new System.Drawing.Point(3, 61);
             this.label_signalHeightValue.Name = "label_signalHeightValue";
@@ -156,6 +201,7 @@
             // 
             // trackBar_signalHeight
             // 
+            this.trackBar_signalHeight.Cursor = System.Windows.Forms.Cursors.Default;
             this.trackBar_signalHeight.Dock = System.Windows.Forms.DockStyle.Top;
             this.trackBar_signalHeight.LargeChange = 512;
             this.trackBar_signalHeight.Location = new System.Drawing.Point(3, 16);
@@ -442,50 +488,6 @@
             this.button_cancel.TabIndex = 2;
             this.button_cancel.Text = "Отмена";
             this.button_cancel.UseVisualStyleBackColor = true;
-            // 
-            // label1
-            // 
-            this.label1.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label1.Location = new System.Drawing.Point(3, 145);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(393, 13);
-            this.label1.TabIndex = 6;
-            this.label1.Text = "Устройство записи:";
-            this.label1.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox_recDevices
-            // 
-            this.comboBox_recDevices.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBox_recDevices.Dock = System.Windows.Forms.DockStyle.Top;
-            this.comboBox_recDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_recDevices.FormattingEnabled = true;
-            this.comboBox_recDevices.Location = new System.Drawing.Point(3, 158);
-            this.comboBox_recDevices.Name = "comboBox_recDevices";
-            this.comboBox_recDevices.Size = new System.Drawing.Size(393, 21);
-            this.comboBox_recDevices.TabIndex = 7;
-            this.comboBox_recDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_recDevices_SelectedIndexChanged_1);
-            // 
-            // label2
-            // 
-            this.label2.Dock = System.Windows.Forms.DockStyle.Top;
-            this.label2.Location = new System.Drawing.Point(3, 179);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(393, 13);
-            this.label2.TabIndex = 8;
-            this.label2.Text = "Устройство воспроизведения:";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
-            // comboBox_playDevices
-            // 
-            this.comboBox_playDevices.BackColor = System.Drawing.SystemColors.Window;
-            this.comboBox_playDevices.Dock = System.Windows.Forms.DockStyle.Top;
-            this.comboBox_playDevices.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.comboBox_playDevices.FormattingEnabled = true;
-            this.comboBox_playDevices.Location = new System.Drawing.Point(3, 192);
-            this.comboBox_playDevices.Name = "comboBox_playDevices";
-            this.comboBox_playDevices.Size = new System.Drawing.Size(393, 21);
-            this.comboBox_playDevices.TabIndex = 9;
-            this.comboBox_playDevices.SelectedIndexChanged += new System.EventHandler(this.comboBox_playDevices_SelectedIndexChanged);
             // 
             // form_settings
             // 

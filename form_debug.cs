@@ -21,6 +21,8 @@ namespace AudioDataInterface
         public static Graphics graphics_decodingQuality = null;
         public static Bitmap bitmap_decodingQuality = null;
 
+        public static int avgQuality = 0;
+
         public form_debug()
         {
             InitializeComponent();
@@ -102,11 +104,18 @@ namespace AudioDataInterface
                 delta = (int)Math.Ceiling((double)pictureBox_decodingQuality.Width / ((double)buff_quality.Count + 10));
                 xPoint = delta / 2;
                 points = new PointF[buff_quality.Count];
-                for (int i = 0; i < buff_quality.Count; i++, xPoint += delta) { points[i] = new PointF(xPoint, Convert.ToInt16(SwapNumberRange(buff_quality[i], 0, 100, 10, pictureBox_decodingQuality.Height - 5))); graphics_decodingQuality.FillEllipse(new SolidBrush(Color.FromArgb(0, 86, 237)), points[i].X, points[i].Y, (int)pictureBox_decodingQuality.Height / 40, (int)pictureBox_decodingQuality.Height / 40); }
+                for (int i = 0; i < buff_quality.Count; i++, xPoint += delta)
+                { 
+                    points[i] = new PointF(xPoint, Convert.ToInt16(SwapNumberRange(buff_quality[i], 0, 100, 10, pictureBox_decodingQuality.Height - 5)));
+                    if (buff_quality[i] >= 70) graphics_decodingQuality.FillEllipse(new SolidBrush(Color.FromArgb(0, 86, 237)), points[i].X, points[i].Y, (int)pictureBox_decodingQuality.Height / 40, (int)pictureBox_decodingQuality.Height / 40);
+                    else graphics_decodingQuality.FillEllipse(new SolidBrush(Color.FromArgb(148, 13, 13)), points[i].X, points[i].Y, (int)pictureBox_decodingQuality.Height / 40, (int)pictureBox_decodingQuality.Height / 40);
+                }
                 graphics_decodingQuality.DrawLines(new Pen(Color.FromArgb(2, 100, 148)), points);              
 
-                int avgQuality = (buff_quality[buff_quality.Count - 1] + buff_quality[buff_quality.Count - 2] + buff_quality[buff_quality.Count - 3] + buff_quality[buff_quality.Count - 4] + buff_quality[buff_quality.Count - 5] + buff_quality[buff_quality.Count - 6]) / 6;
-                graphics_decodingQuality.DrawLine(new Pen(Color.Lime), 0, Convert.ToInt16(SwapNumberRange(avgQuality, 0, 100, 10, pictureBox_decodingQuality.Height - 5)), pictureBox_decodingQuality.Width, Convert.ToInt16(SwapNumberRange(avgQuality, 0, 100, 10, pictureBox_decodingQuality.Height - 5)));
+                avgQuality = (buff_quality[buff_quality.Count - 1] + buff_quality[buff_quality.Count - 2] + buff_quality[buff_quality.Count - 3] + buff_quality[buff_quality.Count - 4] + buff_quality[buff_quality.Count - 5] + buff_quality[buff_quality.Count - 6]) / 6;
+                int greenLevel = (255 * avgQuality) / 100;
+                int redLevel = 255 - greenLevel;
+                graphics_decodingQuality.DrawLine(new Pen(Color.FromArgb(redLevel, greenLevel, 0)), 0, Convert.ToInt16(SwapNumberRange(avgQuality, 0, 100, 10, pictureBox_decodingQuality.Height - 5)), pictureBox_decodingQuality.Width, Convert.ToInt16(SwapNumberRange(avgQuality, 0, 100, 10, pictureBox_decodingQuality.Height - 5)));
                 graphics_decodingQuality.DrawString(avgQuality + "%", new Font("Times New Roman", 8), Brushes.LightYellow, pictureBox_decodingQuality.Width - 50, Convert.ToInt16(SwapNumberRange(avgQuality, 0, 100, 10, pictureBox_decodingQuality.Height - 5)));
                 pictureBox_decodingQuality.Image = bitmap_decodingQuality;
             }
